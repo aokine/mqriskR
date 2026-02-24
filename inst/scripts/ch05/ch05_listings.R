@@ -62,4 +62,4 @@ ex_curtate(x, model = "uniform", omega = omega)
 lambda <- 0.02
 ex_complete(x, model = "exponential", lambda = lambda)
 ex_curtate(x, model = "exponential", lambda = lambda)
-\end{lstlisting}
+
