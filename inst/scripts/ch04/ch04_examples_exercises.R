@@ -1,4 +1,4 @@
-# Chapter 4 — R solution support (selected exercises)
+# Chapter 4: R solution support (selected exercises)
 # Exercises: 4-4 and 4-8
 #
 # Goal:
