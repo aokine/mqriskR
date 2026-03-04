@@ -56,29 +56,30 @@ library(mqriskR)
 
 # Net cash flows (investor perspective):
 # Four payments of X at t=0,1,2,3 and five payments of Y at t=4,...,8
-X <- 100
-Y <- 120
+X <- 100; Y <- 120
 
 cf <- c(-X, -X, -X, -X, rep(Y, 5))
 t  <- c(0, 1, 2, 3, 4:8)
 
 # Yield rate solves PV(i) = 0
 i_hat <- solve_yield(cf, t, interval = c(-0.5, 1))
-i_hat
 
 # Plot NPV(i)
+
 grid <- seq(-0.2, 0.6, by = 0.002)
 vals <- vapply(grid, function(ii) pv_cashflows(cf, t, ii), numeric(1))
 
-plot(grid, vals, xlab = "i", ylab = "NPV(i)",
-     main = "Equation of Value: NPV(i) and Yield Rate")
-abline(h = 0)
-abline(v = i_hat, lty = 2)
+op <- par(mar = c(4, 4, 3, 1) + 0.1, las = 1, bty = "l")
+plot(grid, vals, type = "l", lwd = 2,
+     xlab = "Interest rate,  i", ylab = "Net present value,  NPV(i)",
+     main = "Equation of Value: NPV(i) and Yield Rate",
+     xaxs = "i", yaxs = "i")
+grid(col = "grey85")
+abline(h = 0, lwd = 1.5)
 
-
-
-
-
-
-
+y_hat <- pv_cashflows(cf, t, i_hat)
+abline(v = i_hat, lty = 2, lwd = 1.5)
+points(i_hat, y_hat, pch = 19, cex = 1.1)
+text(i_hat + 0.05, y_hat + 60, labels = sprintf("  i = %.4f", i_hat), cex = 0.9)
+par(op)
 
