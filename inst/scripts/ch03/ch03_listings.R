@@ -73,13 +73,13 @@ P0 <- matrix(c(
 
 P1 <- P0
 
+# Pk corresponds to P^(k) for k >= 2 in the exercise
 Pk <- matrix(c(
   0.00, 0.30, 0.70,
   0.00, 0.00, 1.00,
   0.00, 0.00, 1.00
 ), nrow = 3, byrow = TRUE)
 
-P_step <- function(k) if (k == 0) P0 else if (k == 1) P1 else Pk
 
 state0 <- 1
 state1 <- 2
@@ -99,10 +99,11 @@ for (t in 0:N) {
   pay_b[t + 1] <- if (t >= 1) 4 * pi[state1] else 0
 
   # update pi(t) -> pi(t+1) using the matrix for interval (t, t+1]
-  if (t < N) pi <- drop(pi %*% P_step(t))
+  if (t < N) { if (t == 0) {pi <- drop(pi %*% P0)
+  } else if (t == 1) {pi <- drop(pi %*% P1)
+  } else {pi <- drop(pi %*% Pk)}}
 }
 
 sum(pay_a)  # partial expected value of payments in (a) through time N
 sum(pay_b)  # partial expected value of payments in (b) through time N
-
 
