@@ -63,6 +63,7 @@ t  <- c(0, 1, 2, 3, 4:8)
 
 # Yield rate solves PV(i) = 0
 i_hat <- solve_yield(cf, t, interval = c(-0.5, 1))
+i_hat
 
 # Plot NPV(i)
 
