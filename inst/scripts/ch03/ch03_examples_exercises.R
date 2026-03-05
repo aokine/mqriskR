@@ -79,7 +79,7 @@ P0 <- matrix(c(
 # same as P0 for k=1
 P1 <- P0
 
-P2plus <- matrix(c(
+Pk <- matrix(c(
   0.00, 0.30, 0.70,
   0.00, 0.00, 1.00,
   0.00, 0.00, 1.00
@@ -99,7 +99,7 @@ Epay_a <- Epay_a + sum(pi * pay01)
 pi <- as.numeric(pi %*% P1)             # t=2
 Epay_a <- Epay_a + sum(pi * pay01)
 
-pi <- as.numeric(pi %*% P2plus)         # t=3
+pi <- as.numeric(pi %*% Pk)         # t=3
 Epay_a <- Epay_a + sum(pi * pay01)
 
 # After t=3, probability in State 0 or 1 is 0, so stop.
@@ -115,7 +115,7 @@ Epay_b <- Epay_b + 4 * pi[2]
 pi <- as.numeric(pi %*% P1)             # t=2
 Epay_b <- Epay_b + 4 * pi[2]
 
-pi <- as.numeric(pi %*% P2plus)         # t=3
+pi <- as.numeric(pi %*% Pk)         # t=3
 Epay_b <- Epay_b + 4 * pi[2]
 
 Epay_b
