@@ -13,7 +13,7 @@ simulate_one_year <- function(n_policies, p_claim, benefit, premium, capital, n_
 benefit <- 1000
 premium <- 50
 capital <- 2000
-p_claim <- 0.02
+p_claim <- 0.02   # assumed claim probability (varied in repository solutions)
 
 n_grid <- c(10, 20, 50, 100, 200, 500, 1000)
 
