@@ -13,7 +13,12 @@
 .check_scalar_or_vector_lengths <- function(...) {
   lens <- vapply(list(...), length, integer(1))
   nz <- lens[lens > 0]
-  length(unique(nz)) <= 1L
+
+  if (length(nz) == 0L) return(TRUE)
+
+  # valid if all non-scalar lengths are the same
+  big <- nz[nz != 1L]
+  length(unique(big)) <= 1L
 }
 
 .validate_life_table <- function(tbl) {
