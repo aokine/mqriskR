@@ -254,6 +254,6 @@ nmxq_select <- function(tbl, x_sel, t, n, m) {
 #' @export
 print.select_life_table <- function(x, ...) {
   cat("<select_life_table>\n")
-  print.data.frame(unclass(x), row.names = FALSE, ...)
+  print.data.frame(as.data.frame(x), row.names = FALSE, ...)
   invisible(x)
 }

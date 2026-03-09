@@ -319,6 +319,6 @@ nqx <- function(tbl, x, n) {
 #' @export
 print.life_table <- function(x, ...) {
   cat("<life_table>\n")
-  print.data.frame(unclass(x), row.names = FALSE, ...)
+  print.data.frame(as.data.frame(x), row.names = FALSE, ...)
   invisible(x)
 }
