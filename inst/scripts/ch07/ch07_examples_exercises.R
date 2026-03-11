@@ -310,3 +310,24 @@ barplot(c(v * q_x, v^2 * p_x * q_x1),
         ylab = "Contribution",
         main = "Exercise 7-29: Annual term-insurance contributions")
 grid()
+
+
+
+
+
+# Exercise 7-31
+# Visualize piecewise-constant vs fully continuous increasing benefit
+
+t_grid <- seq(0, 5, by = 0.001)
+b_piece <- floor(t_grid + 1)
+b_cont <- t_grid
+
+plot(t_grid, b_piece, type = "s", lwd = 2,
+     xlab = "t", ylab = "Benefit amount",
+     main = "Exercise 7-31: Piecewise vs continuous increasing benefit")
+lines(t_grid, b_cont, lwd = 2, lty = 2)
+legend("topleft",
+       legend = c("piecewise increasing", "continuous increasing"),
+       lty = c(1, 2), lwd = 2, bty = "n")
+grid()
+
