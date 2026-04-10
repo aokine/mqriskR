@@ -2,7 +2,7 @@
 % Please edit documentation in R/life_table_core.R
 \name{dx}
 \alias{dx}
-\title{Compute d_x = l_x - l_{x+1}}
+\title{Compute deaths between ages x and x+1}
 \usage{
 dx(tbl, x)
 }
@@ -15,5 +15,5 @@ dx(tbl, x)
 Numeric vector of d_x values.
 }
 \description{
-Compute d_x = l_x - l_{x+1}
+Compute deaths between ages x and x+1
 }

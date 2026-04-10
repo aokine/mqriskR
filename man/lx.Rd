@@ -2,7 +2,7 @@
 % Please edit documentation in R/life_table_core.R
 \name{lx}
 \alias{lx}
-\title{Extract l_x}
+\title{Extract life-table survivor values}
 \usage{
 lx(tbl, x)
 }
@@ -15,5 +15,5 @@ lx(tbl, x)
 Numeric vector of l_x values.
 }
 \description{
-Extract l_x
+Extract life-table survivor values
 }

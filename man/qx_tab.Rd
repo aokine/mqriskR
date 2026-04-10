@@ -2,7 +2,7 @@
 % Please edit documentation in R/life_table_core.R
 \name{qx_tab}
 \alias{qx_tab}
-\title{Compute q_x = d_x / l_x}
+\title{Compute one-year death probability from a life table}
 \usage{
 qx_tab(tbl, x)
 }
@@ -15,5 +15,5 @@ qx_tab(tbl, x)
 Numeric vector of q_x values.
 }
 \description{
-Compute q_x = d_x / l_x
+Compute one-year death probability from a life table
 }

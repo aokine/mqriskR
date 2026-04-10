@@ -2,7 +2,7 @@
 % Please edit documentation in R/life_table_core.R
 \name{ndx}
 \alias{ndx}
-\title{Compute {}_n d_x = l_x - l_{x+n}}
+\title{Compute deaths over an n-year interval from a life table}
 \usage{
 ndx(tbl, x, n)
 }
@@ -17,5 +17,5 @@ ndx(tbl, x, n)
 Numeric vector of {}_n d_x values.
 }
 \description{
-Compute {}_n d_x = l_x - l_{x+n}
+Compute deaths over an n-year interval from a life table
 }

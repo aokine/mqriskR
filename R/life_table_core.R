@@ -94,9 +94,6 @@ life_table <- function(x,
     stop("x must be strictly increasing.", call. = FALSE)
   }
 
-  # -----------------------------------------------------------------------
-  # Case 1: lx supplied directly
-  # -----------------------------------------------------------------------
   if (!is.null(lx)) {
     lx <- as.numeric(lx)
 
@@ -116,9 +113,6 @@ life_table <- function(x,
     tbl_lx <- lx
   }
 
-  # -----------------------------------------------------------------------
-  # Case 2: S0 supplied
-  # -----------------------------------------------------------------------
   if (!is.null(S0)) {
     S0 <- as.numeric(S0)
 
@@ -138,11 +132,6 @@ life_table <- function(x,
     tbl_lx <- radix * S0
   }
 
-  # -----------------------------------------------------------------------
-  # Case 3: qx supplied
-  # x corresponds to ages where q_x is defined
-  # Returns lx on ages c(x, max(x)+1)
-  # -----------------------------------------------------------------------
   if (!is.null(qx)) {
     qx <- as.numeric(qx)
 
@@ -165,11 +154,6 @@ life_table <- function(x,
     tbl_lx <- lx_vals
   }
 
-  # -----------------------------------------------------------------------
-  # Case 4: px supplied
-  # x corresponds to ages where p_x is defined
-  # Returns lx on ages c(x, max(x)+1)
-  # -----------------------------------------------------------------------
   if (!is.null(px)) {
     px <- as.numeric(px)
 
@@ -192,7 +176,6 @@ life_table <- function(x,
     tbl_lx <- lx_vals
   }
 
-  # Derive dx, qx, px
   n <- length(tbl_lx)
 
   dx_vals <- c(tbl_lx[-n] - tbl_lx[-1L], NA_real_)
@@ -217,7 +200,7 @@ life_table <- function(x,
 # Accessors and derived quantities
 # -------------------------------------------------------------------------
 
-#' Extract l_x
+#' Extract life-table survivor values
 #' @param tbl A life_table object.
 #' @param x Ages.
 #' @return Numeric vector of l_x values.
@@ -227,7 +210,7 @@ lx <- function(tbl, x) {
   .get_lx_at(tbl, x)
 }
 
-#' Compute d_x = l_x - l_{x+1}
+#' Compute deaths between ages x and x+1
 #' @param tbl A life_table object.
 #' @param x Ages.
 #' @return Numeric vector of d_x values.
@@ -239,7 +222,7 @@ dx <- function(tbl, x) {
   lx_x - lx_x1
 }
 
-#' Compute {}_n d_x = l_x - l_{x+n}
+#' Compute deaths over an n-year interval from a life table
 #' @param tbl A life_table object.
 #' @param x Ages.
 #' @param n Nonnegative integer durations.
@@ -265,7 +248,7 @@ ndx <- function(tbl, x, n) {
   lx_x - lx_xn
 }
 
-#' Compute q_x = d_x / l_x
+#' Compute one-year death probability from a life table
 #' @param tbl A life_table object.
 #' @param x Ages.
 #' @return Numeric vector of q_x values.
@@ -275,7 +258,7 @@ qx_tab <- function(tbl, x) {
   dx(tbl, x) / lx(tbl, x)
 }
 
-#' Compute {}_n p_x = l_{x+n} / l_x
+#' Compute n-year survival probability from a life table
 #' @param tbl A life_table object.
 #' @param x Ages.
 #' @param n Nonnegative integer durations.
@@ -301,7 +284,7 @@ npx <- function(tbl, x, n) {
   lx_xn / lx_x
 }
 
-#' Compute {}_n q_x = {}_n d_x / l_x = 1 - {}_n p_x
+#' Compute n-year death probability from a life table
 #' @param tbl A life_table object.
 #' @param x Ages.
 #' @param n Nonnegative integer durations.

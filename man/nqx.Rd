@@ -2,7 +2,7 @@
 % Please edit documentation in R/life_table_core.R
 \name{nqx}
 \alias{nqx}
-\title{Compute {}_n q_x = {}_n d_x / l_x = 1 - {}_n p_x}
+\title{Compute n-year death probability from a life table}
 \usage{
 nqx(tbl, x, n)
 }
@@ -17,5 +17,5 @@ nqx(tbl, x, n)
 Numeric vector of {}_n q_x values.
 }
 \description{
-Compute {}_n q_x = {}_n d_x / l_x = 1 - {}_n p_x
+Compute n-year death probability from a life table
 }

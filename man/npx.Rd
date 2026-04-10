@@ -2,7 +2,7 @@
 % Please edit documentation in R/life_table_core.R
 \name{npx}
 \alias{npx}
-\title{Compute {}_n p_x = l_{x+n} / l_x}
+\title{Compute n-year survival probability from a life table}
 \usage{
 npx(tbl, x, n)
 }
@@ -17,5 +17,5 @@ npx(tbl, x, n)
 Numeric vector of {}_n p_x values.
 }
 \description{
-Compute {}_n p_x = l_{x+n} / l_x
+Compute n-year survival probability from a life table
 }
