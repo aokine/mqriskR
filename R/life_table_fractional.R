@@ -174,7 +174,7 @@ fx_tab <- function(tbl, x, t, assumption = c("udd", "cf", "balducci")) {
 # Deferred probabilities: {}_{n|m} q_x and {}_{k|} q_x
 # -------------------------------------------------------------------------
 
-#' Deferred probability {}_{n|m} q_x from a life table
+#' Deferred death probability from a life table
 #'
 #' Computes the probability that a life aged x survives n years and then
 #' dies within the following m years:
@@ -207,7 +207,7 @@ nmxq <- function(tbl, x, n, m) {
   npx(tbl, x, n) * nqx(tbl, x + n, m)
 }
 
-#' Curtate death probability {}_{k|} q_x from a life table
+#' Curtate death probability from a life table
 #'
 #' Computes
 #' \eqn{{}_{k|} q_x = {}_k p_x - {}_{k+1} p_x}

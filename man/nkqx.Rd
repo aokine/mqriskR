@@ -2,7 +2,7 @@
 % Please edit documentation in R/life_table_fractional.R
 \name{nkqx}
 \alias{nkqx}
-\title{Curtate death probability {}_{k|} q_x from a life table}
+\title{Curtate death probability from a life table}
 \usage{
 nkqx(tbl, x, k)
 }

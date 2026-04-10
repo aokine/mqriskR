@@ -2,7 +2,7 @@
 % Please edit documentation in R/life_table_fractional.R
 \name{nmxq}
 \alias{nmxq}
-\title{Deferred probability {}_{n|m} q_x from a life table}
+\title{Deferred death probability from a life table}
 \usage{
 nmxq(tbl, x, n, m)
 }
