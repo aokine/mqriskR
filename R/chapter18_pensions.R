@@ -432,7 +432,13 @@ AAL_TUC_db <- function(accrued_benefit, v_to_ret, p_surv, adue_ret) {
 #' @export
 #'
 #' @examples
-#' NC_PUC_db(projected_benefit = 30000, total_service = 30, v_to_ret = 0.5, p_surv = 0.9, adue_ret = 12)
+#' NC_PUC_db(
+#'   projected_benefit = 30000,
+#'   total_service = 30,
+#'   v_to_ret = 0.5,
+#'   p_surv = 0.9,
+#'   adue_ret = 12
+#' )
 NC_PUC_db <- function(projected_benefit, total_service, v_to_ret, p_surv, adue_ret) {
   .validate_nonneg_scalar_ch18(projected_benefit, "projected_benefit")
   .validate_positive_scalar_ch18(total_service, "total_service")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/interest_theory.R
 \name{interest_convert}
 \alias{interest_convert}
-\title{Convert between i, d, and delta (compound interest)}
+\title{Convert between compound-interest quantities}
 \usage{
 interest_convert(i = NULL, d = NULL, delta = NULL, m = NULL)
 }
@@ -13,10 +13,10 @@ interest_convert(i = NULL, d = NULL, delta = NULL, m = NULL)
 
 \item{delta}{Force of interest.}
 
-\item{m}{Optional compounding frequency for nominal rate i^(m).}
+\item{m}{Optional compounding frequency for the nominal rate convertible m-thly.}
 }
 \value{
-A list with elements i, d, delta and (if m is supplied) im (nominal).
+A list with elements i, d, delta and, if m is supplied, im (the nominal rate convertible m-thly).
 }
 \description{
 Provides consistent conversions between:

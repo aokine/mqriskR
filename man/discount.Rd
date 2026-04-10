@@ -2,7 +2,7 @@
 % Please edit documentation in R/interest_theory.R
 \name{discount}
 \alias{discount}
-\title{Discount factor (1+i)^(-t)}
+\title{Discount factor for compound interest}
 \usage{
 discount(i, t)
 }
@@ -12,10 +12,10 @@ discount(i, t)
 \item{t}{Time (can be vector).}
 }
 \value{
-Discount factor v^t.
+Discount factor at time t.
 }
 \description{
-Discount factor (1+i)^(-t)
+Discount factor for compound interest
 }
 \examples{
 discount(0.05, 0:5)

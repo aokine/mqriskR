@@ -16,10 +16,10 @@ Encoding: UTF-8
 LazyData: true
 Suggests: 
     ggplot2,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    expm
 Config/testthat/edition: 3
 Imports: 
-    expm,
-    graphics,
-    stats
+    stats,
+    utils
 RoxygenNote: 7.3.3

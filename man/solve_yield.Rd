@@ -2,7 +2,7 @@
 % Please edit documentation in R/interest_theory.R
 \name{solve_yield}
 \alias{solve_yield}
-\title{Solve yield rate (IRR) via an equation of value}
+\title{Solve the yield rate by the equation of value}
 \usage{
 solve_yield(cf, t, interval = c(-0.99, 1), tol = 1e-10)
 }
@@ -19,7 +19,7 @@ solve_yield(cf, t, interval = c(-0.99, 1), tol = 1e-10)
 Yield rate i.
 }
 \description{
-Finds i such that pv_cashflows(cf, t, i) = 0.
+Finds the interest rate i such that the present value of the cash flows is 0.
 }
 \examples{
 solve_yield(c(-100, 60, 60), c(0, 1, 2), interval = c(-0.5, 1))

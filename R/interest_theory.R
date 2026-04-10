@@ -1,4 +1,4 @@
-#' Convert between i, d, and delta (compound interest)
+#' Convert between compound-interest quantities
 #'
 #' Provides consistent conversions between:
 #' - effective interest rate i
@@ -10,9 +10,9 @@
 #' @param i Effective interest rate.
 #' @param d Effective discount rate.
 #' @param delta Force of interest.
-#' @param m Optional compounding frequency for nominal rate i^(m).
+#' @param m Optional compounding frequency for the nominal rate convertible m-thly.
 #'
-#' @return A list with elements i, d, delta and (if m is supplied) im (nominal).
+#' @return A list with elements i, d, delta and, if m is supplied, im (the nominal rate convertible m-thly).
 #' @export
 #'
 #' @examples
@@ -55,11 +55,11 @@ interest_convert <- function(i = NULL, d = NULL, delta = NULL, m = NULL) {
   out
 }
 
-#' Discount factor (1+i)^(-t)
+#' Discount factor for compound interest
 #'
 #' @param i Effective interest rate.
 #' @param t Time (can be vector).
-#' @return Discount factor v^t.
+#' @return Discount factor at time t.
 #' @export
 #' @examples
 #' discount(0.05, 0:5)
@@ -82,9 +82,9 @@ pv_cashflows <- function(cf, t, i) {
   sum(cf * discount(i, t))
 }
 
-#' Solve yield rate (IRR) via an equation of value
+#' Solve the yield rate by the equation of value
 #'
-#' Finds i such that pv_cashflows(cf, t, i) = 0.
+#' Finds the interest rate i such that the present value of the cash flows is 0.
 #'
 #' @param cf Cash flows.
 #' @param t Times.
@@ -114,14 +114,14 @@ solve_yield <- function(cf, t, interval = c(-0.99, 1), tol = 1e-10) {
   stats::uniroot(f, interval = interval, tol = tol)$root
 }
 
-#' Level annuity-certain present value
+#' Present value of a level annuity-certain
 #'
-#' Computes PV of an n-period annuity certain with level payments of 1 per period.
+#' Computes the present value of an n-period annuity certain with level payments of 1 per period.
 #'
-#' @param n Number of payments/periods.
+#' @param n Number of payments or periods.
 #' @param i Effective interest rate per period.
 #' @param due If TRUE, annuity-due; otherwise annuity-immediate.
-#' @param m Payment frequency per period (m=1 means annual).
+#' @param m Payment frequency per period (m = 1 means annual).
 #' @param cont If TRUE, continuous payment model.
 #' @return Present value.
 #' @export

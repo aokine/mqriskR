@@ -2,18 +2,18 @@
 % Please edit documentation in R/interest_theory.R
 \name{annuity_certain}
 \alias{annuity_certain}
-\title{Level annuity-certain present value}
+\title{Present value of a level annuity-certain}
 \usage{
 annuity_certain(n, i, due = FALSE, m = 1, cont = FALSE)
 }
 \arguments{
-\item{n}{Number of payments/periods.}
+\item{n}{Number of payments or periods.}
 
 \item{i}{Effective interest rate per period.}
 
 \item{due}{If TRUE, annuity-due; otherwise annuity-immediate.}
 
-\item{m}{Payment frequency per period (m=1 means annual).}
+\item{m}{Payment frequency per period (m = 1 means annual).}
 
 \item{cont}{If TRUE, continuous payment model.}
 }
@@ -21,7 +21,7 @@ annuity_certain(n, i, due = FALSE, m = 1, cont = FALSE)
 Present value.
 }
 \description{
-Computes PV of an n-period annuity certain with level payments of 1 per period.
+Computes the present value of an n-period annuity certain with level payments of 1 per period.
 }
 \examples{
 annuity_certain(n = 10, i = 0.05)

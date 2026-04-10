@@ -25,5 +25,11 @@ Computes the PUC normal cost as the APV of the portion of the projected
 benefit attributed to the current year of service.
 }
 \examples{
-NC_PUC_db(projected_benefit = 30000, total_service = 30, v_to_ret = 0.5, p_surv = 0.9, adue_ret = 12)
+NC_PUC_db(
+  projected_benefit = 30000,
+  total_service = 30,
+  v_to_ret = 0.5,
+  p_surv = 0.9,
+  adue_ret = 12
+)
 }
