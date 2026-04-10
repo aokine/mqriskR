@@ -12,10 +12,11 @@ md_table(x, qxj, radix = 1e+05)
 \item{qxj}{Matrix/data.frame of cause-specific decrement probabilities.
 Rows correspond to ages in x, columns correspond to causes.}
 
-\item{radix}{Starting l_x^(tau).}
+\item{radix}{Starting \eqn{l_x^{(\tau)}}.}
 }
 \value{
-Data frame containing q^(j), q^(tau), p^(tau), l^(tau), d^(j), d^(tau).
+Data frame containing \eqn{q^{(j)}}, \eqn{q^{(\tau)}},
+  \eqn{p^{(\tau)}}, \eqn{l^{(\tau)}}, \eqn{d^{(j)}}, and \eqn{d^{(\tau)}}.
 }
 \description{
 Build a multiple-decrement table

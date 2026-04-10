@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{qxtau}
 \alias{qxtau}
-\title{Total probability of decrement q_x^(tau)}
+\title{Total probability of decrement \eqn{q_x^{(\tau)}}}
 \usage{
 qxtau(qxj)
 }
@@ -13,7 +13,7 @@ qxtau(qxj)
 Numeric scalar.
 }
 \description{
-Total probability of decrement q_x^(tau)
+Total probability of decrement \eqn{q_x^{(\tau)}}
 }
 \examples{
 qxtau(c(0.011, 0.100))

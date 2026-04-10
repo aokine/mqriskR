@@ -2,12 +2,12 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tqxprime_mudd}
 \alias{tqxprime_mudd}
-\title{Independent probabilities {}_t q_x^{'(j)} under MUDD}
+\title{Independent probabilities \eqn{{}_t q_x^{\prime(j)}} under MUDD}
 \usage{
 tqxprime_mudd(qxj, t)
 }
 \arguments{
-\item{qxj}{Numeric vector of dependent probabilities q_x^(j).}
+\item{qxj}{Numeric vector of dependent probabilities \eqn{q_x^{(j)}}.}
 
 \item{t}{Time in [0,1].}
 }
@@ -15,7 +15,7 @@ tqxprime_mudd(qxj, t)
 Numeric vector.
 }
 \description{
-Independent probabilities {}_t q_x^{'(j)} under MUDD
+Independent probabilities \eqn{{}_t q_x^{\prime(j)}} under MUDD
 }
 \examples{
 tqxprime_mudd(c(.20, .10), t = 0.5)

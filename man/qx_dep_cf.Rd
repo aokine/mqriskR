@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{qx_dep_cf}
 \alias{qx_dep_cf}
-\title{Dependent probabilities q_x^(j) from independent probabilities q_x^{'(j)} under constant force}
+\title{Dependent probabilities \eqn{q_x^{(j)}} from independent probabilities \eqn{q_x^{\prime(j)}} under constant force}
 \usage{
 qx_dep_cf(qxprime)
 }
@@ -13,7 +13,7 @@ qx_dep_cf(qxprime)
 Numeric vector of dependent probabilities.
 }
 \description{
-Dependent probabilities q_x^(j) from independent probabilities q_x^{'(j)} under constant force
+Dependent probabilities \eqn{q_x^{(j)}} from independent probabilities \eqn{q_x^{\prime(j)}} under constant force
 }
 \examples{
 qx_dep_cf(c(0.20, 0.10))

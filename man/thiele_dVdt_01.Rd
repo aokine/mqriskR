@@ -9,9 +9,9 @@ thiele_dVdt_01(t, V0, V1, delta, Pbar, B, R, mu01, mu02, mu10, mu12)
 \arguments{
 \item{t}{Time.}
 
-\item{V0}{Value of \eqn{{}_t\overline{V}^{(0)}}.}
+\item{V0}{Value of \eqn{{}_{t}\overline{V}^{(0)}}.}
 
-\item{V1}{Value of \eqn{{}_t\overline{V}^{(1)}}.}
+\item{V1}{Value of \eqn{{}_{t}\overline{V}^{(1)}}.}
 
 \item{delta}{Force of interest.}
 
@@ -35,23 +35,23 @@ A named numeric vector with components \code{dV0} and \code{dV1}.
 \description{
 Computes the right-hand sides of the coupled Thiele differential equations
 in Equations (14.25) and (14.26) for the healthy-life reserve
-\eqn{{}_t\overline{V}^{(0)}} and the disabled-life reserve
-\eqn{{}_t\overline{V}^{(1)}}.
+\eqn{{}_{t}\overline{V}^{(0)}} and the disabled-life reserve
+\eqn{{}_{t}\overline{V}^{(1)}}.
 }
 \details{
 The equations are
 \deqn{
-\frac{d}{dt}{}_t\overline{V}^{(0)}
-= \overline{P} + \delta\,{}_t\overline{V}^{(0)}
-- \mu_{x+t}^{02}(B-{}_t\overline{V}^{(0)})
-- \mu_{x+t}^{01}({}_t\overline{V}^{(1)}-{}_t\overline{V}^{(0)}),
+\frac{d}{dt}{}_{t}\overline{V}^{(0)}
+= \overline{P} + \delta {}_{t}\overline{V}^{(0)}
+- \mu_{x+t}^{02}(B-{}_{t}\overline{V}^{(0)})
+- \mu_{x+t}^{01}({}_{t}\overline{V}^{(1)}-{}_{t}\overline{V}^{(0)})
 }
 and
 \deqn{
-\frac{d}{dt}{}_t\overline{V}^{(1)}
-= \delta\,{}_t\overline{V}^{(1)} - R
-- \mu_{x+t}^{12}(B-{}_t\overline{V}^{(1)})
-- \mu_{x+t}^{10}({}_t\overline{V}^{(0)}-{}_t\overline{V}^{(1)}).
+\frac{d}{dt}{}_{t}\overline{V}^{(1)}
+= \delta {}_{t}\overline{V}^{(1)} - R
+- \mu_{x+t}^{12}(B-{}_{t}\overline{V}^{(1)})
+- \mu_{x+t}^{10}({}_{t}\overline{V}^{(0)}-{}_{t}\overline{V}^{(1)})
 }
 }
 \examples{

@@ -40,17 +40,17 @@ thiele_path_01(
 
 \item{mu12}{Function of time returning \eqn{\mu_{x+t}^{12}}.}
 
-\item{V0_n}{Terminal value of \eqn{{}_n\overline{V}^{(0)}}.}
+\item{V0_n}{Terminal value of \eqn{{}_{n}\overline{V}^{(0)}}.}
 
-\item{V1_n}{Terminal value of \eqn{{}_n\overline{V}^{(1)}}.}
+\item{V1_n}{Terminal value of \eqn{{}_{n}\overline{V}^{(1)}}.}
 }
 \value{
 A data frame with columns \code{t}, \code{tV0}, and \code{tV1}.
 }
 \description{
 Computes the backward Euler reserve path for the healthy-life reserve
-\eqn{{}_t\overline{V}^{(0)}} and disabled-life reserve
-\eqn{{}_t\overline{V}^{(1)}} using Equations (14.27) and (14.28).
+\eqn{{}_{t}\overline{V}^{(0)}} and disabled-life reserve
+\eqn{{}_{t}\overline{V}^{(1)}} using Equations (14.27) and (14.28).
 }
 \examples{
 mu01 <- function(t) 0.10 * t + 0.20

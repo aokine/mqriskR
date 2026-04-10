@@ -2,18 +2,18 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{qxprime_mudd}
 \alias{qxprime_mudd}
-\title{Independent probabilities q_x^{'(j)} from dependent probabilities q_x^(j) under MUDD}
+\title{Independent probabilities \eqn{q_x^{\prime(j)}} from dependent probabilities \eqn{q_x^{(j)}} under MUDD}
 \usage{
 qxprime_mudd(qxj)
 }
 \arguments{
-\item{qxj}{Numeric vector of dependent probabilities q_x^(j).}
+\item{qxj}{Numeric vector of dependent probabilities \eqn{q_x^{(j)}}.}
 }
 \value{
-Numeric vector of independent probabilities q_x^{'(j)}.
+Numeric vector of independent probabilities \eqn{q_x^{\prime(j)}}.
 }
 \description{
-Independent probabilities q_x^{'(j)} from dependent probabilities q_x^(j) under MUDD
+Independent probabilities \eqn{q_x^{\prime(j)}} from dependent probabilities \eqn{q_x^{(j)}} under MUDD
 }
 \examples{
 qxprime_mudd(c(.20, .10))

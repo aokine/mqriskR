@@ -2,14 +2,14 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{Abarxj_md}
 \alias{Abarxj_md}
-\title{Continuous multiple-decrement insurance APV \eqn{\overline{A}_x^{(j)}}}
+\title{Continuous multiple-decrement insurance APV \eqn{\overline{A}_{x}^{(j)}}}
 \usage{
 Abarxj_md(t, ptau, muj, delta, benefit = 1)
 }
 \arguments{
 \item{t}{Numeric vector of time points.}
 
-\item{ptau}{Numeric vector of values \eqn{{}_tp_x^{(\tau)}}.}
+\item{ptau}{Numeric vector of values \eqn{{}_{t}p_{x}^{(\tau)}}.}
 
 \item{muj}{Numeric vector of values \eqn{\mu_{x+t}^{(j)}}.}
 
@@ -27,7 +27,7 @@ decrement by Cause \eqn{j}, matching Equation (14.4) in Chapter 14.
 \details{
 The integral is evaluated numerically by the trapezoidal rule:
 \deqn{
-\overline{A}_x^{(j)} = \int_0^T v^t\, {}_tp_x^{(\tau)}\, \mu_{x+t}^{(j)}\, dt.
+\overline{A}_{x}^{(j)} = \int_0^T v^t {}_{t}p_{x}^{(\tau)} \mu_{x+t}^{(j)} dt
 }
 }
 \examples{

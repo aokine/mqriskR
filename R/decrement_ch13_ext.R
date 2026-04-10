@@ -24,7 +24,7 @@
 # Discrete multiple-decrement functions
 # ---------------------------
 
-#' Total probability of decrement q_x^(tau)
+#' Total probability of decrement \eqn{q_x^{(\tau)}}
 #'
 #' @param qxj Numeric vector of cause-specific decrement probabilities.
 #' @return Numeric scalar.
@@ -38,7 +38,7 @@ qxtau <- function(qxj) {
   out
 }
 
-#' Survival probability p_x^(tau)
+#' Survival probability \eqn{p_x^{(\tau)}}
 #'
 #' @param qxj Numeric vector of cause-specific decrement probabilities.
 #' @return Numeric scalar.
@@ -49,7 +49,7 @@ pxtau <- function(qxj) {
   1 - qxtau(qxj)
 }
 
-#' Cause-specific decrements d_x^(j)
+#' Cause-specific decrements \eqn{d_x^{(j)}}
 #'
 #' @param lxtau Number alive at age x in the multiple-decrement table.
 #' @param qxj Numeric vector of cause-specific decrement probabilities.
@@ -64,7 +64,7 @@ dxj <- function(lxtau, qxj) {
   lxtau * qxj
 }
 
-#' Total decrements d_x^(tau)
+#' Total decrements \eqn{d_x^{(\tau)}}
 #'
 #' @param lxtau Number alive at age x in the multiple-decrement table.
 #' @param qxj Numeric vector of cause-specific decrement probabilities.
@@ -81,8 +81,9 @@ dxtau <- function(lxtau, qxj) {
 #' @param x Integer vector of ages or durations.
 #' @param qxj Matrix/data.frame of cause-specific decrement probabilities.
 #'   Rows correspond to ages in x, columns correspond to causes.
-#' @param radix Starting l_x^(tau).
-#' @return Data frame containing q^(j), q^(tau), p^(tau), l^(tau), d^(j), d^(tau).
+#' @param radix Starting \eqn{l_x^{(\tau)}}.
+#' @return Data frame containing \eqn{q^{(j)}}, \eqn{q^{(\tau)}},
+#'   \eqn{p^{(\tau)}}, \eqn{l^{(\tau)}}, \eqn{d^{(j)}}, and \eqn{d^{(\tau)}}.
 #' @examples
 #' x <- 45:50
 #' qmat <- cbind(
@@ -135,7 +136,7 @@ md_table <- function(x, qxj, radix = 100000) {
   out
 }
 
-#' n-year survival probability {}_n p_x^(tau) from a multiple-decrement table
+#' \eqn{{}_n p_x^{(\tau)}} from a multiple-decrement table
 #'
 #' @param tbl Output from md_table().
 #' @param x Starting age.
@@ -156,7 +157,7 @@ npxtau_md <- function(tbl, x, n) {
   tbl$ltau[idx1] / tbl$ltau[idx0]
 }
 
-#' n-year probability of decrement due to cause j from a multiple-decrement table
+#' \eqn{{}_n q_x^{(j)}} from a multiple-decrement table
 #'
 #' @param tbl Output from md_table().
 #' @param x Starting age.
@@ -183,7 +184,7 @@ nqxj_md <- function(tbl, x, n, j) {
   sum(tbl[[dcol]][rows]) / tbl$ltau[idx0]
 }
 
-#' n-year probability of decrement for all causes from a multiple-decrement table
+#' \eqn{{}_n q_x^{(\tau)}} from a multiple-decrement table
 #'
 #' @param tbl Output from md_table().
 #' @param x Starting age.
@@ -203,7 +204,7 @@ nqxtau_md <- function(tbl, x, n) {
 # Continuous multiple-decrement functions under constant force
 # ---------------------------
 
-#' Single-decrement survival probability {}_t p_x^{'(j)} under constant force
+#' Single-decrement survival probability \eqn{{}_t p_x^{\prime(j)}} under constant force
 #'
 #' @param mu Force of decrement for cause j.
 #' @param t Time.
@@ -218,7 +219,7 @@ tpxprimej_cf <- function(mu, t) {
   exp(-mu * t)
 }
 
-#' Single-decrement failure probability {}_t q_x^{'(j)} under constant force
+#' Single-decrement failure probability \eqn{{}_t q_x^{\prime(j)}} under constant force
 #'
 #' @param mu Force of decrement for cause j.
 #' @param t Time.
@@ -230,7 +231,7 @@ tqxprimej_cf <- function(mu, t) {
   1 - tpxprimej_cf(mu = mu, t = t)
 }
 
-#' Total survival probability {}_t p_x^(tau) under constant forces
+#' Total survival probability \eqn{{}_t p_x^{(\tau)}} under constant forces
 #'
 #' @param mu Numeric vector of cause-specific forces.
 #' @param t Time.
@@ -244,7 +245,7 @@ tpx_tau_cf <- function(mu, t) {
   tpxprimej_cf(mu = sum(mu), t = t)
 }
 
-#' Cause-specific probability {}_t q_x^(j) under constant forces
+#' Cause-specific probability \eqn{{}_t q_x^{(j)}} under constant forces
 #'
 #' @param mu Numeric vector of cause-specific forces.
 #' @param j Cause index.
@@ -267,10 +268,10 @@ tqxj_cf <- function(mu, j, t) {
 # MUDD relationships
 # ---------------------------
 
-#' Independent probabilities q_x^{'(j)} from dependent probabilities q_x^(j) under MUDD
+#' Independent probabilities \eqn{q_x^{\prime(j)}} from dependent probabilities \eqn{q_x^{(j)}} under MUDD
 #'
-#' @param qxj Numeric vector of dependent probabilities q_x^(j).
-#' @return Numeric vector of independent probabilities q_x^{'(j)}.
+#' @param qxj Numeric vector of dependent probabilities \eqn{q_x^{(j)}}.
+#' @return Numeric vector of independent probabilities \eqn{q_x^{\prime(j)}}.
 #' @examples
 #' qxprime_mudd(c(.20, .10))
 #' @export
@@ -281,9 +282,9 @@ qxprime_mudd <- function(qxj) {
   1 - (1 - qtau)^(qxj / qtau)
 }
 
-#' Independent probabilities {}_t q_x^{'(j)} under MUDD
+#' Independent probabilities \eqn{{}_t q_x^{\prime(j)}} under MUDD
 #'
-#' @param qxj Numeric vector of dependent probabilities q_x^(j).
+#' @param qxj Numeric vector of dependent probabilities \eqn{q_x^{(j)}}.
 #' @param t Time in [0,1].
 #' @return Numeric vector.
 #' @examples
@@ -304,7 +305,7 @@ tqxprime_mudd <- function(qxj, t) {
 # Constant-force relationships from independent q'
 # ---------------------------
 
-#' Dependent probabilities q_x^(j) from independent probabilities q_x^{'(j)} under constant force
+#' Dependent probabilities \eqn{q_x^{(j)}} from independent probabilities \eqn{q_x^{\prime(j)}} under constant force
 #'
 #' @param qxprime Numeric vector of independent probabilities.
 #' @return Numeric vector of dependent probabilities.
@@ -324,13 +325,13 @@ qx_dep_cf <- function(qxprime) {
 # SUDD relationships for two decrements
 # ---------------------------
 
-#' Dependent probabilities q_x^(j) from independent probabilities q_x^{'(j)} under SUDD
+#' Dependent probabilities \eqn{q_x^{(j)}} from independent probabilities \eqn{q_x^{\prime(j)}} under SUDD
 #'
 #' Two-decrement case only.
 #'
 #' @param q1prime Independent probability for decrement 1.
 #' @param q2prime Independent probability for decrement 2.
-#' @return Numeric vector c(q1, q2).
+#' @return Numeric vector \code{c(q1, q2)}.
 #' @examples
 #' qx_dep_sudd(0.20, 0.10)
 #' @export
@@ -344,13 +345,13 @@ qx_dep_sudd <- function(q1prime, q2prime) {
   c(q1 = q1, q2 = q2)
 }
 
-#' Independent probabilities q_x^{'(j)} from dependent probabilities q_x^(j) under SUDD
+#' Independent probabilities \eqn{q_x^{\prime(j)}} from dependent probabilities \eqn{q_x^{(j)}} under SUDD
 #'
 #' Two-decrement case only.
 #'
 #' @param q1 Dependent probability for decrement 1.
 #' @param q2 Dependent probability for decrement 2.
-#' @return Numeric vector c(q1prime, q2prime).
+#' @return Numeric vector \code{c(q1prime, q2prime)}.
 #' @examples
 #' qxprime_sudd(0.20, 0.10)
 #' @export

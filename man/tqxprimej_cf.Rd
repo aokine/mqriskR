@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tqxprimej_cf}
 \alias{tqxprimej_cf}
-\title{Single-decrement failure probability {}_t q_x^{'(j)} under constant force}
+\title{Single-decrement failure probability \eqn{{}_t q_x^{\prime(j)}} under constant force}
 \usage{
 tqxprimej_cf(mu, t)
 }
@@ -15,7 +15,7 @@ tqxprimej_cf(mu, t)
 Numeric scalar/vector.
 }
 \description{
-Single-decrement failure probability {}_t q_x^{'(j)} under constant force
+Single-decrement failure probability \eqn{{}_t q_x^{\prime(j)}} under constant force
 }
 \examples{
 tqxprimej_cf(0.10, 5)

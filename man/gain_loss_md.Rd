@@ -62,9 +62,9 @@ Computes the gain or loss expression from Section 14.6.
 \details{
 With within-year decrement probabilities, the function evaluates
 \deqn{
-[{}_tV^G + G(1-r) - e](1+i)
+[{}_{t}V^G + G(1-r) - e](1+i)
 - \left[(b^{(1)}+s^{(1)})q^{(1)} + (b^{(2)}+s^{(2)})q^{(2)}
-+ p^{(\tau)}\, {}_{t+1}V^G \right].
++ p^{(\tau)} {}_{t+1}V^G \right]
 }
 
 If \code{year_end_cause2 = TRUE}, the Cause 2 decrement is treated as

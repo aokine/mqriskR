@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{dxj}
 \alias{dxj}
-\title{Cause-specific decrements d_x^(j)}
+\title{Cause-specific decrements \eqn{d_x^{(j)}}}
 \usage{
 dxj(lxtau, qxj)
 }
@@ -15,7 +15,7 @@ dxj(lxtau, qxj)
 Numeric vector.
 }
 \description{
-Cause-specific decrements d_x^(j)
+Cause-specific decrements \eqn{d_x^{(j)}}
 }
 \examples{
 dxj(1000, c(0.011, 0.100))

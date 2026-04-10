@@ -2,7 +2,7 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{tp00_tp01_euler}
 \alias{tp00_tp01_euler}
-\title{Euler approximation for \eqn{{}_tp_x^{00}} and \eqn{{}_tp_x^{01}}}
+\title{Euler approximation for \eqn{{}_{t}p_{x}^{00}} and \eqn{{}_{t}p_{x}^{01}}}
 \usage{
 tp00_tp01_euler(h, n, mu01, mu02, mu10, mu12, p00_0 = 1, p01_0 = 0)
 }
@@ -19,9 +19,9 @@ tp00_tp01_euler(h, n, mu01, mu02, mu10, mu12, p00_0 = 1, p01_0 = 0)
 
 \item{mu12}{Function of time returning \eqn{\mu_{x+t}^{12}}.}
 
-\item{p00_0}{Initial value of \eqn{{}_0p_x^{00}}.}
+\item{p00_0}{Initial value of \eqn{{}_{0}p_{x}^{00}}.}
 
-\item{p01_0}{Initial value of \eqn{{}_0p_x^{01}}.}
+\item{p01_0}{Initial value of \eqn{{}_{0}p_{x}^{01}}.}
 }
 \value{
 A data frame with columns \code{t}, \code{tp00}, \code{tp01},

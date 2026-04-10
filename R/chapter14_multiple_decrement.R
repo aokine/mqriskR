@@ -3,22 +3,22 @@
 # Multiple-Decrement Models (Applications)
 # =========================================================
 
-#' Discrete multiple-decrement insurance APV \(A_x^{(j)}\)
+#' Discrete multiple-decrement insurance APV \eqn{A_{x}^{(j)}}
 #'
 #' Computes the actuarial present value of a benefit payable at the end of the
-#' year of decrement if decrement occurs by Cause \(j\), matching Equation
+#' year of decrement if decrement occurs by Cause \eqn{j}, matching Equation
 #' (14.3b) in Chapter 14.
 #'
 #' The function evaluates
 #' \deqn{
-#' A_x^{(j)} = \sum_{k=0}^{n-1} v^{k+1}\, {}_kp_x^{(\tau)}\, q_{x+k}^{(j)},
+#' A_{x}^{(j)} = \sum_{k=0}^{n-1} v^{k+1} {}_{k}p_{x}^{(\tau)} q_{x+k}^{(j)}
 #' }
 #' with an optional benefit amount multiplier.
 #'
 #' @param qj Numeric vector of conditional probabilities
 #'   \eqn{q_{x+k}^{(j)}} for Cause \eqn{j}.
 #' @param ptau Numeric vector of survival probabilities
-#'   \eqn{{}_kp_x^{(\tau)}} of remaining in force to duration \eqn{k}.
+#'   \eqn{{}_{k}p_{x}^{(\tau)}} of remaining in force to duration \eqn{k}.
 #' @param i Effective annual interest rate.
 #' @param benefit Benefit amount payable on decrement by Cause \eqn{j}.
 #'
@@ -58,18 +58,18 @@ Axj_md <- function(qj, ptau, i, benefit = 1) {
   sum(benefit * v^k * ptau * qj)
 }
 
-#' Continuous multiple-decrement insurance APV \eqn{\overline{A}_x^{(j)}}
+#' Continuous multiple-decrement insurance APV \eqn{\overline{A}_{x}^{(j)}}
 #'
 #' Computes the actuarial present value of a benefit payable at the moment of
 #' decrement by Cause \eqn{j}, matching Equation (14.4) in Chapter 14.
 #'
 #' The integral is evaluated numerically by the trapezoidal rule:
 #' \deqn{
-#' \overline{A}_x^{(j)} = \int_0^T v^t\, {}_tp_x^{(\tau)}\, \mu_{x+t}^{(j)}\, dt.
+#' \overline{A}_{x}^{(j)} = \int_0^T v^t {}_{t}p_{x}^{(\tau)} \mu_{x+t}^{(j)} dt
 #' }
 #'
 #' @param t Numeric vector of time points.
-#' @param ptau Numeric vector of values \eqn{{}_tp_x^{(\tau)}}.
+#' @param ptau Numeric vector of values \eqn{{}_{t}p_{x}^{(\tau)}}.
 #' @param muj Numeric vector of values \eqn{\mu_{x+t}^{(j)}}.
 #' @param delta Force of interest.
 #' @param benefit Benefit amount payable on decrement by Cause \eqn{j}.
@@ -105,7 +105,7 @@ Abarxj_md <- function(t, ptau, muj, delta, benefit = 1) {
   sum(diff(t) * (head(y, -1) + tail(y, -1)) / 2)
 }
 
-#' Projected asset share path \eqn{{}_k AS}
+#' Projected asset share path \eqn{{}_{k}AS}
 #'
 #' Computes projected asset shares recursively using Equations (14.5b) and
 #' (14.6b) of Chapter 14, with optional support for a survival benefit payable
@@ -113,21 +113,20 @@ Abarxj_md <- function(t, ptau, muj, delta, benefit = 1) {
 #'
 #' For policy year \eqn{k},
 #' \deqn{
-#' [{}_ {k-1}AS + G(1-r_k) - e_k](1+i)
+#' [{}_{k-1}AS + G(1-r_k) - e_k](1+i)
 #' = b_k^{(1)} q_{x+k-1}^{(1)}
 #' + b_k^{(2)} q_{x+k-1}^{(2)}
-#' + p_{x+k-1}^{(\tau)} \left(b_k^{(3)} + {}_k AS\right),
+#' + p_{x+k-1}^{(\tau)} \left(b_k^{(3)} + {}_{k}AS\right)
 #' }
 #' so that
 #' \deqn{
-#' {}_k AS =
-#' \frac{[{}_ {k-1}AS + G(1-r_k) - e_k](1+i)
+#' {}_{k}AS =
+#' \frac{[{}_{k-1}AS + G(1-r_k) - e_k](1+i)
 #' - b_k^{(1)} q_{x+k-1}^{(1)}
-#' - b_k^{(2)} q_{x+k-1}^{(2)}}{p_{x+k-1}^{(\tau)}}
-#' - b_k^{(3)}.
+#' - b_k^{(2)} q_{x+k-1}^{(2)}}{p_{x+k-1}^{(\tau)}} - b_k^{(3)}
 #' }
 #'
-#' @param AS0 Initial asset share \eqn{{}_0 AS}.
+#' @param AS0 Initial asset share \eqn{{}_{0}AS}.
 #' @param G Level annual premium.
 #' @param r Numeric vector of percent-of-premium expense factors.
 #' @param e Numeric vector of fixed contract expenses.
@@ -172,7 +171,7 @@ AS_path <- function(AS0, G, r, e, b1, b2, q1, q2, p_tau, i, b3 = NULL) {
   )
 }
 
-#' Euler approximation for \eqn{{}_tp_x^{00}} and \eqn{{}_tp_x^{01}}
+#' Euler approximation for \eqn{{}_{t}p_{x}^{00}} and \eqn{{}_{t}p_{x}^{01}}
 #'
 #' Computes the Euler approximations in the disability model allowing for
 #' recovery, as in Equations (14.20) and (14.21).
@@ -190,8 +189,8 @@ AS_path <- function(AS0, G, r, e, b1, b2, q1, q2, p_tau, i, b3 = NULL) {
 #' @param mu02 Function of time returning \eqn{\mu_{x+t}^{02}}.
 #' @param mu10 Function of time returning \eqn{\mu_{x+t}^{10}}.
 #' @param mu12 Function of time returning \eqn{\mu_{x+t}^{12}}.
-#' @param p00_0 Initial value of \eqn{{}_0p_x^{00}}.
-#' @param p01_0 Initial value of \eqn{{}_0p_x^{01}}.
+#' @param p00_0 Initial value of \eqn{{}_{0}p_{x}^{00}}.
+#' @param p01_0 Initial value of \eqn{{}_{0}p_{x}^{01}}.
 #'
 #' @return A data frame with columns \code{t}, \code{tp00}, \code{tp01},
 #'   and \code{tp02}.
@@ -247,18 +246,18 @@ tp00_tp01_euler <- function(h, n, mu01, mu02, mu10, mu12,
 #'
 #' The numerator is
 #' \deqn{
-#' \int v^t \left[{}_tp_x^{00}\mu_{x+t}^{02}B^{02}
-#' + {}_tp_x^{01}\mu_{x+t}^{12}B^{12}
-#' + {}_tp_x^{01}R \right] dt,
+#' \int v^t \left[{}_{t}p_{x}^{00}\mu_{x+t}^{02}B^{02}
+#' + {}_{t}p_{x}^{01}\mu_{x+t}^{12}B^{12}
+#' + {}_{t}p_{x}^{01}R \right] dt
 #' }
 #' and the denominator is
 #' \deqn{
-#' \int v^t {}_tp_x^{00} dt.
+#' \int v^t {}_{t}p_{x}^{00} dt
 #' }
 #'
 #' @param t Numeric vector of time points.
-#' @param tp00 Numeric vector of values \eqn{{}_tp_x^{00}}.
-#' @param tp01 Numeric vector of values \eqn{{}_tp_x^{01}}.
+#' @param tp00 Numeric vector of values \eqn{{}_{t}p_{x}^{00}}.
+#' @param tp01 Numeric vector of values \eqn{{}_{t}p_{x}^{01}}.
 #' @param delta Force of interest.
 #' @param mu02 Function of time returning \eqn{\mu_{x+t}^{02}}.
 #' @param mu12 Function of time returning \eqn{\mu_{x+t}^{12}}.
@@ -314,27 +313,27 @@ Pbar_trapz_ms <- function(t, tp00, tp01, delta,
 #'
 #' Computes the right-hand sides of the coupled Thiele differential equations
 #' in Equations (14.25) and (14.26) for the healthy-life reserve
-#' \eqn{{}_t\overline{V}^{(0)}} and the disabled-life reserve
-#' \eqn{{}_t\overline{V}^{(1)}}.
+#' \eqn{{}_{t}\overline{V}^{(0)}} and the disabled-life reserve
+#' \eqn{{}_{t}\overline{V}^{(1)}}.
 #'
 #' The equations are
 #' \deqn{
-#' \frac{d}{dt}{}_t\overline{V}^{(0)}
-#' = \overline{P} + \delta\,{}_t\overline{V}^{(0)}
-#' - \mu_{x+t}^{02}(B-{}_t\overline{V}^{(0)})
-#' - \mu_{x+t}^{01}({}_t\overline{V}^{(1)}-{}_t\overline{V}^{(0)}),
+#' \frac{d}{dt}{}_{t}\overline{V}^{(0)}
+#' = \overline{P} + \delta {}_{t}\overline{V}^{(0)}
+#' - \mu_{x+t}^{02}(B-{}_{t}\overline{V}^{(0)})
+#' - \mu_{x+t}^{01}({}_{t}\overline{V}^{(1)}-{}_{t}\overline{V}^{(0)})
 #' }
 #' and
 #' \deqn{
-#' \frac{d}{dt}{}_t\overline{V}^{(1)}
-#' = \delta\,{}_t\overline{V}^{(1)} - R
-#' - \mu_{x+t}^{12}(B-{}_t\overline{V}^{(1)})
-#' - \mu_{x+t}^{10}({}_t\overline{V}^{(0)}-{}_t\overline{V}^{(1)}).
+#' \frac{d}{dt}{}_{t}\overline{V}^{(1)}
+#' = \delta {}_{t}\overline{V}^{(1)} - R
+#' - \mu_{x+t}^{12}(B-{}_{t}\overline{V}^{(1)})
+#' - \mu_{x+t}^{10}({}_{t}\overline{V}^{(0)}-{}_{t}\overline{V}^{(1)})
 #' }
 #'
 #' @param t Time.
-#' @param V0 Value of \eqn{{}_t\overline{V}^{(0)}}.
-#' @param V1 Value of \eqn{{}_t\overline{V}^{(1)}}.
+#' @param V0 Value of \eqn{{}_{t}\overline{V}^{(0)}}.
+#' @param V1 Value of \eqn{{}_{t}\overline{V}^{(1)}}.
 #' @param delta Force of interest.
 #' @param Pbar Continuous premium rate.
 #' @param B Death benefit.
@@ -402,8 +401,8 @@ thiele_dVdt_01 <- function(t, V0, V1, delta, Pbar, B, R,
 #' Backward reserve path for the disability model with recovery
 #'
 #' Computes the backward Euler reserve path for the healthy-life reserve
-#' \eqn{{}_t\overline{V}^{(0)}} and disabled-life reserve
-#' \eqn{{}_t\overline{V}^{(1)}} using Equations (14.27) and (14.28).
+#' \eqn{{}_{t}\overline{V}^{(0)}} and disabled-life reserve
+#' \eqn{{}_{t}\overline{V}^{(1)}} using Equations (14.27) and (14.28).
 #'
 #' @param h Step size.
 #' @param n Final time.
@@ -415,8 +414,8 @@ thiele_dVdt_01 <- function(t, V0, V1, delta, Pbar, B, R,
 #' @param mu02 Function of time returning \eqn{\mu_{x+t}^{02}}.
 #' @param mu10 Function of time returning \eqn{\mu_{x+t}^{10}}.
 #' @param mu12 Function of time returning \eqn{\mu_{x+t}^{12}}.
-#' @param V0_n Terminal value of \eqn{{}_n\overline{V}^{(0)}}.
-#' @param V1_n Terminal value of \eqn{{}_n\overline{V}^{(1)}}.
+#' @param V0_n Terminal value of \eqn{{}_{n}\overline{V}^{(0)}}.
+#' @param V1_n Terminal value of \eqn{{}_{n}\overline{V}^{(1)}}.
 #'
 #' @return A data frame with columns \code{t}, \code{tV0}, and \code{tV1}.
 #'
@@ -535,9 +534,9 @@ markov_nstep_prob <- function(P, n, i, j) {
 #'
 #' With within-year decrement probabilities, the function evaluates
 #' \deqn{
-#' [{}_tV^G + G(1-r) - e](1+i)
+#' [{}_{t}V^G + G(1-r) - e](1+i)
 #' - \left[(b^{(1)}+s^{(1)})q^{(1)} + (b^{(2)}+s^{(2)})q^{(2)}
-#' + p^{(\tau)}\, {}_{t+1}V^G \right].
+#' + p^{(\tau)} {}_{t+1}V^G \right]
 #' }
 #'
 #' If \code{year_end_cause2 = TRUE}, the Cause 2 decrement is treated as
@@ -590,8 +589,6 @@ gain_loss_md <- function(Vt, G, r, e, i,
 
   lhs - rhs
 }
-
-
 
 #' General projected asset share path (multiple decrements)
 #'

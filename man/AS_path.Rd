@@ -2,12 +2,12 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{AS_path}
 \alias{AS_path}
-\title{Projected asset share path \eqn{{}_k AS}}
+\title{Projected asset share path \eqn{{}_{k}AS}}
 \usage{
 AS_path(AS0, G, r, e, b1, b2, q1, q2, p_tau, i, b3 = NULL)
 }
 \arguments{
-\item{AS0}{Initial asset share \eqn{{}_0 AS}.}
+\item{AS0}{Initial asset share \eqn{{}_{0}AS}.}
 
 \item{G}{Level annual premium.}
 
@@ -42,17 +42,16 @@ at the end of year \eqn{k}.
 \details{
 For policy year \eqn{k},
 \deqn{
-[{}_ {k-1}AS + G(1-r_k) - e_k](1+i)
+[{}_{k-1}AS + G(1-r_k) - e_k](1+i)
 = b_k^{(1)} q_{x+k-1}^{(1)}
 + b_k^{(2)} q_{x+k-1}^{(2)}
-+ p_{x+k-1}^{(\tau)} \left(b_k^{(3)} + {}_k AS\right),
++ p_{x+k-1}^{(\tau)} \left(b_k^{(3)} + {}_{k}AS\right)
 }
 so that
 \deqn{
-{}_k AS =
-\frac{[{}_ {k-1}AS + G(1-r_k) - e_k](1+i)
+{}_{k}AS =
+\frac{[{}_{k-1}AS + G(1-r_k) - e_k](1+i)
 - b_k^{(1)} q_{x+k-1}^{(1)}
-- b_k^{(2)} q_{x+k-1}^{(2)}}{p_{x+k-1}^{(\tau)}}
-- b_k^{(3)}.
+- b_k^{(2)} q_{x+k-1}^{(2)}}{p_{x+k-1}^{(\tau)}} - b_k^{(3)}
 }
 }

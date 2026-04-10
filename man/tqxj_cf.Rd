@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tqxj_cf}
 \alias{tqxj_cf}
-\title{Cause-specific probability {}_t q_x^(j) under constant forces}
+\title{Cause-specific probability \eqn{{}_t q_x^{(j)}} under constant forces}
 \usage{
 tqxj_cf(mu, j, t)
 }
@@ -17,7 +17,7 @@ tqxj_cf(mu, j, t)
 Numeric scalar/vector.
 }
 \description{
-Cause-specific probability {}_t q_x^(j) under constant forces
+Cause-specific probability \eqn{{}_t q_x^{(j)}} under constant forces
 }
 \examples{
 tqxj_cf(c(0.10, 0.20), j = 1, t = 5)

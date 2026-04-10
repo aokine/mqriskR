@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{npxtau_md}
 \alias{npxtau_md}
-\title{n-year survival probability {}_n p_x^(tau) from a multiple-decrement table}
+\title{\eqn{{}_n p_x^{(\tau)}} from a multiple-decrement table}
 \usage{
 npxtau_md(tbl, x, n)
 }
@@ -17,7 +17,7 @@ npxtau_md(tbl, x, n)
 Numeric scalar.
 }
 \description{
-n-year survival probability {}_n p_x^(tau) from a multiple-decrement table
+\eqn{{}_n p_x^{(\tau)}} from a multiple-decrement table
 }
 \examples{
 x <- 45:50

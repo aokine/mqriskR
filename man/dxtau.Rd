@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{dxtau}
 \alias{dxtau}
-\title{Total decrements d_x^(tau)}
+\title{Total decrements \eqn{d_x^{(\tau)}}}
 \usage{
 dxtau(lxtau, qxj)
 }
@@ -15,7 +15,7 @@ dxtau(lxtau, qxj)
 Numeric scalar.
 }
 \description{
-Total decrements d_x^(tau)
+Total decrements \eqn{d_x^{(\tau)}}
 }
 \examples{
 dxtau(1000, c(0.011, 0.100))

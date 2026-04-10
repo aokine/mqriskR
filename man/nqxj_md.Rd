@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{nqxj_md}
 \alias{nqxj_md}
-\title{n-year probability of decrement due to cause j from a multiple-decrement table}
+\title{\eqn{{}_n q_x^{(j)}} from a multiple-decrement table}
 \usage{
 nqxj_md(tbl, x, n, j)
 }
@@ -19,7 +19,7 @@ nqxj_md(tbl, x, n, j)
 Numeric scalar.
 }
 \description{
-n-year probability of decrement due to cause j from a multiple-decrement table
+\eqn{{}_n q_x^{(j)}} from a multiple-decrement table
 }
 \examples{
 x <- 45:50

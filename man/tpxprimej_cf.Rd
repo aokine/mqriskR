@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tpxprimej_cf}
 \alias{tpxprimej_cf}
-\title{Single-decrement survival probability {}_t p_x^{'(j)} under constant force}
+\title{Single-decrement survival probability \eqn{{}_t p_x^{\prime(j)}} under constant force}
 \usage{
 tpxprimej_cf(mu, t)
 }
@@ -15,7 +15,7 @@ tpxprimej_cf(mu, t)
 Numeric scalar/vector.
 }
 \description{
-Single-decrement survival probability {}_t p_x^{'(j)} under constant force
+Single-decrement survival probability \eqn{{}_t p_x^{\prime(j)}} under constant force
 }
 \examples{
 tpxprimej_cf(0.10, 5)

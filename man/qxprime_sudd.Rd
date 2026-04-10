@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{qxprime_sudd}
 \alias{qxprime_sudd}
-\title{Independent probabilities q_x^{'(j)} from dependent probabilities q_x^(j) under SUDD}
+\title{Independent probabilities \eqn{q_x^{\prime(j)}} from dependent probabilities \eqn{q_x^{(j)}} under SUDD}
 \usage{
 qxprime_sudd(q1, q2)
 }
@@ -12,7 +12,7 @@ qxprime_sudd(q1, q2)
 \item{q2}{Dependent probability for decrement 2.}
 }
 \value{
-Numeric vector c(q1prime, q2prime).
+Numeric vector \code{c(q1prime, q2prime)}.
 }
 \description{
 Two-decrement case only.

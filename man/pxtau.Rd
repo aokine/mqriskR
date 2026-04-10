@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{pxtau}
 \alias{pxtau}
-\title{Survival probability p_x^(tau)}
+\title{Survival probability \eqn{p_x^{(\tau)}}}
 \usage{
 pxtau(qxj)
 }
@@ -13,7 +13,7 @@ pxtau(qxj)
 Numeric scalar.
 }
 \description{
-Survival probability p_x^(tau)
+Survival probability \eqn{p_x^{(\tau)}}
 }
 \examples{
 pxtau(c(0.011, 0.100))

@@ -9,9 +9,9 @@ Pbar_trapz_ms(t, tp00, tp01, delta, mu02, mu12, B02 = 1, B12 = 1, R = 0)
 \arguments{
 \item{t}{Numeric vector of time points.}
 
-\item{tp00}{Numeric vector of values \eqn{{}_tp_x^{00}}.}
+\item{tp00}{Numeric vector of values \eqn{{}_{t}p_{x}^{00}}.}
 
-\item{tp01}{Numeric vector of values \eqn{{}_tp_x^{01}}.}
+\item{tp01}{Numeric vector of values \eqn{{}_{t}p_{x}^{01}}.}
 
 \item{delta}{Force of interest.}
 
@@ -35,13 +35,13 @@ for recovery, as in Example 14.18.
 \details{
 The numerator is
 \deqn{
-\int v^t \left[{}_tp_x^{00}\mu_{x+t}^{02}B^{02}
-+ {}_tp_x^{01}\mu_{x+t}^{12}B^{12}
-+ {}_tp_x^{01}R \right] dt,
+\int v^t \left[{}_{t}p_{x}^{00}\mu_{x+t}^{02}B^{02}
++ {}_{t}p_{x}^{01}\mu_{x+t}^{12}B^{12}
++ {}_{t}p_{x}^{01}R \right] dt
 }
 and the denominator is
 \deqn{
-\int v^t {}_tp_x^{00} dt.
+\int v^t {}_{t}p_{x}^{00} dt
 }
 }
 \examples{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{nqxtau_md}
 \alias{nqxtau_md}
-\title{n-year probability of decrement for all causes from a multiple-decrement table}
+\title{\eqn{{}_n q_x^{(\tau)}} from a multiple-decrement table}
 \usage{
 nqxtau_md(tbl, x, n)
 }
@@ -17,7 +17,7 @@ nqxtau_md(tbl, x, n)
 Numeric scalar.
 }
 \description{
-n-year probability of decrement for all causes from a multiple-decrement table
+\eqn{{}_n q_x^{(\tau)}} from a multiple-decrement table
 }
 \examples{
 x <- 45:50

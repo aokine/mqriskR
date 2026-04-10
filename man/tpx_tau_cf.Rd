@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tpx_tau_cf}
 \alias{tpx_tau_cf}
-\title{Total survival probability {}_t p_x^(tau) under constant forces}
+\title{Total survival probability \eqn{{}_t p_x^{(\tau)}} under constant forces}
 \usage{
 tpx_tau_cf(mu, t)
 }
@@ -15,7 +15,7 @@ tpx_tau_cf(mu, t)
 Numeric scalar/vector.
 }
 \description{
-Total survival probability {}_t p_x^(tau) under constant forces
+Total survival probability \eqn{{}_t p_x^{(\tau)}} under constant forces
 }
 \examples{
 tpx_tau_cf(c(0.10, 0.20), 5)
