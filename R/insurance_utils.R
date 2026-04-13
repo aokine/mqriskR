@@ -117,7 +117,7 @@ Abarx_udd <- function(Ax, i) {
 
 #' UDD approximation of continuous term insurance
 #'
-#' Computes \eqn{\bar{A}_{x:\angl{n}}^{1} = (i/\delta)A_{x:\angl{n}}^{1}}.
+#' Computes \eqn{\bar{A}_{x:\overline{n}|}^{1} = (i/\delta)A_{x:\overline{n}|}^{1}}.
 #'
 #' @param Axn1 Discrete term insurance APV.
 #' @param i Effective annual interest rate.
@@ -148,7 +148,7 @@ nAbarx_udd <- function(nAx, i) {
 #' UDD approximation of continuous endowment insurance
 #'
 #' Computes
-#' \eqn{\bar{A}_{x:\angl{n}} = (i/\delta)A_{x:\angl{n}}^{1} + {}_nE_x}.
+#' \eqn{\bar{A}_{x:\overline{n}|} = (i/\delta)A_{x:\overline{n}|}^{1} + {}_nE_x}.
 #'
 #' @param Axn1 Discrete term insurance APV.
 #' @param nEx Pure endowment APV, \eqn{{}_nE_x}.
@@ -188,7 +188,7 @@ Ax_m_udd <- function(Ax, i, m) {
 
 #' UDD approximation of m-thly term insurance
 #'
-#' Computes \eqn{A_{x:\angl{n}}^{1(m)} = (i/i^{(m)})A_{x:\angl{n}}^{1}}.
+#' Computes \eqn{A_{x:\overline{n}|}^{1(m)} = (i/i^{(m)})A_{x:\overline{n}|}^{1}}.
 #'
 #' @param Axn1 Discrete term insurance APV.
 #' @param i Effective annual interest rate.
@@ -221,7 +221,7 @@ nAx_m_udd <- function(nAx, i, m) {
 #' UDD approximation of m-thly endowment insurance
 #'
 #' Computes
-#' \eqn{A_{x:\angl{n}}^{(m)} = (i/i^{(m)})A_{x:\angl{n}}^{1} + {}_nE_x}.
+#' \eqn{A_{x:\overline{n}|}^{(m)} = (i/i^{(m)})A_{x:\overline{n}|}^{1} + {}_nE_x}.
 #'
 #' @param Axn1 Discrete term insurance APV.
 #' @param nEx Pure endowment APV.

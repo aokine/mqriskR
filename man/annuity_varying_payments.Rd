@@ -61,40 +61,40 @@ Computes
 \deqn{(Ia)_x = \sum_{t=1}^{\infty} t \, v^t \, {}_tp_x.}
 
 Computes
-\deqn{(Ia)_{x:\angl{n}} = \sum_{t=1}^{n} t \, v^t \, {}_tp_x.}
+\deqn{(Ia)_{x:\overline{n}|} = \sum_{t=1}^{n} t \, v^t \, {}_tp_x.}
 
 Computes
-\deqn{(Da)_{x:\angl{n}} = \sum_{t=1}^{n} (n+1-t)\, v^t \, {}_tp_x.}
+\deqn{(Da)_{x:\overline{n}|} = \sum_{t=1}^{n} (n+1-t)\, v^t \, {}_tp_x.}
 
 Computes
 \deqn{(I\ddot{a})_x = \sum_{t=0}^{\infty} (t+1)\, v^t \, {}_tp_x.}
 
 Computes
-\deqn{(I\ddot{a})_{x:\angl{n}} = \sum_{t=0}^{n-1} (t+1)\, v^t \, {}_tp_x.}
+\deqn{(I\ddot{a})_{x:\overline{n}|} = \sum_{t=0}^{n-1} (t+1)\, v^t \, {}_tp_x.}
 
 Computes
-\deqn{(D\ddot{a})_{x:\angl{n}} = \sum_{t=0}^{n-1} (n-t)\, v^t \, {}_tp_x.}
+\deqn{(D\ddot{a})_{x:\overline{n}|} = \sum_{t=0}^{n-1} (n-t)\, v^t \, {}_tp_x.}
 
 Computes
 \deqn{(\bar{I}\bar{a})_x = \int_0^\infty t\,v^t\,{}_tp_x\,dt.}
 
 Computes
-\deqn{(\bar{I}\bar{a})_{x:\angl{n}} = \int_0^n t\,v^t\,{}_tp_x\,dt.}
+\deqn{(\bar{I}\bar{a})_{x:\overline{n}|} = \int_0^n t\,v^t\,{}_tp_x\,dt.}
 
 Computes
-\deqn{(\bar{D}\bar{a})_{x:\angl{n}} = \int_0^n (n-t)\,v^t\,{}_tp_x\,dt.}
+\deqn{(\bar{D}\bar{a})_{x:\overline{n}|} = \int_0^n (n-t)\,v^t\,{}_tp_x\,dt.}
 }
 \details{
 The functions implemented here match the notation in Section 8.6:
 \itemize{
   \item \code{Iax()} = \eqn{(Ia)_x}
-  \item \code{Iaxn()} = \eqn{(Ia)_{x:\angl{n}}}
-  \item \code{Daxn()} = \eqn{(Da)_{x:\angl{n}}}
+  \item \code{Iaxn()} = \eqn{(Ia)_{x:\overline{n}|}}
+  \item \code{Daxn()} = \eqn{(Da)_{x:\overline{n}|}}
   \item \code{Iadotx()} = \eqn{(I\ddot{a})_x}
-  \item \code{Iadotxn()} = \eqn{(I\ddot{a})_{x:\angl{n}}}
-  \item \code{Dadotxn()} = \eqn{(D\ddot{a})_{x:\angl{n}}}
+  \item \code{Iadotxn()} = \eqn{(I\ddot{a})_{x:\overline{n}|}}
+  \item \code{Dadotxn()} = \eqn{(D\ddot{a})_{x:\overline{n}|}}
   \item \code{Iabarx()} = \eqn{(\bar{I}\bar{a})_x}
-  \item \code{Iabarxn()} = \eqn{(\bar{I}\bar{a})_{x:\angl{n}}}
-  \item \code{Dabarxn()} = \eqn{(\bar{D}\bar{a})_{x:\angl{n}}}
+  \item \code{Iabarxn()} = \eqn{(\bar{I}\bar{a})_{x:\overline{n}|}}
+  \item \code{Dabarxn()} = \eqn{(\bar{D}\bar{a})_{x:\overline{n}|}}
 }
 }

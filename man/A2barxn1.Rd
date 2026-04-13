@@ -21,6 +21,6 @@ A2barxn1(x, n, i, model, ...)
 Numeric vector of second moments.
 }
 \description{
-Computes \eqn{{}^{2}\bar{A}_{x:\angl{n}}^{1}} by evaluating
-\eqn{\bar{A}_{x:\angl{n}}^{1}} at doubled force.
+Computes \eqn{{}^{2}\bar{A}_{x:\overline{n}|}^{1}} by evaluating
+\eqn{\bar{A}_{x:\overline{n}|}^{1}} at doubled force.
 }

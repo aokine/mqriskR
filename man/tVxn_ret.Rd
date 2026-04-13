@@ -24,7 +24,7 @@ Numeric vector.
 }
 \description{
 Computes the Chapter 10 retrospective reserve
-\eqn{{}_tV_{x:\angl{n}} = P_{x:\angl{n}} \ddot{s}_{x:\angl{t}} - {}_tk_x}
+\eqn{{}_tV_{x:\overline{n}|} = P_{x:\overline{n}|} \ddot{s}_{x:\overline{t}|} - {}_tk_x}
 for \eqn{t \le n}.
 }
 \examples{

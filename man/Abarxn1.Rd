@@ -22,5 +22,5 @@ Numeric vector of APVs.
 }
 \description{
 Computes
-\eqn{\bar{A}_{x:\angl{n}}^{1} = \int_0^n v^t \, {}_t p_x \mu_{x+t}\,dt}.
+\eqn{\bar{A}_{x:\overline{n}|}^{1} = \int_0^n v^t \, {}_t p_x \mu_{x+t}\,dt}.
 }

@@ -22,7 +22,7 @@ Numeric vector.
 }
 \description{
 Computes the Chapter 10 retrospective reserve
-\eqn{{}_tV_x = P_x \ddot{s}_{x:\angl{t}} - {}_tk_x}.
+\eqn{{}_tV_x = P_x \ddot{s}_{x:\overline{t}|} - {}_tk_x}.
 }
 \examples{
 tVx_ret(40, t = 10, i = 0.05, model = "uniform", omega = 100)

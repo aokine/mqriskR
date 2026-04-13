@@ -230,7 +230,7 @@ adotx_m <- function(x, m, i, model, ..., k_max = 200000, tol = 1e-12) {
 #'
 #' Computes the exact temporary m-thly annuity-immediate.
 #'
-#' \deqn{a_{x:\angl{n}}^{(m)} = \frac{1}{m}\sum_{t=1}^{mn} v^{t/m}\,{}_{t/m}p_x}
+#' \deqn{a_{x:\overline{n}|}^{(m)} = \frac{1}{m}\sum_{t=1}^{mn} v^{t/m}\,{}_{t/m}p_x}
 #'
 #' @name annuity_mthly_temp_immediate
 #' @aliases axn_m
@@ -264,7 +264,7 @@ axn_m <- function(x, n, m, i, model, ...) {
 #'
 #' Computes the exact temporary m-thly annuity-due.
 #'
-#' \deqn{\ddot{a}_{x:\angl{n}}^{(m)} = \frac{1}{m}\sum_{t=0}^{mn-1} v^{t/m}\,{}_{t/m}p_x}
+#' \deqn{\ddot{a}_{x:\overline{n}|}^{(m)} = \frac{1}{m}\sum_{t=0}^{mn-1} v^{t/m}\,{}_{t/m}p_x}
 #'
 #' @name annuity_mthly_temp_due
 #' @aliases adotxn_m
@@ -359,7 +359,7 @@ nadotx_m <- function(x, n, m, i, model, ..., k_max = 200000, tol = 1e-12) {
 #' Temporary m-thly annuity-immediate actuarial accumulated value
 #'
 #' Computes
-#' \deqn{s_{x:\angl{n}}^{(m)} = a_{x:\angl{n}}^{(m)} / {}_nE_x}
+#' \deqn{s_{x:\overline{n}|}^{(m)} = a_{x:\overline{n}|}^{(m)} / {}_nE_x}
 #'
 #' @name annuity_mthly_accum_immediate
 #' @aliases sxn_m
@@ -386,7 +386,7 @@ sxn_m <- function(x, n, m, i, model, ...) {
 #' Temporary m-thly annuity-due actuarial accumulated value
 #'
 #' Computes
-#' \deqn{\ddot{s}_{x:\angl{n}}^{(m)} = \ddot{a}_{x:\angl{n}}^{(m)} / {}_nE_x}
+#' \deqn{\ddot{s}_{x:\overline{n}|}^{(m)} = \ddot{a}_{x:\overline{n}|}^{(m)} / {}_nE_x}
 #'
 #' @name annuity_mthly_accum_due
 #' @aliases sdotxn_m

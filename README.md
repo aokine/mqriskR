@@ -1,25 +1,31 @@
-
 # mqriskR
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of mqriskR is to ...
+The goal of mqriskR is to provide functions for actuarial risk modeling,
+including survival models, life annuities, multiple-decrement models,
+and mortality improvement projections, using standard actuarial notation.
+
+The package is designed to align with standard actuarial notation and
+supports teaching, exam preparation, and reproducible actuarial analysis.
 
 ## Installation
 
-You can install the development version of mqriskR like so:
+You can install the development version of mqriskR from GitHub:
 
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+```r
+# install.packages("remotes")
+remotes::install_github("aokine/mqriskR")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This example computes a whole life annuity under a uniform distribution of deaths.
 
 ``` r
 library(mqriskR)
-## basic example code
+
+ax(40, i = 0.05, model = "uniform", omega = 100)
 ```
 

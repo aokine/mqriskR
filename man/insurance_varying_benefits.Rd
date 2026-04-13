@@ -11,13 +11,13 @@ varying benefits, matching Chapter 7 notation.
 Included functions:
 \itemize{
   \item \eqn{(IA)_x}
-  \item \eqn{(IA)_{x:\angl{n}}^{1}}
-  \item \eqn{(DA)_{x:\angl{n}}^{1}}
+  \item \eqn{(IA)_{x:\overline{n}|}^{1}}
+  \item \eqn{(DA)_{x:\overline{n}|}^{1}}
   \item \eqn{(\bar{I}\bar{A})_x}
   \item \eqn{(I\bar{A})_x}
-  \item \eqn{(\bar{I}\bar{A})_{x:\angl{n}}^{1}}
-  \item \eqn{(\bar{D}\bar{A})_{x:\angl{n}}^{1}}
-  \item \eqn{(D\bar{A})_{x:\angl{n}}^{1}}
+  \item \eqn{(\bar{I}\bar{A})_{x:\overline{n}|}^{1}}
+  \item \eqn{(\bar{D}\bar{A})_{x:\overline{n}|}^{1}}
+  \item \eqn{(D\bar{A})_{x:\overline{n}|}^{1}}
 }
 }
 \keyword{internal}

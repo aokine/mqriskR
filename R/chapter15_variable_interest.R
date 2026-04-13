@@ -123,7 +123,7 @@ nEx_var <- function(qx, i, benefit = 1) {
 #' Computes the APV of an \eqn{n}-year term insurance with benefit paid at the
 #' end of the year of death under a variable annual interest scenario:
 #' \deqn{
-#' A_{x:\angl{n}}^1 = \sum_{t=1}^{n} v_t \cdot {}_{t-1}p_x \cdot q_{x+t-1}.
+#' A_{x:\overline{n}|}^1 = \sum_{t=1}^{n} v_t \cdot {}_{t-1}p_x \cdot q_{x+t-1}.
 #' }
 #'
 #' If a benefit amount is supplied, the function returns that benefit times the
@@ -167,7 +167,7 @@ Axn1_var <- function(qx, i, benefit = 1) {
 #' Computes the APV of an \eqn{n}-year endowment insurance under a variable
 #' annual interest scenario:
 #' \deqn{
-#' A_{x:\angl{n}} = A_{x:\angl{n}}^1 + {}_nE_x.
+#' A_{x:\overline{n}|} = A_{x:\overline{n}|}^1 + {}_nE_x.
 #' }
 #'
 #' If a benefit amount is supplied, the function returns that benefit times the
@@ -212,12 +212,12 @@ Axn_var <- function(qx, i, benefit = 1) {
 #'
 #' For an immediate annuity,
 #' \deqn{
-#' a_{x:\angl{n}} = \sum_{t=1}^{n} v_t \cdot {}_tp_x.
+#' a_{x:\overline{n}|} = \sum_{t=1}^{n} v_t \cdot {}_tp_x.
 #' }
 #'
 #' For an annuity-due,
 #' \deqn{
-#' \ddot{a}_{x:\angl{n}} = \sum_{t=0}^{n-1} v_t \cdot {}_tp_x,
+#' \ddot{a}_{x:\overline{n}|} = \sum_{t=0}^{n-1} v_t \cdot {}_tp_x,
 #' }
 #' with \eqn{v_0 = 1}.
 #'
@@ -319,7 +319,7 @@ nEx_spot <- function(qx, z, benefit = 1) {
 #'
 #' Computes
 #' \deqn{
-#' A_{x:\angl{n}}^1 = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_{t-1}p_x \cdot q_{x+t-1}.
+#' A_{x:\overline{n}|}^1 = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_{t-1}p_x \cdot q_{x+t-1}.
 #' }
 #'
 #' @param qx Numeric vector of one-year mortality rates.
@@ -360,7 +360,7 @@ Axn1_spot <- function(qx, z, benefit = 1) {
 #'
 #' Computes
 #' \deqn{
-#' A_{x:\angl{n}} = A_{x:\angl{n}}^1 + {}_nE_x
+#' A_{x:\overline{n}|} = A_{x:\overline{n}|}^1 + {}_nE_x
 #' }
 #' using spot-rate discount factors.
 #'
@@ -399,12 +399,12 @@ Axn_spot <- function(qx, z, benefit = 1) {
 #'
 #' For an immediate annuity,
 #' \deqn{
-#' a_{x:\angl{n}} = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_tp_x.
+#' a_{x:\overline{n}|} = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_tp_x.
 #' }
 #'
 #' For an annuity-due,
 #' \deqn{
-#' \ddot{a}_{x:\angl{n}} = \sum_{t=0}^{n-1}(1+z_t)^{-t}\cdot {}_tp_x,
+#' \ddot{a}_{x:\overline{n}|} = \sum_{t=0}^{n-1}(1+z_t)^{-t}\cdot {}_tp_x,
 #' }
 #' where the time-0 discount factor is 1.
 #'

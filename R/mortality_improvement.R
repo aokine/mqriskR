@@ -190,7 +190,7 @@ tpx_improved <- function(x0, n, qx_base_vec, AAx_vec, base_year, issue_year) {
 #' Temporary annuity-immediate under mortality improvement
 #'
 #' Computes
-#' \deqn{a_{x:\angl{n}} = \sum_{t=1}^n v^t \, {}_tp_x^{(\mathrm{improved})}}
+#' \deqn{a_{x:\overline{n}|} = \sum_{t=1}^n v^t \, {}_tp_x^{(\mathrm{improved})}}
 #' using projected mortality rates.
 #'
 #' @param x0 Issue age.
@@ -236,7 +236,7 @@ axn_improved <- function(x0, n, i, qx_base_vec, AAx_vec, base_year, issue_year) 
 #' Deferred temporary annuity-immediate under mortality improvement
 #'
 #' Computes
-#' \deqn{{}_{u\mid}a_{x:\angl{n}} = \sum_{t=u+1}^{u+n} v^t \, {}_tp_x^{(\mathrm{improved})}}
+#' \deqn{{}_{u\mid}a_{x:\overline{n}|} = \sum_{t=u+1}^{u+n} v^t \, {}_tp_x^{(\mathrm{improved})}}
 #'
 #' @param x0 Issue age.
 #' @param u Deferral period in years.

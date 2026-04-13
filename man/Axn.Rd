@@ -23,5 +23,5 @@ Axn(x, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector of APVs.
 }
 \description{
-Computes \eqn{A_{x:\angl{n}} = A_{x:\angl{n}}^{1} + {}_nE_x}.
+Computes \eqn{A_{x:\overline{n}|} = A_{x:\overline{n}|}^{1} + {}_nE_x}.
 }

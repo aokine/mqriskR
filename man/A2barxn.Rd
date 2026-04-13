@@ -21,5 +21,5 @@ A2barxn(x, n, i, model, ...)
 Numeric vector of second moments.
 }
 \description{
-Computes \eqn{{}^{2}\bar{A}_{x:\angl{n}}}.
+Computes \eqn{{}^{2}\bar{A}_{x:\overline{n}|}}.
 }

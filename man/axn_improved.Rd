@@ -28,6 +28,6 @@ Numeric scalar.
 }
 \description{
 Computes
-\deqn{a_{x:\angl{n}} = \sum_{t=1}^n v^t \, {}_tp_x^{(\mathrm{improved})}}
+\deqn{a_{x:\overline{n}|} = \sum_{t=1}^n v^t \, {}_tp_x^{(\mathrm{improved})}}
 using projected mortality rates.
 }

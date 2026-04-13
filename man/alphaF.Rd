@@ -26,10 +26,10 @@ Numeric vector.
 }
 \description{
 Computes
-\eqn{\alpha^F = v q_x = A_{x:\angl{1}}^{1}}.
+\eqn{\alpha^F = v q_x = A_{x:\overline{1}|}^{1}}.
 
 Computes
-\eqn{\alpha^F = v q_x = A_{x:\angl{1}}^{1}}.
+\eqn{\alpha^F = v q_x = A_{x:\overline{1}|}^{1}}.
 }
 \examples{
 alphaF(40, i = 0.05, model = "uniform", omega = 100)

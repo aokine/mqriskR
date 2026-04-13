@@ -6,10 +6,10 @@
 \alias{mqriskR-package}
 \title{mqriskR package}
 \description{
-More about what it does (maybe more than one line). Continuation lines should be indented.
+Provides functions for actuarial risk modeling, including survival models, life annuities, multiple-decrement models, and mortality improvement projections. The package is designed to align with standard actuarial notation and supports teaching, exam preparation, and reproducible actuarial analysis.
 }
 \author{
-\strong{Maintainer}: Jane Doe \email{jane@example.com}
+\strong{Maintainer}: Nii Okine \email{okinean@appstate.edu}
 
 }
 \keyword{internal}

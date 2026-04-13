@@ -26,7 +26,7 @@ axybarn(x, y, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector.
 }
 \description{
-Computes \eqn{a_{\overline{xy}:\angl{n}}}.
+Computes \eqn{a_{\overline{xy}:\overline{n}|}}.
 }
 \details{
 Shared documentation topic used to avoid filename collisions with

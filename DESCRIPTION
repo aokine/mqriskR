@@ -1,25 +1,29 @@
 Package: mqriskR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Actuarial Risk Modeling and Life Contingencies Functions
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Nii", "Okine",
+      email = "okinean@appstate.edu",
       role = c("aut", "cre")
     )
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
+Description: Provides functions for actuarial risk modeling, including survival models,
+    life annuities, multiple-decrement models, and mortality improvement projections.
+    The package is designed to align with standard actuarial notation and supports
+    teaching, exam preparation, and reproducible actuarial analysis.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Suggests: 
     ggplot2,
     testthat (>= 3.0.0),
-    expm
+    expm,
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 Imports: 
     stats,
     utils
 RoxygenNote: 7.3.3
+VignetteBuilder: knitr

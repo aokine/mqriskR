@@ -22,5 +22,5 @@ Numeric vector of APVs.
 }
 \description{
 Computes
-\eqn{\bar{A}_{x:\angl{n}} = \bar{A}_{x:\angl{n}}^{1} + v^n\,{}_np_x}.
+\eqn{\bar{A}_{x:\overline{n}|} = \bar{A}_{x:\overline{n}|}^{1} + v^n\,{}_np_x}.
 }

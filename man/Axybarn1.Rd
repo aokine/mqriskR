@@ -25,7 +25,7 @@ Axybarn1(x, y, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector.
 }
 \description{
-Computes \eqn{A^{1}_{\overline{xy}:\angl{n}}}.
+Computes \eqn{A^{1}_{\overline{xy}:\overline{n}|}}.
 }
 \examples{
 Axybarn1(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)

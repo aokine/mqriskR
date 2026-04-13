@@ -23,6 +23,6 @@ A2xn1(x, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector of second moments.
 }
 \description{
-Computes \eqn{{}^{2}A_{x:\angl{n}}^{1}} by evaluating
-\eqn{A_{x:\angl{n}}^{1}} at doubled force.
+Computes \eqn{{}^{2}A_{x:\overline{n}|}^{1}} by evaluating
+\eqn{A_{x:\overline{n}|}^{1}} at doubled force.
 }

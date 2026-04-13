@@ -23,5 +23,5 @@ A2xn(x, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector of second moments.
 }
 \description{
-Computes \eqn{{}^{2}A_{x:\angl{n}}}.
+Computes \eqn{{}^{2}A_{x:\overline{n}|}}.
 }

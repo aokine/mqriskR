@@ -1,7 +1,7 @@
 # R Check for Example 10.1
-# Verify {}_{n-1}V_{x:\angl{n}} both ways:
+# Verify {}_{n-1}V_{x:\overline{n}|} both ways:
 # (1) prospective reserve formula
-# (2) shortcut v - P_{x:\angl{n}}
+# (2) shortcut v - P_{x:\overline{n}|}
 
 A_xn <- 0.20
 d <- 0.08
@@ -14,7 +14,7 @@ P_xn <- A_xn / adot_xn
 
 # Reserve from the prospective formula at t = n - 1
 # For one year remaining in an endowment:
-# A_{x+n-1:\angl{1}} = v and ä_{x+n-1:\angl{1}} = 1
+# A_{x+n-1:\overline{1}|} = v and ä_{x+n-1\overline1n}|}} = 1
 reserve_prospective <- v - P_xn * 1
 
 # Reserve from the shortcut expression
@@ -33,12 +33,12 @@ print(round(out, 6))
 
 
 # R Check for Example 10.2
-# Solve for P_{x:\angl{n}}^1 from
-# {}_nV_x = P_x / P_{x:\angl{n}}^{1(endowment)} - P_{x:\angl{n}}^1 / P_{x:\angl{n}}^{1(endowment)}
+# Solve for P_{x:\overline{n}|}^1 from
+# {}_nV_x = P_x / P_{x:\overline{n}|}^{1(endowment)} - P_{x:\overline{n}|}^1 / P_{x:\overline{n}|}^{1(endowment)}
 
 Px_whole <- 0.090
 Vn <- 0.563
-PnEx <- 0.00864   # this is P_{x:\angl{n}}^{ 1 } for the pure endowment part
+PnEx <- 0.00864   # this is P_{x:\overline{n}|}^{ 1 } for the pure endowment part
 
 Pxn1 <- Px_whole - Vn * PnEx
 
@@ -247,7 +247,7 @@ abline(h = reserve_20, lty = 2)
 
 
 # R Check for Exercise 10-6
-# Compute 1000({}_2V_{x:\angl{3}} - {}_1V_{x:\angl{3}})
+# Compute 1000({}_2V_{x:\overline{3}|} - {}_1V_{x:\overline{3}|})
 
 P_x3 <- 0.33251
 i <- 0.06
@@ -290,7 +290,7 @@ V1 <- 0.04145
 i <- 0.10
 v <- 1 / (1 + i)
 
-# From {}_1V_{x:\angl{2}}^1 = v q_{x+1} - P
+# From {}_1V_{x:\overline{2}|}^1 = v q_{x+1} - P
 q_x1 <- (V1 + P) / v
 
 # Solve for p_x from premium equation

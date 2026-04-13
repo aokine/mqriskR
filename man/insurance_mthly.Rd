@@ -10,9 +10,9 @@ Exact m-thly contingent payment / insurance functions matching Chapter 7 notatio
 These functions handle:
 \itemize{
   \item m-thly whole life insurance: \eqn{A_x^{(m)}},
-  \item m-thly term insurance: \eqn{A_{x:\angl{n}}^{1(m)}},
+  \item m-thly term insurance: \eqn{A_{x:\overline{n}|}^{1(m)}},
   \item m-thly deferred insurance: \eqn{{}_{n\mid}A_x^{(m)}},
-  \item m-thly endowment insurance: \eqn{A_{x:\angl{n}}^{(m)}},
+  \item m-thly endowment insurance: \eqn{A_{x:\overline{n}|}^{(m)}},
   \item second moments and variances.
 }
 

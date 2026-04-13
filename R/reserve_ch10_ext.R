@@ -58,7 +58,7 @@ NULL
 #' Whole life net level premium reserve by retrospective method
 #'
 #' Computes the Chapter 10 retrospective reserve
-#' \eqn{{}_tV_x = P_x \ddot{s}_{x:\angl{t}} - {}_tk_x}.
+#' \eqn{{}_tV_x = P_x \ddot{s}_{x:\overline{t}|} - {}_tk_x}.
 #'
 #' @param x Issue age.
 #' @param t Duration.
@@ -89,7 +89,7 @@ tVx_ret <- function(x, t, i, model, ...) {
 #' Endowment insurance reserve by retrospective method
 #'
 #' Computes the Chapter 10 retrospective reserve
-#' \eqn{{}_tV_{x:\angl{n}} = P_{x:\angl{n}} \ddot{s}_{x:\angl{t}} - {}_tk_x}
+#' \eqn{{}_tV_{x:\overline{n}|} = P_{x:\overline{n}|} \ddot{s}_{x:\overline{t}|} - {}_tk_x}
 #' for \eqn{t \le n}.
 #'
 #' @param x Issue age.
@@ -251,7 +251,7 @@ htVnAx <- function(x, n, h, t, i, model, ...) {
 #' Deferred annuity-due premium
 #'
 #' Computes
-#' \eqn{P({}_{n|}\ddot{a}_x) = {}_{n|}\ddot{a}_x / \ddot{a}_{x:\angl{n}}}.
+#' \eqn{P({}_{n|}\ddot{a}_x) = {}_{n|}\ddot{a}_x / \ddot{a}_{x:\overline{n}|}}.
 #'
 #' @param x Issue age.
 #' @param n Deferral period.
@@ -318,7 +318,7 @@ tVnAdotx <- function(x, n, t, i, model, ...) {
 #' Deferred annuity-immediate premium
 #'
 #' Computes
-#' \eqn{P({}_{n|}a_x) = {}_{n|}a_x / \ddot{a}_{x:\angl{n}}}.
+#' \eqn{P({}_{n|}a_x) = {}_{n|}a_x / \ddot{a}_{x:\overline{n}|}}.
 #'
 #' @inheritParams PnAdotx
 #' @return Numeric vector.

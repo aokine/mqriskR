@@ -24,5 +24,5 @@ Numeric vector of APVs.
 }
 \description{
 Computes
-\eqn{A_{x:\angl{n}}^{1(m)} = \sum_{j=0}^{mn-1} v^{(j+1)/m}\Pr(j/m < T_x \le (j+1)/m)}.
+\eqn{A_{x:\overline{n}|}^{1(m)} = \sum_{j=0}^{mn-1} v^{(j+1)/m}\Pr(j/m < T_x \le (j+1)/m)}.
 }

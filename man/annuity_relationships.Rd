@@ -80,9 +80,9 @@ Included identities:
   \item whole life immediate: \eqn{a_x = (v - A_x)/d}
   \item whole life due: \eqn{\ddot{a}_x = (1 - A_x)/d}
   \item whole life continuous: \eqn{\bar{a}_x = (1 - \bar{A}_x)/\delta}
-  \item temporary immediate: \eqn{a_{x:\angl{n}} = (1 - A_{x:\angl{n}})/d - 1 + {}_nE_x}
-  \item temporary due: \eqn{\ddot{a}_{x:\angl{n}} = (1 - A_{x:\angl{n}})/d}
-  \item temporary continuous: \eqn{\bar{a}_{x:\angl{n}} = (1 - \bar{A}_{x:\angl{n}})/\delta}
+  \item temporary immediate: \eqn{a_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d - 1 + {}_nE_x}
+  \item temporary due: \eqn{\ddot{a}_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d}
+  \item temporary continuous: \eqn{\bar{a}_{x:\overline{n}|} = (1 - \bar{A}_{x:\overline{n}|})/\delta}
   \item deferred immediate: \eqn{{}_{n\mid}a_x = {}_nE_x a_{x+n}}
   \item deferred due: \eqn{{}_{n\mid}\ddot{a}_x = {}_nE_x \ddot{a}_{x+n}}
   \item deferred continuous: \eqn{{}_{n\mid}\bar{a}_x = {}_nE_x \bar{a}_{x+n}}

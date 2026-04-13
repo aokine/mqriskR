@@ -1,4 +1,3 @@
-
 ## In-Text Examples
 ## Example 5.2 (PDF and HRF)
 # Example 5.2 verification:

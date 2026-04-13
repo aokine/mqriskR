@@ -22,7 +22,7 @@ Numeric vector.
 }
 \description{
 Computes
-\eqn{P({}_{n|}\ddot{a}_x) = {}_{n|}\ddot{a}_x / \ddot{a}_{x:\angl{n}}}.
+\eqn{P({}_{n|}\ddot{a}_x) = {}_{n|}\ddot{a}_x / \ddot{a}_{x:\overline{n}|}}.
 }
 \examples{
 PnAdotx(40, n = 20, i = 0.05, model = "uniform", omega = 100)

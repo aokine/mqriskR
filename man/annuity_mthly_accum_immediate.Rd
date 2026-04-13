@@ -25,7 +25,7 @@ Numeric vector of actuarial accumulated values.
 }
 \description{
 Computes
-\deqn{s_{x:\angl{n}}^{(m)} = a_{x:\angl{n}}^{(m)} / {}_nE_x}
+\deqn{s_{x:\overline{n}|}^{(m)} = a_{x:\overline{n}|}^{(m)} / {}_nE_x}
 }
 \examples{
 sxn_m(40, n = 10, m = 12, i = 0.05, model = "uniform", omega = 100)

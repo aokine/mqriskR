@@ -5,10 +5,10 @@
 #' These functions handle:
 #' \itemize{
 #'   \item whole life insurance: \eqn{A_x},
-#'   \item term insurance: \eqn{A_{x:\angl{n}}^{1}},
+#'   \item term insurance: \eqn{A_{x:\overline{n}|}^{1}},
 #'   \item deferred insurance: \eqn{{}_{n\mid}A_x},
 #'   \item pure endowment: \eqn{{}_nE_x},
-#'   \item endowment insurance: \eqn{A_{x:\angl{n}}},
+#'   \item endowment insurance: \eqn{A_{x:\overline{n}|}},
 #'   \item second moments and variances.
 #' }
 #'
@@ -157,7 +157,7 @@ Ax <- function(x, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) {
 
 #' Term insurance APV
 #'
-#' Computes \eqn{A_{x:\angl{n}}^{1} = \sum_{k=0}^{n-1} v^{k+1} {}_{k\mid}q_x}.
+#' Computes \eqn{A_{x:\overline{n}|}^{1} = \sum_{k=0}^{n-1} v^{k+1} {}_{k\mid}q_x}.
 #'
 #' @param x Age.
 #' @param n Term.
@@ -237,7 +237,7 @@ nAx <- function(x, n, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 500
 
 #' Endowment insurance APV
 #'
-#' Computes \eqn{A_{x:\angl{n}} = A_{x:\angl{n}}^{1} + {}_nE_x}.
+#' Computes \eqn{A_{x:\overline{n}|} = A_{x:\overline{n}|}^{1} + {}_nE_x}.
 #'
 #' @param x Age.
 #' @param n Term.
@@ -270,8 +270,8 @@ A2x <- function(x, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) 
 
 #' Second moment of term insurance PV
 #'
-#' Computes \eqn{{}^{2}A_{x:\angl{n}}^{1}} by evaluating
-#' \eqn{A_{x:\angl{n}}^{1}} at doubled force.
+#' Computes \eqn{{}^{2}A_{x:\overline{n}|}^{1}} by evaluating
+#' \eqn{A_{x:\overline{n}|}^{1}} at doubled force.
 #'
 #' @inheritParams Axn1
 #' @return Numeric vector of second moments.
@@ -305,7 +305,7 @@ A2nAx <- function(x, n, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5
 
 #' Second moment of endowment insurance PV
 #'
-#' Computes \eqn{{}^{2}A_{x:\angl{n}}}.
+#' Computes \eqn{{}^{2}A_{x:\overline{n}|}}.
 #'
 #' @inheritParams Axn
 #' @return Numeric vector of second moments.
@@ -333,7 +333,7 @@ var_Ax <- function(x, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 500
 
 #' Variance of term insurance PV
 #'
-#' Computes \eqn{\mathrm{Var}(Z_{x:\angl{n}}^{1}) = {}^{2}A_{x:\angl{n}}^{1} - (A_{x:\angl{n}}^{1})^2}.
+#' Computes \eqn{\mathrm{Var}(Z_{x:\overline{n}|}^{1}) = {}^{2}A_{x:\overline{n}|}^{1} - (A_{x:\overline{n}|}^{1})^2}.
 #'
 #' @inheritParams Axn1
 #' @return Numeric vector of variances.
@@ -380,7 +380,7 @@ var_Axn <- function(x, n, i, tbl = NULL, model = NULL, ...) {
 #' Covariance of term and deferred insurance PVs
 #'
 #' Computes
-#' \eqn{\mathrm{Cov}(Z_{x:\angl{n}}^{1}, {}_{n\mid}Z_x) = -A_{x:\angl{n}}^{1} \cdot {}_{n\mid}A_x}.
+#' \eqn{\mathrm{Cov}(Z_{x:\overline{n}|}^{1}, {}_{n\mid}Z_x) = -A_{x:\overline{n}|}^{1} \cdot {}_{n\mid}A_x}.
 #'
 #' @inheritParams Axn1
 #' @return Numeric vector of covariances.
@@ -393,8 +393,8 @@ cov_term_deferred <- function(x, n, i, tbl = NULL, model = NULL, ...) {
 #' Covariance of term insurance and pure endowment PVs
 #'
 #' Computes
-#' \eqn{\mathrm{Cov}(Z_{x:\angl{n}}^{1}, Z_{x:\angl{n}}^{1\text{(pure endow)}}) =
-#' -A_{x:\angl{n}}^{1} \cdot {}_nE_x}.
+#' \eqn{\mathrm{Cov}(Z_{x:\overline{n}|}^{1}, Z_{x:\overline{n}|}^{1\text{(pure endow)}}) =
+#' -A_{x:\overline{n}|}^{1} \cdot {}_nE_x}.
 #'
 #' @inheritParams Axn1
 #' @return Numeric vector of covariances.

@@ -6,13 +6,13 @@
 #' Included functions:
 #' \itemize{
 #'   \item \eqn{(IA)_x}
-#'   \item \eqn{(IA)_{x:\angl{n}}^{1}}
-#'   \item \eqn{(DA)_{x:\angl{n}}^{1}}
+#'   \item \eqn{(IA)_{x:\overline{n}|}^{1}}
+#'   \item \eqn{(DA)_{x:\overline{n}|}^{1}}
 #'   \item \eqn{(\bar{I}\bar{A})_x}
 #'   \item \eqn{(I\bar{A})_x}
-#'   \item \eqn{(\bar{I}\bar{A})_{x:\angl{n}}^{1}}
-#'   \item \eqn{(\bar{D}\bar{A})_{x:\angl{n}}^{1}}
-#'   \item \eqn{(D\bar{A})_{x:\angl{n}}^{1}}
+#'   \item \eqn{(\bar{I}\bar{A})_{x:\overline{n}|}^{1}}
+#'   \item \eqn{(\bar{D}\bar{A})_{x:\overline{n}|}^{1}}
+#'   \item \eqn{(D\bar{A})_{x:\overline{n}|}^{1}}
 #' }
 #'
 #' @name insurance_varying_benefits
@@ -117,7 +117,7 @@ IAx <- function(x, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) 
 #' Increasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(IA)_{x:\angl{n}}^{1} = \sum_{k=0}^{n-1} (k+1) v^{k+1} \Pr(K_x = k).}
+#' \deqn{(IA)_{x:\overline{n}|}^{1} = \sum_{k=0}^{n-1} (k+1) v^{k+1} \Pr(K_x = k).}
 #'
 #' @param x Age.
 #' @param n Term.
@@ -151,7 +151,7 @@ IAxn1 <- function(x, n, i, tbl = NULL, model = NULL, ...) {
 #' Decreasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(DA)_{x:\angl{n}}^{1} = \sum_{k=0}^{n-1} (n-k) v^{k+1} \Pr(K_x = k).}
+#' \deqn{(DA)_{x:\overline{n}|}^{1} = \sum_{k=0}^{n-1} (n-k) v^{k+1} \Pr(K_x = k).}
 #'
 #' @inheritParams IAxn1
 #'
@@ -251,7 +251,7 @@ IAbarx <- function(x, i, model, ...) {
 #' Fully continuous increasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(\bar{I}\bar{A})_{x:\angl{n}}^{1} = \int_0^n t\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+#' \deqn{(\bar{I}\bar{A})_{x:\overline{n}|}^{1} = \int_0^n t\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
 #'
 #' @param x Age.
 #' @param n Term.
@@ -292,7 +292,7 @@ IbarAbarxn1 <- function(x, n, i, model, ...) {
 #' Fully continuous decreasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(\bar{D}\bar{A})_{x:\angl{n}}^{1} = \int_0^n (n-t)\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+#' \deqn{(\bar{D}\bar{A})_{x:\overline{n}|}^{1} = \int_0^n (n-t)\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
 #'
 #' @inheritParams IbarAbarxn1
 #'
@@ -329,7 +329,7 @@ DbarAbarxn1 <- function(x, n, i, model, ...) {
 #' Piecewise-continuous decreasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(D\bar{A})_{x:\angl{n}}^{1} = \int_0^n \lfloor n+1-t \rfloor\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+#' \deqn{(D\bar{A})_{x:\overline{n}|}^{1} = \int_0^n \lfloor n+1-t \rfloor\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
 #'
 #' @inheritParams IbarAbarxn1
 #'

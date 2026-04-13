@@ -30,5 +30,5 @@ Numeric scalar.
 }
 \description{
 Computes
-\deqn{{}_{u\mid}a_{x:\angl{n}} = \sum_{t=u+1}^{u+n} v^t \, {}_tp_x^{(\mathrm{improved})}}
+\deqn{{}_{u\mid}a_{x:\overline{n}|} = \sum_{t=u+1}^{u+n} v^t \, {}_tp_x^{(\mathrm{improved})}}
 }

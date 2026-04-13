@@ -5,9 +5,9 @@
 #' These functions handle:
 #' \itemize{
 #'   \item continuous whole life insurance: \eqn{\bar{A}_x},
-#'   \item continuous term insurance: \eqn{\bar{A}_{x:\angl{n}}^{1}},
+#'   \item continuous term insurance: \eqn{\bar{A}_{x:\overline{n}|}^{1}},
 #'   \item continuous deferred insurance: \eqn{{}_{n\mid}\bar{A}_x},
-#'   \item continuous endowment insurance: \eqn{\bar{A}_{x:\angl{n}}},
+#'   \item continuous endowment insurance: \eqn{\bar{A}_{x:\overline{n}|}},
 #'   \item second moments and variances.
 #' }
 #'
@@ -132,7 +132,7 @@ Abarx <- function(x, i, model, ...) {
 #' Continuous term insurance APV
 #'
 #' Computes
-#' \eqn{\bar{A}_{x:\angl{n}}^{1} = \int_0^n v^t \, {}_t p_x \mu_{x+t}\,dt}.
+#' \eqn{\bar{A}_{x:\overline{n}|}^{1} = \int_0^n v^t \, {}_t p_x \mu_{x+t}\,dt}.
 #'
 #' @param x Age.
 #' @param n Term.
@@ -197,7 +197,7 @@ nAbarx <- function(x, n, i, model, ...) {
 #' Continuous endowment insurance APV
 #'
 #' Computes
-#' \eqn{\bar{A}_{x:\angl{n}} = \bar{A}_{x:\angl{n}}^{1} + v^n\,{}_np_x}.
+#' \eqn{\bar{A}_{x:\overline{n}|} = \bar{A}_{x:\overline{n}|}^{1} + v^n\,{}_np_x}.
 #'
 #' @param x Age.
 #' @param n Term.
@@ -234,8 +234,8 @@ A2barx <- function(x, i, model, ...) {
 
 #' Second moment of continuous term insurance PV
 #'
-#' Computes \eqn{{}^{2}\bar{A}_{x:\angl{n}}^{1}} by evaluating
-#' \eqn{\bar{A}_{x:\angl{n}}^{1}} at doubled force.
+#' Computes \eqn{{}^{2}\bar{A}_{x:\overline{n}|}^{1}} by evaluating
+#' \eqn{\bar{A}_{x:\overline{n}|}^{1}} at doubled force.
 #'
 #' @inheritParams Abarxn1
 #' @return Numeric vector of second moments.
@@ -258,7 +258,7 @@ A2nAbarx <- function(x, n, i, model, ...) {
 
 #' Second moment of continuous endowment insurance PV
 #'
-#' Computes \eqn{{}^{2}\bar{A}_{x:\angl{n}}}.
+#' Computes \eqn{{}^{2}\bar{A}_{x:\overline{n}|}}.
 #'
 #' @inheritParams Abarxn
 #' @return Numeric vector of second moments.
@@ -291,7 +291,7 @@ var_Abarx <- function(x, i, model, ...) {
 #' Variance of continuous term insurance PV
 #'
 #' Computes
-#' \eqn{\mathrm{Var}(\bar{Z}_{x:\angl{n}}^{1}) = {}^{2}\bar{A}_{x:\angl{n}}^{1} - (\bar{A}_{x:\angl{n}}^{1})^2}.
+#' \eqn{\mathrm{Var}(\bar{Z}_{x:\overline{n}|}^{1}) = {}^{2}\bar{A}_{x:\overline{n}|}^{1} - (\bar{A}_{x:\overline{n}|}^{1})^2}.
 #'
 #' @inheritParams Abarxn1
 #' @return Numeric vector of variances.

@@ -22,5 +22,5 @@ Numeric vector.
 }
 \description{
 Computes
-\deqn{(\bar{I}\bar{A})_{x:\angl{n}}^{1} = \int_0^n t\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+\deqn{(\bar{I}\bar{A})_{x:\overline{n}|}^{1} = \int_0^n t\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
 }

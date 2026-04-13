@@ -47,24 +47,24 @@ Computes
 
 Computes
 \deqn{
-A_{x:\angl{n}}^1 = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_{t-1}p_x \cdot q_{x+t-1}.
+A_{x:\overline{n}|}^1 = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_{t-1}p_x \cdot q_{x+t-1}.
 }
 
 Computes
 \deqn{
-A_{x:\angl{n}} = A_{x:\angl{n}}^1 + {}_nE_x
+A_{x:\overline{n}|} = A_{x:\overline{n}|}^1 + {}_nE_x
 }
 using spot-rate discount factors.
 
 For an immediate annuity,
 \deqn{
-a_{x:\angl{n}} = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_tp_x.
+a_{x:\overline{n}|} = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_tp_x.
 }
 }
 \details{
 For an annuity-due,
 \deqn{
-\ddot{a}_{x:\angl{n}} = \sum_{t=0}^{n-1}(1+z_t)^{-t}\cdot {}_tp_x,
+\ddot{a}_{x:\overline{n}|} = \sum_{t=0}^{n-1}(1+z_t)^{-t}\cdot {}_tp_x,
 }
 where the time-0 discount factor is 1.
 }

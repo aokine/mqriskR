@@ -17,5 +17,5 @@ Axn1_m_udd(Axn1, i, m)
 m-thly term insurance APV under UDD.
 }
 \description{
-Computes \eqn{A_{x:\angl{n}}^{1(m)} = (i/i^{(m)})A_{x:\angl{n}}^{1}}.
+Computes \eqn{A_{x:\overline{n}|}^{1(m)} = (i/i^{(m)})A_{x:\overline{n}|}^{1}}.
 }

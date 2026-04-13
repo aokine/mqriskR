@@ -27,7 +27,7 @@ Numeric vector of annuity values.
 Computes the exact temporary m-thly annuity-immediate.
 }
 \details{
-\deqn{a_{x:\angl{n}}^{(m)} = \frac{1}{m}\sum_{t=1}^{mn} v^{t/m}\,{}_{t/m}p_x}
+\deqn{a_{x:\overline{n}|}^{(m)} = \frac{1}{m}\sum_{t=1}^{mn} v^{t/m}\,{}_{t/m}p_x}
 }
 \examples{
 axn_m(40, n = 10, m = 12, i = 0.05, model = "uniform", omega = 100)

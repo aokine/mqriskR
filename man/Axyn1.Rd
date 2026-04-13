@@ -25,7 +25,7 @@ Axyn1(x, y, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector.
 }
 \description{
-Computes \eqn{A^{1}_{xy:\angl{n}}}.
+Computes \eqn{A^{1}_{xy:\overline{n}|}}.
 }
 \examples{
 Axyn1(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)

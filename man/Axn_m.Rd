@@ -24,5 +24,5 @@ Numeric vector of APVs.
 }
 \description{
 Computes
-\eqn{A_{x:\angl{n}}^{(m)} = A_{x:\angl{n}}^{1(m)} + v^n\,{}_np_x}.
+\eqn{A_{x:\overline{n}|}^{(m)} = A_{x:\overline{n}|}^{1(m)} + v^n\,{}_np_x}.
 }

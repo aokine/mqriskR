@@ -20,7 +20,7 @@ Numeric vector of temporary complete expectations.
 }
 \description{
 Computes
-\eqn{\overset{\circ}{e}_{x:\angl{n}} = \int_0^n {}_t p_x \, dt}
+\eqn{\overset{\circ}{e}_{x:\overline{n}|} = \int_0^n {}_t p_x \, dt}
 using a within-year assumption:
 \code{"udd"}, \code{"cf"}, or \code{"balducci"}.
 }

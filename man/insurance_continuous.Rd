@@ -10,9 +10,9 @@ Continuous contingent payment / insurance functions matching Chapter 7 notation.
 These functions handle:
 \itemize{
   \item continuous whole life insurance: \eqn{\bar{A}_x},
-  \item continuous term insurance: \eqn{\bar{A}_{x:\angl{n}}^{1}},
+  \item continuous term insurance: \eqn{\bar{A}_{x:\overline{n}|}^{1}},
   \item continuous deferred insurance: \eqn{{}_{n\mid}\bar{A}_x},
-  \item continuous endowment insurance: \eqn{\bar{A}_{x:\angl{n}}},
+  \item continuous endowment insurance: \eqn{\bar{A}_{x:\overline{n}|}},
   \item second moments and variances.
 }
 

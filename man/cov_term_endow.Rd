@@ -24,6 +24,6 @@ Numeric vector of covariances.
 }
 \description{
 Computes
-\eqn{\mathrm{Cov}(Z_{x:\angl{n}}^{1}, Z_{x:\angl{n}}^{1\text{(pure endow)}}) =
--A_{x:\angl{n}}^{1} \cdot {}_nE_x}.
+\eqn{\mathrm{Cov}(Z_{x:\overline{n}|}^{1}, Z_{x:\overline{n}|}^{1\text{(pure endow)}}) =
+-A_{x:\overline{n}|}^{1} \cdot {}_nE_x}.
 }

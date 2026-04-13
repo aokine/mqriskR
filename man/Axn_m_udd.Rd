@@ -20,5 +20,5 @@ m-thly endowment insurance APV under UDD.
 }
 \description{
 Computes
-\eqn{A_{x:\angl{n}}^{(m)} = (i/i^{(m)})A_{x:\angl{n}}^{1} + {}_nE_x}.
+\eqn{A_{x:\overline{n}|}^{(m)} = (i/i^{(m)})A_{x:\overline{n}|}^{1} + {}_nE_x}.
 }

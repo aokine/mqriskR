@@ -24,5 +24,5 @@ Numeric vector.
 }
 \description{
 Computes
-\deqn{(DA)_{x:\angl{n}}^{1} = \sum_{k=0}^{n-1} (n-k) v^{k+1} \Pr(K_x = k).}
+\deqn{(DA)_{x:\overline{n}|}^{1} = \sum_{k=0}^{n-1} (n-k) v^{k+1} \Pr(K_x = k).}
 }

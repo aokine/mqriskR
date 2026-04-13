@@ -25,7 +25,7 @@ adotxyn(x, y, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector.
 }
 \description{
-Computes \eqn{\ddot{a}_{xy:\angl{n}}}.
+Computes \eqn{\ddot{a}_{xy:\overline{n}|}}.
 }
 \examples{
 adotxyn(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)

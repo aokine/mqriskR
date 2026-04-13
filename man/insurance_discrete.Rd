@@ -10,10 +10,10 @@ Discrete contingent payment / insurance functions matching Chapter 7 notation.
 These functions handle:
 \itemize{
   \item whole life insurance: \eqn{A_x},
-  \item term insurance: \eqn{A_{x:\angl{n}}^{1}},
+  \item term insurance: \eqn{A_{x:\overline{n}|}^{1}},
   \item deferred insurance: \eqn{{}_{n\mid}A_x},
   \item pure endowment: \eqn{{}_nE_x},
-  \item endowment insurance: \eqn{A_{x:\angl{n}}},
+  \item endowment insurance: \eqn{A_{x:\overline{n}|}},
   \item second moments and variances.
 }
 

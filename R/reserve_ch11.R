@@ -13,7 +13,7 @@ NULL
 #' Full preliminary term first-year modified premium
 #'
 #' Computes
-#' \eqn{\alpha^F = v q_x = A_{x:\angl{1}}^{1}}.
+#' \eqn{\alpha^F = v q_x = A_{x:\overline{1}|}^{1}}.
 #'
 #' @param x Issue age.
 #' @param i Effective annual interest rate.

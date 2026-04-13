@@ -60,8 +60,8 @@ Computes
 \deqn{\ddot{a}_x^{(m)} \approx \alpha(m)\ddot{a}_x - \beta(m).}
 
 Computes
-\deqn{\ddot{a}_{x:\angl{n}}^{(m)} \approx
-\alpha(m)\ddot{a}_{x:\angl{n}} - \beta(m)(1-{}_nE_x).}
+\deqn{\ddot{a}_{x:\overline{n}|}^{(m)} \approx
+\alpha(m)\ddot{a}_{x:\overline{n}|} - \beta(m)(1-{}_nE_x).}
 
 Computes
 \deqn{{}_{n\mid}\ddot{a}_x^{(m)} \approx
@@ -71,28 +71,28 @@ Computes
 \deqn{a_x^{(m)} \approx \alpha(m)a_x + \gamma(m).}
 
 Computes
-\deqn{a_{x:\angl{n}}^{(m)} \approx
-\alpha(m)a_{x:\angl{n}} + \gamma(m)(1-{}_nE_x).}
+\deqn{a_{x:\overline{n}|}^{(m)} \approx
+\alpha(m)a_{x:\overline{n}|} + \gamma(m)(1-{}_nE_x).}
 
 Computes
 \deqn{{}_{n\mid}a_x^{(m)} \approx
 \alpha(m)\,{}_{n\mid}a_x + \gamma(m)\,{}_nE_x.}
 
 Computes
-\deqn{\ddot{s}_{x:\angl{n}}^{(m)} \approx
-\alpha(m)\ddot{s}_{x:\angl{n}} - \beta(m)\left(\frac{1}{{}_nE_x}-1\right).}
+\deqn{\ddot{s}_{x:\overline{n}|}^{(m)} \approx
+\alpha(m)\ddot{s}_{x:\overline{n}|} - \beta(m)\left(\frac{1}{{}_nE_x}-1\right).}
 
 Computes
-\deqn{s_{x:\angl{n}}^{(m)} \approx
-\alpha(m)s_{x:\angl{n}} + \gamma(m)\left(\frac{1}{{}_nE_x}-1\right).}
+\deqn{s_{x:\overline{n}|}^{(m)} \approx
+\alpha(m)s_{x:\overline{n}|} + \gamma(m)\left(\frac{1}{{}_nE_x}-1\right).}
 
 Computes
 \deqn{\bar{a}_x \approx \frac{id}{\delta^2}\ddot{a}_x - \frac{i-\delta}{\delta^2}.}
 
 Uses the identity
-\deqn{\bar{a}_{x:\angl{n}} \approx \frac{1-\bar{A}_{x:\angl{n}}}{\delta}}
+\deqn{\bar{a}_{x:\overline{n}|} \approx \frac{1-\bar{A}_{x:\overline{n}|}}{\delta}}
 together with the package's existing Chapter 7 UDD insurance approximation
-for \eqn{\bar{A}_{x:\angl{n}}}.
+for \eqn{\bar{A}_{x:\overline{n}|}}.
 
 Computes
 \deqn{{}_{n\mid}\bar{a}_x \approx {}_nE_x \, \bar{a}_{x+n}.}

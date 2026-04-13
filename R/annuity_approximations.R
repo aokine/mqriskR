@@ -164,8 +164,8 @@ adotx_m_udd <- function(x, m, i, model, ...) {
 #' UDD approximation to m-thly temporary annuity-due
 #'
 #' Computes
-#' \deqn{\ddot{a}_{x:\angl{n}}^{(m)} \approx
-#' \alpha(m)\ddot{a}_{x:\angl{n}} - \beta(m)(1-{}_nE_x).}
+#' \deqn{\ddot{a}_{x:\overline{n}|}^{(m)} \approx
+#' \alpha(m)\ddot{a}_{x:\overline{n}|} - \beta(m)(1-{}_nE_x).}
 #'
 #' @param n Term.
 #' @rdname annuity_approximations_udd
@@ -215,8 +215,8 @@ ax_m_udd <- function(x, m, i, model, ...) {
 #' UDD approximation to m-thly temporary annuity-immediate
 #'
 #' Computes
-#' \deqn{a_{x:\angl{n}}^{(m)} \approx
-#' \alpha(m)a_{x:\angl{n}} + \gamma(m)(1-{}_nE_x).}
+#' \deqn{a_{x:\overline{n}|}^{(m)} \approx
+#' \alpha(m)a_{x:\overline{n}|} + \gamma(m)(1-{}_nE_x).}
 #'
 #' @rdname annuity_approximations_udd
 #' @export
@@ -251,8 +251,8 @@ nax_m_udd <- function(x, n, m, i, model, ...) {
 #' UDD approximation to m-thly temporary annuity accumulated value
 #'
 #' Computes
-#' \deqn{\ddot{s}_{x:\angl{n}}^{(m)} \approx
-#' \alpha(m)\ddot{s}_{x:\angl{n}} - \beta(m)\left(\frac{1}{{}_nE_x}-1\right).}
+#' \deqn{\ddot{s}_{x:\overline{n}|}^{(m)} \approx
+#' \alpha(m)\ddot{s}_{x:\overline{n}|} - \beta(m)\left(\frac{1}{{}_nE_x}-1\right).}
 #'
 #' @rdname annuity_approximations_udd
 #' @export
@@ -270,8 +270,8 @@ sdotxn_m_udd <- function(x, n, m, i, model, ...) {
 #' UDD approximation to m-thly temporary annuity accumulated value
 #'
 #' Computes
-#' \deqn{s_{x:\angl{n}}^{(m)} \approx
-#' \alpha(m)s_{x:\angl{n}} + \gamma(m)\left(\frac{1}{{}_nE_x}-1\right).}
+#' \deqn{s_{x:\overline{n}|}^{(m)} \approx
+#' \alpha(m)s_{x:\overline{n}|} + \gamma(m)\left(\frac{1}{{}_nE_x}-1\right).}
 #'
 #' @rdname annuity_approximations_udd
 #' @export
@@ -305,9 +305,9 @@ abarx_udd <- function(x, i, model, ...) {
 #' UDD approximation to continuous temporary annuity
 #'
 #' Uses the identity
-#' \deqn{\bar{a}_{x:\angl{n}} \approx \frac{1-\bar{A}_{x:\angl{n}}}{\delta}}
+#' \deqn{\bar{a}_{x:\overline{n}|} \approx \frac{1-\bar{A}_{x:\overline{n}|}}{\delta}}
 #' together with the package's existing Chapter 7 UDD insurance approximation
-#' for \eqn{\bar{A}_{x:\angl{n}}}.
+#' for \eqn{\bar{A}_{x:\overline{n}|}}.
 #'
 #' Note that this function relies on the already-existing \code{Abarxn_udd()}
 #' implementation in the package, so extra survival-model arguments are not used.

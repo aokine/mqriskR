@@ -26,7 +26,7 @@ axyn(x, y, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector.
 }
 \description{
-Computes \eqn{a_{xy:\angl{n}}}.
+Computes \eqn{a_{xy:\overline{n}|}}.
 }
 \details{
 Shared documentation topic used to avoid filename collisions with

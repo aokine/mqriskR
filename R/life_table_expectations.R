@@ -6,8 +6,8 @@
 # Functions:
 #   ex_complete_tab()       complete expectation of life, \circ e_x
 #   ex_curtate_tab()        curtate expectation of life, e_x
-#   ex_temp_complete_tab()  temporary complete expectation of life, \circ e_{x:\angl{n}}
-#   ex_temp_curtate_tab()   temporary curtate expectation of life, e_{x:\angl{n}}
+#   ex_temp_complete_tab()  temporary complete expectation of life, \circ e_{x:\overline{n}|}
+#   ex_temp_curtate_tab()   temporary curtate expectation of life, e_{x:\overline{n}|}
 #
 # By default, complete expectations are computed under a fractional-age assumption:
 #   - "udd"       : \circ e_x = e_x + 1/2 (within each year)
@@ -78,13 +78,13 @@ ex_curtate_tab <- function(tbl, x) {
 }
 
 # -------------------------------------------------------------------------
-# Temporary curtate expectation of life: e_{x:\angl{n}}
+# Temporary curtate expectation of life: e_{x:\overline{n}|}
 # -------------------------------------------------------------------------
 
 #' Temporary curtate expectation of life from a life table
 #'
 #' Computes
-#' \eqn{e_{x:\angl{n}} = \sum_{k=1}^{n} {}_k p_x}
+#' \eqn{e_{x:\overline{n}|} = \sum_{k=1}^{n} {}_k p_x}
 #' for integer n in the discrete tabular setting.
 #'
 #' @param tbl A life_table object.
@@ -118,13 +118,13 @@ ex_temp_curtate_tab <- function(tbl, x, n) {
 }
 
 # -------------------------------------------------------------------------
-# Temporary complete expectation of life: \circ e_{x:\angl{n}}
+# Temporary complete expectation of life: \circ e_{x:\overline{n}|}
 # -------------------------------------------------------------------------
 
 #' Temporary complete expectation of life from a life table
 #'
 #' Computes
-#' \eqn{\overset{\circ}{e}_{x:\angl{n}} = \int_0^n {}_t p_x \, dt}
+#' \eqn{\overset{\circ}{e}_{x:\overline{n}|} = \int_0^n {}_t p_x \, dt}
 #' using a within-year assumption:
 #' \code{"udd"}, \code{"cf"}, or \code{"balducci"}.
 #'

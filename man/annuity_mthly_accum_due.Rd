@@ -25,7 +25,7 @@ Numeric vector of actuarial accumulated values.
 }
 \description{
 Computes
-\deqn{\ddot{s}_{x:\angl{n}}^{(m)} = \ddot{a}_{x:\angl{n}}^{(m)} / {}_nE_x}
+\deqn{\ddot{s}_{x:\overline{n}|}^{(m)} = \ddot{a}_{x:\overline{n}|}^{(m)} / {}_nE_x}
 }
 \examples{
 sdotxn_m(40, n = 10, m = 12, i = 0.05, model = "uniform", omega = 100)

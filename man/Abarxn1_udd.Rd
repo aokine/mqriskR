@@ -15,5 +15,5 @@ Abarxn1_udd(Axn1, i)
 Continuous term insurance APV under UDD.
 }
 \description{
-Computes \eqn{\bar{A}_{x:\angl{n}}^{1} = (i/\delta)A_{x:\angl{n}}^{1}}.
+Computes \eqn{\bar{A}_{x:\overline{n}|}^{1} = (i/\delta)A_{x:\overline{n}|}^{1}}.
 }

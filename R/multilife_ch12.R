@@ -197,7 +197,7 @@ nExybar <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
 
 #' Joint-life temporary annuity-due
 #'
-#' Computes \eqn{\ddot{a}_{xy:\angl{n}}}.
+#' Computes \eqn{\ddot{a}_{xy:\overline{n}|}}.
 #'
 #' @inheritParams nExy
 #' @return Numeric vector.
@@ -224,7 +224,7 @@ adotxyn <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
 
 #' Joint-life temporary annuity-immediate
 #'
-#' Computes \eqn{a_{xy:\angl{n}}}.
+#' Computes \eqn{a_{xy:\overline{n}|}}.
 #'
 #' Shared documentation topic used to avoid filename collisions with
 #' case-distinct function names on case-insensitive file systems.
@@ -297,7 +297,7 @@ axy <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-1
 
 #' Joint-life term insurance
 #'
-#' Computes \eqn{A^{1}_{xy:\angl{n}}}.
+#' Computes \eqn{A^{1}_{xy:\overline{n}|}}.
 #'
 #' @inheritParams nExy
 #' @return Numeric vector.
@@ -312,7 +312,7 @@ Axyn1 <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
 
 #' Joint-life endowment insurance
 #'
-#' Computes \eqn{A_{xy:\angl{n}}}.
+#' Computes \eqn{A_{xy:\overline{n}|}}.
 #'
 #' @inheritParams nExy
 #' @return Numeric vector.
@@ -347,7 +347,7 @@ Axy <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-1
 
 #' Last-survivor temporary annuity-due
 #'
-#' Computes \eqn{\ddot{a}_{\overline{xy}:\angl{n}}}.
+#' Computes \eqn{\ddot{a}_{\overline{xy}:\overline{n}|}}.
 #'
 #' @inheritParams nExy
 #' @return Numeric vector.
@@ -362,7 +362,7 @@ adotxybarn <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
 
 #' Last-survivor temporary annuity-immediate
 #'
-#' Computes \eqn{a_{\overline{xy}:\angl{n}}}.
+#' Computes \eqn{a_{\overline{xy}:\overline{n}|}}.
 #'
 #' Shared documentation topic used to avoid filename collisions with
 #' case-distinct function names on case-insensitive file systems.
@@ -419,7 +419,7 @@ axybar <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1
 
 #' Last-survivor term insurance
 #'
-#' Computes \eqn{A^{1}_{\overline{xy}:\angl{n}}}.
+#' Computes \eqn{A^{1}_{\overline{xy}:\overline{n}|}}.
 #'
 #' @inheritParams nExy
 #' @return Numeric vector.
@@ -434,7 +434,7 @@ Axybarn1 <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
 
 #' Last-survivor endowment insurance
 #'
-#' Computes \eqn{A_{\overline{xy}:\angl{n}}}.
+#' Computes \eqn{A_{\overline{xy}:\overline{n}|}}.
 #'
 #' @inheritParams nExy
 #' @return Numeric vector.

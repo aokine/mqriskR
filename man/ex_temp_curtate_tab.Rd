@@ -18,6 +18,6 @@ Numeric vector of temporary curtate expectations.
 }
 \description{
 Computes
-\eqn{e_{x:\angl{n}} = \sum_{k=1}^{n} {}_k p_x}
+\eqn{e_{x:\overline{n}|} = \sum_{k=1}^{n} {}_k p_x}
 for integer n in the discrete tabular setting.
 }

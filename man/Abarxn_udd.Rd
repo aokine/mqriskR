@@ -18,5 +18,5 @@ Continuous endowment insurance APV under UDD.
 }
 \description{
 Computes
-\eqn{\bar{A}_{x:\angl{n}} = (i/\delta)A_{x:\angl{n}}^{1} + {}_nE_x}.
+\eqn{\bar{A}_{x:\overline{n}|} = (i/\delta)A_{x:\overline{n}|}^{1} + {}_nE_x}.
 }

@@ -5,9 +5,9 @@
 #' These functions handle:
 #' \itemize{
 #'   \item m-thly whole life insurance: \eqn{A_x^{(m)}},
-#'   \item m-thly term insurance: \eqn{A_{x:\angl{n}}^{1(m)}},
+#'   \item m-thly term insurance: \eqn{A_{x:\overline{n}|}^{1(m)}},
 #'   \item m-thly deferred insurance: \eqn{{}_{n\mid}A_x^{(m)}},
-#'   \item m-thly endowment insurance: \eqn{A_{x:\angl{n}}^{(m)}},
+#'   \item m-thly endowment insurance: \eqn{A_{x:\overline{n}|}^{(m)}},
 #'   \item second moments and variances.
 #' }
 #'
@@ -138,7 +138,7 @@ Ax_m <- function(x, i, m, model, ..., tol = 1e-12, j_max = 100000L) {
 #' m-thly term insurance APV
 #'
 #' Computes
-#' \eqn{A_{x:\angl{n}}^{1(m)} = \sum_{j=0}^{mn-1} v^{(j+1)/m}\Pr(j/m < T_x \le (j+1)/m)}.
+#' \eqn{A_{x:\overline{n}|}^{1(m)} = \sum_{j=0}^{mn-1} v^{(j+1)/m}\Pr(j/m < T_x \le (j+1)/m)}.
 #'
 #' @param x Age.
 #' @param n Term.
@@ -204,7 +204,7 @@ nAx_m <- function(x, n, i, m, model, ..., tol = 1e-12, j_max = 100000L) {
 #' m-thly endowment insurance APV
 #'
 #' Computes
-#' \eqn{A_{x:\angl{n}}^{(m)} = A_{x:\angl{n}}^{1(m)} + v^n\,{}_np_x}.
+#' \eqn{A_{x:\overline{n}|}^{(m)} = A_{x:\overline{n}|}^{1(m)} + v^n\,{}_np_x}.
 #'
 #' @param x Age.
 #' @param n Term.

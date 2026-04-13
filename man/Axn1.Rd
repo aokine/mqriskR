@@ -23,5 +23,5 @@ Axn1(x, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector of APVs.
 }
 \description{
-Computes \eqn{A_{x:\angl{n}}^{1} = \sum_{k=0}^{n-1} v^{k+1} {}_{k\mid}q_x}.
+Computes \eqn{A_{x:\overline{n}|}^{1} = \sum_{k=0}^{n-1} v^{k+1} {}_{k\mid}q_x}.
 }
