@@ -1,6 +1,6 @@
 Package: mqriskR
 Type: Package
-Title: Actuarial Risk Modeling and Life Contingencies Functions
+Title: Actuarial Risk Modeling and Life Contingencies
 Version: 0.1.0
 Authors@R: c(
     person(
@@ -25,5 +25,10 @@ Config/testthat/edition: 3
 Imports: 
     stats,
     utils
+References:
+    Camilli, S. J., Duncan, I. and London, R. L. (2014, ISBN:9781625423474)
+    "Models for Quantifying Risk", 6th Edition, ACTEX Publications.
+    Dickson, D. C. M., Hardy, M. R. and Waters, H. R. (2020, ISBN:9781108478083)
+    "Actuarial Mathematics for Life Contingent Risks".
 RoxygenNote: 7.3.3
 VignetteBuilder: knitr

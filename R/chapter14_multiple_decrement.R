@@ -602,6 +602,10 @@ gain_loss_md <- function(Vt, G, r, e, i,
 #' @param i Interest rate.
 #' @param b_surv Optional survival benefits.
 #'
+#' @return A data frame with columns \code{k} and \code{AS}. Column
+#'   \code{k} gives the policy year from 0 to \code{n}, and column
+#'   \code{AS} gives the corresponding projected asset share at each year.
+#'
 #' @export
 AS_path_md <- function(AS0, G, r, e, b_mat, q_mat, p_tau, i, b_surv = NULL) {
 

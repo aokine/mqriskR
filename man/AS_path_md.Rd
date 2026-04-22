@@ -25,6 +25,11 @@ AS_path_md(AS0, G, r, e, b_mat, q_mat, p_tau, i, b_surv = NULL)
 
 \item{b_surv}{Optional survival benefits.}
 }
+\value{
+A data frame with columns \code{k} and \code{AS}. Column
+  \code{k} gives the policy year from 0 to \code{n}, and column
+  \code{AS} gives the corresponding projected asset share at each year.
+}
 \description{
 General projected asset share path (multiple decrements)
 }
