@@ -9,7 +9,6 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: 
 Description: Provides functions for actuarial risk modeling, including survival models,
     life annuities, multiple-decrement models, and mortality improvement projections.
     The package is designed to align with standard actuarial notation and supports
