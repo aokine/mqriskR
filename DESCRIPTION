@@ -9,10 +9,14 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
+Description: 
 Description: Provides functions for actuarial risk modeling, including survival models,
     life annuities, multiple-decrement models, and mortality improvement projections.
     The package is designed to align with standard actuarial notation and supports
-    teaching, exam preparation, and reproducible actuarial analysis.
+    teaching, exam preparation, and reproducible actuarial analysis. The methods are
+    based on standard actuarial references including Camilli, Duncan and London (2014,
+    ISBN:9781625423474) "Models for Quantifying Risk" and Dickson, Hardy and Waters
+    (2020, ISBN:9781108478083) "Actuarial Mathematics for Life Contingent Risks".
 License: MIT + file LICENSE
 Encoding: UTF-8
 Suggests: 
@@ -25,10 +29,5 @@ Config/testthat/edition: 3
 Imports: 
     stats,
     utils
-References:
-    Camilli, S. J., Duncan, I. and London, R. L. (2014, ISBN:9781625423474)
-    "Models for Quantifying Risk", 6th Edition, ACTEX Publications.
-    Dickson, D. C. M., Hardy, M. R. and Waters, H. R. (2020, ISBN:9781108478083)
-    "Actuarial Mathematics for Life Contingent Risks".
 RoxygenNote: 7.3.3
 VignetteBuilder: knitr
