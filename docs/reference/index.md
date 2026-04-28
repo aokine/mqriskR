@@ -1,0 +1,536 @@
+# Package index
+
+## All functions
+
+- [`A2barx()`](A2barx.md) : Second moment of continuous whole life
+  insurance PV
+- [`A2barxn()`](A2barxn.md) : Second moment of continuous endowment
+  insurance PV
+- [`A2barxn1()`](A2barxn1.md) : Second moment of continuous term
+  insurance PV
+- [`A2nAbarx()`](A2nAbarx.md) : Second moment of continuous deferred
+  insurance PV
+- [`A2nAx()`](A2nAx.md) : Second moment of deferred insurance PV
+- [`A2nAx_m()`](A2nAx_m.md) : Second moment of m-thly deferred insurance
+  PV
+- [`A2nEx()`](A2nEx.md) : Second moment of pure endowment PV
+- [`A2x()`](A2x.md) : Second moment of whole life insurance PV
+- [`A2x_m()`](A2x_m.md) : Second moment of m-thly whole life insurance
+  PV
+- [`A2xn()`](A2xn.md) : Second moment of endowment insurance PV
+- [`A2xn1()`](A2xn1.md) : Second moment of term insurance PV
+- [`A2xn1_m()`](A2xn1_m.md) : Second moment of m-thly term insurance PV
+- [`A2xn_m()`](A2xn_m.md) : Second moment of m-thly endowment insurance
+  PV
+- [`AAL_PUC_db()`](AAL_PUC_db.md) : Projected Unit Credit accrued
+  liability for a DB plan
+- [`AAL_TUC_db()`](AAL_TUC_db.md) : Traditional Unit Credit accrued
+  liability for a DB plan
+- [`AB_cae()`](AB_cae.md) : Accrued benefit for a career average
+  earnings plan
+- [`AB_fas()`](AB_fas.md) : Accrued benefit for a final average salary
+  plan
+- [`APV_NR_db()`](APV_NR_db.md) : APV of normal retirement benefit for a
+  DB plan
+- [`APV_gross_premiums()`](APV_gross_premiums.md) : APV of gross
+  premiums under a risk discount rate
+- [`AS_path()`](AS_path.md) : Projected asset share path \\{}\_{k}AS\\
+- [`AS_path_md()`](AS_path_md.md) : General projected asset share path
+  (multiple decrements)
+- [`AV_path_ul_typeA()`](AV_path_ul_typeA.md) : Account-value path for
+  Type A universal life
+- [`AV_path_ul_typeB()`](AV_path_ul_typeB.md) : Account-value path for
+  Type B universal life
+- [`AVz_dc()`](AVz_dc.md) : Accumulated value of defined contribution
+  plan contributions
+- [`Abarx()`](Abarx.md) : Continuous whole life insurance APV
+- [`Abarx_udd()`](Abarx_udd.md) : UDD approximation of continuous whole
+  life insurance
+- [`Abarxj_md()`](Abarxj_md.md) : Continuous multiple-decrement
+  insurance APV \\\overline{A}\_{x}^{(j)}\\
+- [`Abarxn()`](Abarxn.md) : Continuous endowment insurance APV
+- [`Abarxn1()`](Abarxn1.md) : Continuous term insurance APV
+- [`Abarxn1_udd()`](Abarxn1_udd.md) : UDD approximation of continuous
+  term insurance
+- [`Abarxn_udd()`](Abarxn_udd.md) : UDD approximation of continuous
+  endowment insurance
+- [`Abarxy()`](Abarxy.md) : Continuous joint-life whole life insurance
+- [`Abarxy1()`](Abarxy1.md) : Continuous contingent insurance: benefit
+  on death of (x) if before (y)
+- [`Abarxy2()`](Abarxy2.md) : Continuous contingent insurance: benefit
+  on death of (x) if after (y)
+- [`Abarxybar()`](Abarxybar.md) : Continuous last-survivor whole life
+  insurance
+- [`Abaryx1()`](Abaryx1.md) : Continuous contingent insurance: benefit
+  on death of (y) if before (x)
+- [`Abaryx2()`](Abaryx2.md) : Continuous contingent insurance: benefit
+  on death of (y) if after (x)
+- [`Ax()`](Ax.md) : Whole life insurance APV
+- [`Ax_m()`](Ax_m.md) : m-thly whole life insurance APV
+- [`Ax_m_udd()`](Ax_m_udd.md) : UDD approximation of m-thly whole life
+  insurance
+- [`Axj_md()`](Axj_md.md) : Discrete multiple-decrement insurance APV
+  \\A\_{x}^{(j)}\\
+- [`Axn()`](Axn.md) : Endowment insurance APV
+- [`Axn1()`](Axn1.md) : Term insurance APV
+- [`Axn1_m()`](Axn1_m.md) : m-thly term insurance APV
+- [`Axn1_m_udd()`](Axn1_m_udd.md) : UDD approximation of m-thly term
+  insurance
+- [`Axn_m()`](Axn_m.md) : m-thly endowment insurance APV
+- [`Axn_m_udd()`](Axn_m_udd.md) : UDD approximation of m-thly endowment
+  insurance
+- [`Axy()`](Axy.md) : Joint-life whole life insurance
+- [`Axybar()`](Axybar.md) : Last-survivor whole life insurance
+- [`Axybarn()`](Axybarn.md) : Last-survivor endowment insurance
+- [`Axybarn1()`](Axybarn1.md) : Last-survivor term insurance
+- [`Axyn()`](Axyn.md) : Joint-life endowment insurance
+- [`Axyn1()`](Axyn1.md) : Joint-life term insurance
+- [`DAbarxn1()`](DAbarxn1.md) : Piecewise-continuous decreasing n-year
+  term insurance
+- [`DAxn1()`](DAxn1.md) : Decreasing n-year term insurance
+- [`DbarAbarxn1()`](DbarAbarxn1.md) : Fully continuous decreasing n-year
+  term insurance
+- [`ELtx()`](ELtx.md) : Mean present value of loss at duration t for
+  whole life insurance
+- [`GI_cont()`](GI_cont.md) : Interest gain helper for continuous-style
+  recursion
+- [`GI_disc()`](GI_disc.md) : Interest gain for a discrete insurance
+  contract
+- [`GMF_rollforward_ul()`](GMF_rollforward_ul.md) : Guaranteed maturity
+  fund roll-forward
+- [`GM_cont()`](GM_cont.md) : Mortality gain helper for continuous-style
+  recursion
+- [`GM_disc()`](GM_disc.md) : Mortality gain for a discrete insurance
+  contract
+- [`GT_cont()`](GT_cont.md) : Total gain for a continuous-style one-step
+  recursion
+- [`GT_disc()`](GT_disc.md) : Total gain for a discrete insurance
+  contract
+- [`GTg_disc()`](GTg_disc.md) : Total gross gain for a discrete
+  insurance contract
+- [`IAbarx()`](IAbarx.md) : Piecewise-continuous increasing whole life
+  insurance
+- [`IAx()`](IAx.md) : Increasing whole life insurance
+- [`IAxn1()`](IAxn1.md) : Increasing n-year term insurance
+- [`IRR_profit()`](IRR_profit.md) : Internal rate of return of a profit
+  signature
+- [`IbarAbarx()`](IbarAbarx.md) : Fully continuous increasing whole life
+  insurance
+- [`IbarAbarxn1()`](IbarAbarxn1.md) : Fully continuous increasing n-year
+  term insurance
+- [`Income_dc()`](Income_dc.md) : Retirement income from a defined
+  contribution accumulation
+- [`NC_EAN_db()`](NC_EAN_db.md) : Entry Age Normal normal cost for a DB
+  plan
+- [`NC_PUC_db()`](NC_PUC_db.md) : Projected Unit Credit normal cost for
+  a DB plan
+- [`NC_TUC_db()`](NC_TUC_db.md) : Traditional Unit Credit normal cost
+  for a DB plan
+- [`NPV_partial()`](NPV_partial.md) : Partial net present values
+- [`NPV_profit()`](NPV_profit.md) : Net present value of a profit
+  signature
+- [`PAB_cae()`](PAB_cae.md) : Projected annual benefit under a career
+  average earnings DB plan
+- [`PAB_fas()`](PAB_fas.md) : Projected annual benefit under a final
+  average salary DB plan
+- [`Pbar_trapz_ms()`](Pbar_trapz_ms.md) : Continuous premium
+  approximation \\\overline{P}\\ by trapezoidal rule
+- [`Pi_signature()`](Pi_signature.md) : Profit signature from a profit
+  vector
+- [`PnAdotx()`](PnAdotx.md) : Deferred annuity-due premium
+- [`Pnax()`](Pnax.md) : Deferred annuity-immediate premium
+- [`Pr_vector_disc()`](Pr_vector_disc.md) : Profit vector for a discrete
+  profit-analysis model
+- [`S0()`](S0.md) : Survival function for age-at-failure T0
+- [`S0_to_lx()`](S0_to_lx.md) : Convert survival probabilities to
+  life-table values
+- [`V_zeroized()`](V_zeroized.md) : Zeroized reserves for a discrete
+  death-only contract
+- [`Vprefloor_crvm_ul()`](Vprefloor_crvm_ul.md) : Pre-floor CRVM reserve
+  for universal life
+- [`abarx_y()`](abarx_y.md) : Continuous reversionary annuity to (y)
+  after death of (x)
+- [`abarxy()`](abarxy_ch12.md) : Continuous joint-life whole life
+  annuity
+- [`abarxybar()`](abarxybar_ch12.md) : Continuous last-survivor whole
+  life annuity
+- [`abary_x()`](abary_x.md) : Continuous reversionary annuity to (x)
+  after death of (y)
+- [`adotxy()`](adotxy.md) : Joint-life whole life annuity-due
+- [`adotxybar()`](adotxybar.md) : Last-survivor whole life annuity-due
+- [`adotxybarn()`](adotxybarn.md) : Last-survivor temporary annuity-due
+- [`adotxyn()`](adotxyn.md) : Joint-life temporary annuity-due
+- [`ag38_prefunding_ratio()`](ag38_prefunding_ratio.md) : AG 38
+  prefunding ratio
+- [`ag38_reserve_ul()`](ag38_reserve_ul.md) : AG 38 reserve calculation
+- [`alphaF()`](alphaF.md) : Full preliminary term first-year modified
+  premium
+- [`ax()`](annuity_annual.md) [`adotx()`](annuity_annual.md)
+  [`abarx()`](annuity_annual.md) [`axn()`](annuity_annual.md)
+  [`adotxn()`](annuity_annual.md) [`abarxn()`](annuity_annual.md)
+  [`nax()`](annuity_annual.md) [`nadotx()`](annuity_annual.md)
+  [`nabarx()`](annuity_annual.md) [`sxn()`](annuity_annual.md)
+  [`sdotxn()`](annuity_annual.md) [`sbarxn()`](annuity_annual.md) :
+  Annual annuity functions (Chapter 8)
+- [`annuity_approximations`](annuity_approximations.md) : Annuity
+  approximations (Chapter 8)
+- [`adotx_m_udd()`](annuity_approximations_udd.md)
+  [`adotxn_m_udd()`](annuity_approximations_udd.md)
+  [`nadotx_m_udd()`](annuity_approximations_udd.md)
+  [`ax_m_udd()`](annuity_approximations_udd.md)
+  [`axn_m_udd()`](annuity_approximations_udd.md)
+  [`nax_m_udd()`](annuity_approximations_udd.md)
+  [`sdotxn_m_udd()`](annuity_approximations_udd.md)
+  [`sxn_m_udd()`](annuity_approximations_udd.md)
+  [`abarx_udd()`](annuity_approximations_udd.md)
+  [`abarxn_udd()`](annuity_approximations_udd.md)
+  [`nabarx_udd()`](annuity_approximations_udd.md) : UDD annuity
+  approximations
+- [`ax_m_woolhouse2()`](annuity_approximations_woolhouse2.md)
+  [`adotx_m_woolhouse2()`](annuity_approximations_woolhouse2.md)
+  [`nax_m_woolhouse2()`](annuity_approximations_woolhouse2.md)
+  [`nadotx_m_woolhouse2()`](annuity_approximations_woolhouse2.md)
+  [`axn_m_woolhouse2()`](annuity_approximations_woolhouse2.md)
+  [`adotxn_m_woolhouse2()`](annuity_approximations_woolhouse2.md)
+  [`sxn_m_woolhouse2()`](annuity_approximations_woolhouse2.md)
+  [`sdotxn_m_woolhouse2()`](annuity_approximations_woolhouse2.md)
+  [`abarx_woolhouse2()`](annuity_approximations_woolhouse2.md) :
+  Woolhouse 2-term annuity approximations
+- [`ax_m_woolhouse3()`](annuity_approximations_woolhouse3.md)
+  [`adotx_m_woolhouse3()`](annuity_approximations_woolhouse3.md)
+  [`nax_m_woolhouse3()`](annuity_approximations_woolhouse3.md)
+  [`nadotx_m_woolhouse3()`](annuity_approximations_woolhouse3.md)
+  [`axn_m_woolhouse3()`](annuity_approximations_woolhouse3.md)
+  [`adotxn_m_woolhouse3()`](annuity_approximations_woolhouse3.md)
+  [`abarx_woolhouse3()`](annuity_approximations_woolhouse3.md) :
+  Woolhouse 3-term annuity approximations
+- [`annuity_certain()`](annuity_certain.md) : Present value of a level
+  annuity-certain
+- [`annuity_mthly`](annuity_mthly.md) : m-thly contingent annuity
+  functions (Chapter 8)
+- [`sdotxn_m()`](annuity_mthly_accum_due.md) : Temporary m-thly
+  annuity-due actuarial accumulated value
+- [`sxn_m()`](annuity_mthly_accum_immediate.md) : Temporary m-thly
+  annuity-immediate actuarial accumulated value
+- [`nadotx_m()`](annuity_mthly_deferred_due.md) : Deferred whole life
+  m-thly annuity-due
+- [`nax_m()`](annuity_mthly_deferred_immediate.md) : Deferred whole life
+  m-thly annuity-immediate
+- [`adotxn_m()`](annuity_mthly_temp_due.md) : Temporary m-thly
+  annuity-due
+- [`axn_m()`](annuity_mthly_temp_immediate.md) : Temporary m-thly
+  annuity-immediate
+- [`adotx_m()`](annuity_mthly_whole_due.md) : Whole life m-thly
+  annuity-due
+- [`ax_m()`](annuity_mthly_whole_immediate.md) : Whole life m-thly
+  annuity-immediate
+- [`annuity_identity_ax()`](annuity_relationships.md)
+  [`annuity_identity_adotx()`](annuity_relationships.md)
+  [`annuity_identity_abarx()`](annuity_relationships.md)
+  [`annuity_identity_axn()`](annuity_relationships.md)
+  [`annuity_identity_adotxn()`](annuity_relationships.md)
+  [`annuity_identity_abarxn()`](annuity_relationships.md)
+  [`annuity_identity_nax()`](annuity_relationships.md)
+  [`annuity_identity_nadotx()`](annuity_relationships.md)
+  [`annuity_identity_nabarx()`](annuity_relationships.md) :
+  Annuity-insurance relationships (Chapter 8)
+- [`Iax()`](annuity_varying_payments.md)
+  [`Iaxn()`](annuity_varying_payments.md)
+  [`Daxn()`](annuity_varying_payments.md)
+  [`Iadotx()`](annuity_varying_payments.md)
+  [`Iadotxn()`](annuity_varying_payments.md)
+  [`Dadotxn()`](annuity_varying_payments.md)
+  [`Iabarx()`](annuity_varying_payments.md)
+  [`Iabarxn()`](annuity_varying_payments.md)
+  [`Dabarxn()`](annuity_varying_payments.md) : Varying-payment annuity
+  functions (Chapter 8)
+- [`ax_improved()`](ax_improved.md) : Whole life annuity-immediate under
+  mortality improvement
+- [`ax_y()`](ax_y.md) : Reversionary annuity to (y) after death of (x)
+- [`axn_improved()`](axn_improved.md) : Temporary annuity-immediate
+  under mortality improvement
+- [`axy()`](axy_ch12.md) : Joint-life whole life annuity-immediate
+- [`axybar()`](axybar_ch12.md) : Last-survivor whole life
+  annuity-immediate
+- [`axybarn()`](axybarn_ch12.md) : Last-survivor temporary
+  annuity-immediate
+- [`axyn()`](axyn_ch12.md) : Joint-life temporary annuity-immediate
+- [`ay_x()`](ay_x.md) : Reversionary annuity to (x) after death of (y)
+- [`betaF()`](betaF.md) : Full preliminary term renewal modified premium
+- [`ch12_multilife_cont_params`](ch12_multilife_cont_params.md) : Shared
+  parameters for Chapter 12 continuous multi-life functions
+- [`nEx_spot()`](chapter15_spot_interest_apv.md)
+  [`Axn1_spot()`](chapter15_spot_interest_apv.md)
+  [`Axn_spot()`](chapter15_spot_interest_apv.md)
+  [`axn_spot()`](chapter15_spot_interest_apv.md) : Spot-rate actuarial
+  present value functions
+- [`nEx_var()`](chapter15_variable_interest_apv.md)
+  [`Axn1_var()`](chapter15_variable_interest_apv.md)
+  [`Axn_var()`](chapter15_variable_interest_apv.md)
+  [`axn_var()`](chapter15_variable_interest_apv.md) : Variable-interest
+  actuarial present value functions
+- [`coi_ul_typeB()`](coi_ul_typeB.md) : Cost of insurance for Type B
+  universal life
+- [`contribution_rate_target()`](contribution_rate_target.md) : Target
+  contribution rate for a defined contribution plan
+- [`cov_term_deferred()`](cov_term_deferred.md) : Covariance of term and
+  deferred insurance PVs
+- [`cov_term_endow()`](cov_term_endow.md) : Covariance of term insurance
+  and pure endowment PVs
+- [`cumhaz0()`](cumhaz0.md) : Cumulative hazard for age-at-failure T0
+- [`decompGg_disc()`](decompGg_disc.md) : Ordered gross gain
+  decomposition
+- [`discount()`](discount.md) : Discount factor for compound interest
+- [`discounted_payback_period()`](discounted_payback_period.md) :
+  Discounted payback period
+- [`F0()`](dist0.md) [`f0()`](dist0.md) : Distribution functions for
+  age-at-failure T0
+- [`double_force_delta()`](double_force_delta.md) : Doubled force of
+  interest
+- [`double_force_i()`](double_force_i.md) : Effective annual interest at
+  doubled force
+- [`dx()`](dx.md) : Compute deaths between ages x and x+1
+- [`dxj()`](dxj.md) : Cause-specific decrements \\d_x^{(j)}\\
+- [`dxtau()`](dxtau.md) : Total decrements \\d_x^{(\tau)}\\
+- [`ex_complete()`](ex_complete.md) : Complete expectation of life at
+  age x
+- [`ex_complete_tab()`](ex_complete_tab.md) : Complete expectation of
+  life from a life table
+- [`ex_curtate()`](ex_curtate.md) : Curtate expectation of life at age x
+- [`ex_curtate_tab()`](ex_curtate_tab.md) : Curtate expectation of life
+  from a life table
+- [`ex_temp_complete_tab()`](ex_temp_complete_tab.md) : Temporary
+  complete expectation of life from a life table
+- [`ex_temp_curtate_tab()`](ex_temp_curtate_tab.md) : Temporary curtate
+  expectation of life from a life table
+- [`fnk_from_z()`](fnk_from_z.md) : Forward rate \\f\_{n,k}\\ from spot
+  rates
+- [`forward_matrix_from_z()`](forward_matrix_from_z.md) : Matrix of all
+  determinable forward rates from spot rates
+- [`fx()`](fx.md) : Conditional density for Tx
+- [`fx_tab()`](fx_tab.md) : Fractional conditional density from a life
+  table
+- [`gain_loss_md()`](gain_loss_md.md) : Gain or loss in a
+  multiple-decrement model
+- [`hazard0()`](hazard0.md) : Hazard / force for age-at-failure T0
+- [`htVx()`](htVx.md) : h-pay whole life net level premium reserve
+- [`iMA_eiul()`](iMA_eiul.md) : Monthly-average index growth rate
+- [`iP_eiul()`](iP_eiul.md) : Point-to-point index growth rates
+- [`i_credit_eiul()`](i_credit_eiul.md) : Credited rates from raw index
+  growth rates
+- [`interest_convert()`](interest_convert.md) : Convert between
+  compound-interest quantities
+- [`life_table()`](life_table.md) : Construct a life table
+- [`lx()`](lx.md) : Extract life-table survivor values
+- [`lx_select()`](lx_select.md) : Extract select-table survivor value
+- [`lx_to_S0()`](lx_to_S0.md) : Convert life-table values to survival
+  probabilities
+- [`markov_nstep_prob()`](markov_nstep_prob.md) : n-step transition
+  probability for a discrete-time Markov chain
+- [`md_table()`](md_table.md) : Build a multiple-decrement table
+- [`meanVx()`](meanVx.md) : Mean reserve for whole life insurance
+- [`mortality_improvement`](mortality_improvement.md) : Mortality
+  improvement projection functions (Chapter 8)
+- [`multilife_ch12`](multilife_ch12.md) : Multi-life functions for
+  Chapter 12
+- [`multilife_ch12_ext`](multilife_ch12_ext.md) : Extended multi-life
+  functions for Chapter 12
+- [`mux_tab()`](mux_tab.md) : Fractional force of mortality from a life
+  table
+- [`nAbarx()`](nAbarx.md) : Continuous deferred insurance APV
+- [`nAbarx_udd()`](nAbarx_udd.md) : UDD approximation of continuous
+  deferred insurance
+- [`nAx()`](nAx.md) : Deferred insurance APV
+- [`nAx_m()`](nAx_m.md) : m-thly deferred insurance APV
+- [`nAx_m_udd()`](nAx_m_udd.md) : UDD approximation of m-thly deferred
+  insurance
+- [`nEx()`](nEx.md) : Pure endowment APV
+- [`nExy()`](nExy.md) : Joint-life pure endowment
+- [`nExybar()`](nExybar.md) : Last-survivor pure endowment
+- [`naxn_improved()`](naxn_improved.md) : Deferred temporary
+  annuity-immediate under mortality improvement
+- [`ndx()`](ndx.md) : Compute deaths over an n-year interval from a life
+  table
+- [`nkqx()`](nkqx.md) : Curtate death probability from a life table
+- [`nmxq()`](nmxq.md) : Deferred death probability from a life table
+- [`nmxq_select()`](nmxq_select.md) : Deferred select-life death
+  probability
+- [`npx()`](npx.md) : Compute n-year survival probability from a life
+  table
+- [`npx_select()`](npx_select.md) : Select-life survival probability
+- [`npxtau_md()`](npxtau_md.md) : \\{}\_n p_x^{(\tau)}\\ from a
+  multiple-decrement table
+- [`nqx()`](nqx.md) : Compute n-year death probability from a life table
+- [`nqx_select()`](nqx_select.md) : Select-life death probability
+- [`nqxj_md()`](nqxj_md.md) : \\{}\_n q_x^{(j)}\\ from a
+  multiple-decrement table
+- [`nqxtau_md()`](nqxtau_md.md) : \\{}\_n q_x^{(\tau)}\\ from a
+  multiple-decrement table
+- [`Px()`](premium_ch9.md) [`Pxn1()`](premium_ch9.md)
+  [`PnEx()`](premium_ch9.md) [`Pxn()`](premium_ch9.md)
+  [`tPx()`](premium_ch9.md) [`tPxn1()`](premium_ch9.md)
+  [`tPnEx()`](premium_ch9.md) [`tPxn()`](premium_ch9.md)
+  [`PnAx()`](premium_ch9.md) [`tPnAx()`](premium_ch9.md)
+  [`Pbarx()`](premium_ch9.md) [`Pbarxn1()`](premium_ch9.md)
+  [`Pbarxn()`](premium_ch9.md) [`PbarAbarx()`](premium_ch9.md)
+  [`PbarAbarxn1()`](premium_ch9.md) [`PbarAbarxn()`](premium_ch9.md)
+  [`Px_m()`](premium_ch9.md) [`Pxn1_m()`](premium_ch9.md)
+  [`Pxn_m()`](premium_ch9.md) [`PnAx_m()`](premium_ch9.md)
+  [`EL0x()`](premium_ch9.md) [`varL0x()`](premium_ch9.md)
+  [`EL0xn1()`](premium_ch9.md) [`varL0xn1()`](premium_ch9.md)
+  [`EL0xn()`](premium_ch9.md) [`varL0xn()`](premium_ch9.md)
+  [`EL0barAbarx()`](premium_ch9.md) [`varL0barAbarx()`](premium_ch9.md)
+  [`Gx()`](premium_ch9.md) : Chapter 9 premium, loss, and expense
+  functions
+- [`profit_margin()`](profit_margin.md) : Profit margin
+- [`pv_cashflows()`](pv_cashflows.md) : Present value of cash flows at
+  time 0
+- [`pv_spot_cashflows()`](pv_spot_cashflows.md) : Present value of cash
+  flows using spot rates
+- [`px_proj()`](px_proj.md) : Project one-year survival probability
+  under mortality improvement
+- [`px_to_lx()`](px_to_lx.md) : Construct life-table values from p_x
+  values
+- [`pxtau()`](pxtau.md) : Survival probability \\p_x^{(\tau)}\\
+- [`pxtau_ul()`](pxtau_ul.md) : One-year persistency rates for universal
+  life
+- [`qx_dep_cf()`](qx_dep_cf.md) : Dependent probabilities \\q_x^{(j)}\\
+  from independent probabilities \\q_x^{\prime(j)}\\ under constant
+  force
+- [`qx_dep_sudd()`](qx_dep_sudd.md) : Dependent probabilities
+  \\q_x^{(j)}\\ from independent probabilities \\q_x^{\prime(j)}\\ under
+  SUDD
+- [`qx_proj()`](qx_proj.md) : Project one-year death probability under
+  mortality improvement
+- [`qx_tab()`](qx_tab.md) : Compute one-year death probability from a
+  life table
+- [`qx_to_lx()`](qx_to_lx.md) : Construct life-table values from q_x
+  values
+- [`qxprime_mudd()`](qxprime_mudd.md) : Independent probabilities
+  \\q_x^{\prime(j)}\\ from dependent probabilities \\q_x^{(j)}\\ under
+  MUDD
+- [`qxprime_sudd()`](qxprime_sudd.md) : Independent probabilities
+  \\q_x^{\prime(j)}\\ from dependent probabilities \\q_x^{(j)}\\ under
+  SUDD
+- [`qxtau()`](qxtau.md) : Total probability of decrement
+  \\q_x^{(\tau)}\\
+- [`replacement_ratio_db()`](replacement_ratio_db.md) : Replacement
+  ratio for a defined benefit plan
+- [`replacement_ratio_dc()`](replacement_ratio_dc.md) : Replacement
+  ratio for a defined contribution plan
+- [`reserve_ch10`](reserve_ch10.md) : Reserve functions for Chapter 10
+- [`reserve_ch10_ext`](reserve_ch10_ext.md) : Extended reserve functions
+  for Chapter 10
+- [`reserve_ch11`](reserve_ch11.md) : Reserve functions for Chapter 11
+- [`reserve_ch11_ext`](reserve_ch11_ext.md) : Extended reserve functions
+  for Chapter 11
+- [`tVnAx()`](reserve_deferred_insurance_ch10.md)
+  [`htVnAx()`](reserve_deferred_insurance_ch10.md) : Deferred insurance
+  reserve functions
+- [`rt_ul()`](rt_ul.md) : Ratio \\r_t = AV_t / GMF_t\\ capped at 1
+- [`salary_scale()`](salary_scale.md) : Salary scale under constant
+  annual growth
+- [`select_life_table()`](select_life_table.md) : Construct a select
+  life table
+- [`solve_yield()`](solve_yield.md) : Solve the yield rate by the
+  equation of value
+- [`tVEx()`](tVEx.md) : Whole life expense reserve
+- [`tVFx()`](tVFx.md) : Full preliminary term reserve for whole life
+  insurance
+- [`tVGx()`](tVGx.md) : Whole life gross premium reserve
+- [`tVbarAbarx()`](tVbarAbarx.md) : Fully continuous whole life reserve
+- [`tVbarx()`](tVbarx.md) : Whole life reserve with continuous premiums
+- [`tVnAdotx()`](tVnAdotx.md) : Deferred annuity-due reserve
+- [`tVnEx()`](tVnEx.md) : Pure endowment net level premium reserve
+- [`tVnax()`](tVnax.md) : Deferred annuity-immediate reserve
+- [`tVx()`](tVx.md) : Whole life net level premium reserve
+- [`tVx_m()`](tVx_m.md) : Whole life reserve with m-thly premiums
+- [`tVx_ret()`](tVx_ret.md) : Whole life net level premium reserve by
+  retrospective method
+- [`tVxn()`](tVxn.md) : Endowment insurance net level premium reserve
+- [`tVxn1()`](tVxn1.md) : Term insurance net level premium reserve
+- [`tVxn1_ret()`](tVxn1_ret.md) : Term insurance reserve by
+  retrospective method
+- [`tVxn_ret()`](tVxn_ret.md) : Endowment insurance reserve by
+  retrospective method
+- [`thiele_backward_path()`](thiele_backward_path.md) : Backward Euler
+  reserve path from maturity
+- [`thiele_backward_step()`](thiele_backward_step.md) : One backward
+  Euler-style Thiele step
+- [`thiele_dVdt()`](thiele_dVdt.md) : Reserve derivative from Thiele's
+  equation
+- [`thiele_dVdt_01()`](thiele_dVdt_01.md) : Reserve derivatives for the
+  disability model with recovery
+- [`thiele_path_01()`](thiele_path_01.md) : Backward reserve path for
+  the disability model with recovery
+- [`tp00_tp01_euler()`](tp00_tp01_euler.md) : Euler approximation for
+  \\{}\_{t}p\_{x}^{00}\\ and \\{}\_{t}p\_{x}^{01}\\
+- [`tpx()`](tpx.md) : Conditional survival probability for Tx
+- [`tpx_improved()`](tpx_improved.md) : Multi-year survival probability
+  under mortality improvement
+- [`tpx_tab()`](tpx_tab.md) : Fractional survival probability from a
+  life table
+- [`tpx_tau_cf()`](tpx_tau_cf.md) : Total survival probability \\{}\_t
+  p_x^{(\tau)}\\ under constant forces
+- [`tpxprimej_cf()`](tpxprimej_cf.md) : Single-decrement survival
+  probability \\{}\_t p_x^{\prime(j)}\\ under constant force
+- [`tpxtau_ul()`](tpxtau_ul.md) : Cumulative persistency to the end of
+  each policy year
+- [`tpxy()`](tpxy.md) : Joint-life survival probability
+- [`tpxybar()`](tpxybar.md) : Last-survivor survival probability
+- [`tqx()`](tqx.md) : Conditional failure probability for Tx
+- [`tqx_tab()`](tqx_tab.md) : Fractional failure probability from a life
+  table
+- [`tqxj_cf()`](tqxj_cf.md) : Cause-specific probability \\{}\_t
+  q_x^{(j)}\\ under constant forces
+- [`tqxprime_mudd()`](tqxprime_mudd.md) : Independent probabilities
+  \\{}\_t q_x^{\prime(j)}\\ under MUDD
+- [`tqxprimej_cf()`](tqxprimej_cf.md) : Single-decrement failure
+  probability \\{}\_t q_x^{\prime(j)}\\ under constant force
+- [`tqxy()`](tqxy.md) : Joint-life failure probability
+- [`tqxy1()`](tqxy1.md) : Probability that (x) fails before (y) within n
+  years
+- [`tqxy2()`](tqxy2.md) : Probability that (x) fails after (y) within n
+  years
+- [`tqxybar()`](tqxybar.md) : Last-survivor failure probability
+- [`tqyx1()`](tqyx1.md) : Probability that (y) fails before (x) within n
+  years
+- [`tqyx2()`](tqyx2.md) : Probability that (y) fails after (x) within n
+  years
+- [`tsVx()`](tsVx.md) : Fractional-duration whole life reserve
+- [`tsVxn()`](tsVxn.md) : Fractional-duration endowment reserve
+- [`tsVxn1()`](tsVxn1.md) : Fractional-duration term reserve
+- [`udd_continuous_multiplier()`](udd_continuous_multiplier.md) : UDD
+  multiplier for continuous insurance approximations
+- [`udd_mthly_multiplier()`](udd_mthly_multiplier.md) : UDD multiplier
+  for m-thly insurance approximations
+- [`varLtx()`](varLtx.md) : Variance of present value of loss at
+  duration t for whole life insurance
+- [`var_Abarx()`](var_Abarx.md) : Variance of continuous whole life
+  insurance PV
+- [`var_Abarxn()`](var_Abarxn.md) : Variance of continuous endowment
+  insurance PV
+- [`var_Abarxn1()`](var_Abarxn1.md) : Variance of continuous term
+  insurance PV
+- [`var_Ax()`](var_Ax.md) : Variance of whole life insurance PV
+- [`var_Ax_m()`](var_Ax_m.md) : Variance of m-thly whole life insurance
+  PV
+- [`var_Axn()`](var_Axn.md) : Variance of endowment insurance PV
+- [`var_Axn1()`](var_Axn1.md) : Variance of term insurance PV
+- [`var_Axn1_m()`](var_Axn1_m.md) : Variance of m-thly term insurance PV
+- [`var_Axn_m()`](var_Axn_m.md) : Variance of m-thly endowment insurance
+  PV
+- [`var_nAbarx()`](var_nAbarx.md) : Variance of continuous deferred
+  insurance PV
+- [`var_nAx()`](var_nAx.md) : Variance of deferred insurance PV
+- [`var_nAx_m()`](var_nAx_m.md) : Variance of m-thly deferred insurance
+  PV
+- [`var_nEx()`](var_nEx.md) : Variance of pure endowment PV
+- [`vt_var()`](vt_var.md) : Discount factors under a variable annual
+  interest scenario
+- [`z_from_coupon_annual()`](z_from_coupon_annual.md) : Bootstrap annual
+  spot rates from annual coupon-bond yields
+- [`z_from_coupon_semi()`](z_from_coupon_semi.md) : Bootstrap semiannual
+  nominal spot rates from coupon-bond yields
+- [`z_from_fn1()`](z_from_fn1.md) : Spot rates from forward one-year
+  rates
