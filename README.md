@@ -6,6 +6,7 @@
 
 `mqriskR` provides functions for actuarial risk modeling, including survival models, life annuities, multiple-decrement models, and mortality improvement projections, using standard actuarial notation.
 
+
 The package is designed to support teaching, exam preparation, and reproducible actuarial analysis.
 
 ## Installation
