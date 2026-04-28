@@ -4,7 +4,7 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/mqriskR)](https://CRAN.R-project.org/package=mqriskR)
 <!-- badges: end -->
 
-mqriskR provides functions for actuarial risk modeling, including survival models, life annuities, multiple-decrement models, and mortality improvement projections, using standard actuarial notation.
+`mqriskR` provides functions for actuarial risk modeling, including survival models, life annuities, multiple-decrement models, and mortality improvement projections, using standard actuarial notation.
 
 The package is designed to support teaching, exam preparation, and reproducible actuarial analysis.
 
