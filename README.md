@@ -50,3 +50,23 @@ This package is intended for:
 - Instructors teaching life contingencies
 - Practitioners needing transparent and reproducible calculations
 
+
+## Documentation
+
+Full function documentation is available on the pkgdown site:
+
+https://aokine.github.io/mqriskR/
+
+
+
+## References
+
+The methods implemented in this package are aligned with standard actuarial texts, including:
+
+- Camilli, S. J., Duncan, I., and London, R. L. (2014, ISBN:9781625423474)
+“Models for Quantifying Risk”, 6th Edition, ACTEX Publications.
+
+- Dickson, D. C. M., Hardy, M. R., and Waters, H. R. (2020, ISBN:9781108478083)
+“Actuarial Mathematics for Life Contingent Risks”.
+
+

@@ -2,3 +2,7 @@ url: ~
 template:
   bootstrap: 5
 
+navbar:
+  structure:
+    left: [home, reference, articles]
+    right: [github]
