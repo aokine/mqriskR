@@ -13,6 +13,7 @@ These utilities focus on:
 - UDD approximations for continuous and m-thly insurance functions.
 
 General interest conversion functions such as
-[`interest_convert()`](interest_convert.md) and
-[`discount()`](discount.md) are defined elsewhere in the package and are
-reused here.
+[`interest_convert()`](https://aokine.github.io/mqriskR/reference/interest_convert.md)
+and
+[`discount()`](https://aokine.github.io/mqriskR/reference/discount.md)
+are defined elsewhere in the package and are reused here.

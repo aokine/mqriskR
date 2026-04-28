@@ -124,5 +124,6 @@ The exported functions documented on this page are:
 - `nabarx_udd()`
 
 Note that this function relies on the already-existing
-[`Abarxn_udd()`](Abarxn_udd.md) implementation in the package, so extra
-survival-model arguments are not used.
+[`Abarxn_udd()`](https://aokine.github.io/mqriskR/reference/Abarxn_udd.md)
+implementation in the package, so extra survival-model arguments are not
+used.

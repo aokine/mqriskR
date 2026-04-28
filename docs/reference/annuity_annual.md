@@ -129,4 +129,5 @@ Naming convention follows Chapter 8 notation:
 - `sbarxn()` = \\\bar{s}\_{x:\overline{n}\|}\\
 
 These functions work directly from the Chapter 5 survival model
-functions and the Chapter 7 pure endowment function [`nEx()`](nEx.md).
+functions and the Chapter 7 pure endowment function
+[`nEx()`](https://aokine.github.io/mqriskR/reference/nEx.md).
