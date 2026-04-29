@@ -5,6 +5,7 @@
 #' continuous-time gain/loss helpers, and Euler/Thiele approximation helpers.
 #'
 #' @name reserve_ch10_ext
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

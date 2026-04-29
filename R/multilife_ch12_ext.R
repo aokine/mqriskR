@@ -4,6 +4,7 @@
 #' continuous contingent insurances, and continuous multi-life annuities.
 #'
 #' @name multilife_ch12_ext
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------
@@ -21,6 +22,7 @@ NULL
 #' @param ... Additional model parameters.
 #'
 #' @name ch12_multilife_cont_params
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

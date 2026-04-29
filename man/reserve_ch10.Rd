@@ -12,3 +12,4 @@ term insurance, pure endowment, endowment insurance, selected continuous
 premium cases, selected m-thly premium cases, basic gain/loss
 calculations, and duration-t loss moments.
 }
+\keyword{internal}

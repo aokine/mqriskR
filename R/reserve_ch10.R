@@ -8,6 +8,7 @@
 #' calculations, and duration-t loss moments.
 #'
 #' @name reserve_ch10
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

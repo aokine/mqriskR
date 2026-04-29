@@ -9,6 +9,7 @@
 #' installments, so each payment is of size \eqn{1/m}.
 #'
 #' @name annuity_mthly
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

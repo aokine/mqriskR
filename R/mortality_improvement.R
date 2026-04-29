@@ -15,6 +15,7 @@
 #' }
 #'
 #' @name mortality_improvement
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

@@ -11,6 +11,7 @@
 #' }
 #'
 #' @name annuity_approximations
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

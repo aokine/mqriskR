@@ -7,3 +7,4 @@
 Chapter 11 functions for modified reserves, fractional-duration reserves,
 gross premium reserves, expense reserves, and gross gain analysis.
 }
+\keyword{internal}

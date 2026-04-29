@@ -4,6 +4,7 @@
 #' including survival probabilities, annuities, insurances, and reversionary annuities.
 #'
 #' @name multilife_ch12
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

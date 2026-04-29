@@ -4,6 +4,7 @@
 #' gross premium reserves, expense reserves, and gross gain analysis.
 #'
 #' @name reserve_ch11
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

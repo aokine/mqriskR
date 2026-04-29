@@ -19,3 +19,4 @@ where:
   \item \eqn{AA_x} is the mortality improvement factor at age \eqn{x}.
 }
 }
+\keyword{internal}

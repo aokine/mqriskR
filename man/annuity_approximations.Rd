@@ -15,3 +15,4 @@ This file implements:
   \item Woolhouse 3-term approximations.
 }
 }
+\keyword{internal}

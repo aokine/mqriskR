@@ -21,3 +21,4 @@
 \description{
 Shared parameters for Chapter 12 continuous multi-life functions
 }
+\keyword{internal}

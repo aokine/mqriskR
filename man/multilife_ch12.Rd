@@ -7,3 +7,4 @@
 Core Chapter 12 functions for two-life joint-life and last-survivor models,
 including survival probabilities, annuities, insurances, and reversionary annuities.
 }
+\keyword{internal}

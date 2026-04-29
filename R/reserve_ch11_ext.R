@@ -6,6 +6,7 @@
 #' ordered gross gain decomposition.
 #'
 #' @name reserve_ch11_ext
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

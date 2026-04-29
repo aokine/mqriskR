@@ -32,7 +32,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="interest-theory">Interest Theory<a class="anchor" aria-label="anchor" href="#interest-theory"></a></h2>
 
 
 
@@ -43,17 +43,548 @@
 
       <dl><dt>
 
+          <code><a href="interest_convert.html">interest_convert()</a></code>
+
+        </dt>
+        <dd>Convert between compound-interest quantities</dd>
+
+        <dt>
+
+          <code><a href="discount.html">discount()</a></code>
+
+        </dt>
+        <dd>Discount factor for compound interest</dd>
+
+        <dt>
+
+          <code><a href="pv_cashflows.html">pv_cashflows()</a></code>
+
+        </dt>
+        <dd>Present value of cash flows at time 0</dd>
+
+        <dt>
+
+          <code><a href="solve_yield.html">solve_yield()</a></code>
+
+        </dt>
+        <dd>Solve the yield rate by the equation of value</dd>
+
+        <dt>
+
+          <code><a href="annuity_certain.html">annuity_certain()</a></code>
+
+        </dt>
+        <dd>Present value of a level annuity-certain</dd>
+      </dl></div><div class="section level2">
+      <h2 id="survival-models">Survival Models<a class="anchor" aria-label="anchor" href="#survival-models"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="S0.html">S0()</a></code>
+
+        </dt>
+        <dd>Survival function for age-at-failure T0</dd>
+
+        <dt>
+
+          <code><a href="dist0.html">F0()</a></code> <code><a href="dist0.html">f0()</a></code>
+
+        </dt>
+        <dd>Distribution functions for age-at-failure T0</dd>
+
+        <dt>
+
+          <code><a href="hazard0.html">hazard0()</a></code>
+
+        </dt>
+        <dd>Hazard / force for age-at-failure T0</dd>
+
+        <dt>
+
+          <code><a href="cumhaz0.html">cumhaz0()</a></code>
+
+        </dt>
+        <dd>Cumulative hazard for age-at-failure T0</dd>
+
+        <dt>
+
+          <code><a href="tpx.html">tpx()</a></code>
+
+        </dt>
+        <dd>Conditional survival probability for Tx</dd>
+
+        <dt>
+
+          <code><a href="tqx.html">tqx()</a></code>
+
+        </dt>
+        <dd>Conditional failure probability for Tx</dd>
+
+        <dt>
+
+          <code><a href="fx.html">fx()</a></code>
+
+        </dt>
+        <dd>Conditional density for Tx</dd>
+
+        <dt>
+
+          <code><a href="ex_complete.html">ex_complete()</a></code>
+
+        </dt>
+        <dd>Complete expectation of life at age x</dd>
+
+        <dt>
+
+          <code><a href="ex_curtate.html">ex_curtate()</a></code>
+
+        </dt>
+        <dd>Curtate expectation of life at age x</dd>
+      </dl></div><div class="section level2">
+      <h2 id="life-tables">Life Tables<a class="anchor" aria-label="anchor" href="#life-tables"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="S0_to_lx.html">S0_to_lx()</a></code>
+
+        </dt>
+        <dd>Convert survival probabilities to life-table values</dd>
+
+        <dt>
+
+          <code><a href="lx_to_S0.html">lx_to_S0()</a></code>
+
+        </dt>
+        <dd>Convert life-table values to survival probabilities</dd>
+
+        <dt>
+
+          <code><a href="px_to_lx.html">px_to_lx()</a></code>
+
+        </dt>
+        <dd>Construct life-table values from p_x values</dd>
+
+        <dt>
+
+          <code><a href="qx_to_lx.html">qx_to_lx()</a></code>
+
+        </dt>
+        <dd>Construct life-table values from q_x values</dd>
+
+        <dt>
+
+          <code><a href="life_table.html">life_table()</a></code>
+
+        </dt>
+        <dd>Construct a life table</dd>
+
+        <dt>
+
+          <code><a href="lx.html">lx()</a></code>
+
+        </dt>
+        <dd>Extract life-table survivor values</dd>
+
+        <dt>
+
+          <code><a href="dx.html">dx()</a></code>
+
+        </dt>
+        <dd>Compute deaths between ages x and x+1</dd>
+
+        <dt>
+
+          <code><a href="ndx.html">ndx()</a></code>
+
+        </dt>
+        <dd>Compute deaths over an n-year interval from a life table</dd>
+
+        <dt>
+
+          <code><a href="qx_tab.html">qx_tab()</a></code>
+
+        </dt>
+        <dd>Compute one-year death probability from a life table</dd>
+
+        <dt>
+
+          <code><a href="npx.html">npx()</a></code>
+
+        </dt>
+        <dd>Compute n-year survival probability from a life table</dd>
+
+        <dt>
+
+          <code><a href="nqx.html">nqx()</a></code>
+
+        </dt>
+        <dd>Compute n-year death probability from a life table</dd>
+
+        <dt>
+
+          <code><a href="select_life_table.html">select_life_table()</a></code>
+
+        </dt>
+        <dd>Construct a select life table</dd>
+
+        <dt>
+
+          <code><a href="lx_select.html">lx_select()</a></code>
+
+        </dt>
+        <dd>Extract select-table survivor value</dd>
+
+        <dt>
+
+          <code><a href="npx_select.html">npx_select()</a></code>
+
+        </dt>
+        <dd>Select-life survival probability</dd>
+
+        <dt>
+
+          <code><a href="nqx_select.html">nqx_select()</a></code>
+
+        </dt>
+        <dd>Select-life death probability</dd>
+
+        <dt>
+
+          <code><a href="nmxq_select.html">nmxq_select()</a></code>
+
+        </dt>
+        <dd>Deferred select-life death probability</dd>
+
+        <dt>
+
+          <code><a href="tpx_tab.html">tpx_tab()</a></code>
+
+        </dt>
+        <dd>Fractional survival probability from a life table</dd>
+
+        <dt>
+
+          <code><a href="tqx_tab.html">tqx_tab()</a></code>
+
+        </dt>
+        <dd>Fractional failure probability from a life table</dd>
+
+        <dt>
+
+          <code><a href="mux_tab.html">mux_tab()</a></code>
+
+        </dt>
+        <dd>Fractional force of mortality from a life table</dd>
+
+        <dt>
+
+          <code><a href="fx_tab.html">fx_tab()</a></code>
+
+        </dt>
+        <dd>Fractional conditional density from a life table</dd>
+
+        <dt>
+
+          <code><a href="nmxq.html">nmxq()</a></code>
+
+        </dt>
+        <dd>Deferred death probability from a life table</dd>
+
+        <dt>
+
+          <code><a href="nkqx.html">nkqx()</a></code>
+
+        </dt>
+        <dd>Curtate death probability from a life table</dd>
+
+        <dt>
+
+          <code><a href="ex_curtate_tab.html">ex_curtate_tab()</a></code>
+
+        </dt>
+        <dd>Curtate expectation of life from a life table</dd>
+
+        <dt>
+
+          <code><a href="ex_temp_curtate_tab.html">ex_temp_curtate_tab()</a></code>
+
+        </dt>
+        <dd>Temporary curtate expectation of life from a life table</dd>
+
+        <dt>
+
+          <code><a href="ex_temp_complete_tab.html">ex_temp_complete_tab()</a></code>
+
+        </dt>
+        <dd>Temporary complete expectation of life from a life table</dd>
+
+        <dt>
+
+          <code><a href="ex_complete_tab.html">ex_complete_tab()</a></code>
+
+        </dt>
+        <dd>Complete expectation of life from a life table</dd>
+      </dl></div><div class="section level2">
+      <h2 id="contingent-payment-models">Contingent Payment Models<a class="anchor" aria-label="anchor" href="#contingent-payment-models"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="double_force_i.html">double_force_i()</a></code>
+
+        </dt>
+        <dd>Effective annual interest at doubled force</dd>
+
+        <dt>
+
+          <code><a href="double_force_delta.html">double_force_delta()</a></code>
+
+        </dt>
+        <dd>Doubled force of interest</dd>
+
+        <dt>
+
+          <code><a href="udd_continuous_multiplier.html">udd_continuous_multiplier()</a></code>
+
+        </dt>
+        <dd>UDD multiplier for continuous insurance approximations</dd>
+
+        <dt>
+
+          <code><a href="udd_mthly_multiplier.html">udd_mthly_multiplier()</a></code>
+
+        </dt>
+        <dd>UDD multiplier for m-thly insurance approximations</dd>
+
+        <dt>
+
+          <code><a href="Abarx_udd.html">Abarx_udd()</a></code>
+
+        </dt>
+        <dd>UDD approximation of continuous whole life insurance</dd>
+
+        <dt>
+
+          <code><a href="Abarxn1_udd.html">Abarxn1_udd()</a></code>
+
+        </dt>
+        <dd>UDD approximation of continuous term insurance</dd>
+
+        <dt>
+
+          <code><a href="nAbarx_udd.html">nAbarx_udd()</a></code>
+
+        </dt>
+        <dd>UDD approximation of continuous deferred insurance</dd>
+
+        <dt>
+
+          <code><a href="Abarxn_udd.html">Abarxn_udd()</a></code>
+
+        </dt>
+        <dd>UDD approximation of continuous endowment insurance</dd>
+
+        <dt>
+
+          <code><a href="Ax_m_udd.html">Ax_m_udd()</a></code>
+
+        </dt>
+        <dd>UDD approximation of m-thly whole life insurance</dd>
+
+        <dt>
+
+          <code><a href="Axn1_m_udd.html">Axn1_m_udd()</a></code>
+
+        </dt>
+        <dd>UDD approximation of m-thly term insurance</dd>
+
+        <dt>
+
+          <code><a href="nAx_m_udd.html">nAx_m_udd()</a></code>
+
+        </dt>
+        <dd>UDD approximation of m-thly deferred insurance</dd>
+
+        <dt>
+
+          <code><a href="Axn_m_udd.html">Axn_m_udd()</a></code>
+
+        </dt>
+        <dd>UDD approximation of m-thly endowment insurance</dd>
+
+        <dt>
+
+          <code><a href="Ax.html">Ax()</a></code>
+
+        </dt>
+        <dd>Whole life insurance APV</dd>
+
+        <dt>
+
+          <code><a href="Axn1.html">Axn1()</a></code>
+
+        </dt>
+        <dd>Term insurance APV</dd>
+
+        <dt>
+
+          <code><a href="nEx.html">nEx()</a></code>
+
+        </dt>
+        <dd>Pure endowment APV</dd>
+
+        <dt>
+
+          <code><a href="nAx.html">nAx()</a></code>
+
+        </dt>
+        <dd>Deferred insurance APV</dd>
+
+        <dt>
+
+          <code><a href="Axn.html">Axn()</a></code>
+
+        </dt>
+        <dd>Endowment insurance APV</dd>
+
+        <dt>
+
+          <code><a href="A2x.html">A2x()</a></code>
+
+        </dt>
+        <dd>Second moment of whole life insurance PV</dd>
+
+        <dt>
+
+          <code><a href="A2xn1.html">A2xn1()</a></code>
+
+        </dt>
+        <dd>Second moment of term insurance PV</dd>
+
+        <dt>
+
+          <code><a href="A2nEx.html">A2nEx()</a></code>
+
+        </dt>
+        <dd>Second moment of pure endowment PV</dd>
+
+        <dt>
+
+          <code><a href="A2nAx.html">A2nAx()</a></code>
+
+        </dt>
+        <dd>Second moment of deferred insurance PV</dd>
+
+        <dt>
+
+          <code><a href="A2xn.html">A2xn()</a></code>
+
+        </dt>
+        <dd>Second moment of endowment insurance PV</dd>
+
+        <dt>
+
+          <code><a href="var_Ax.html">var_Ax()</a></code>
+
+        </dt>
+        <dd>Variance of whole life insurance PV</dd>
+
+        <dt>
+
+          <code><a href="var_Axn1.html">var_Axn1()</a></code>
+
+        </dt>
+        <dd>Variance of term insurance PV</dd>
+
+        <dt>
+
+          <code><a href="var_nEx.html">var_nEx()</a></code>
+
+        </dt>
+        <dd>Variance of pure endowment PV</dd>
+
+        <dt>
+
+          <code><a href="var_nAx.html">var_nAx()</a></code>
+
+        </dt>
+        <dd>Variance of deferred insurance PV</dd>
+
+        <dt>
+
+          <code><a href="var_Axn.html">var_Axn()</a></code>
+
+        </dt>
+        <dd>Variance of endowment insurance PV</dd>
+
+        <dt>
+
+          <code><a href="cov_term_deferred.html">cov_term_deferred()</a></code>
+
+        </dt>
+        <dd>Covariance of term and deferred insurance PVs</dd>
+
+        <dt>
+
+          <code><a href="cov_term_endow.html">cov_term_endow()</a></code>
+
+        </dt>
+        <dd>Covariance of term insurance and pure endowment PVs</dd>
+
+        <dt>
+
+          <code><a href="Abarx.html">Abarx()</a></code>
+
+        </dt>
+        <dd>Continuous whole life insurance APV</dd>
+
+        <dt>
+
+          <code><a href="Abarxn1.html">Abarxn1()</a></code>
+
+        </dt>
+        <dd>Continuous term insurance APV</dd>
+
+        <dt>
+
+          <code><a href="nAbarx.html">nAbarx()</a></code>
+
+        </dt>
+        <dd>Continuous deferred insurance APV</dd>
+
+        <dt>
+
+          <code><a href="Abarxn.html">Abarxn()</a></code>
+
+        </dt>
+        <dd>Continuous endowment insurance APV</dd>
+
+        <dt>
+
           <code><a href="A2barx.html">A2barx()</a></code>
 
         </dt>
         <dd>Second moment of continuous whole life insurance PV</dd>
-
-        <dt>
-
-          <code><a href="A2barxn.html">A2barxn()</a></code>
-
-        </dt>
-        <dd>Second moment of continuous endowment insurance PV</dd>
 
         <dt>
 
@@ -71,241 +602,38 @@
 
         <dt>
 
-          <code><a href="A2nAx.html">A2nAx()</a></code>
+          <code><a href="A2barxn.html">A2barxn()</a></code>
 
         </dt>
-        <dd>Second moment of deferred insurance PV</dd>
+        <dd>Second moment of continuous endowment insurance PV</dd>
 
         <dt>
 
-          <code><a href="A2nAx_m.html">A2nAx_m()</a></code>
+          <code><a href="var_Abarx.html">var_Abarx()</a></code>
 
         </dt>
-        <dd>Second moment of m-thly deferred insurance PV</dd>
+        <dd>Variance of continuous whole life insurance PV</dd>
 
         <dt>
 
-          <code><a href="A2nEx.html">A2nEx()</a></code>
+          <code><a href="var_Abarxn1.html">var_Abarxn1()</a></code>
 
         </dt>
-        <dd>Second moment of pure endowment PV</dd>
+        <dd>Variance of continuous term insurance PV</dd>
 
         <dt>
 
-          <code><a href="A2x.html">A2x()</a></code>
+          <code><a href="var_nAbarx.html">var_nAbarx()</a></code>
 
         </dt>
-        <dd>Second moment of whole life insurance PV</dd>
+        <dd>Variance of continuous deferred insurance PV</dd>
 
         <dt>
 
-          <code><a href="A2x_m.html">A2x_m()</a></code>
+          <code><a href="var_Abarxn.html">var_Abarxn()</a></code>
 
         </dt>
-        <dd>Second moment of m-thly whole life insurance PV</dd>
-
-        <dt>
-
-          <code><a href="A2xn.html">A2xn()</a></code>
-
-        </dt>
-        <dd>Second moment of endowment insurance PV</dd>
-
-        <dt>
-
-          <code><a href="A2xn1.html">A2xn1()</a></code>
-
-        </dt>
-        <dd>Second moment of term insurance PV</dd>
-
-        <dt>
-
-          <code><a href="A2xn1_m.html">A2xn1_m()</a></code>
-
-        </dt>
-        <dd>Second moment of m-thly term insurance PV</dd>
-
-        <dt>
-
-          <code><a href="A2xn_m.html">A2xn_m()</a></code>
-
-        </dt>
-        <dd>Second moment of m-thly endowment insurance PV</dd>
-
-        <dt>
-
-          <code><a href="AAL_PUC_db.html">AAL_PUC_db()</a></code>
-
-        </dt>
-        <dd>Projected Unit Credit accrued liability for a DB plan</dd>
-
-        <dt>
-
-          <code><a href="AAL_TUC_db.html">AAL_TUC_db()</a></code>
-
-        </dt>
-        <dd>Traditional Unit Credit accrued liability for a DB plan</dd>
-
-        <dt>
-
-          <code><a href="AB_cae.html">AB_cae()</a></code>
-
-        </dt>
-        <dd>Accrued benefit for a career average earnings plan</dd>
-
-        <dt>
-
-          <code><a href="AB_fas.html">AB_fas()</a></code>
-
-        </dt>
-        <dd>Accrued benefit for a final average salary plan</dd>
-
-        <dt>
-
-          <code><a href="APV_NR_db.html">APV_NR_db()</a></code>
-
-        </dt>
-        <dd>APV of normal retirement benefit for a DB plan</dd>
-
-        <dt>
-
-          <code><a href="APV_gross_premiums.html">APV_gross_premiums()</a></code>
-
-        </dt>
-        <dd>APV of gross premiums under a risk discount rate</dd>
-
-        <dt>
-
-          <code><a href="AS_path.html">AS_path()</a></code>
-
-        </dt>
-        <dd>Projected asset share path \({}_{k}AS\)</dd>
-
-        <dt>
-
-          <code><a href="AS_path_md.html">AS_path_md()</a></code>
-
-        </dt>
-        <dd>General projected asset share path (multiple decrements)</dd>
-
-        <dt>
-
-          <code><a href="AV_path_ul_typeA.html">AV_path_ul_typeA()</a></code>
-
-        </dt>
-        <dd>Account-value path for Type A universal life</dd>
-
-        <dt>
-
-          <code><a href="AV_path_ul_typeB.html">AV_path_ul_typeB()</a></code>
-
-        </dt>
-        <dd>Account-value path for Type B universal life</dd>
-
-        <dt>
-
-          <code><a href="AVz_dc.html">AVz_dc()</a></code>
-
-        </dt>
-        <dd>Accumulated value of defined contribution plan contributions</dd>
-
-        <dt>
-
-          <code><a href="Abarx.html">Abarx()</a></code>
-
-        </dt>
-        <dd>Continuous whole life insurance APV</dd>
-
-        <dt>
-
-          <code><a href="Abarx_udd.html">Abarx_udd()</a></code>
-
-        </dt>
-        <dd>UDD approximation of continuous whole life insurance</dd>
-
-        <dt>
-
-          <code><a href="Abarxj_md.html">Abarxj_md()</a></code>
-
-        </dt>
-        <dd>Continuous multiple-decrement insurance APV \(\overline{A}_{x}^{(j)}\)</dd>
-
-        <dt>
-
-          <code><a href="Abarxn.html">Abarxn()</a></code>
-
-        </dt>
-        <dd>Continuous endowment insurance APV</dd>
-
-        <dt>
-
-          <code><a href="Abarxn1.html">Abarxn1()</a></code>
-
-        </dt>
-        <dd>Continuous term insurance APV</dd>
-
-        <dt>
-
-          <code><a href="Abarxn1_udd.html">Abarxn1_udd()</a></code>
-
-        </dt>
-        <dd>UDD approximation of continuous term insurance</dd>
-
-        <dt>
-
-          <code><a href="Abarxn_udd.html">Abarxn_udd()</a></code>
-
-        </dt>
-        <dd>UDD approximation of continuous endowment insurance</dd>
-
-        <dt>
-
-          <code><a href="Abarxy.html">Abarxy()</a></code>
-
-        </dt>
-        <dd>Continuous joint-life whole life insurance</dd>
-
-        <dt>
-
-          <code><a href="Abarxy1.html">Abarxy1()</a></code>
-
-        </dt>
-        <dd>Continuous contingent insurance: benefit on death of (x) if before (y)</dd>
-
-        <dt>
-
-          <code><a href="Abarxy2.html">Abarxy2()</a></code>
-
-        </dt>
-        <dd>Continuous contingent insurance: benefit on death of (x) if after (y)</dd>
-
-        <dt>
-
-          <code><a href="Abarxybar.html">Abarxybar()</a></code>
-
-        </dt>
-        <dd>Continuous last-survivor whole life insurance</dd>
-
-        <dt>
-
-          <code><a href="Abaryx1.html">Abaryx1()</a></code>
-
-        </dt>
-        <dd>Continuous contingent insurance: benefit on death of (y) if before (x)</dd>
-
-        <dt>
-
-          <code><a href="Abaryx2.html">Abaryx2()</a></code>
-
-        </dt>
-        <dd>Continuous contingent insurance: benefit on death of (y) if after (x)</dd>
-
-        <dt>
-
-          <code><a href="Ax.html">Ax()</a></code>
-
-        </dt>
-        <dd>Whole life insurance APV</dd>
+        <dd>Variance of continuous endowment insurance PV</dd>
 
         <dt>
 
@@ -316,34 +644,6 @@
 
         <dt>
 
-          <code><a href="Ax_m_udd.html">Ax_m_udd()</a></code>
-
-        </dt>
-        <dd>UDD approximation of m-thly whole life insurance</dd>
-
-        <dt>
-
-          <code><a href="Axj_md.html">Axj_md()</a></code>
-
-        </dt>
-        <dd>Discrete multiple-decrement insurance APV \(A_{x}^{(j)}\)</dd>
-
-        <dt>
-
-          <code><a href="Axn.html">Axn()</a></code>
-
-        </dt>
-        <dd>Endowment insurance APV</dd>
-
-        <dt>
-
-          <code><a href="Axn1.html">Axn1()</a></code>
-
-        </dt>
-        <dd>Term insurance APV</dd>
-
-        <dt>
-
           <code><a href="Axn1_m.html">Axn1_m()</a></code>
 
         </dt>
@@ -351,10 +651,10 @@
 
         <dt>
 
-          <code><a href="Axn1_m_udd.html">Axn1_m_udd()</a></code>
+          <code><a href="nAx_m.html">nAx_m()</a></code>
 
         </dt>
-        <dd>UDD approximation of m-thly term insurance</dd>
+        <dd>m-thly deferred insurance APV</dd>
 
         <dt>
 
@@ -365,143 +665,59 @@
 
         <dt>
 
-          <code><a href="Axn_m_udd.html">Axn_m_udd()</a></code>
+          <code><a href="A2x_m.html">A2x_m()</a></code>
 
         </dt>
-        <dd>UDD approximation of m-thly endowment insurance</dd>
+        <dd>Second moment of m-thly whole life insurance PV</dd>
 
         <dt>
 
-          <code><a href="Axy.html">Axy()</a></code>
+          <code><a href="A2xn1_m.html">A2xn1_m()</a></code>
 
         </dt>
-        <dd>Joint-life whole life insurance</dd>
+        <dd>Second moment of m-thly term insurance PV</dd>
 
         <dt>
 
-          <code><a href="Axybar.html">Axybar()</a></code>
+          <code><a href="A2nAx_m.html">A2nAx_m()</a></code>
 
         </dt>
-        <dd>Last-survivor whole life insurance</dd>
+        <dd>Second moment of m-thly deferred insurance PV</dd>
 
         <dt>
 
-          <code><a href="Axybarn.html">Axybarn()</a></code>
+          <code><a href="A2xn_m.html">A2xn_m()</a></code>
 
         </dt>
-        <dd>Last-survivor endowment insurance</dd>
+        <dd>Second moment of m-thly endowment insurance PV</dd>
 
         <dt>
 
-          <code><a href="Axybarn1.html">Axybarn1()</a></code>
+          <code><a href="var_Ax_m.html">var_Ax_m()</a></code>
 
         </dt>
-        <dd>Last-survivor term insurance</dd>
+        <dd>Variance of m-thly whole life insurance PV</dd>
 
         <dt>
 
-          <code><a href="Axyn.html">Axyn()</a></code>
+          <code><a href="var_Axn1_m.html">var_Axn1_m()</a></code>
 
         </dt>
-        <dd>Joint-life endowment insurance</dd>
+        <dd>Variance of m-thly term insurance PV</dd>
 
         <dt>
 
-          <code><a href="Axyn1.html">Axyn1()</a></code>
+          <code><a href="var_nAx_m.html">var_nAx_m()</a></code>
 
         </dt>
-        <dd>Joint-life term insurance</dd>
+        <dd>Variance of m-thly deferred insurance PV</dd>
 
         <dt>
 
-          <code><a href="DAbarxn1.html">DAbarxn1()</a></code>
+          <code><a href="var_Axn_m.html">var_Axn_m()</a></code>
 
         </dt>
-        <dd>Piecewise-continuous decreasing n-year term insurance</dd>
-
-        <dt>
-
-          <code><a href="DAxn1.html">DAxn1()</a></code>
-
-        </dt>
-        <dd>Decreasing n-year term insurance</dd>
-
-        <dt>
-
-          <code><a href="DbarAbarxn1.html">DbarAbarxn1()</a></code>
-
-        </dt>
-        <dd>Fully continuous decreasing n-year term insurance</dd>
-
-        <dt>
-
-          <code><a href="ELtx.html">ELtx()</a></code>
-
-        </dt>
-        <dd>Mean present value of loss at duration t for whole life insurance</dd>
-
-        <dt>
-
-          <code><a href="GI_cont.html">GI_cont()</a></code>
-
-        </dt>
-        <dd>Interest gain helper for continuous-style recursion</dd>
-
-        <dt>
-
-          <code><a href="GI_disc.html">GI_disc()</a></code>
-
-        </dt>
-        <dd>Interest gain for a discrete insurance contract</dd>
-
-        <dt>
-
-          <code><a href="GMF_rollforward_ul.html">GMF_rollforward_ul()</a></code>
-
-        </dt>
-        <dd>Guaranteed maturity fund roll-forward</dd>
-
-        <dt>
-
-          <code><a href="GM_cont.html">GM_cont()</a></code>
-
-        </dt>
-        <dd>Mortality gain helper for continuous-style recursion</dd>
-
-        <dt>
-
-          <code><a href="GM_disc.html">GM_disc()</a></code>
-
-        </dt>
-        <dd>Mortality gain for a discrete insurance contract</dd>
-
-        <dt>
-
-          <code><a href="GT_cont.html">GT_cont()</a></code>
-
-        </dt>
-        <dd>Total gain for a continuous-style one-step recursion</dd>
-
-        <dt>
-
-          <code><a href="GT_disc.html">GT_disc()</a></code>
-
-        </dt>
-        <dd>Total gain for a discrete insurance contract</dd>
-
-        <dt>
-
-          <code><a href="GTg_disc.html">GTg_disc()</a></code>
-
-        </dt>
-        <dd>Total gross gain for a discrete insurance contract</dd>
-
-        <dt>
-
-          <code><a href="IAbarx.html">IAbarx()</a></code>
-
-        </dt>
-        <dd>Piecewise-continuous increasing whole life insurance</dd>
+        <dd>Variance of m-thly endowment insurance PV</dd>
 
         <dt>
 
@@ -519,10 +735,10 @@
 
         <dt>
 
-          <code><a href="IRR_profit.html">IRR_profit()</a></code>
+          <code><a href="DAxn1.html">DAxn1()</a></code>
 
         </dt>
-        <dd>Internal rate of return of a profit signature</dd>
+        <dd>Decreasing n-year term insurance</dd>
 
         <dt>
 
@@ -533,6 +749,13 @@
 
         <dt>
 
+          <code><a href="IAbarx.html">IAbarx()</a></code>
+
+        </dt>
+        <dd>Piecewise-continuous increasing whole life insurance</dd>
+
+        <dt>
+
           <code><a href="IbarAbarxn1.html">IbarAbarxn1()</a></code>
 
         </dt>
@@ -540,201 +763,28 @@
 
         <dt>
 
-          <code><a href="Income_dc.html">Income_dc()</a></code>
+          <code><a href="DbarAbarxn1.html">DbarAbarxn1()</a></code>
 
         </dt>
-        <dd>Retirement income from a defined contribution accumulation</dd>
+        <dd>Fully continuous decreasing n-year term insurance</dd>
 
         <dt>
 
-          <code><a href="NC_EAN_db.html">NC_EAN_db()</a></code>
+          <code><a href="DAbarxn1.html">DAbarxn1()</a></code>
 
         </dt>
-        <dd>Entry Age Normal normal cost for a DB plan</dd>
+        <dd>Piecewise-continuous decreasing n-year term insurance</dd>
+      </dl></div><div class="section level2">
+      <h2 id="contingent-annuity-models">Contingent Annuity Models<a class="anchor" aria-label="anchor" href="#contingent-annuity-models"></a></h2>
 
-        <dt>
 
-          <code><a href="NC_PUC_db.html">NC_PUC_db()</a></code>
 
-        </dt>
-        <dd>Projected Unit Credit normal cost for a DB plan</dd>
+      <dl></dl></div><div class="section level2">
 
-        <dt>
 
-          <code><a href="NC_TUC_db.html">NC_TUC_db()</a></code>
 
-        </dt>
-        <dd>Traditional Unit Credit normal cost for a DB plan</dd>
 
-        <dt>
-
-          <code><a href="NPV_partial.html">NPV_partial()</a></code>
-
-        </dt>
-        <dd>Partial net present values</dd>
-
-        <dt>
-
-          <code><a href="NPV_profit.html">NPV_profit()</a></code>
-
-        </dt>
-        <dd>Net present value of a profit signature</dd>
-
-        <dt>
-
-          <code><a href="PAB_cae.html">PAB_cae()</a></code>
-
-        </dt>
-        <dd>Projected annual benefit under a career average earnings DB plan</dd>
-
-        <dt>
-
-          <code><a href="PAB_fas.html">PAB_fas()</a></code>
-
-        </dt>
-        <dd>Projected annual benefit under a final average salary DB plan</dd>
-
-        <dt>
-
-          <code><a href="Pbar_trapz_ms.html">Pbar_trapz_ms()</a></code>
-
-        </dt>
-        <dd>Continuous premium approximation \(\overline{P}\) by trapezoidal rule</dd>
-
-        <dt>
-
-          <code><a href="Pi_signature.html">Pi_signature()</a></code>
-
-        </dt>
-        <dd>Profit signature from a profit vector</dd>
-
-        <dt>
-
-          <code><a href="PnAdotx.html">PnAdotx()</a></code>
-
-        </dt>
-        <dd>Deferred annuity-due premium</dd>
-
-        <dt>
-
-          <code><a href="Pnax.html">Pnax()</a></code>
-
-        </dt>
-        <dd>Deferred annuity-immediate premium</dd>
-
-        <dt>
-
-          <code><a href="Pr_vector_disc.html">Pr_vector_disc()</a></code>
-
-        </dt>
-        <dd>Profit vector for a discrete profit-analysis model</dd>
-
-        <dt>
-
-          <code><a href="S0.html">S0()</a></code>
-
-        </dt>
-        <dd>Survival function for age-at-failure T0</dd>
-
-        <dt>
-
-          <code><a href="S0_to_lx.html">S0_to_lx()</a></code>
-
-        </dt>
-        <dd>Convert survival probabilities to life-table values</dd>
-
-        <dt>
-
-          <code><a href="V_zeroized.html">V_zeroized()</a></code>
-
-        </dt>
-        <dd>Zeroized reserves for a discrete death-only contract</dd>
-
-        <dt>
-
-          <code><a href="Vprefloor_crvm_ul.html">Vprefloor_crvm_ul()</a></code>
-
-        </dt>
-        <dd>Pre-floor CRVM reserve for universal life</dd>
-
-        <dt>
-
-          <code><a href="abarx_y.html">abarx_y()</a></code>
-
-        </dt>
-        <dd>Continuous reversionary annuity to (y) after death of (x)</dd>
-
-        <dt>
-
-          <code><a href="abarxy_ch12.html">abarxy()</a></code>
-
-        </dt>
-        <dd>Continuous joint-life whole life annuity</dd>
-
-        <dt>
-
-          <code><a href="abarxybar_ch12.html">abarxybar()</a></code>
-
-        </dt>
-        <dd>Continuous last-survivor whole life annuity</dd>
-
-        <dt>
-
-          <code><a href="abary_x.html">abary_x()</a></code>
-
-        </dt>
-        <dd>Continuous reversionary annuity to (x) after death of (y)</dd>
-
-        <dt>
-
-          <code><a href="adotxy.html">adotxy()</a></code>
-
-        </dt>
-        <dd>Joint-life whole life annuity-due</dd>
-
-        <dt>
-
-          <code><a href="adotxybar.html">adotxybar()</a></code>
-
-        </dt>
-        <dd>Last-survivor whole life annuity-due</dd>
-
-        <dt>
-
-          <code><a href="adotxybarn.html">adotxybarn()</a></code>
-
-        </dt>
-        <dd>Last-survivor temporary annuity-due</dd>
-
-        <dt>
-
-          <code><a href="adotxyn.html">adotxyn()</a></code>
-
-        </dt>
-        <dd>Joint-life temporary annuity-due</dd>
-
-        <dt>
-
-          <code><a href="ag38_prefunding_ratio.html">ag38_prefunding_ratio()</a></code>
-
-        </dt>
-        <dd>AG 38 prefunding ratio</dd>
-
-        <dt>
-
-          <code><a href="ag38_reserve_ul.html">ag38_reserve_ul()</a></code>
-
-        </dt>
-        <dd>AG 38 reserve calculation</dd>
-
-        <dt>
-
-          <code><a href="alphaF.html">alphaF()</a></code>
-
-        </dt>
-        <dd>Full preliminary term first-year modified premium</dd>
-
-        <dt>
+      <dl><dt>
 
           <code><a href="annuity_annual.html">ax()</a></code> <code><a href="annuity_annual.html">adotx()</a></code> <code><a href="annuity_annual.html">abarx()</a></code> <code><a href="annuity_annual.html">axn()</a></code> <code><a href="annuity_annual.html">adotxn()</a></code> <code><a href="annuity_annual.html">abarxn()</a></code> <code><a href="annuity_annual.html">nax()</a></code> <code><a href="annuity_annual.html">nadotx()</a></code> <code><a href="annuity_annual.html">nabarx()</a></code> <code><a href="annuity_annual.html">sxn()</a></code> <code><a href="annuity_annual.html">sdotxn()</a></code> <code><a href="annuity_annual.html">sbarxn()</a></code>
 
@@ -743,10 +793,115 @@
 
         <dt>
 
-          <code><a href="annuity_approximations.html">annuity_approximations</a></code>
+          <code><a href="annuity_mthly_whole_immediate.html">ax_m()</a></code>
 
         </dt>
-        <dd>Annuity approximations (Chapter 8)</dd>
+        <dd>Whole life m-thly annuity-immediate</dd>
+
+        <dt>
+
+          <code><a href="annuity_mthly_whole_due.html">adotx_m()</a></code>
+
+        </dt>
+        <dd>Whole life m-thly annuity-due</dd>
+
+        <dt>
+
+          <code><a href="annuity_mthly_temp_immediate.html">axn_m()</a></code>
+
+        </dt>
+        <dd>Temporary m-thly annuity-immediate</dd>
+
+        <dt>
+
+          <code><a href="annuity_mthly_temp_due.html">adotxn_m()</a></code>
+
+        </dt>
+        <dd>Temporary m-thly annuity-due</dd>
+
+        <dt>
+
+          <code><a href="annuity_mthly_deferred_immediate.html">nax_m()</a></code>
+
+        </dt>
+        <dd>Deferred whole life m-thly annuity-immediate</dd>
+
+        <dt>
+
+          <code><a href="annuity_mthly_deferred_due.html">nadotx_m()</a></code>
+
+        </dt>
+        <dd>Deferred whole life m-thly annuity-due</dd>
+
+        <dt>
+
+          <code><a href="annuity_mthly_accum_immediate.html">sxn_m()</a></code>
+
+        </dt>
+        <dd>Temporary m-thly annuity-immediate actuarial accumulated value</dd>
+
+        <dt>
+
+          <code><a href="annuity_mthly_accum_due.html">sdotxn_m()</a></code>
+
+        </dt>
+        <dd>Temporary m-thly annuity-due actuarial accumulated value</dd>
+
+        <dt>
+
+          <code><a href="annuity_relationships.html">annuity_identity_ax()</a></code> <code><a href="annuity_relationships.html">annuity_identity_adotx()</a></code> <code><a href="annuity_relationships.html">annuity_identity_abarx()</a></code> <code><a href="annuity_relationships.html">annuity_identity_axn()</a></code> <code><a href="annuity_relationships.html">annuity_identity_adotxn()</a></code> <code><a href="annuity_relationships.html">annuity_identity_abarxn()</a></code> <code><a href="annuity_relationships.html">annuity_identity_nax()</a></code> <code><a href="annuity_relationships.html">annuity_identity_nadotx()</a></code> <code><a href="annuity_relationships.html">annuity_identity_nabarx()</a></code>
+
+        </dt>
+        <dd>Annuity-insurance relationships (Chapter 8)</dd>
+
+        <dt>
+
+          <code><a href="annuity_varying_payments.html">Iax()</a></code> <code><a href="annuity_varying_payments.html">Iaxn()</a></code> <code><a href="annuity_varying_payments.html">Daxn()</a></code> <code><a href="annuity_varying_payments.html">Iadotx()</a></code> <code><a href="annuity_varying_payments.html">Iadotxn()</a></code> <code><a href="annuity_varying_payments.html">Dadotxn()</a></code> <code><a href="annuity_varying_payments.html">Iabarx()</a></code> <code><a href="annuity_varying_payments.html">Iabarxn()</a></code> <code><a href="annuity_varying_payments.html">Dabarxn()</a></code>
+
+        </dt>
+        <dd>Varying-payment annuity functions (Chapter 8)</dd>
+
+        <dt>
+
+          <code><a href="qx_proj.html">qx_proj()</a></code>
+
+        </dt>
+        <dd>Project one-year death probability under mortality improvement</dd>
+
+        <dt>
+
+          <code><a href="px_proj.html">px_proj()</a></code>
+
+        </dt>
+        <dd>Project one-year survival probability under mortality improvement</dd>
+
+        <dt>
+
+          <code><a href="tpx_improved.html">tpx_improved()</a></code>
+
+        </dt>
+        <dd>Multi-year survival probability under mortality improvement</dd>
+
+        <dt>
+
+          <code><a href="axn_improved.html">axn_improved()</a></code>
+
+        </dt>
+        <dd>Temporary annuity-immediate under mortality improvement</dd>
+
+        <dt>
+
+          <code><a href="naxn_improved.html">naxn_improved()</a></code>
+
+        </dt>
+        <dd>Deferred temporary annuity-immediate under mortality improvement</dd>
+
+        <dt>
+
+          <code><a href="ax_improved.html">ax_improved()</a></code>
+
+        </dt>
+        <dd>Whole life annuity-immediate under mortality improvement</dd>
 
         <dt>
 
@@ -768,881 +923,38 @@
 
         </dt>
         <dd>Woolhouse 3-term annuity approximations</dd>
+      </dl></div><div class="section level2">
+      <h2 id="funding-plans-for-contingent-contracts">Funding Plans for Contingent Contracts<a class="anchor" aria-label="anchor" href="#funding-plans-for-contingent-contracts"></a></h2>
 
-        <dt>
 
-          <code><a href="annuity_certain.html">annuity_certain()</a></code>
 
-        </dt>
-        <dd>Present value of a level annuity-certain</dd>
+      <dl></dl></div><div class="section level2">
 
-        <dt>
 
-          <code><a href="annuity_mthly.html">annuity_mthly</a></code>
 
-        </dt>
-        <dd>m-thly contingent annuity functions (Chapter 8)</dd>
 
-        <dt>
-
-          <code><a href="annuity_mthly_accum_due.html">sdotxn_m()</a></code>
-
-        </dt>
-        <dd>Temporary m-thly annuity-due actuarial accumulated value</dd>
-
-        <dt>
-
-          <code><a href="annuity_mthly_accum_immediate.html">sxn_m()</a></code>
-
-        </dt>
-        <dd>Temporary m-thly annuity-immediate actuarial accumulated value</dd>
-
-        <dt>
-
-          <code><a href="annuity_mthly_deferred_due.html">nadotx_m()</a></code>
-
-        </dt>
-        <dd>Deferred whole life m-thly annuity-due</dd>
-
-        <dt>
-
-          <code><a href="annuity_mthly_deferred_immediate.html">nax_m()</a></code>
-
-        </dt>
-        <dd>Deferred whole life m-thly annuity-immediate</dd>
-
-        <dt>
-
-          <code><a href="annuity_mthly_temp_due.html">adotxn_m()</a></code>
-
-        </dt>
-        <dd>Temporary m-thly annuity-due</dd>
-
-        <dt>
-
-          <code><a href="annuity_mthly_temp_immediate.html">axn_m()</a></code>
-
-        </dt>
-        <dd>Temporary m-thly annuity-immediate</dd>
-
-        <dt>
-
-          <code><a href="annuity_mthly_whole_due.html">adotx_m()</a></code>
-
-        </dt>
-        <dd>Whole life m-thly annuity-due</dd>
-
-        <dt>
-
-          <code><a href="annuity_mthly_whole_immediate.html">ax_m()</a></code>
-
-        </dt>
-        <dd>Whole life m-thly annuity-immediate</dd>
-
-        <dt>
-
-          <code><a href="annuity_relationships.html">annuity_identity_ax()</a></code> <code><a href="annuity_relationships.html">annuity_identity_adotx()</a></code> <code><a href="annuity_relationships.html">annuity_identity_abarx()</a></code> <code><a href="annuity_relationships.html">annuity_identity_axn()</a></code> <code><a href="annuity_relationships.html">annuity_identity_adotxn()</a></code> <code><a href="annuity_relationships.html">annuity_identity_abarxn()</a></code> <code><a href="annuity_relationships.html">annuity_identity_nax()</a></code> <code><a href="annuity_relationships.html">annuity_identity_nadotx()</a></code> <code><a href="annuity_relationships.html">annuity_identity_nabarx()</a></code>
-
-        </dt>
-        <dd>Annuity-insurance relationships (Chapter 8)</dd>
-
-        <dt>
-
-          <code><a href="annuity_varying_payments.html">Iax()</a></code> <code><a href="annuity_varying_payments.html">Iaxn()</a></code> <code><a href="annuity_varying_payments.html">Daxn()</a></code> <code><a href="annuity_varying_payments.html">Iadotx()</a></code> <code><a href="annuity_varying_payments.html">Iadotxn()</a></code> <code><a href="annuity_varying_payments.html">Dadotxn()</a></code> <code><a href="annuity_varying_payments.html">Iabarx()</a></code> <code><a href="annuity_varying_payments.html">Iabarxn()</a></code> <code><a href="annuity_varying_payments.html">Dabarxn()</a></code>
-
-        </dt>
-        <dd>Varying-payment annuity functions (Chapter 8)</dd>
-
-        <dt>
-
-          <code><a href="ax_improved.html">ax_improved()</a></code>
-
-        </dt>
-        <dd>Whole life annuity-immediate under mortality improvement</dd>
-
-        <dt>
-
-          <code><a href="ax_y.html">ax_y()</a></code>
-
-        </dt>
-        <dd>Reversionary annuity to (y) after death of (x)</dd>
-
-        <dt>
-
-          <code><a href="axn_improved.html">axn_improved()</a></code>
-
-        </dt>
-        <dd>Temporary annuity-immediate under mortality improvement</dd>
-
-        <dt>
-
-          <code><a href="axy_ch12.html">axy()</a></code>
-
-        </dt>
-        <dd>Joint-life whole life annuity-immediate</dd>
-
-        <dt>
-
-          <code><a href="axybar_ch12.html">axybar()</a></code>
-
-        </dt>
-        <dd>Last-survivor whole life annuity-immediate</dd>
-
-        <dt>
-
-          <code><a href="axybarn_ch12.html">axybarn()</a></code>
-
-        </dt>
-        <dd>Last-survivor temporary annuity-immediate</dd>
-
-        <dt>
-
-          <code><a href="axyn_ch12.html">axyn()</a></code>
-
-        </dt>
-        <dd>Joint-life temporary annuity-immediate</dd>
-
-        <dt>
-
-          <code><a href="ay_x.html">ay_x()</a></code>
-
-        </dt>
-        <dd>Reversionary annuity to (x) after death of (y)</dd>
-
-        <dt>
-
-          <code><a href="betaF.html">betaF()</a></code>
-
-        </dt>
-        <dd>Full preliminary term renewal modified premium</dd>
-
-        <dt>
-
-          <code><a href="ch12_multilife_cont_params.html">ch12_multilife_cont_params</a></code>
-
-        </dt>
-        <dd>Shared parameters for Chapter 12 continuous multi-life functions</dd>
-
-        <dt>
-
-          <code><a href="chapter15_spot_interest_apv.html">nEx_spot()</a></code> <code><a href="chapter15_spot_interest_apv.html">Axn1_spot()</a></code> <code><a href="chapter15_spot_interest_apv.html">Axn_spot()</a></code> <code><a href="chapter15_spot_interest_apv.html">axn_spot()</a></code>
-
-        </dt>
-        <dd>Spot-rate actuarial present value functions</dd>
-
-        <dt>
-
-          <code><a href="chapter15_variable_interest_apv.html">nEx_var()</a></code> <code><a href="chapter15_variable_interest_apv.html">Axn1_var()</a></code> <code><a href="chapter15_variable_interest_apv.html">Axn_var()</a></code> <code><a href="chapter15_variable_interest_apv.html">axn_var()</a></code>
-
-        </dt>
-        <dd>Variable-interest actuarial present value functions</dd>
-
-        <dt>
-
-          <code><a href="coi_ul_typeB.html">coi_ul_typeB()</a></code>
-
-        </dt>
-        <dd>Cost of insurance for Type B universal life</dd>
-
-        <dt>
-
-          <code><a href="contribution_rate_target.html">contribution_rate_target()</a></code>
-
-        </dt>
-        <dd>Target contribution rate for a defined contribution plan</dd>
-
-        <dt>
-
-          <code><a href="cov_term_deferred.html">cov_term_deferred()</a></code>
-
-        </dt>
-        <dd>Covariance of term and deferred insurance PVs</dd>
-
-        <dt>
-
-          <code><a href="cov_term_endow.html">cov_term_endow()</a></code>
-
-        </dt>
-        <dd>Covariance of term insurance and pure endowment PVs</dd>
-
-        <dt>
-
-          <code><a href="cumhaz0.html">cumhaz0()</a></code>
-
-        </dt>
-        <dd>Cumulative hazard for age-at-failure T0</dd>
-
-        <dt>
-
-          <code><a href="decompGg_disc.html">decompGg_disc()</a></code>
-
-        </dt>
-        <dd>Ordered gross gain decomposition</dd>
-
-        <dt>
-
-          <code><a href="discount.html">discount()</a></code>
-
-        </dt>
-        <dd>Discount factor for compound interest</dd>
-
-        <dt>
-
-          <code><a href="discounted_payback_period.html">discounted_payback_period()</a></code>
-
-        </dt>
-        <dd>Discounted payback period</dd>
-
-        <dt>
-
-          <code><a href="dist0.html">F0()</a></code> <code><a href="dist0.html">f0()</a></code>
-
-        </dt>
-        <dd>Distribution functions for age-at-failure T0</dd>
-
-        <dt>
-
-          <code><a href="double_force_delta.html">double_force_delta()</a></code>
-
-        </dt>
-        <dd>Doubled force of interest</dd>
-
-        <dt>
-
-          <code><a href="double_force_i.html">double_force_i()</a></code>
-
-        </dt>
-        <dd>Effective annual interest at doubled force</dd>
-
-        <dt>
-
-          <code><a href="dx.html">dx()</a></code>
-
-        </dt>
-        <dd>Compute deaths between ages x and x+1</dd>
-
-        <dt>
-
-          <code><a href="dxj.html">dxj()</a></code>
-
-        </dt>
-        <dd>Cause-specific decrements \(d_x^{(j)}\)</dd>
-
-        <dt>
-
-          <code><a href="dxtau.html">dxtau()</a></code>
-
-        </dt>
-        <dd>Total decrements \(d_x^{(\tau)}\)</dd>
-
-        <dt>
-
-          <code><a href="ex_complete.html">ex_complete()</a></code>
-
-        </dt>
-        <dd>Complete expectation of life at age x</dd>
-
-        <dt>
-
-          <code><a href="ex_complete_tab.html">ex_complete_tab()</a></code>
-
-        </dt>
-        <dd>Complete expectation of life from a life table</dd>
-
-        <dt>
-
-          <code><a href="ex_curtate.html">ex_curtate()</a></code>
-
-        </dt>
-        <dd>Curtate expectation of life at age x</dd>
-
-        <dt>
-
-          <code><a href="ex_curtate_tab.html">ex_curtate_tab()</a></code>
-
-        </dt>
-        <dd>Curtate expectation of life from a life table</dd>
-
-        <dt>
-
-          <code><a href="ex_temp_complete_tab.html">ex_temp_complete_tab()</a></code>
-
-        </dt>
-        <dd>Temporary complete expectation of life from a life table</dd>
-
-        <dt>
-
-          <code><a href="ex_temp_curtate_tab.html">ex_temp_curtate_tab()</a></code>
-
-        </dt>
-        <dd>Temporary curtate expectation of life from a life table</dd>
-
-        <dt>
-
-          <code><a href="fnk_from_z.html">fnk_from_z()</a></code>
-
-        </dt>
-        <dd>Forward rate \(f_{n,k}\) from spot rates</dd>
-
-        <dt>
-
-          <code><a href="forward_matrix_from_z.html">forward_matrix_from_z()</a></code>
-
-        </dt>
-        <dd>Matrix of all determinable forward rates from spot rates</dd>
-
-        <dt>
-
-          <code><a href="fx.html">fx()</a></code>
-
-        </dt>
-        <dd>Conditional density for Tx</dd>
-
-        <dt>
-
-          <code><a href="fx_tab.html">fx_tab()</a></code>
-
-        </dt>
-        <dd>Fractional conditional density from a life table</dd>
-
-        <dt>
-
-          <code><a href="gain_loss_md.html">gain_loss_md()</a></code>
-
-        </dt>
-        <dd>Gain or loss in a multiple-decrement model</dd>
-
-        <dt>
-
-          <code><a href="hazard0.html">hazard0()</a></code>
-
-        </dt>
-        <dd>Hazard / force for age-at-failure T0</dd>
-
-        <dt>
-
-          <code><a href="htVx.html">htVx()</a></code>
-
-        </dt>
-        <dd>h-pay whole life net level premium reserve</dd>
-
-        <dt>
-
-          <code><a href="iMA_eiul.html">iMA_eiul()</a></code>
-
-        </dt>
-        <dd>Monthly-average index growth rate</dd>
-
-        <dt>
-
-          <code><a href="iP_eiul.html">iP_eiul()</a></code>
-
-        </dt>
-        <dd>Point-to-point index growth rates</dd>
-
-        <dt>
-
-          <code><a href="i_credit_eiul.html">i_credit_eiul()</a></code>
-
-        </dt>
-        <dd>Credited rates from raw index growth rates</dd>
-
-        <dt>
-
-          <code><a href="interest_convert.html">interest_convert()</a></code>
-
-        </dt>
-        <dd>Convert between compound-interest quantities</dd>
-
-        <dt>
-
-          <code><a href="life_table.html">life_table()</a></code>
-
-        </dt>
-        <dd>Construct a life table</dd>
-
-        <dt>
-
-          <code><a href="lx.html">lx()</a></code>
-
-        </dt>
-        <dd>Extract life-table survivor values</dd>
-
-        <dt>
-
-          <code><a href="lx_select.html">lx_select()</a></code>
-
-        </dt>
-        <dd>Extract select-table survivor value</dd>
-
-        <dt>
-
-          <code><a href="lx_to_S0.html">lx_to_S0()</a></code>
-
-        </dt>
-        <dd>Convert life-table values to survival probabilities</dd>
-
-        <dt>
-
-          <code><a href="markov_nstep_prob.html">markov_nstep_prob()</a></code>
-
-        </dt>
-        <dd>n-step transition probability for a discrete-time Markov chain</dd>
-
-        <dt>
-
-          <code><a href="md_table.html">md_table()</a></code>
-
-        </dt>
-        <dd>Build a multiple-decrement table</dd>
-
-        <dt>
-
-          <code><a href="meanVx.html">meanVx()</a></code>
-
-        </dt>
-        <dd>Mean reserve for whole life insurance</dd>
-
-        <dt>
-
-          <code><a href="mortality_improvement.html">mortality_improvement</a></code>
-
-        </dt>
-        <dd>Mortality improvement projection functions (Chapter 8)</dd>
-
-        <dt>
-
-          <code><a href="multilife_ch12.html">multilife_ch12</a></code>
-
-        </dt>
-        <dd>Multi-life functions for Chapter 12</dd>
-
-        <dt>
-
-          <code><a href="multilife_ch12_ext.html">multilife_ch12_ext</a></code>
-
-        </dt>
-        <dd>Extended multi-life functions for Chapter 12</dd>
-
-        <dt>
-
-          <code><a href="mux_tab.html">mux_tab()</a></code>
-
-        </dt>
-        <dd>Fractional force of mortality from a life table</dd>
-
-        <dt>
-
-          <code><a href="nAbarx.html">nAbarx()</a></code>
-
-        </dt>
-        <dd>Continuous deferred insurance APV</dd>
-
-        <dt>
-
-          <code><a href="nAbarx_udd.html">nAbarx_udd()</a></code>
-
-        </dt>
-        <dd>UDD approximation of continuous deferred insurance</dd>
-
-        <dt>
-
-          <code><a href="nAx.html">nAx()</a></code>
-
-        </dt>
-        <dd>Deferred insurance APV</dd>
-
-        <dt>
-
-          <code><a href="nAx_m.html">nAx_m()</a></code>
-
-        </dt>
-        <dd>m-thly deferred insurance APV</dd>
-
-        <dt>
-
-          <code><a href="nAx_m_udd.html">nAx_m_udd()</a></code>
-
-        </dt>
-        <dd>UDD approximation of m-thly deferred insurance</dd>
-
-        <dt>
-
-          <code><a href="nEx.html">nEx()</a></code>
-
-        </dt>
-        <dd>Pure endowment APV</dd>
-
-        <dt>
-
-          <code><a href="nExy.html">nExy()</a></code>
-
-        </dt>
-        <dd>Joint-life pure endowment</dd>
-
-        <dt>
-
-          <code><a href="nExybar.html">nExybar()</a></code>
-
-        </dt>
-        <dd>Last-survivor pure endowment</dd>
-
-        <dt>
-
-          <code><a href="naxn_improved.html">naxn_improved()</a></code>
-
-        </dt>
-        <dd>Deferred temporary annuity-immediate under mortality improvement</dd>
-
-        <dt>
-
-          <code><a href="ndx.html">ndx()</a></code>
-
-        </dt>
-        <dd>Compute deaths over an n-year interval from a life table</dd>
-
-        <dt>
-
-          <code><a href="nkqx.html">nkqx()</a></code>
-
-        </dt>
-        <dd>Curtate death probability from a life table</dd>
-
-        <dt>
-
-          <code><a href="nmxq.html">nmxq()</a></code>
-
-        </dt>
-        <dd>Deferred death probability from a life table</dd>
-
-        <dt>
-
-          <code><a href="nmxq_select.html">nmxq_select()</a></code>
-
-        </dt>
-        <dd>Deferred select-life death probability</dd>
-
-        <dt>
-
-          <code><a href="npx.html">npx()</a></code>
-
-        </dt>
-        <dd>Compute n-year survival probability from a life table</dd>
-
-        <dt>
-
-          <code><a href="npx_select.html">npx_select()</a></code>
-
-        </dt>
-        <dd>Select-life survival probability</dd>
-
-        <dt>
-
-          <code><a href="npxtau_md.html">npxtau_md()</a></code>
-
-        </dt>
-        <dd>\({}_n p_x^{(\tau)}\) from a multiple-decrement table</dd>
-
-        <dt>
-
-          <code><a href="nqx.html">nqx()</a></code>
-
-        </dt>
-        <dd>Compute n-year death probability from a life table</dd>
-
-        <dt>
-
-          <code><a href="nqx_select.html">nqx_select()</a></code>
-
-        </dt>
-        <dd>Select-life death probability</dd>
-
-        <dt>
-
-          <code><a href="nqxj_md.html">nqxj_md()</a></code>
-
-        </dt>
-        <dd>\({}_n q_x^{(j)}\) from a multiple-decrement table</dd>
-
-        <dt>
-
-          <code><a href="nqxtau_md.html">nqxtau_md()</a></code>
-
-        </dt>
-        <dd>\({}_n q_x^{(\tau)}\) from a multiple-decrement table</dd>
-
-        <dt>
+      <dl><dt>
 
           <code><a href="premium_ch9.html">Px()</a></code> <code><a href="premium_ch9.html">Pxn1()</a></code> <code><a href="premium_ch9.html">PnEx()</a></code> <code><a href="premium_ch9.html">Pxn()</a></code> <code><a href="premium_ch9.html">tPx()</a></code> <code><a href="premium_ch9.html">tPxn1()</a></code> <code><a href="premium_ch9.html">tPnEx()</a></code> <code><a href="premium_ch9.html">tPxn()</a></code> <code><a href="premium_ch9.html">PnAx()</a></code> <code><a href="premium_ch9.html">tPnAx()</a></code> <code><a href="premium_ch9.html">Pbarx()</a></code> <code><a href="premium_ch9.html">Pbarxn1()</a></code> <code><a href="premium_ch9.html">Pbarxn()</a></code> <code><a href="premium_ch9.html">PbarAbarx()</a></code> <code><a href="premium_ch9.html">PbarAbarxn1()</a></code> <code><a href="premium_ch9.html">PbarAbarxn()</a></code> <code><a href="premium_ch9.html">Px_m()</a></code> <code><a href="premium_ch9.html">Pxn1_m()</a></code> <code><a href="premium_ch9.html">Pxn_m()</a></code> <code><a href="premium_ch9.html">PnAx_m()</a></code> <code><a href="premium_ch9.html">EL0x()</a></code> <code><a href="premium_ch9.html">varL0x()</a></code> <code><a href="premium_ch9.html">EL0xn1()</a></code> <code><a href="premium_ch9.html">varL0xn1()</a></code> <code><a href="premium_ch9.html">EL0xn()</a></code> <code><a href="premium_ch9.html">varL0xn()</a></code> <code><a href="premium_ch9.html">EL0barAbarx()</a></code> <code><a href="premium_ch9.html">varL0barAbarx()</a></code> <code><a href="premium_ch9.html">Gx()</a></code>
 
         </dt>
         <dd>Chapter 9 premium, loss, and expense functions</dd>
+      </dl></div><div class="section level2">
+      <h2 id="contingent-contract-reserves">Contingent Contract Reserves<a class="anchor" aria-label="anchor" href="#contingent-contract-reserves"></a></h2>
 
-        <dt>
 
-          <code><a href="profit_margin.html">profit_margin()</a></code>
 
-        </dt>
-        <dd>Profit margin</dd>
+      <dl></dl></div><div class="section level2">
 
-        <dt>
 
-          <code><a href="pv_cashflows.html">pv_cashflows()</a></code>
 
-        </dt>
-        <dd>Present value of cash flows at time 0</dd>
 
-        <dt>
-
-          <code><a href="pv_spot_cashflows.html">pv_spot_cashflows()</a></code>
-
-        </dt>
-        <dd>Present value of cash flows using spot rates</dd>
-
-        <dt>
-
-          <code><a href="px_proj.html">px_proj()</a></code>
-
-        </dt>
-        <dd>Project one-year survival probability under mortality improvement</dd>
-
-        <dt>
-
-          <code><a href="px_to_lx.html">px_to_lx()</a></code>
-
-        </dt>
-        <dd>Construct life-table values from p_x values</dd>
-
-        <dt>
-
-          <code><a href="pxtau.html">pxtau()</a></code>
-
-        </dt>
-        <dd>Survival probability \(p_x^{(\tau)}\)</dd>
-
-        <dt>
-
-          <code><a href="pxtau_ul.html">pxtau_ul()</a></code>
-
-        </dt>
-        <dd>One-year persistency rates for universal life</dd>
-
-        <dt>
-
-          <code><a href="qx_dep_cf.html">qx_dep_cf()</a></code>
-
-        </dt>
-        <dd>Dependent probabilities \(q_x^{(j)}\) from independent probabilities \(q_x^{\prime(j)}\) under constant force</dd>
-
-        <dt>
-
-          <code><a href="qx_dep_sudd.html">qx_dep_sudd()</a></code>
-
-        </dt>
-        <dd>Dependent probabilities \(q_x^{(j)}\) from independent probabilities \(q_x^{\prime(j)}\) under SUDD</dd>
-
-        <dt>
-
-          <code><a href="qx_proj.html">qx_proj()</a></code>
-
-        </dt>
-        <dd>Project one-year death probability under mortality improvement</dd>
-
-        <dt>
-
-          <code><a href="qx_tab.html">qx_tab()</a></code>
-
-        </dt>
-        <dd>Compute one-year death probability from a life table</dd>
-
-        <dt>
-
-          <code><a href="qx_to_lx.html">qx_to_lx()</a></code>
-
-        </dt>
-        <dd>Construct life-table values from q_x values</dd>
-
-        <dt>
-
-          <code><a href="qxprime_mudd.html">qxprime_mudd()</a></code>
-
-        </dt>
-        <dd>Independent probabilities \(q_x^{\prime(j)}\) from dependent probabilities \(q_x^{(j)}\) under MUDD</dd>
-
-        <dt>
-
-          <code><a href="qxprime_sudd.html">qxprime_sudd()</a></code>
-
-        </dt>
-        <dd>Independent probabilities \(q_x^{\prime(j)}\) from dependent probabilities \(q_x^{(j)}\) under SUDD</dd>
-
-        <dt>
-
-          <code><a href="qxtau.html">qxtau()</a></code>
-
-        </dt>
-        <dd>Total probability of decrement \(q_x^{(\tau)}\)</dd>
-
-        <dt>
-
-          <code><a href="replacement_ratio_db.html">replacement_ratio_db()</a></code>
-
-        </dt>
-        <dd>Replacement ratio for a defined benefit plan</dd>
-
-        <dt>
-
-          <code><a href="replacement_ratio_dc.html">replacement_ratio_dc()</a></code>
-
-        </dt>
-        <dd>Replacement ratio for a defined contribution plan</dd>
-
-        <dt>
-
-          <code><a href="reserve_ch10.html">reserve_ch10</a></code>
-
-        </dt>
-        <dd>Reserve functions for Chapter 10</dd>
-
-        <dt>
-
-          <code><a href="reserve_ch10_ext.html">reserve_ch10_ext</a></code>
-
-        </dt>
-        <dd>Extended reserve functions for Chapter 10</dd>
-
-        <dt>
-
-          <code><a href="reserve_ch11.html">reserve_ch11</a></code>
-
-        </dt>
-        <dd>Reserve functions for Chapter 11</dd>
-
-        <dt>
-
-          <code><a href="reserve_ch11_ext.html">reserve_ch11_ext</a></code>
-
-        </dt>
-        <dd>Extended reserve functions for Chapter 11</dd>
-
-        <dt>
-
-          <code><a href="reserve_deferred_insurance_ch10.html">tVnAx()</a></code> <code><a href="reserve_deferred_insurance_ch10.html">htVnAx()</a></code>
-
-        </dt>
-        <dd>Deferred insurance reserve functions</dd>
-
-        <dt>
-
-          <code><a href="rt_ul.html">rt_ul()</a></code>
-
-        </dt>
-        <dd>Ratio \(r_t = AV_t / GMF_t\) capped at 1</dd>
-
-        <dt>
-
-          <code><a href="salary_scale.html">salary_scale()</a></code>
-
-        </dt>
-        <dd>Salary scale under constant annual growth</dd>
-
-        <dt>
-
-          <code><a href="select_life_table.html">select_life_table()</a></code>
-
-        </dt>
-        <dd>Construct a select life table</dd>
-
-        <dt>
-
-          <code><a href="solve_yield.html">solve_yield()</a></code>
-
-        </dt>
-        <dd>Solve the yield rate by the equation of value</dd>
-
-        <dt>
-
-          <code><a href="tVEx.html">tVEx()</a></code>
-
-        </dt>
-        <dd>Whole life expense reserve</dd>
-
-        <dt>
-
-          <code><a href="tVFx.html">tVFx()</a></code>
-
-        </dt>
-        <dd>Full preliminary term reserve for whole life insurance</dd>
-
-        <dt>
-
-          <code><a href="tVGx.html">tVGx()</a></code>
-
-        </dt>
-        <dd>Whole life gross premium reserve</dd>
-
-        <dt>
-
-          <code><a href="tVbarAbarx.html">tVbarAbarx()</a></code>
-
-        </dt>
-        <dd>Fully continuous whole life reserve</dd>
-
-        <dt>
-
-          <code><a href="tVbarx.html">tVbarx()</a></code>
-
-        </dt>
-        <dd>Whole life reserve with continuous premiums</dd>
-
-        <dt>
-
-          <code><a href="tVnAdotx.html">tVnAdotx()</a></code>
-
-        </dt>
-        <dd>Deferred annuity-due reserve</dd>
-
-        <dt>
-
-          <code><a href="tVnEx.html">tVnEx()</a></code>
-
-        </dt>
-        <dd>Pure endowment net level premium reserve</dd>
-
-        <dt>
-
-          <code><a href="tVnax.html">tVnax()</a></code>
-
-        </dt>
-        <dd>Deferred annuity-immediate reserve</dd>
-
-        <dt>
+      <dl><dt>
 
           <code><a href="tVx.html">tVx()</a></code>
 
         </dt>
         <dd>Whole life net level premium reserve</dd>
-
-        <dt>
-
-          <code><a href="tVx_m.html">tVx_m()</a></code>
-
-        </dt>
-        <dd>Whole life reserve with m-thly premiums</dd>
-
-        <dt>
-
-          <code><a href="tVx_ret.html">tVx_ret()</a></code>
-
-        </dt>
-        <dd>Whole life net level premium reserve by retrospective method</dd>
-
-        <dt>
-
-          <code><a href="tVxn.html">tVxn()</a></code>
-
-        </dt>
-        <dd>Endowment insurance net level premium reserve</dd>
 
         <dt>
 
@@ -1653,10 +965,108 @@
 
         <dt>
 
-          <code><a href="tVxn1_ret.html">tVxn1_ret()</a></code>
+          <code><a href="tVnEx.html">tVnEx()</a></code>
 
         </dt>
-        <dd>Term insurance reserve by retrospective method</dd>
+        <dd>Pure endowment net level premium reserve</dd>
+
+        <dt>
+
+          <code><a href="tVxn.html">tVxn()</a></code>
+
+        </dt>
+        <dd>Endowment insurance net level premium reserve</dd>
+
+        <dt>
+
+          <code><a href="htVx.html">htVx()</a></code>
+
+        </dt>
+        <dd>h-pay whole life net level premium reserve</dd>
+
+        <dt>
+
+          <code><a href="ELtx.html">ELtx()</a></code>
+
+        </dt>
+        <dd>Mean present value of loss at duration t for whole life insurance</dd>
+
+        <dt>
+
+          <code><a href="varLtx.html">varLtx()</a></code>
+
+        </dt>
+        <dd>Variance of present value of loss at duration t for whole life insurance</dd>
+
+        <dt>
+
+          <code><a href="tVbarx.html">tVbarx()</a></code>
+
+        </dt>
+        <dd>Whole life reserve with continuous premiums</dd>
+
+        <dt>
+
+          <code><a href="tVbarAbarx.html">tVbarAbarx()</a></code>
+
+        </dt>
+        <dd>Fully continuous whole life reserve</dd>
+
+        <dt>
+
+          <code><a href="tVx_m.html">tVx_m()</a></code>
+
+        </dt>
+        <dd>Whole life reserve with m-thly premiums</dd>
+
+        <dt>
+
+          <code><a href="GT_disc.html">GT_disc()</a></code>
+
+        </dt>
+        <dd>Total gain for a discrete insurance contract</dd>
+
+        <dt>
+
+          <code><a href="GM_disc.html">GM_disc()</a></code>
+
+        </dt>
+        <dd>Mortality gain for a discrete insurance contract</dd>
+
+        <dt>
+
+          <code><a href="GI_disc.html">GI_disc()</a></code>
+
+        </dt>
+        <dd>Interest gain for a discrete insurance contract</dd>
+
+        <dt>
+
+          <code><a href="GT_cont.html">GT_cont()</a></code>
+
+        </dt>
+        <dd>Total gain for a continuous-style one-step recursion</dd>
+
+        <dt>
+
+          <code><a href="GM_cont.html">GM_cont()</a></code>
+
+        </dt>
+        <dd>Mortality gain helper for continuous-style recursion</dd>
+
+        <dt>
+
+          <code><a href="GI_cont.html">GI_cont()</a></code>
+
+        </dt>
+        <dd>Interest gain helper for continuous-style recursion</dd>
+
+        <dt>
+
+          <code><a href="tVx_ret.html">tVx_ret()</a></code>
+
+        </dt>
+        <dd>Whole life net level premium reserve by retrospective method</dd>
 
         <dt>
 
@@ -1667,10 +1077,45 @@
 
         <dt>
 
-          <code><a href="thiele_backward_path.html">thiele_backward_path()</a></code>
+          <code><a href="tVxn1_ret.html">tVxn1_ret()</a></code>
 
         </dt>
-        <dd>Backward Euler reserve path from maturity</dd>
+        <dd>Term insurance reserve by retrospective method</dd>
+
+        <dt>
+
+          <code><a href="reserve_deferred_insurance_ch10.html">tVnAx()</a></code> <code><a href="reserve_deferred_insurance_ch10.html">htVnAx()</a></code>
+
+        </dt>
+        <dd>Deferred insurance reserve functions</dd>
+
+        <dt>
+
+          <code><a href="PnAdotx.html">PnAdotx()</a></code>
+
+        </dt>
+        <dd>Deferred annuity-due premium</dd>
+
+        <dt>
+
+          <code><a href="tVnAdotx.html">tVnAdotx()</a></code>
+
+        </dt>
+        <dd>Deferred annuity-due reserve</dd>
+
+        <dt>
+
+          <code><a href="Pnax.html">Pnax()</a></code>
+
+        </dt>
+        <dd>Deferred annuity-immediate premium</dd>
+
+        <dt>
+
+          <code><a href="tVnax.html">tVnax()</a></code>
+
+        </dt>
+        <dd>Deferred annuity-immediate reserve</dd>
 
         <dt>
 
@@ -1688,157 +1133,40 @@
 
         <dt>
 
-          <code><a href="thiele_dVdt_01.html">thiele_dVdt_01()</a></code>
+          <code><a href="thiele_backward_path.html">thiele_backward_path()</a></code>
 
         </dt>
-        <dd>Reserve derivatives for the disability model with recovery</dd>
+        <dd>Backward Euler reserve path from maturity</dd>
+      </dl></div><div class="section level2">
+      <h2 id="reserves-as-financial-liabilities">Reserves as Financial Liabilities<a class="anchor" aria-label="anchor" href="#reserves-as-financial-liabilities"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="alphaF.html">alphaF()</a></code>
+
+        </dt>
+        <dd>Full preliminary term first-year modified premium</dd>
 
         <dt>
 
-          <code><a href="thiele_path_01.html">thiele_path_01()</a></code>
+          <code><a href="betaF.html">betaF()</a></code>
 
         </dt>
-        <dd>Backward reserve path for the disability model with recovery</dd>
+        <dd>Full preliminary term renewal modified premium</dd>
 
         <dt>
 
-          <code><a href="tp00_tp01_euler.html">tp00_tp01_euler()</a></code>
+          <code><a href="tVFx.html">tVFx()</a></code>
 
         </dt>
-        <dd>Euler approximation for \({}_{t}p_{x}^{00}\) and \({}_{t}p_{x}^{01}\)</dd>
-
-        <dt>
-
-          <code><a href="tpx.html">tpx()</a></code>
-
-        </dt>
-        <dd>Conditional survival probability for Tx</dd>
-
-        <dt>
-
-          <code><a href="tpx_improved.html">tpx_improved()</a></code>
-
-        </dt>
-        <dd>Multi-year survival probability under mortality improvement</dd>
-
-        <dt>
-
-          <code><a href="tpx_tab.html">tpx_tab()</a></code>
-
-        </dt>
-        <dd>Fractional survival probability from a life table</dd>
-
-        <dt>
-
-          <code><a href="tpx_tau_cf.html">tpx_tau_cf()</a></code>
-
-        </dt>
-        <dd>Total survival probability \({}_t p_x^{(\tau)}\) under constant forces</dd>
-
-        <dt>
-
-          <code><a href="tpxprimej_cf.html">tpxprimej_cf()</a></code>
-
-        </dt>
-        <dd>Single-decrement survival probability \({}_t p_x^{\prime(j)}\) under constant force</dd>
-
-        <dt>
-
-          <code><a href="tpxtau_ul.html">tpxtau_ul()</a></code>
-
-        </dt>
-        <dd>Cumulative persistency to the end of each policy year</dd>
-
-        <dt>
-
-          <code><a href="tpxy.html">tpxy()</a></code>
-
-        </dt>
-        <dd>Joint-life survival probability</dd>
-
-        <dt>
-
-          <code><a href="tpxybar.html">tpxybar()</a></code>
-
-        </dt>
-        <dd>Last-survivor survival probability</dd>
-
-        <dt>
-
-          <code><a href="tqx.html">tqx()</a></code>
-
-        </dt>
-        <dd>Conditional failure probability for Tx</dd>
-
-        <dt>
-
-          <code><a href="tqx_tab.html">tqx_tab()</a></code>
-
-        </dt>
-        <dd>Fractional failure probability from a life table</dd>
-
-        <dt>
-
-          <code><a href="tqxj_cf.html">tqxj_cf()</a></code>
-
-        </dt>
-        <dd>Cause-specific probability \({}_t q_x^{(j)}\) under constant forces</dd>
-
-        <dt>
-
-          <code><a href="tqxprime_mudd.html">tqxprime_mudd()</a></code>
-
-        </dt>
-        <dd>Independent probabilities \({}_t q_x^{\prime(j)}\) under MUDD</dd>
-
-        <dt>
-
-          <code><a href="tqxprimej_cf.html">tqxprimej_cf()</a></code>
-
-        </dt>
-        <dd>Single-decrement failure probability \({}_t q_x^{\prime(j)}\) under constant force</dd>
-
-        <dt>
-
-          <code><a href="tqxy.html">tqxy()</a></code>
-
-        </dt>
-        <dd>Joint-life failure probability</dd>
-
-        <dt>
-
-          <code><a href="tqxy1.html">tqxy1()</a></code>
-
-        </dt>
-        <dd>Probability that (x) fails before (y) within n years</dd>
-
-        <dt>
-
-          <code><a href="tqxy2.html">tqxy2()</a></code>
-
-        </dt>
-        <dd>Probability that (x) fails after (y) within n years</dd>
-
-        <dt>
-
-          <code><a href="tqxybar.html">tqxybar()</a></code>
-
-        </dt>
-        <dd>Last-survivor failure probability</dd>
-
-        <dt>
-
-          <code><a href="tqyx1.html">tqyx1()</a></code>
-
-        </dt>
-        <dd>Probability that (y) fails before (x) within n years</dd>
-
-        <dt>
-
-          <code><a href="tqyx2.html">tqyx2()</a></code>
-
-        </dt>
-        <dd>Probability that (y) fails after (x) within n years</dd>
+        <dd>Full preliminary term reserve for whole life insurance</dd>
 
         <dt>
 
@@ -1846,6 +1174,13 @@
 
         </dt>
         <dd>Fractional-duration whole life reserve</dd>
+
+        <dt>
+
+          <code><a href="meanVx.html">meanVx()</a></code>
+
+        </dt>
+        <dd>Mean reserve for whole life insurance</dd>
 
         <dt>
 
@@ -1863,115 +1198,522 @@
 
         <dt>
 
-          <code><a href="udd_continuous_multiplier.html">udd_continuous_multiplier()</a></code>
+          <code><a href="tVGx.html">tVGx()</a></code>
 
         </dt>
-        <dd>UDD multiplier for continuous insurance approximations</dd>
+        <dd>Whole life gross premium reserve</dd>
 
         <dt>
 
-          <code><a href="udd_mthly_multiplier.html">udd_mthly_multiplier()</a></code>
+          <code><a href="tVEx.html">tVEx()</a></code>
 
         </dt>
-        <dd>UDD multiplier for m-thly insurance approximations</dd>
+        <dd>Whole life expense reserve</dd>
 
         <dt>
 
-          <code><a href="varLtx.html">varLtx()</a></code>
+          <code><a href="GTg_disc.html">GTg_disc()</a></code>
 
         </dt>
-        <dd>Variance of present value of loss at duration t for whole life insurance</dd>
+        <dd>Total gross gain for a discrete insurance contract</dd>
 
         <dt>
 
-          <code><a href="var_Abarx.html">var_Abarx()</a></code>
+          <code><a href="decompGg_disc.html">decompGg_disc()</a></code>
 
         </dt>
-        <dd>Variance of continuous whole life insurance PV</dd>
+        <dd>Ordered gross gain decomposition</dd>
+      </dl></div><div class="section level2">
+      <h2 id="multi-life-models">Multi-Life Models<a class="anchor" aria-label="anchor" href="#multi-life-models"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="tpxy.html">tpxy()</a></code>
+
+        </dt>
+        <dd>Joint-life survival probability</dd>
 
         <dt>
 
-          <code><a href="var_Abarxn.html">var_Abarxn()</a></code>
+          <code><a href="tqxy.html">tqxy()</a></code>
 
         </dt>
-        <dd>Variance of continuous endowment insurance PV</dd>
+        <dd>Joint-life failure probability</dd>
 
         <dt>
 
-          <code><a href="var_Abarxn1.html">var_Abarxn1()</a></code>
+          <code><a href="tpxybar.html">tpxybar()</a></code>
 
         </dt>
-        <dd>Variance of continuous term insurance PV</dd>
+        <dd>Last-survivor survival probability</dd>
 
         <dt>
 
-          <code><a href="var_Ax.html">var_Ax()</a></code>
+          <code><a href="tqxybar.html">tqxybar()</a></code>
 
         </dt>
-        <dd>Variance of whole life insurance PV</dd>
+        <dd>Last-survivor failure probability</dd>
 
         <dt>
 
-          <code><a href="var_Ax_m.html">var_Ax_m()</a></code>
+          <code><a href="tqxy1.html">tqxy1()</a></code>
 
         </dt>
-        <dd>Variance of m-thly whole life insurance PV</dd>
+        <dd>Probability that (x) fails before (y) within n years</dd>
 
         <dt>
 
-          <code><a href="var_Axn.html">var_Axn()</a></code>
+          <code><a href="tqyx1.html">tqyx1()</a></code>
 
         </dt>
-        <dd>Variance of endowment insurance PV</dd>
+        <dd>Probability that (y) fails before (x) within n years</dd>
 
         <dt>
 
-          <code><a href="var_Axn1.html">var_Axn1()</a></code>
+          <code><a href="tqxy2.html">tqxy2()</a></code>
 
         </dt>
-        <dd>Variance of term insurance PV</dd>
+        <dd>Probability that (x) fails after (y) within n years</dd>
 
         <dt>
 
-          <code><a href="var_Axn1_m.html">var_Axn1_m()</a></code>
+          <code><a href="tqyx2.html">tqyx2()</a></code>
 
         </dt>
-        <dd>Variance of m-thly term insurance PV</dd>
+        <dd>Probability that (y) fails after (x) within n years</dd>
 
         <dt>
 
-          <code><a href="var_Axn_m.html">var_Axn_m()</a></code>
+          <code><a href="nExy.html">nExy()</a></code>
 
         </dt>
-        <dd>Variance of m-thly endowment insurance PV</dd>
+        <dd>Joint-life pure endowment</dd>
 
         <dt>
 
-          <code><a href="var_nAbarx.html">var_nAbarx()</a></code>
+          <code><a href="nExybar.html">nExybar()</a></code>
 
         </dt>
-        <dd>Variance of continuous deferred insurance PV</dd>
+        <dd>Last-survivor pure endowment</dd>
 
         <dt>
 
-          <code><a href="var_nAx.html">var_nAx()</a></code>
+          <code><a href="adotxyn.html">adotxyn()</a></code>
 
         </dt>
-        <dd>Variance of deferred insurance PV</dd>
+        <dd>Joint-life temporary annuity-due</dd>
 
         <dt>
 
-          <code><a href="var_nAx_m.html">var_nAx_m()</a></code>
+          <code><a href="axyn_ch12.html">axyn()</a></code>
 
         </dt>
-        <dd>Variance of m-thly deferred insurance PV</dd>
+        <dd>Joint-life temporary annuity-immediate</dd>
 
         <dt>
 
-          <code><a href="var_nEx.html">var_nEx()</a></code>
+          <code><a href="adotxy.html">adotxy()</a></code>
 
         </dt>
-        <dd>Variance of pure endowment PV</dd>
+        <dd>Joint-life whole life annuity-due</dd>
+
+        <dt>
+
+          <code><a href="axy_ch12.html">axy()</a></code>
+
+        </dt>
+        <dd>Joint-life whole life annuity-immediate</dd>
+
+        <dt>
+
+          <code><a href="Axyn1.html">Axyn1()</a></code>
+
+        </dt>
+        <dd>Joint-life term insurance</dd>
+
+        <dt>
+
+          <code><a href="Axyn.html">Axyn()</a></code>
+
+        </dt>
+        <dd>Joint-life endowment insurance</dd>
+
+        <dt>
+
+          <code><a href="Axy.html">Axy()</a></code>
+
+        </dt>
+        <dd>Joint-life whole life insurance</dd>
+
+        <dt>
+
+          <code><a href="adotxybarn.html">adotxybarn()</a></code>
+
+        </dt>
+        <dd>Last-survivor temporary annuity-due</dd>
+
+        <dt>
+
+          <code><a href="axybarn_ch12.html">axybarn()</a></code>
+
+        </dt>
+        <dd>Last-survivor temporary annuity-immediate</dd>
+
+        <dt>
+
+          <code><a href="adotxybar.html">adotxybar()</a></code>
+
+        </dt>
+        <dd>Last-survivor whole life annuity-due</dd>
+
+        <dt>
+
+          <code><a href="axybar_ch12.html">axybar()</a></code>
+
+        </dt>
+        <dd>Last-survivor whole life annuity-immediate</dd>
+
+        <dt>
+
+          <code><a href="Axybarn1.html">Axybarn1()</a></code>
+
+        </dt>
+        <dd>Last-survivor term insurance</dd>
+
+        <dt>
+
+          <code><a href="Axybarn.html">Axybarn()</a></code>
+
+        </dt>
+        <dd>Last-survivor endowment insurance</dd>
+
+        <dt>
+
+          <code><a href="Axybar.html">Axybar()</a></code>
+
+        </dt>
+        <dd>Last-survivor whole life insurance</dd>
+
+        <dt>
+
+          <code><a href="ax_y.html">ax_y()</a></code>
+
+        </dt>
+        <dd>Reversionary annuity to (y) after death of (x)</dd>
+
+        <dt>
+
+          <code><a href="ay_x.html">ay_x()</a></code>
+
+        </dt>
+        <dd>Reversionary annuity to (x) after death of (y)</dd>
+
+        <dt>
+
+          <code><a href="abarx_y.html">abarx_y()</a></code>
+
+        </dt>
+        <dd>Continuous reversionary annuity to (y) after death of (x)</dd>
+
+        <dt>
+
+          <code><a href="abary_x.html">abary_x()</a></code>
+
+        </dt>
+        <dd>Continuous reversionary annuity to (x) after death of (y)</dd>
+
+        <dt>
+
+          <code><a href="abarxy_ch12.html">abarxy()</a></code>
+
+        </dt>
+        <dd>Continuous joint-life whole life annuity</dd>
+
+        <dt>
+
+          <code><a href="abarxybar_ch12.html">abarxybar()</a></code>
+
+        </dt>
+        <dd>Continuous last-survivor whole life annuity</dd>
+
+        <dt>
+
+          <code><a href="Abarxy.html">Abarxy()</a></code>
+
+        </dt>
+        <dd>Continuous joint-life whole life insurance</dd>
+
+        <dt>
+
+          <code><a href="Abarxybar.html">Abarxybar()</a></code>
+
+        </dt>
+        <dd>Continuous last-survivor whole life insurance</dd>
+
+        <dt>
+
+          <code><a href="Abarxy1.html">Abarxy1()</a></code>
+
+        </dt>
+        <dd>Continuous contingent insurance: benefit on death of (x) if before (y)</dd>
+
+        <dt>
+
+          <code><a href="Abaryx1.html">Abaryx1()</a></code>
+
+        </dt>
+        <dd>Continuous contingent insurance: benefit on death of (y) if before (x)</dd>
+
+        <dt>
+
+          <code><a href="Abarxy2.html">Abarxy2()</a></code>
+
+        </dt>
+        <dd>Continuous contingent insurance: benefit on death of (x) if after (y)</dd>
+
+        <dt>
+
+          <code><a href="Abaryx2.html">Abaryx2()</a></code>
+
+        </dt>
+        <dd>Continuous contingent insurance: benefit on death of (y) if after (x)</dd>
+      </dl></div><div class="section level2">
+      <h2 id="multiple-decrement-models">Multiple-Decrement Models<a class="anchor" aria-label="anchor" href="#multiple-decrement-models"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="qxtau.html">qxtau()</a></code>
+
+        </dt>
+        <dd>Total probability of decrement \(q_x^{(\tau)}\)</dd>
+
+        <dt>
+
+          <code><a href="pxtau.html">pxtau()</a></code>
+
+        </dt>
+        <dd>Survival probability \(p_x^{(\tau)}\)</dd>
+
+        <dt>
+
+          <code><a href="dxj.html">dxj()</a></code>
+
+        </dt>
+        <dd>Cause-specific decrements \(d_x^{(j)}\)</dd>
+
+        <dt>
+
+          <code><a href="dxtau.html">dxtau()</a></code>
+
+        </dt>
+        <dd>Total decrements \(d_x^{(\tau)}\)</dd>
+
+        <dt>
+
+          <code><a href="md_table.html">md_table()</a></code>
+
+        </dt>
+        <dd>Build a multiple-decrement table</dd>
+
+        <dt>
+
+          <code><a href="npxtau_md.html">npxtau_md()</a></code>
+
+        </dt>
+        <dd>\({}_n p_x^{(\tau)}\) from a multiple-decrement table</dd>
+
+        <dt>
+
+          <code><a href="nqxj_md.html">nqxj_md()</a></code>
+
+        </dt>
+        <dd>\({}_n q_x^{(j)}\) from a multiple-decrement table</dd>
+
+        <dt>
+
+          <code><a href="nqxtau_md.html">nqxtau_md()</a></code>
+
+        </dt>
+        <dd>\({}_n q_x^{(\tau)}\) from a multiple-decrement table</dd>
+
+        <dt>
+
+          <code><a href="tpxprimej_cf.html">tpxprimej_cf()</a></code>
+
+        </dt>
+        <dd>Single-decrement survival probability \({}_t p_x^{\prime(j)}\) under constant force</dd>
+
+        <dt>
+
+          <code><a href="tqxprimej_cf.html">tqxprimej_cf()</a></code>
+
+        </dt>
+        <dd>Single-decrement failure probability \({}_t q_x^{\prime(j)}\) under constant force</dd>
+
+        <dt>
+
+          <code><a href="tpx_tau_cf.html">tpx_tau_cf()</a></code>
+
+        </dt>
+        <dd>Total survival probability \({}_t p_x^{(\tau)}\) under constant forces</dd>
+
+        <dt>
+
+          <code><a href="tqxj_cf.html">tqxj_cf()</a></code>
+
+        </dt>
+        <dd>Cause-specific probability \({}_t q_x^{(j)}\) under constant forces</dd>
+
+        <dt>
+
+          <code><a href="qx_dep_cf.html">qx_dep_cf()</a></code>
+
+        </dt>
+        <dd>Dependent probabilities \(q_x^{(j)}\) from independent probabilities \(q_x^{\prime(j)}\) under constant force</dd>
+
+        <dt>
+
+          <code><a href="qxprime_mudd.html">qxprime_mudd()</a></code>
+
+        </dt>
+        <dd>Independent probabilities \(q_x^{\prime(j)}\) from dependent probabilities \(q_x^{(j)}\) under MUDD</dd>
+
+        <dt>
+
+          <code><a href="tqxprime_mudd.html">tqxprime_mudd()</a></code>
+
+        </dt>
+        <dd>Independent probabilities \({}_t q_x^{\prime(j)}\) under MUDD</dd>
+
+        <dt>
+
+          <code><a href="qx_dep_sudd.html">qx_dep_sudd()</a></code>
+
+        </dt>
+        <dd>Dependent probabilities \(q_x^{(j)}\) from independent probabilities \(q_x^{\prime(j)}\) under SUDD</dd>
+
+        <dt>
+
+          <code><a href="qxprime_sudd.html">qxprime_sudd()</a></code>
+
+        </dt>
+        <dd>Independent probabilities \(q_x^{\prime(j)}\) from dependent probabilities \(q_x^{(j)}\) under SUDD</dd>
+      </dl></div><div class="section level2">
+      <h2 id="multiple-decrement-applications">Multiple-Decrement Applications<a class="anchor" aria-label="anchor" href="#multiple-decrement-applications"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Axj_md.html">Axj_md()</a></code>
+
+        </dt>
+        <dd>Discrete multiple-decrement insurance APV \(A_{x}^{(j)}\)</dd>
+
+        <dt>
+
+          <code><a href="Abarxj_md.html">Abarxj_md()</a></code>
+
+        </dt>
+        <dd>Continuous multiple-decrement insurance APV \(\overline{A}_{x}^{(j)}\)</dd>
+
+        <dt>
+
+          <code><a href="AS_path.html">AS_path()</a></code>
+
+        </dt>
+        <dd>Projected asset share path \({}_{k}AS\)</dd>
+
+        <dt>
+
+          <code><a href="AS_path_md.html">AS_path_md()</a></code>
+
+        </dt>
+        <dd>General projected asset share path (multiple decrements)</dd>
+
+        <dt>
+
+          <code><a href="tp00_tp01_euler.html">tp00_tp01_euler()</a></code>
+
+        </dt>
+        <dd>Euler approximation for \({}_{t}p_{x}^{00}\) and \({}_{t}p_{x}^{01}\)</dd>
+
+        <dt>
+
+          <code><a href="Pbar_trapz_ms.html">Pbar_trapz_ms()</a></code>
+
+        </dt>
+        <dd>Continuous premium approximation \(\overline{P}\) by trapezoidal rule</dd>
+
+        <dt>
+
+          <code><a href="thiele_dVdt_01.html">thiele_dVdt_01()</a></code>
+
+        </dt>
+        <dd>Reserve derivatives for the disability model with recovery</dd>
+
+        <dt>
+
+          <code><a href="thiele_path_01.html">thiele_path_01()</a></code>
+
+        </dt>
+        <dd>Backward reserve path for the disability model with recovery</dd>
+
+        <dt>
+
+          <code><a href="markov_nstep_prob.html">markov_nstep_prob()</a></code>
+
+        </dt>
+        <dd>n-step transition probability for a discrete-time Markov chain</dd>
+
+        <dt>
+
+          <code><a href="gain_loss_md.html">gain_loss_md()</a></code>
+
+        </dt>
+        <dd>Gain or loss in a multiple-decrement model</dd>
+      </dl></div><div class="section level2">
+      <h2 id="variable-interest-models">Variable Interest Models<a class="anchor" aria-label="anchor" href="#variable-interest-models"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="chapter15_variable_interest_apv.html">nEx_var()</a></code> <code><a href="chapter15_variable_interest_apv.html">Axn1_var()</a></code> <code><a href="chapter15_variable_interest_apv.html">Axn_var()</a></code> <code><a href="chapter15_variable_interest_apv.html">axn_var()</a></code>
+
+        </dt>
+        <dd>Variable-interest actuarial present value functions</dd>
+
+        <dt>
+
+          <code><a href="chapter15_spot_interest_apv.html">nEx_spot()</a></code> <code><a href="chapter15_spot_interest_apv.html">Axn1_spot()</a></code> <code><a href="chapter15_spot_interest_apv.html">Axn_spot()</a></code> <code><a href="chapter15_spot_interest_apv.html">axn_spot()</a></code>
+
+        </dt>
+        <dd>Spot-rate actuarial present value functions</dd>
 
         <dt>
 
@@ -1982,10 +1724,10 @@
 
         <dt>
 
-          <code><a href="z_from_coupon_annual.html">z_from_coupon_annual()</a></code>
+          <code><a href="pv_spot_cashflows.html">pv_spot_cashflows()</a></code>
 
         </dt>
-        <dd>Bootstrap annual spot rates from annual coupon-bond yields</dd>
+        <dd>Present value of cash flows using spot rates</dd>
 
         <dt>
 
@@ -1996,12 +1738,327 @@
 
         <dt>
 
+          <code><a href="z_from_coupon_annual.html">z_from_coupon_annual()</a></code>
+
+        </dt>
+        <dd>Bootstrap annual spot rates from annual coupon-bond yields</dd>
+
+        <dt>
+
+          <code><a href="fnk_from_z.html">fnk_from_z()</a></code>
+
+        </dt>
+        <dd>Forward rate \(f_{n,k}\) from spot rates</dd>
+
+        <dt>
+
+          <code><a href="forward_matrix_from_z.html">forward_matrix_from_z()</a></code>
+
+        </dt>
+        <dd>Matrix of all determinable forward rates from spot rates</dd>
+
+        <dt>
+
           <code><a href="z_from_fn1.html">z_from_fn1()</a></code>
 
         </dt>
         <dd>Spot rates from forward one-year rates</dd>
+      </dl></div><div class="section level2">
+      <h2 id="universal-life-insurance">Universal Life Insurance<a class="anchor" aria-label="anchor" href="#universal-life-insurance"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="coi_ul_typeB.html">coi_ul_typeB()</a></code>
+
+        </dt>
+        <dd>Cost of insurance for Type B universal life</dd>
+
+        <dt>
+
+          <code><a href="AV_path_ul_typeB.html">AV_path_ul_typeB()</a></code>
+
+        </dt>
+        <dd>Account-value path for Type B universal life</dd>
+
+        <dt>
+
+          <code><a href="AV_path_ul_typeA.html">AV_path_ul_typeA()</a></code>
+
+        </dt>
+        <dd>Account-value path for Type A universal life</dd>
+
+        <dt>
+
+          <code><a href="iP_eiul.html">iP_eiul()</a></code>
+
+        </dt>
+        <dd>Point-to-point index growth rates</dd>
+
+        <dt>
+
+          <code><a href="iMA_eiul.html">iMA_eiul()</a></code>
+
+        </dt>
+        <dd>Monthly-average index growth rate</dd>
+
+        <dt>
+
+          <code><a href="i_credit_eiul.html">i_credit_eiul()</a></code>
+
+        </dt>
+        <dd>Credited rates from raw index growth rates</dd>
+
+        <dt>
+
+          <code><a href="pxtau_ul.html">pxtau_ul()</a></code>
+
+        </dt>
+        <dd>One-year persistency rates for universal life</dd>
+
+        <dt>
+
+          <code><a href="tpxtau_ul.html">tpxtau_ul()</a></code>
+
+        </dt>
+        <dd>Cumulative persistency to the end of each policy year</dd>
+
+        <dt>
+
+          <code><a href="GMF_rollforward_ul.html">GMF_rollforward_ul()</a></code>
+
+        </dt>
+        <dd>Guaranteed maturity fund roll-forward</dd>
+
+        <dt>
+
+          <code><a href="rt_ul.html">rt_ul()</a></code>
+
+        </dt>
+        <dd>Ratio \(r_t = AV_t / GMF_t\) capped at 1</dd>
+
+        <dt>
+
+          <code><a href="Vprefloor_crvm_ul.html">Vprefloor_crvm_ul()</a></code>
+
+        </dt>
+        <dd>Pre-floor CRVM reserve for universal life</dd>
+
+        <dt>
+
+          <code><a href="ag38_prefunding_ratio.html">ag38_prefunding_ratio()</a></code>
+
+        </dt>
+        <dd>AG 38 prefunding ratio</dd>
+
+        <dt>
+
+          <code><a href="ag38_reserve_ul.html">ag38_reserve_ul()</a></code>
+
+        </dt>
+        <dd>AG 38 reserve calculation</dd>
+      </dl></div><div class="section level2">
+      <h2 id="profit-analysis">Profit Analysis<a class="anchor" aria-label="anchor" href="#profit-analysis"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="Pr_vector_disc.html">Pr_vector_disc()</a></code>
+
+        </dt>
+        <dd>Profit vector for a discrete profit-analysis model</dd>
+
+        <dt>
+
+          <code><a href="Pi_signature.html">Pi_signature()</a></code>
+
+        </dt>
+        <dd>Profit signature from a profit vector</dd>
+
+        <dt>
+
+          <code><a href="NPV_profit.html">NPV_profit()</a></code>
+
+        </dt>
+        <dd>Net present value of a profit signature</dd>
+
+        <dt>
+
+          <code><a href="NPV_partial.html">NPV_partial()</a></code>
+
+        </dt>
+        <dd>Partial net present values</dd>
+
+        <dt>
+
+          <code><a href="discounted_payback_period.html">discounted_payback_period()</a></code>
+
+        </dt>
+        <dd>Discounted payback period</dd>
+
+        <dt>
+
+          <code><a href="IRR_profit.html">IRR_profit()</a></code>
+
+        </dt>
+        <dd>Internal rate of return of a profit signature</dd>
+
+        <dt>
+
+          <code><a href="APV_gross_premiums.html">APV_gross_premiums()</a></code>
+
+        </dt>
+        <dd>APV of gross premiums under a risk discount rate</dd>
+
+        <dt>
+
+          <code><a href="profit_margin.html">profit_margin()</a></code>
+
+        </dt>
+        <dd>Profit margin</dd>
+
+        <dt>
+
+          <code><a href="V_zeroized.html">V_zeroized()</a></code>
+
+        </dt>
+        <dd>Zeroized reserves for a discrete death-only contract</dd>
+      </dl></div><div class="section level2">
+      <h2 id="pension-benefits">Pension Benefits<a class="anchor" aria-label="anchor" href="#pension-benefits"></a></h2>
+
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="salary_scale.html">salary_scale()</a></code>
+
+        </dt>
+        <dd>Salary scale under constant annual growth</dd>
+
+        <dt>
+
+          <code><a href="AVz_dc.html">AVz_dc()</a></code>
+
+        </dt>
+        <dd>Accumulated value of defined contribution plan contributions</dd>
+
+        <dt>
+
+          <code><a href="Income_dc.html">Income_dc()</a></code>
+
+        </dt>
+        <dd>Retirement income from a defined contribution accumulation</dd>
+
+        <dt>
+
+          <code><a href="replacement_ratio_dc.html">replacement_ratio_dc()</a></code>
+
+        </dt>
+        <dd>Replacement ratio for a defined contribution plan</dd>
+
+        <dt>
+
+          <code><a href="contribution_rate_target.html">contribution_rate_target()</a></code>
+
+        </dt>
+        <dd>Target contribution rate for a defined contribution plan</dd>
+
+        <dt>
+
+          <code><a href="PAB_fas.html">PAB_fas()</a></code>
+
+        </dt>
+        <dd>Projected annual benefit under a final average salary DB plan</dd>
+
+        <dt>
+
+          <code><a href="PAB_cae.html">PAB_cae()</a></code>
+
+        </dt>
+        <dd>Projected annual benefit under a career average earnings DB plan</dd>
+
+        <dt>
+
+          <code><a href="replacement_ratio_db.html">replacement_ratio_db()</a></code>
+
+        </dt>
+        <dd>Replacement ratio for a defined benefit plan</dd>
+
+        <dt>
+
+          <code><a href="AB_fas.html">AB_fas()</a></code>
+
+        </dt>
+        <dd>Accrued benefit for a final average salary plan</dd>
+
+        <dt>
+
+          <code><a href="AB_cae.html">AB_cae()</a></code>
+
+        </dt>
+        <dd>Accrued benefit for a career average earnings plan</dd>
+
+        <dt>
+
+          <code><a href="APV_NR_db.html">APV_NR_db()</a></code>
+
+        </dt>
+        <dd>APV of normal retirement benefit for a DB plan</dd>
+
+        <dt>
+
+          <code><a href="NC_EAN_db.html">NC_EAN_db()</a></code>
+
+        </dt>
+        <dd>Entry Age Normal normal cost for a DB plan</dd>
+
+        <dt>
+
+          <code><a href="NC_TUC_db.html">NC_TUC_db()</a></code>
+
+        </dt>
+        <dd>Traditional Unit Credit normal cost for a DB plan</dd>
+
+        <dt>
+
+          <code><a href="AAL_TUC_db.html">AAL_TUC_db()</a></code>
+
+        </dt>
+        <dd>Traditional Unit Credit accrued liability for a DB plan</dd>
+
+        <dt>
+
+          <code><a href="NC_PUC_db.html">NC_PUC_db()</a></code>
+
+        </dt>
+        <dd>Projected Unit Credit normal cost for a DB plan</dd>
+
+        <dt>
+
+          <code><a href="AAL_PUC_db.html">AAL_PUC_db()</a></code>
+
+        </dt>
+        <dd>Projected Unit Credit accrued liability for a DB plan</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

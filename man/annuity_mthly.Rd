@@ -13,3 +13,4 @@ using the survival model functions already available in the package.
 In all cases, the annuity is one unit per year payable in m equal
 installments, so each payment is of size \eqn{1/m}.
 }
+\keyword{internal}

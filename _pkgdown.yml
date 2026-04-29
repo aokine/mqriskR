@@ -6,3 +6,406 @@ navbar:
   structure:
     left: [home, reference, articles]
     right: [github]
+
+reference:
+  - title: "Interest Theory"
+    contents:
+      - interest_convert
+      - discount
+      - pv_cashflows
+      - solve_yield
+      - annuity_certain
+
+  - title: "Survival Models"
+    contents:
+      - S0
+      - F0
+      - f0
+      - hazard0
+      - cumhaz0
+      - tpx
+      - tqx
+      - fx
+      - ex_complete
+      - ex_curtate
+
+  - title: "Life Tables"
+    contents:
+      - S0_to_lx
+      - lx_to_S0
+      - px_to_lx
+      - qx_to_lx
+      - life_table
+      - lx
+      - dx
+      - ndx
+      - qx_tab
+      - npx
+      - nqx
+      - select_life_table
+      - lx_select
+      - npx_select
+      - nqx_select
+      - nmxq_select
+      - tpx_tab
+      - tqx_tab
+      - mux_tab
+      - fx_tab
+      - nmxq
+      - nkqx
+      - ex_curtate_tab
+      - ex_temp_curtate_tab
+      - ex_temp_complete_tab
+      - ex_complete_tab
+
+  - title: "Contingent Payment Models"
+    contents:
+      - double_force_i
+      - double_force_delta
+      - udd_continuous_multiplier
+      - udd_mthly_multiplier
+      - Abarx_udd
+      - Abarxn1_udd
+      - nAbarx_udd
+      - Abarxn_udd
+      - Ax_m_udd
+      - Axn1_m_udd
+      - nAx_m_udd
+      - Axn_m_udd
+      - Ax
+      - Axn1
+      - nEx
+      - nAx
+      - Axn
+      - A2x
+      - A2xn1
+      - A2nEx
+      - A2nAx
+      - A2xn
+      - var_Ax
+      - var_Axn1
+      - var_nEx
+      - var_nAx
+      - var_Axn
+      - cov_term_deferred
+      - cov_term_endow
+      - Abarx
+      - Abarxn1
+      - nAbarx
+      - Abarxn
+      - A2barx
+      - A2barxn1
+      - A2nAbarx
+      - A2barxn
+      - var_Abarx
+      - var_Abarxn1
+      - var_nAbarx
+      - var_Abarxn
+      - Ax_m
+      - Axn1_m
+      - nAx_m
+      - Axn_m
+      - A2x_m
+      - A2xn1_m
+      - A2nAx_m
+      - A2xn_m
+      - var_Ax_m
+      - var_Axn1_m
+      - var_nAx_m
+      - var_Axn_m
+      - IAx
+      - IAxn1
+      - DAxn1
+      - IbarAbarx
+      - IAbarx
+      - IbarAbarxn1
+      - DbarAbarxn1
+      - DAbarxn1
+
+  - title: "Contingent Annuity Models"
+    contents:
+      - ax
+      - adotx
+      - abarx
+      - axn
+      - adotxn
+      - abarxn
+      - nax
+      - nadotx
+      - nabarx
+      - sxn
+      - sdotxn
+      - sbarxn
+      - ax_m
+      - adotx_m
+      - axn_m
+      - adotxn_m
+      - nax_m
+      - nadotx_m
+      - sxn_m
+      - sdotxn_m
+      - annuity_identity_ax
+      - annuity_identity_adotx
+      - annuity_identity_abarx
+      - annuity_identity_axn
+      - annuity_identity_adotxn
+      - annuity_identity_abarxn
+      - annuity_identity_nax
+      - annuity_identity_nadotx
+      - annuity_identity_nabarx
+      - Iax
+      - Iaxn
+      - Daxn
+      - Iadotx
+      - Iadotxn
+      - Dadotxn
+      - Iabarx
+      - Iabarxn
+      - Dabarxn
+      - qx_proj
+      - px_proj
+      - tpx_improved
+      - axn_improved
+      - naxn_improved
+      - ax_improved
+      - adotx_m_udd
+      - adotxn_m_udd
+      - nadotx_m_udd
+      - ax_m_udd
+      - axn_m_udd
+      - nax_m_udd
+      - sdotxn_m_udd
+      - sxn_m_udd
+      - abarx_udd
+      - abarxn_udd
+      - nabarx_udd
+      - ax_m_woolhouse2
+      - adotx_m_woolhouse2
+      - nax_m_woolhouse2
+      - nadotx_m_woolhouse2
+      - axn_m_woolhouse2
+      - adotxn_m_woolhouse2
+      - sxn_m_woolhouse2
+      - sdotxn_m_woolhouse2
+      - abarx_woolhouse2
+      - ax_m_woolhouse3
+      - adotx_m_woolhouse3
+      - nax_m_woolhouse3
+      - nadotx_m_woolhouse3
+      - axn_m_woolhouse3
+      - adotxn_m_woolhouse3
+      - abarx_woolhouse3
+
+  - title: "Funding Plans for Contingent Contracts"
+    contents:
+      - Px
+      - Pxn1
+      - PnEx
+      - Pxn
+      - tPx
+      - tPxn1
+      - tPnEx
+      - tPxn
+      - PnAx
+      - tPnAx
+      - Pbarx
+      - Pbarxn1
+      - Pbarxn
+      - PbarAbarx
+      - PbarAbarxn1
+      - PbarAbarxn
+      - Px_m
+      - Pxn1_m
+      - Pxn_m
+      - PnAx_m
+      - EL0x
+      - varL0x
+      - EL0xn1
+      - varL0xn1
+      - EL0xn
+      - varL0xn
+      - EL0barAbarx
+      - varL0barAbarx
+      - Gx
+
+  - title: "Contingent Contract Reserves"
+    contents:
+      - tVx
+      - tVxn1
+      - tVnEx
+      - tVxn
+      - htVx
+      - ELtx
+      - varLtx
+      - tVbarx
+      - tVbarAbarx
+      - tVx_m
+      - GT_disc
+      - GM_disc
+      - GI_disc
+      - GT_cont
+      - GM_cont
+      - GI_cont
+      - tVx_ret
+      - tVxn_ret
+      - tVxn1_ret
+      - tVnAx
+      - htVnAx
+      - PnAdotx
+      - tVnAdotx
+      - Pnax
+      - tVnax
+      - thiele_backward_step
+      - thiele_dVdt
+      - thiele_backward_path
+
+  - title: "Reserves as Financial Liabilities"
+    contents:
+      - alphaF
+      - betaF
+      - tVFx
+      - tsVx
+      - meanVx
+      - tsVxn
+      - tsVxn1
+      - tVGx
+      - tVEx
+      - GTg_disc
+      - decompGg_disc
+
+  - title: "Multi-Life Models"
+    contents:
+      - tpxy
+      - tqxy
+      - tpxybar
+      - tqxybar
+      - tqxy1
+      - tqyx1
+      - tqxy2
+      - tqyx2
+      - nExy
+      - nExybar
+      - adotxyn
+      - axyn
+      - adotxy
+      - axy
+      - Axyn1
+      - Axyn
+      - Axy
+      - adotxybarn
+      - axybarn
+      - adotxybar
+      - axybar
+      - Axybarn1
+      - Axybarn
+      - Axybar
+      - ax_y
+      - ay_x
+      - abarx_y
+      - abary_x
+      - abarxy
+      - abarxybar
+      - Abarxy
+      - Abarxybar
+      - Abarxy1
+      - Abaryx1
+      - Abarxy2
+      - Abaryx2
+
+  - title: "Multiple-Decrement Models"
+    contents:
+      - qxtau
+      - pxtau
+      - dxj
+      - dxtau
+      - md_table
+      - npxtau_md
+      - nqxj_md
+      - nqxtau_md
+      - tpxprimej_cf
+      - tqxprimej_cf
+      - tpx_tau_cf
+      - tqxj_cf
+      - qx_dep_cf
+      - qxprime_mudd
+      - tqxprime_mudd
+      - qx_dep_sudd
+      - qxprime_sudd
+
+  - title: "Multiple-Decrement Applications"
+    contents:
+      - Axj_md
+      - Abarxj_md
+      - AS_path
+      - AS_path_md
+      - tp00_tp01_euler
+      - Pbar_trapz_ms
+      - thiele_dVdt_01
+      - thiele_path_01
+      - markov_nstep_prob
+      - gain_loss_md
+
+  - title: "Variable Interest Models"
+    contents:
+      - nEx_var
+      - Axn1_var
+      - Axn_var
+      - axn_var
+      - nEx_spot
+      - Axn1_spot
+      - Axn_spot
+      - axn_spot
+      - vt_var
+      - pv_spot_cashflows
+      - z_from_coupon_semi
+      - z_from_coupon_annual
+      - fnk_from_z
+      - forward_matrix_from_z
+      - z_from_fn1
+
+  - title: "Universal Life Insurance"
+    contents:
+      - coi_ul_typeB
+      - AV_path_ul_typeB
+      - AV_path_ul_typeA
+      - iP_eiul
+      - iMA_eiul
+      - i_credit_eiul
+      - pxtau_ul
+      - tpxtau_ul
+      - GMF_rollforward_ul
+      - rt_ul
+      - Vprefloor_crvm_ul
+      - ag38_prefunding_ratio
+      - ag38_reserve_ul
+
+  - title: "Profit Analysis"
+    contents:
+      - Pr_vector_disc
+      - Pi_signature
+      - NPV_profit
+      - NPV_partial
+      - discounted_payback_period
+      - IRR_profit
+      - APV_gross_premiums
+      - profit_margin
+      - V_zeroized
+
+  - title: "Pension Benefits"
+    contents:
+      - salary_scale
+      - AVz_dc
+      - Income_dc
+      - replacement_ratio_dc
+      - contribution_rate_target
+      - PAB_fas
+      - PAB_cae
+      - replacement_ratio_db
+      - AB_fas
+      - AB_cae
+      - APV_NR_db
+      - NC_EAN_db
+      - NC_TUC_db
+      - AAL_TUC_db
+      - NC_PUC_db
+      - AAL_PUC_db
