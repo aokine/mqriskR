@@ -2,29 +2,22 @@
 % Please edit documentation in R/survival_models.R
 \name{tqx}
 \alias{tqx}
-\title{Conditional failure probability for Tx}
+\title{Conditional failure probability}
 \usage{
 tqx(t, x, model, ...)
 }
 \arguments{
-\item{t}{Numeric vector of durations (\eqn{t \ge 0}).}
+\item{t}{Numeric vector of durations.}
 
-\item{x}{Numeric vector of ages (\eqn{x \ge 0}).}
+\item{x}{Numeric vector of ages.}
 
-\item{model}{One of \code{"uniform"}, \code{"exponential"}, \code{"gompertz"},
-\code{"makeham"}, \code{"weibull"}.}
+\item{model}{One of \code{"uniform"}, \code{"exponential"},
+\code{"gompertz"}, \code{"makeham"}, or \code{"weibull"}.}
 
-\item{...}{Model parameters:
-\itemize{
-  \item uniform: \code{omega}
-  \item exponential: \code{lambda}
-  \item gompertz: \code{B}, \code{c}
-  \item makeham: \code{A}, \code{B}, \code{c}
-  \item weibull: \code{shape}, \code{scale}
-}}
+\item{...}{Model parameters.}
 }
 \value{
-Numeric vector in \eqn{[0,1]}.
+Numeric vector of failure probabilities.
 }
 \description{
 Computes \eqn{{}_t q_x = 1 - {}_t p_x}.

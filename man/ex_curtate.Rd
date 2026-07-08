@@ -2,32 +2,26 @@
 % Please edit documentation in R/survival_models.R
 \name{ex_curtate}
 \alias{ex_curtate}
-\title{Curtate expectation of life at age x}
+\title{Curtate expectation of life}
 \usage{
 ex_curtate(x, model, ..., k_max = 5000, tol = 1e-12)
 }
 \arguments{
-\item{x}{Numeric vector of ages (\eqn{x \ge 0}).}
+\item{x}{Numeric vector of ages.}
 
-\item{model}{One of \code{"uniform"}, \code{"exponential"}, \code{"gompertz"},
-\code{"makeham"}, \code{"weibull"}.}
+\item{model}{One of \code{"uniform"}, \code{"exponential"},
+\code{"gompertz"}, \code{"makeham"}, or \code{"weibull"}.}
 
-\item{...}{Model parameters:
-\itemize{
-  \item uniform: \code{omega}
-  \item exponential: \code{lambda}
-  \item gompertz: \code{B}, \code{c}
-  \item makeham: \code{A}, \code{B}, \code{c}
-  \item weibull: \code{shape}, \code{scale}
-}}
+\item{...}{Model parameters.}
 
 \item{k_max}{Maximum integer duration to sum to.}
 
-\item{tol}{Stop early if the summand is < tol for several steps.}
+\item{tol}{Stop early if the summand is smaller than this tolerance for
+several consecutive steps.}
 }
 \value{
 Numeric vector of curtate expectations.
 }
 \description{
-Computes \eqn{e_x = E[K_x] = \sum_{k=1}^\infty {}_k p_x} with truncation.
+Computes \eqn{e_x = E[K_x] = \sum_{k=1}^{\infty} {}_k p_x}.
 }

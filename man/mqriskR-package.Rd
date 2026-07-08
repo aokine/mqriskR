@@ -11,5 +11,10 @@ Provides functions for actuarial risk modeling, including survival models, life 
 \author{
 \strong{Maintainer}: Nii Okine \email{okinean@appstate.edu}
 
+Authors:
+\itemize{
+  \item Nii Okine \email{okinean@appstate.edu}
+}
+
 }
 \keyword{internal}

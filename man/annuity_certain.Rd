@@ -7,24 +7,27 @@
 annuity_certain(n, i, due = FALSE, m = 1, cont = FALSE)
 }
 \arguments{
-\item{n}{Number of payments or periods.}
+\item{n}{Number of payments or periods. May be scalar or vector.}
 
-\item{i}{Effective interest rate per period.}
+\item{i}{Effective interest rate per period. May be scalar or vector.}
 
-\item{due}{If TRUE, annuity-due; otherwise annuity-immediate.}
+\item{due}{If `TRUE`, annuity-due; otherwise annuity-immediate.}
 
-\item{m}{Payment frequency per period (m = 1 means annual).}
+\item{m}{Payment frequency per period. `m = 1` means annual.}
 
-\item{cont}{If TRUE, continuous payment model.}
+\item{cont}{If `TRUE`, use the continuous payment model.}
 }
 \value{
-Present value.
+Numeric vector of present values.
 }
 \description{
-Computes the present value of an n-period annuity certain with level payments of 1 per period.
+Computes the present value of an n-period annuity certain with level
+payments of 1 per period.
 }
 \examples{
 annuity_certain(n = 10, i = 0.05)
+annuity_certain(n = c(5, 10), i = 0.05)
+annuity_certain(n = 10, i = c(0.03, 0.05))
 annuity_certain(n = 10, i = 0.05, due = TRUE)
 annuity_certain(n = 10, i = 0.05, cont = TRUE)
 }

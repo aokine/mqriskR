@@ -1,5 +1,5 @@
 # Chapter 4: R solution support (selected exercises)
-# Exercises: 4-4 and 4-8
+# Exercises: 4-5 and 4-9
 #
 # Goal:
 # - Simulate/compute the one-year claim risk for a small term insurer.
@@ -13,7 +13,7 @@
 # - Each life has independent probability q of dying within 1 year
 # - Claim count ~ Binomial(n, q), aggregate claims = 1000 * ClaimCount
 #
-# NOTE: Exercise 4-4 and 4-8 do NOT specify q.
+# NOTE: Exercise 4-5 and 4-9 do NOT specify q.
 # So we treat q as a parameter and do sensitivity analysis.
 #
 # --- Helpers ---------------------------------------------------------------
@@ -75,14 +75,14 @@ claims_risk_measures <- function(n, q, p = 0.99, benefit = 1000) {
   list(VaR = var_claims, TVaR = tvar_claims, k_var = k_var)
 }
 
-# --- Exercise 4-4 ----------------------------------------------------------
+# --- Exercise 4-5 ----------------------------------------------------------
 # Risk Mitigation, Inc.:
 # capital = 2000, benefit = 1000, prem = 50
 # Question asks how many policies to sell and how much capital to hold.
 #
 # We'll explore ruin probabilities for a range of n under plausible q values.
 
-ex4_4_analysis <- function(q_values = c(0.001, 0.002, 0.005, 0.01),
+ex4_5_analysis <- function(q_values = c(0.001, 0.002, 0.005, 0.01),
                            n_values = c(10, 20, 30, 40, 50, 75, 100, 150, 200),
                            capital = 2000, benefit = 1000, prem = 50,
                            alpha_targets = c(0.10, 0.05, 0.01)) {
@@ -120,19 +120,19 @@ ex4_4_analysis <- function(q_values = c(0.001, 0.002, 0.005, 0.01),
 }
 
 # Run and print a compact view:
-res_4_4 <- ex4_4_analysis()
+res_4_5 <- ex4_5_analysis()
 
 # Print a quick summary for one q (you can change which one):
-print(res_4_4[["q=0.005"]]$table)
-print(res_4_4[["q=0.005"]]$capital_requirements)
+print(res_4_5[["q=0.005"]]$table)
+print(res_4_5[["q=0.005"]]$capital_requirements)
 
-# --- Exercise 4-8 ----------------------------------------------------------
+# --- Exercise 4-9 ----------------------------------------------------------
 # New Beginnings, Inc.:
 # capital = 3000, and a client wants 1,000 one-year policies.
 #
 # We quantify the concentration risk via ruin probability and capital needed.
 
-ex4_8_analysis <- function(q = 0.005, n = 1000, capital = 3000,
+ex4_9_analysis <- function(q = 0.005, n = 1000, capital = 3000,
                            benefit = 1000, prem = 50,
                            alpha_targets = c(0.10, 0.05, 0.01, 0.001)) {
 
@@ -155,10 +155,10 @@ ex4_8_analysis <- function(q = 0.005, n = 1000, capital = 3000,
   )
 }
 
-res_4_8 <- ex4_8_analysis(q = 0.005, n = 1000, capital = 3000)
-print(res_4_8)
+res_4_9 <- ex4_9_analysis(q = 0.005, n = 1000, capital = 3000)
+print(res_4_9)
 
-# Optional: Monte Carlo sanity check for 4-8 (can be slow at large n_sims)
-# sim_4_8 <- simulate_one_year(n = 1000, q = 0.005, capital = 3000, n_sims = 200000)
-# sim_4_8$prob_ruin
+# Optional: Monte Carlo sanity check for 4-9 (can be slow at large n_sims)
+# sim_4_9 <- simulate_one_year(n = 1000, q = 0.005, capital = 3000, n_sims = 200000)
+# sim_4_9$prob_ruin
 

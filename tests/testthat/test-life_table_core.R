@@ -123,3 +123,45 @@ test_that("life table identities hold", {
   expect_equal(nqx(tbl,1,3), 1 - npx(tbl,1,3))
 
 })
+
+
+testthat::test_that("closed life tables return zero lx beyond terminal age", {
+  tbl <- life_table(x = 0:3, lx = c(100000, 80000, 50000, 0))
+
+  testthat::expect_equal(lx(tbl, 4), 0)
+  testthat::expect_equal(lx(tbl, 10), 0)
+  testthat::expect_equal(npx(tbl, x = 2, n = 1), 0)
+  testthat::expect_equal(npx(tbl, x = 2, n = 5), 0)
+})
+
+testthat::test_that("open life tables return NA beyond final age", {
+  tbl <- life_table(x = 0:2, lx = c(100000, 80000, 50000))
+
+  testthat::expect_true(is.na(lx(tbl, 3)))
+  testthat::expect_true(is.na(npx(tbl, x = 1, n = 5)))
+})
+
+testthat::test_that("life table probabilities behave correctly near terminal age", {
+  tbl <- life_table(x = 0:3, lx = c(100000, 80000, 50000, 0))
+
+  testthat::expect_equal(dx(tbl, 2), 50000)
+  testthat::expect_equal(qx_tab(tbl, 2), 1)
+  testthat::expect_equal(npx(tbl, 2, 1), 0)
+  testthat::expect_equal(nqx(tbl, 2, 1), 1)
+})
+
+testthat::test_that("life table functions vectorize over x and n", {
+  tbl <- life_table(x = 0:4, lx = c(100000, 90000, 80000, 60000, 0))
+
+  testthat::expect_equal(lx(tbl, c(0, 1, 2)), c(100000, 90000, 80000))
+
+  testthat::expect_equal(
+    npx(tbl, x = c(0, 1), n = c(1, 2)),
+    c(90000 / 100000, 60000 / 90000)
+  )
+
+  testthat::expect_equal(
+    nqx(tbl, x = c(0, 1), n = c(1, 2)),
+    1 - c(90000 / 100000, 60000 / 90000)
+  )
+})

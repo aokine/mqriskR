@@ -13,13 +13,13 @@ solve_yield(cf, t, interval = c(-0.99, 1), tol = 1e-10)
 
 \item{interval}{Two-length numeric vector bracketing the root.}
 
-\item{tol}{Tolerance passed to uniroot.}
+\item{tol}{Tolerance passed to `uniroot()`.}
 }
 \value{
-Yield rate i.
+Yield rate `i`.
 }
 \description{
-Finds the interest rate i such that the present value of the cash flows is 0.
+Finds the interest rate `i` such that the present value of the cash flows is 0.
 }
 \examples{
 solve_yield(c(-100, 60, 60), c(0, 1, 2), interval = c(-0.5, 1))

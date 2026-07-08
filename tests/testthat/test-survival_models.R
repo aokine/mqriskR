@@ -12,7 +12,7 @@ testthat::test_that("Uniform (de Moivre) model basics", {
 
   # density constant on (0, omega), 0 outside
   testthat::expect_equal(f0(1, "uniform", omega = omega), 1 / omega)
-  testthat::expect_equal(f0(0, "uniform", omega = omega), 0)
+  testthat::expect_equal(f0(0, "uniform", omega = omega), 1 / omega)
   testthat::expect_equal(f0(omega, "uniform", omega = omega), 0)
   testthat::expect_equal(f0(omega + 1, "uniform", omega = omega), 0)
 

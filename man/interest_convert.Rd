@@ -7,28 +7,30 @@
 interest_convert(i = NULL, d = NULL, delta = NULL, m = NULL)
 }
 \arguments{
-\item{i}{Effective interest rate.}
+\item{i}{Effective interest rate. May be scalar or vector.}
 
-\item{d}{Effective discount rate.}
+\item{d}{Effective discount rate. May be scalar or vector.}
 
-\item{delta}{Force of interest.}
+\item{delta}{Force of interest. May be scalar or vector.}
 
-\item{m}{Optional compounding frequency for the nominal rate convertible m-thly.}
+\item{m}{Optional positive integer compounding frequency for the nominal
+rate convertible m-thly.}
 }
 \value{
-A list with elements i, d, delta and, if m is supplied, im (the nominal rate convertible m-thly).
+A list with elements `i`, `d`, `delta`, and, if `m` is supplied,
+  `im` and `m`.
 }
 \description{
-Provides consistent conversions between:
-- effective interest rate i
-- effective discount rate d
-- force of interest delta
+Provides consistent conversions between effective interest rate, effective
+discount rate, force of interest, and optional nominal interest rate
+convertible m-thly.
 }
 \details{
-Exactly one of i, d, or delta must be provided.
+Exactly one of `i`, `d`, or `delta` must be provided.
 }
 \examples{
 interest_convert(i = 0.05)
+interest_convert(i = c(0.03, 0.05, 0.07))
 interest_convert(d = 0.04761905)
 interest_convert(delta = log(1.05))
 }

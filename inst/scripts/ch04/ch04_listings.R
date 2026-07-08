@@ -1,4 +1,4 @@
-## Listing 4.1: Risk pooling and one-year capital stress (Exercises 4-4 and 4-8)
+## Listing 4.1: Risk pooling and one-year capital stress (Exercises 4-5 and 4-9)
 set.seed(1)
 simulate_one_year <- function(n_policies, p_claim, benefit, premium, capital, n_sims = 10000) {
   claims <- rbinom(n_sims, size = n_policies, prob = p_claim)

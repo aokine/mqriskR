@@ -2,32 +2,21 @@
 % Please edit documentation in R/survival_models.R
 \name{S0}
 \alias{S0}
-\title{Survival function for age-at-failure T0}
+\title{Survival function for age-at-failure}
 \usage{
 S0(t, model, ...)
 }
 \arguments{
-\item{t}{Numeric vector of times (\eqn{t \ge 0}).}
+\item{t}{Numeric vector of times.}
 
-\item{model}{One of \code{"uniform"}, \code{"exponential"}, \code{"gompertz"},
-\code{"makeham"}, \code{"weibull"}.}
+\item{model}{One of \code{"uniform"}, \code{"exponential"},
+\code{"gompertz"}, \code{"makeham"}, or \code{"weibull"}.}
 
-\item{...}{Model parameters:
-\itemize{
-  \item uniform: \code{omega}
-  \item exponential: \code{lambda}
-  \item gompertz: \code{B}, \code{c}
-  \item makeham: \code{A}, \code{B}, \code{c}
-  \item weibull: \code{shape}, \code{scale}
-}}
+\item{...}{Model parameters.}
 }
 \value{
-Numeric vector of survival probabilities in \eqn{[0,1]}.
+Numeric vector of survival probabilities.
 }
 \description{
-Computes the survival distribution function \eqn{S_0(t)=Pr(T_0>t)}.
-}
-\details{
-Supported models (Chapter 5): uniform (de Moivre), exponential,
-Gompertz, Makeham, Weibull.
+Computes \eqn{S_0(t)=Pr(T_0>t)}.
 }

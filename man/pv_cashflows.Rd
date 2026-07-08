@@ -7,9 +7,9 @@
 pv_cashflows(cf, t, i)
 }
 \arguments{
-\item{cf}{Cash flow amounts (positive = inflow, negative = outflow).}
+\item{cf}{Cash flow amounts.}
 
-\item{t}{Times of cash flows (same length as cf).}
+\item{t}{Times of cash flows.}
 
 \item{i}{Effective interest rate.}
 }

@@ -2,31 +2,23 @@
 % Please edit documentation in R/survival_models.R
 \name{ex_complete}
 \alias{ex_complete}
-\title{Complete expectation of life at age x}
+\title{Complete expectation of life}
 \usage{
 ex_complete(x, model, ..., tol = 1e-10)
 }
 \arguments{
-\item{x}{Numeric vector of ages (\eqn{x \ge 0}).}
+\item{x}{Numeric vector of ages.}
 
-\item{model}{One of \code{"uniform"}, \code{"exponential"}, \code{"gompertz"},
-\code{"makeham"}, \code{"weibull"}.}
+\item{model}{One of \code{"uniform"}, \code{"exponential"},
+\code{"gompertz"}, \code{"makeham"}, or \code{"weibull"}.}
 
-\item{...}{Model parameters:
-\itemize{
-  \item uniform: \code{omega}
-  \item exponential: \code{lambda}
-  \item gompertz: \code{B}, \code{c}
-  \item makeham: \code{A}, \code{B}, \code{c}
-  \item weibull: \code{shape}, \code{scale}
-}}
+\item{...}{Model parameters.}
 
-\item{tol}{Tolerance used to choose a finite integration bound (numeric).}
+\item{tol}{Tolerance used to choose a finite integration bound.}
 }
 \value{
 Numeric vector of complete expectations.
 }
 \description{
-Computes \eqn{\overset{\circ}{e}_x=\int_0^\infty {}_t p_x \, dt}.
-Uses closed form for uniform and exponential; numeric integration otherwise.
+Computes \eqn{\overset{\circ}{e}_x=\int_0^\infty {}_t p_x\,dt}.
 }

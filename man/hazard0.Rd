@@ -2,28 +2,21 @@
 % Please edit documentation in R/survival_models.R
 \name{hazard0}
 \alias{hazard0}
-\title{Hazard / force for age-at-failure T0}
+\title{Hazard or force of mortality for age-at-failure}
 \usage{
 hazard0(t, model, ...)
 }
 \arguments{
-\item{t}{Numeric vector of times (\eqn{t \ge 0}).}
+\item{t}{Numeric vector of times.}
 
-\item{model}{One of \code{"uniform"}, \code{"exponential"}, \code{"gompertz"},
-\code{"makeham"}, \code{"weibull"}.}
+\item{model}{One of \code{"uniform"}, \code{"exponential"},
+\code{"gompertz"}, \code{"makeham"}, or \code{"weibull"}.}
 
-\item{...}{Model parameters:
-\itemize{
-  \item uniform: \code{omega}
-  \item exponential: \code{lambda}
-  \item gompertz: \code{B}, \code{c}
-  \item makeham: \code{A}, \code{B}, \code{c}
-  \item weibull: \code{shape}, \code{scale}
-}}
+\item{...}{Model parameters.}
 }
 \value{
-Numeric vector of hazard/force values.
+Numeric vector.
 }
 \description{
-Computes \eqn{\lambda_0(t)=f_0(t)/S_0(t)}.
+Computes \eqn{\lambda_0(t)}.
 }

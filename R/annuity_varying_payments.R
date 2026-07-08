@@ -129,10 +129,11 @@ NULL
 #'
 #' Increasing and decreasing annuity functions from Chapter 8.
 #'
+#' @name annuity_varying_payments
 #' @aliases Iax Iaxn Daxn
 #' @aliases Iadotx Iadotxn Dadotxn
 #' @aliases Iabarx Iabarxn Dabarxn
-#' @rdname annuity_varying_payments
+#' @keywords internal
 NULL
 
 # -------------------------------------------------------------------------

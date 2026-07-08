@@ -7,16 +7,17 @@
 discount(i, t)
 }
 \arguments{
-\item{i}{Effective interest rate.}
+\item{i}{Effective interest rate. May be scalar or vector.}
 
-\item{t}{Time (can be vector).}
+\item{t}{Time. May be scalar or vector.}
 }
 \value{
-Discount factor at time t.
+Numeric vector of discount factors.
 }
 \description{
-Discount factor for compound interest
+Computes the discount factor \eqn{v^t = (1+i)^{-t}}.
 }
 \examples{
 discount(0.05, 0:5)
+discount(c(0.03, 0.05), 1)
 }

@@ -14,7 +14,7 @@
 \alias{sxn}
 \alias{sdotxn}
 \alias{sbarxn}
-\title{Annual annuity functions (Chapter 8)}
+\title{Annual annuity functions}
 \usage{
 ax(x, i, model, ..., k_max = 5000, tol = 1e-12)
 

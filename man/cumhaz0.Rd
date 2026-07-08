@@ -2,28 +2,21 @@
 % Please edit documentation in R/survival_models.R
 \name{cumhaz0}
 \alias{cumhaz0}
-\title{Cumulative hazard for age-at-failure T0}
+\title{Cumulative hazard for age-at-failure}
 \usage{
 cumhaz0(t, model, ...)
 }
 \arguments{
-\item{t}{Numeric vector of times (\eqn{t \ge 0}).}
+\item{t}{Numeric vector of times.}
 
-\item{model}{One of \code{"uniform"}, \code{"exponential"}, \code{"gompertz"},
-\code{"makeham"}, \code{"weibull"}.}
+\item{model}{One of \code{"uniform"}, \code{"exponential"},
+\code{"gompertz"}, \code{"makeham"}, or \code{"weibull"}.}
 
-\item{...}{Model parameters:
-\itemize{
-  \item uniform: \code{omega}
-  \item exponential: \code{lambda}
-  \item gompertz: \code{B}, \code{c}
-  \item makeham: \code{A}, \code{B}, \code{c}
-  \item weibull: \code{shape}, \code{scale}
-}}
+\item{...}{Model parameters.}
 }
 \value{
-Numeric vector of cumulative hazard values.
+Numeric vector.
 }
 \description{
-Computes \eqn{\Lambda_0(t)=\int_0^t \lambda_0(y)\,dy}.
+Computes \eqn{\Lambda_0(t)}.
 }

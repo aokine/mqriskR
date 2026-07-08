@@ -1,4 +1,4 @@
-#' Annual annuity functions (Chapter 8)
+#' Annual annuity functions
 #'
 #' Annual whole life, temporary, deferred, and actuarial accumulated value
 #' annuity functions in immediate, due, and continuous forms.

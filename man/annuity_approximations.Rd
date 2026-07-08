@@ -2,7 +2,7 @@
 % Please edit documentation in R/annuity_approximations.R
 \name{annuity_approximations}
 \alias{annuity_approximations}
-\title{Annuity approximations (Chapter 8)}
+\title{Annuity approximations}
 \description{
 Chapter 8 approximation formulas for m-thly and continuous life annuities.
 }

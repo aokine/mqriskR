@@ -57,6 +57,8 @@ Numeric vector.
 Chapter 8 non-level annuity functions for increasing and decreasing
 life annuities.
 
+Increasing and decreasing annuity functions from Chapter 8.
+
 Computes
 \deqn{(Ia)_x = \sum_{t=1}^{\infty} t \, v^t \, {}_tp_x.}
 
@@ -98,3 +100,4 @@ The functions implemented here match the notation in Section 8.6:
   \item \code{Dabarxn()} = \eqn{(\bar{D}\bar{a})_{x:\overline{n}|}}
 }
 }
+\keyword{internal}

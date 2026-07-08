@@ -2,35 +2,23 @@
 % Please edit documentation in R/survival_models.R
 \name{fx}
 \alias{fx}
-\title{Conditional density for Tx}
+\title{Conditional density}
 \usage{
 fx(t, x, model, ...)
 }
 \arguments{
-\item{t}{Numeric vector of durations (\eqn{t \ge 0}).}
+\item{t}{Numeric vector of durations.}
 
-\item{x}{Numeric vector of ages (\eqn{x \ge 0}).}
+\item{x}{Numeric vector of ages.}
 
-\item{model}{One of \code{"uniform"}, \code{"exponential"}, \code{"gompertz"},
-\code{"makeham"}, \code{"weibull"}.}
+\item{model}{One of \code{"uniform"}, \code{"exponential"},
+\code{"gompertz"}, \code{"makeham"}, or \code{"weibull"}.}
 
-\item{...}{Model parameters:
-\itemize{
-  \item uniform: \code{omega}
-  \item exponential: \code{lambda}
-  \item gompertz: \code{B}, \code{c}
-  \item makeham: \code{A}, \code{B}, \code{c}
-  \item weibull: \code{shape}, \code{scale}
-}}
+\item{...}{Model parameters.}
 }
 \value{
-Numeric vector of densities (\eqn{\ge 0}).
+Numeric vector of density values.
 }
 \description{
 Computes \eqn{f_x(t)=f_0(x+t)/S_0(x)}.
-}
-\details{
-Vectorization rule:
-- If \code{t} and \code{x} are the same length, values are computed elementwise.
-- If one of \code{t} or \code{x} has length 1, it is recycled to match the other.
 }

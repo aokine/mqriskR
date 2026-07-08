@@ -4,36 +4,23 @@
 \alias{dist0}
 \alias{F0}
 \alias{f0}
-\title{Distribution functions for age-at-failure T0}
+\title{Distribution functions for age-at-failure}
 \usage{
 F0(t, model, ...)
 
 f0(t, model, ...)
 }
 \arguments{
-\item{t}{Numeric vector of times (\eqn{t \ge 0}).}
+\item{t}{Numeric vector of times.}
 
-\item{model}{One of \code{"uniform"}, \code{"exponential"}, \code{"gompertz"},
-\code{"makeham"}, \code{"weibull"}.}
+\item{model}{One of \code{"uniform"}, \code{"exponential"},
+\code{"gompertz"}, \code{"makeham"}, or \code{"weibull"}.}
 
-\item{...}{Model parameters:
-\itemize{
-  \item uniform: \code{omega}
-  \item exponential: \code{lambda}
-  \item gompertz: \code{B}, \code{c}
-  \item makeham: \code{A}, \code{B}, \code{c}
-  \item weibull: \code{shape}, \code{scale}
-}}
+\item{...}{Model parameters.}
 }
 \value{
-Numeric vector. For \code{F0}: CDF values in \eqn{[0,1]}. For \code{f0}: density values (\eqn{\ge 0}).
+Numeric vector.
 }
 \description{
-Convenience functions for the CDF and density of \eqn{T_0}.
-}
-\details{
-\itemize{
-  \item \code{F0(t)} computes \eqn{F_0(t)=Pr(T_0 \le t)=1-S_0(t)}
-  \item \code{f0(t)} computes \eqn{f_0(t)=\frac{d}{dt}F_0(t)}
-}
+Distribution functions for age-at-failure
 }
