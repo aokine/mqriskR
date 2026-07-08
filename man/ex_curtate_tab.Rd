@@ -7,7 +7,7 @@
 ex_curtate_tab(tbl, x)
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Numeric vector of integer ages.}
 }
@@ -16,6 +16,6 @@ Numeric vector of curtate expectations \eqn{e_x}.
 }
 \description{
 Computes the curtate expectation of life
-\eqn{e_x = \sum_{k=1}^\infty {}_k p_x}
+\eqn{e_x = \sum_{k=1}^{\infty} {}_k p_x}
 in the discrete tabular setting.
 }

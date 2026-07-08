@@ -7,11 +7,11 @@
 ex_temp_complete_tab(tbl, x, n, assumption = c("udd", "cf", "balducci"))
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Numeric vector of integer ages.}
 
-\item{n}{Numeric vector of nonnegative numbers.}
+\item{n}{Numeric vector of nonnegative durations.}
 
 \item{assumption}{One of \code{"udd"}, \code{"cf"}, \code{"balducci"}.}
 }
@@ -20,7 +20,8 @@ Numeric vector of temporary complete expectations.
 }
 \description{
 Computes
-\eqn{\overset{\circ}{e}_{x:\overline{n}|} = \int_0^n {}_t p_x \, dt}
+\eqn{\overset{\circ}{e}_{x:\overline{n}|} =
+\int_0^n {}_t p_x \, dt}
 using a within-year assumption:
 \code{"udd"}, \code{"cf"}, or \code{"balducci"}.
 }

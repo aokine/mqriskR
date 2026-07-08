@@ -7,14 +7,14 @@
 npx(tbl, x, n)
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Ages.}
 
 \item{n}{Nonnegative integer durations.}
 }
 \value{
-Numeric vector of {}_n p_x values.
+Numeric vector of \eqn{{}_n p_x} values.
 }
 \description{
 Compute n-year survival probability from a life table

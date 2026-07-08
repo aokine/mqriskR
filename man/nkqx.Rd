@@ -17,6 +17,5 @@ nkqx(tbl, x, k)
 Numeric vector of \eqn{{}_{k|} q_x} values.
 }
 \description{
-Computes
-\eqn{{}_{k|} q_x = {}_k p_x - {}_{k+1} p_x}
+Computes \eqn{{}_{k|} q_x = {}_k p_x - {}_{k+1} p_x}.
 }

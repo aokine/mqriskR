@@ -12,9 +12,9 @@ qx_to_lx(qx, radix = 1e+05)
 \item{radix}{Positive radix \eqn{l_0}.}
 }
 \value{
-Numeric vector of \eqn{l_x} values of length \code{length(qx)+1}.
+Numeric vector of \eqn{l_x} values of length \code{length(qx) + 1}.
 }
 \description{
 Builds life-table survivor values recursively from
-\eqn{l_{x+1} = l_x (1-q_x)}, starting from a chosen radix.
+\eqn{l_{x+1} = l_x (1 - q_x)}, starting from a chosen radix.
 }

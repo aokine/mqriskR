@@ -7,7 +7,7 @@
 nqx_select(tbl, x_sel, t, n)
 }
 \arguments{
-\item{tbl}{A select_life_table object.}
+\item{tbl}{A \code{select_life_table} object.}
 
 \item{x_sel}{Numeric vector of ages at selection.}
 

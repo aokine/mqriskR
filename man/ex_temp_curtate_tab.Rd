@@ -7,7 +7,7 @@
 ex_temp_curtate_tab(tbl, x, n)
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Numeric vector of integer ages.}
 
@@ -19,5 +19,5 @@ Numeric vector of temporary curtate expectations.
 \description{
 Computes
 \eqn{e_{x:\overline{n}|} = \sum_{k=1}^{n} {}_k p_x}
-for integer n in the discrete tabular setting.
+for integer \eqn{n} in the discrete tabular setting.
 }

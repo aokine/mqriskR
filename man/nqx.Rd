@@ -7,14 +7,14 @@
 nqx(tbl, x, n)
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Ages.}
 
 \item{n}{Nonnegative integer durations.}
 }
 \value{
-Numeric vector of {}_n q_x values.
+Numeric vector of \eqn{{}_n q_x} values.
 }
 \description{
 Compute n-year death probability from a life table

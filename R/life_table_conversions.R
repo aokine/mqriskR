@@ -1,7 +1,6 @@
 # life_table_conversions.R
 #
-# Conversion utilities linking Chapter 5 survival-model notation
-# and Chapter 6 life-table notation.
+# Conversion utilities linking survival-function notation and life-table notation.
 #
 # Functions:
 #   S0_to_lx()  : convert S0(x) values to l_x values using a radix
@@ -14,9 +13,11 @@
 # -------------------------------------------------------------------------
 
 .check_radix <- function(radix) {
-  if (!is.numeric(radix) || length(radix) != 1L || !is.finite(radix) || radix <= 0) {
+  if (!is.numeric(radix) || length(radix) != 1L ||
+      !is.finite(radix) || radix <= 0) {
     stop("radix must be a single positive finite number.", call. = FALSE)
   }
+
   radix
 }
 
@@ -26,8 +27,8 @@
 
 #' Convert survival probabilities to life-table values
 #'
-#' Converts Chapter 5 survival function values \eqn{S_0(x)} into
-#' Chapter 6 life-table values \eqn{l_x = l_0 S_0(x)} using a chosen radix.
+#' Converts survival function values \eqn{S_0(x)} into life-table survivor
+#' values \eqn{l_x = l_0 S_0(x)} using a chosen radix.
 #'
 #' @param S0 Numeric vector of survival probabilities.
 #' @param radix Positive radix \eqn{l_0}.
@@ -38,6 +39,9 @@ S0_to_lx <- function(S0, radix = 100000) {
   radix <- .check_radix(radix)
   S0 <- as.numeric(S0)
 
+  if (length(S0) == 0L) {
+    stop("S0 must have positive length.", call. = FALSE)
+  }
   if (any(!is.finite(S0))) {
     stop("S0 must contain only finite values.", call. = FALSE)
   }
@@ -57,8 +61,8 @@ S0_to_lx <- function(S0, radix = 100000) {
 
 #' Convert life-table values to survival probabilities
 #'
-#' Converts Chapter 6 life-table values \eqn{l_x} into Chapter 5
-#' survival probabilities \eqn{S_0(x) = l_x / l_0}.
+#' Converts life-table survivor values \eqn{l_x} into survival probabilities
+#' \eqn{S_0(x) = l_x / l_0}.
 #'
 #' @param lx Numeric vector of life-table survivor values.
 #'
@@ -98,7 +102,7 @@ lx_to_S0 <- function(lx) {
 #' @param px Numeric vector of one-year survival probabilities \eqn{p_x}.
 #' @param radix Positive radix \eqn{l_0}.
 #'
-#' @return Numeric vector of \eqn{l_x} values of length \code{length(px)+1}.
+#' @return Numeric vector of \eqn{l_x} values of length \code{length(px) + 1}.
 #' @export
 px_to_lx <- function(px, radix = 100000) {
   radix <- .check_radix(radix)
@@ -131,12 +135,12 @@ px_to_lx <- function(px, radix = 100000) {
 #' Construct life-table values from q_x values
 #'
 #' Builds life-table survivor values recursively from
-#' \eqn{l_{x+1} = l_x (1-q_x)}, starting from a chosen radix.
+#' \eqn{l_{x+1} = l_x (1 - q_x)}, starting from a chosen radix.
 #'
 #' @param qx Numeric vector of one-year death probabilities \eqn{q_x}.
 #' @param radix Positive radix \eqn{l_0}.
 #'
-#' @return Numeric vector of \eqn{l_x} values of length \code{length(qx)+1}.
+#' @return Numeric vector of \eqn{l_x} values of length \code{length(qx) + 1}.
 #' @export
 qx_to_lx <- function(qx, radix = 100000) {
   radix <- .check_radix(radix)

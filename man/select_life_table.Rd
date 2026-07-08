@@ -16,7 +16,7 @@ select_life_table(x_sel, duration, attained_age, lx)
 \item{lx}{Numeric vector of select-table survivor values.}
 }
 \value{
-A data.frame with class \code{"select_life_table"}.
+A data frame with class \code{"select_life_table"}.
 }
 \description{
 Builds a select-life-table object from vectors of selection age,

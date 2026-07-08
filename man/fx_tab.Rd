@@ -20,6 +20,5 @@ Numeric vector of conditional density values.
 }
 \description{
 Computes the conditional density
-\eqn{f_x(t \mid T_0 > x) = {}_t p_x \mu_{x+t}}
-for \eqn{0 < t < 1}.
+\eqn{f_x(t \mid T_0 > x) = {}_t p_x \mu_{x+t}}.
 }

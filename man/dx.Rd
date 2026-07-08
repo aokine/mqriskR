@@ -7,12 +7,12 @@
 dx(tbl, x)
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Ages.}
 }
 \value{
-Numeric vector of d_x values.
+Numeric vector of \eqn{d_x} values.
 }
 \description{
 Compute deaths between ages x and x+1

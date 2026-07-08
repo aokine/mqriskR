@@ -13,6 +13,6 @@ lx_to_S0(lx)
 Numeric vector of \eqn{S_0(x)} values.
 }
 \description{
-Converts Chapter 6 life-table values \eqn{l_x} into Chapter 5
-survival probabilities \eqn{S_0(x) = l_x / l_0}.
+Converts life-table survivor values \eqn{l_x} into survival probabilities
+\eqn{S_0(x) = l_x / l_0}.
 }

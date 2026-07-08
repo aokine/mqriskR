@@ -9,19 +9,21 @@ life_table(x, lx = NULL, qx = NULL, px = NULL, S0 = NULL, radix = 1e+05)
 \arguments{
 \item{x}{Numeric vector of ages.}
 
-\item{lx}{Numeric vector of l_x values.}
+\item{lx}{Numeric vector of \eqn{l_x} values.}
 
-\item{qx}{Numeric vector of q_x values.}
+\item{qx}{Numeric vector of \eqn{q_x} values.}
 
-\item{px}{Numeric vector of p_x values.}
+\item{px}{Numeric vector of \eqn{p_x} values.}
 
-\item{S0}{Numeric vector of S_0(x) values.}
+\item{S0}{Numeric vector of \eqn{S_0(x)} values.}
 
-\item{radix}{Radix used when converting S0 to lx, or when building from qx/px.}
+\item{radix}{Radix used when converting \code{S0} to \code{lx}, or when
+building from \code{qx} or \code{px}.}
 }
 \value{
-A data.frame with class "life_table".
+A data frame with class \code{"life_table"}.
 }
 \description{
-Build a discrete life table from one of lx, qx, px, or S0.
+Build a discrete life table from one of \code{lx}, \code{qx}, \code{px},
+or \code{S0}.
 }

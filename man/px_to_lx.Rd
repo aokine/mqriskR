@@ -12,7 +12,7 @@ px_to_lx(px, radix = 1e+05)
 \item{radix}{Positive radix \eqn{l_0}.}
 }
 \value{
-Numeric vector of \eqn{l_x} values of length \code{length(px)+1}.
+Numeric vector of \eqn{l_x} values of length \code{length(px) + 1}.
 }
 \description{
 Builds life-table survivor values recursively from

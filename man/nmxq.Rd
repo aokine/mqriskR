@@ -21,7 +21,7 @@ Numeric vector of \eqn{{}_{n|m} q_x} values.
 \description{
 Computes the probability that a life aged x survives n years and then
 dies within the following m years:
-\eqn{{}_{n|m} q_x = {}_n p_x \cdot {}_m q_{x+n}}
+\eqn{{}_{n|m} q_x = {}_n p_x \cdot {}_m q_{x+n}}.
 }
 \details{
 This function is for integer n and m in the discrete tabular setting.

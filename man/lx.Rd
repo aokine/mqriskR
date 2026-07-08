@@ -7,12 +7,12 @@
 lx(tbl, x)
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Ages.}
 }
 \value{
-Numeric vector of l_x values.
+Numeric vector of \eqn{l_x} values.
 }
 \description{
 Extract life-table survivor values

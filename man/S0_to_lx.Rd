@@ -15,6 +15,6 @@ S0_to_lx(S0, radix = 1e+05)
 Numeric vector of \eqn{l_x} values.
 }
 \description{
-Converts Chapter 5 survival function values \eqn{S_0(x)} into
-Chapter 6 life-table values \eqn{l_x = l_0 S_0(x)} using a chosen radix.
+Converts survival function values \eqn{S_0(x)} into life-table survivor
+values \eqn{l_x = l_0 S_0(x)} using a chosen radix.
 }

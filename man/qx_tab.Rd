@@ -7,12 +7,12 @@
 qx_tab(tbl, x)
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Ages.}
 }
 \value{
-Numeric vector of q_x values.
+Numeric vector of \eqn{q_x} values.
 }
 \description{
 Compute one-year death probability from a life table

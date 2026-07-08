@@ -7,14 +7,14 @@
 ndx(tbl, x, n)
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Ages.}
 
 \item{n}{Nonnegative integer durations.}
 }
 \value{
-Numeric vector of {}_n d_x values.
+Numeric vector of \eqn{{}_n d_x} values.
 }
 \description{
 Compute deaths over an n-year interval from a life table

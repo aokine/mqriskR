@@ -7,7 +7,7 @@
 ex_complete_tab(tbl, x, assumption = c("udd", "cf", "balducci"))
 }
 \arguments{
-\item{tbl}{A life_table object.}
+\item{tbl}{A \code{life_table} object.}
 
 \item{x}{Numeric vector of integer ages.}
 

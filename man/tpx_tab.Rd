@@ -20,6 +20,5 @@ Numeric vector of \eqn{{}_t p_x} values.
 }
 \description{
 Computes \eqn{{}_t p_x} for \eqn{0 \le t \le 1} from a discrete life table
-under one of the standard Chapter 6 assumptions:
-UDD, constant force, or Balducci.
+under UDD, constant force, or Balducci.
 }
