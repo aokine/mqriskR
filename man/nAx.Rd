@@ -27,5 +27,5 @@ nAx(x, n, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000)
 Numeric vector of APVs.
 }
 \description{
-Computes \eqn{{}_{n\mid}A_x = {}_nE_x \cdot A_{x+n}}.
+Computes \eqn{{}_{n\mid}A_x = {}_nE_x A_{x+n}}.
 }

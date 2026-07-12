@@ -2,28 +2,41 @@
 % Please edit documentation in R/reserve_ch10_ext.R
 \name{Pnax}
 \alias{Pnax}
-\title{Deferred annuity-immediate premium}
+\title{Net premium for a deferred annuity-immediate}
 \usage{
-Pnax(x, n, i, model, ...)
+Pnax(x, n, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
-\item{x}{Issue age.}
+\item{x}{Issue age. May be scalar or vector.}
 
-\item{n}{Deferral period.}
+\item{n}{Positive integer deferral period. May be scalar or vector.}
 
-\item{i}{Effective annual interest rate.}
+\item{i}{Effective annual interest rate. May be scalar or vector.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model.}
 
-\item{...}{Additional model parameters.}
+\item{...}{Additional parameters passed to the actuarial functions.}
+
+\item{tbl}{Optional life table object. Supply by name.}
 }
 \value{
-Numeric vector.
+Numeric vector of net annual premiums.
 }
 \description{
 Computes
-\eqn{P({}_{n|}a_x) = {}_{n|}a_x / \ddot{a}_{x:\overline{n}|}}.
+\deqn{
+P({}_{n|}a_x)
+=
+\frac{{}_{n|}a_x}
+{\ddot{a}_{x:\overline{n}|}}.
+}
 }
 \examples{
-Pnax(40, n = 20, i = 0.05, model = "uniform", omega = 100)
+Pnax(
+  40,
+  n = 20,
+  i = 0.05,
+  model = "uniform",
+  omega = 100
+)
 }

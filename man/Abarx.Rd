@@ -20,5 +20,5 @@ Numeric vector of APVs.
 }
 \description{
 Computes
-\eqn{\bar{A}_x = \int_0^\infty v^t \, {}_t p_x \mu_{x+t}\,dt}.
+\eqn{\bar{A}_x = \int_0^\infty v^t {}_t p_x \mu_{x+t}\,dt}.
 }

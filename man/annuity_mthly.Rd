@@ -2,15 +2,53 @@
 % Please edit documentation in R/annuity_mthly.R
 \name{annuity_mthly}
 \alias{annuity_mthly}
-\title{m-thly contingent annuity functions (Chapter 8)}
-\description{
-Chapter 8 functions for life annuities payable m-thly.
-}
-\details{
-These functions implement the exact m-thly formulas from Section 8.5
-using the survival model functions already available in the package.
+\alias{ax_m}
+\alias{adotx_m}
+\alias{axn_m}
+\alias{adotxn_m}
+\alias{nax_m}
+\alias{nadotx_m}
+\alias{sxn_m}
+\alias{sdotxn_m}
+\title{m-thly contingent annuity functions}
+\usage{
+ax_m(x, m, i, model, ..., k_max = 2e+05, tol = 1e-12)
 
-In all cases, the annuity is one unit per year payable in m equal
-installments, so each payment is of size \eqn{1/m}.
+adotx_m(x, m, i, model, ..., k_max = 2e+05, tol = 1e-12)
+
+axn_m(x, n, m, i, model, ...)
+
+adotxn_m(x, n, m, i, model, ...)
+
+nax_m(x, n, m, i, model, ..., k_max = 2e+05, tol = 1e-12)
+
+nadotx_m(x, n, m, i, model, ..., k_max = 2e+05, tol = 1e-12)
+
+sxn_m(x, n, m, i, model, ...)
+
+sdotxn_m(x, n, m, i, model, ...)
 }
-\keyword{internal}
+\arguments{
+\item{x}{Age.}
+
+\item{m}{Number of payments per year.}
+
+\item{i}{Effective annual interest rate.}
+
+\item{model}{Survival model name.}
+
+\item{...}{Additional parameters passed to the survival model.}
+
+\item{k_max}{Maximum summation horizon for non-terminating models.}
+
+\item{tol}{Truncation tolerance for non-terminating models.}
+
+\item{n}{Term or deferral period in years.}
+}
+\value{
+Numeric vector containing the requested m-thly annuity value or actuarial
+accumulated value.
+}
+\description{
+Life annuities payable m-thly.
+}

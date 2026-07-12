@@ -1,19 +1,7 @@
-#' Insurance models with varying benefits (Chapter 7)
+#' Insurance models with varying benefits
 #'
 #' Functions for discrete and continuous contingent payment models with
-#' varying benefits, matching Chapter 7 notation.
-#'
-#' Included functions:
-#' \itemize{
-#'   \item \eqn{(IA)_x}
-#'   \item \eqn{(IA)_{x:\overline{n}|}^{1}}
-#'   \item \eqn{(DA)_{x:\overline{n}|}^{1}}
-#'   \item \eqn{(\bar{I}\bar{A})_x}
-#'   \item \eqn{(I\bar{A})_x}
-#'   \item \eqn{(\bar{I}\bar{A})_{x:\overline{n}|}^{1}}
-#'   \item \eqn{(\bar{D}\bar{A})_{x:\overline{n}|}^{1}}
-#'   \item \eqn{(D\bar{A})_{x:\overline{n}|}^{1}}
-#' }
+#' varying benefits.
 #'
 #' @name insurance_varying_benefits
 #' @keywords internal
@@ -23,53 +11,73 @@ NULL
 # Internal helpers
 # ------------------------------------------------------------
 
-#' @noRd
 .discrete_prob_k <- function(x, k, tbl = NULL, model = NULL, ...) {
   if (!is.null(tbl)) {
-    return(npx(tbl, x, k) - npx(tbl, x, k + 1))
+    p0 <- npx(tbl, x = x, n = k)
+    p1 <- npx(tbl, x = x, n = k + 1)
+
+    if (is.na(p0)) p0 <- 0
+    if (is.na(p1)) p1 <- 0
+
+    return(p0 - p1)
   }
+
   if (is.null(model)) {
     stop("Supply either tbl or model.", call. = FALSE)
   }
-  tpx(k, x = x, model = model, ...) - tpx(k + 1, x = x, model = model, ...)
+
+  tpx(k, x = x, model = model, ...) -
+    tpx(k + 1, x = x, model = model, ...)
 }
 
-#' @noRd
-.max_k_varying <- function(x, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) {
-  if (!is.null(tbl)) {
-    k <- 0
-    repeat {
-      if (k >= k_max) return(k_max)
-      surv <- npx(tbl, x, k)
-      if (surv <= tol) return(k)
-      k <- k + 1
+.max_k_varying <- function(x, tbl = NULL, model = NULL, ...,
+                           tol = 1e-12, k_max = 5000) {
+  for (k in 0:k_max) {
+    if (!is.null(tbl)) {
+      surv <- npx(tbl, x = x, n = k)
+    } else {
+      if (is.null(model)) {
+        stop("Supply either tbl or model.", call. = FALSE)
+      }
+      surv <- tpx(k, x = x, model = model, ...)
+    }
+
+    if (is.na(surv)) {
+      return(max(k - 1L, 0L))
+    }
+
+    if (!is.finite(surv) || surv <= tol) {
+      return(k)
     }
   }
 
-  for (k in 0:k_max) {
-    surv <- tpx(k, x = x, model = model, ...)
-    if (!is.finite(surv) || surv <= tol) return(k)
-  }
   k_max
 }
 
-#' @noRd
 .get_upper_varying_cont <- function(x, n = NULL, model, ...) {
   if (tolower(model) == "uniform") {
     dots <- list(...)
+
     if (is.null(dots$omega)) {
       stop("For model = 'uniform', omega must be supplied.", call. = FALSE)
     }
+
     upper <- dots$omega - x
-    if (!is.null(n)) upper <- pmin(upper, n)
+
+    if (!is.null(n)) {
+      upper <- pmin(upper, n)
+    }
+
     return(pmax(upper, 0))
   }
 
-  if (is.null(n)) return(Inf)
+  if (is.null(n)) {
+    return(Inf)
+  }
+
   n
 }
 
-#' @noRd
 .integrate_varying_cont <- function(f, lower, upper) {
   stats::integrate(
     f,
@@ -99,25 +107,48 @@ NULL
 #'
 #' @return Numeric vector.
 #' @export
-IAx <- function(x, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) {
+IAx <- function(x, i, tbl = NULL, model = NULL, ...,
+                tol = 1e-12, k_max = 5000) {
   x <- as.numeric(x)
-  if (any(!is.finite(x) | x < 0)) stop("x must be non-negative and finite.", call. = FALSE)
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
+  i <- .check_i_discrete(i)
+
+  if (length(x) == 0L || any(!is.finite(x))) {
+    stop("x must contain finite numeric values.", call. = FALSE)
+  }
+
+  if (any(x < 0)) {
+    stop("x must be nonnegative.", call. = FALSE)
+  }
 
   v <- 1 / (1 + i)
 
   sapply(x, function(xx) {
-    kk_max <- .max_k_varying(xx, tbl = tbl, model = model, ..., tol = tol, k_max = k_max)
+    kk_max <- .max_k_varying(
+      xx,
+      tbl = tbl,
+      model = model,
+      ...,
+      tol = tol,
+      k_max = k_max
+    )
+
     k <- 0:kk_max
-    probs <- vapply(k, function(kk) .discrete_prob_k(xx, kk, tbl = tbl, model = model, ...), numeric(1))
-    sum((k + 1) * v^(k + 1) * probs)
+
+    probs <- vapply(
+      k,
+      function(kk) .discrete_prob_k(xx, kk, tbl = tbl, model = model, ...),
+      numeric(1)
+    )
+
+    sum((k + 1) * v^(k + 1) * probs, na.rm = TRUE)
   })
 }
 
 #' Increasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(IA)_{x:\overline{n}|}^{1} = \sum_{k=0}^{n-1} (k+1) v^{k+1} \Pr(K_x = k).}
+#' \deqn{(IA)_{x:\overline{n}|}^{1}
+#' = \sum_{k=0}^{n-1} (k+1) v^{k+1} \Pr(K_x = k).}
 #'
 #' @param x Age.
 #' @param n Term.
@@ -132,26 +163,35 @@ IAxn1 <- function(x, n, i, tbl = NULL, model = NULL, ...) {
   xn <- .recycle_x_n(x, n)
   x <- xn$x
   n <- xn$n
-
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
+  i <- .check_i_discrete(i)
 
   v <- 1 / (1 + i)
 
   sapply(seq_along(x), function(j) {
     xx <- x[j]
     nn <- n[j]
-    if (nn == 0) return(0)
+
+    if (nn == 0) {
+      return(0)
+    }
 
     k <- 0:(nn - 1)
-    probs <- vapply(k, function(kk) .discrete_prob_k(xx, kk, tbl = tbl, model = model, ...), numeric(1))
-    sum((k + 1) * v^(k + 1) * probs)
+
+    probs <- vapply(
+      k,
+      function(kk) .discrete_prob_k(xx, kk, tbl = tbl, model = model, ...),
+      numeric(1)
+    )
+
+    sum((k + 1) * v^(k + 1) * probs, na.rm = TRUE)
   })
 }
 
 #' Decreasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(DA)_{x:\overline{n}|}^{1} = \sum_{k=0}^{n-1} (n-k) v^{k+1} \Pr(K_x = k).}
+#' \deqn{(DA)_{x:\overline{n}|}^{1}
+#' = \sum_{k=0}^{n-1} (n-k) v^{k+1} \Pr(K_x = k).}
 #'
 #' @inheritParams IAxn1
 #'
@@ -161,19 +201,27 @@ DAxn1 <- function(x, n, i, tbl = NULL, model = NULL, ...) {
   xn <- .recycle_x_n(x, n)
   x <- xn$x
   n <- xn$n
-
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
+  i <- .check_i_discrete(i)
 
   v <- 1 / (1 + i)
 
   sapply(seq_along(x), function(j) {
     xx <- x[j]
     nn <- n[j]
-    if (nn == 0) return(0)
+
+    if (nn == 0) {
+      return(0)
+    }
 
     k <- 0:(nn - 1)
-    probs <- vapply(k, function(kk) .discrete_prob_k(xx, kk, tbl = tbl, model = model, ...), numeric(1))
-    sum((nn - k) * v^(k + 1) * probs)
+
+    probs <- vapply(
+      k,
+      function(kk) .discrete_prob_k(xx, kk, tbl = tbl, model = model, ...),
+      numeric(1)
+    )
+
+    sum((nn - k) * v^(k + 1) * probs, na.rm = TRUE)
   })
 }
 
@@ -184,7 +232,8 @@ DAxn1 <- function(x, n, i, tbl = NULL, model = NULL, ...) {
 #' Fully continuous increasing whole life insurance
 #'
 #' Computes
-#' \deqn{(\bar{I}\bar{A})_x = \int_0^\infty t\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+#' \deqn{(\bar{I}\bar{A})_x =
+#' \int_0^\infty t v^t {}_tp_x \mu_{x+t}\,dt.}
 #'
 #' @param x Age.
 #' @param i Effective annual interest rate.
@@ -194,15 +243,21 @@ DAxn1 <- function(x, n, i, tbl = NULL, model = NULL, ...) {
 #' @return Numeric vector.
 #' @export
 IbarAbarx <- function(x, i, model, ...) {
-  x <- as.numeric(x)
-  if (any(!is.finite(x) | x < 0)) stop("x must be non-negative and finite.", call. = FALSE)
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
+  args <- .recycle_cont_vectors(x, .check_i_cont(i))
+  x <- args[[1L]]
+  i <- args[[2L]]
 
-  delta <- interest_convert(i = i)$delta
+  .check_x_cont(x)
 
-  sapply(x, function(xx) {
+  sapply(seq_along(x), function(j) {
+    xx <- x[j]
+    delta <- log(1 + i[j])
+
     upper <- .get_upper_varying_cont(xx, model = model, ...)
-    if (upper <= 0) return(0)
+
+    if (upper <= 0) {
+      return(0)
+    }
 
     f <- function(t) {
       val <- t * exp(-delta * t) *
@@ -219,22 +274,29 @@ IbarAbarx <- function(x, i, model, ...) {
 #' Piecewise-continuous increasing whole life insurance
 #'
 #' Computes
-#' \deqn{(I\bar{A})_x = \int_0^\infty \lfloor t+1 \rfloor\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+#' \deqn{(I\bar{A})_x =
+#' \int_0^\infty \lfloor t+1 \rfloor v^t {}_tp_x \mu_{x+t}\,dt.}
 #'
 #' @inheritParams IbarAbarx
 #'
 #' @return Numeric vector.
 #' @export
 IAbarx <- function(x, i, model, ...) {
-  x <- as.numeric(x)
-  if (any(!is.finite(x) | x < 0)) stop("x must be non-negative and finite.", call. = FALSE)
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
+  args <- .recycle_cont_vectors(x, .check_i_cont(i))
+  x <- args[[1L]]
+  i <- args[[2L]]
 
-  delta <- interest_convert(i = i)$delta
+  .check_x_cont(x)
 
-  sapply(x, function(xx) {
+  sapply(seq_along(x), function(j) {
+    xx <- x[j]
+    delta <- log(1 + i[j])
+
     upper <- .get_upper_varying_cont(xx, model = model, ...)
-    if (upper <= 0) return(0)
+
+    if (upper <= 0) {
+      return(0)
+    }
 
     f <- function(t) {
       val <- floor(t + 1) * exp(-delta * t) *
@@ -251,7 +313,8 @@ IAbarx <- function(x, i, model, ...) {
 #' Fully continuous increasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(\bar{I}\bar{A})_{x:\overline{n}|}^{1} = \int_0^n t\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+#' \deqn{(\bar{I}\bar{A})_{x:\overline{n}|}^{1}
+#' = \int_0^n t v^t {}_tp_x \mu_{x+t}\,dt.}
 #'
 #' @param x Age.
 #' @param n Term.
@@ -262,20 +325,24 @@ IAbarx <- function(x, i, model, ...) {
 #' @return Numeric vector.
 #' @export
 IbarAbarxn1 <- function(x, n, i, model, ...) {
-  xn <- .recycle_x_n_cont(x, n)
-  x <- xn$x
-  n <- xn$n
+  args <- .recycle_cont_vectors(x, n, .check_i_cont(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
 
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
-
-  delta <- interest_convert(i = i)$delta
+  .check_x_cont(x)
+  .check_n_cont(n)
 
   sapply(seq_along(x), function(j) {
     xx <- x[j]
     nn <- n[j]
+    delta <- log(1 + i[j])
 
     upper <- .get_upper_varying_cont(xx, n = nn, model = model, ...)
-    if (upper <= 0) return(0)
+
+    if (upper <= 0) {
+      return(0)
+    }
 
     f <- function(t) {
       val <- t * exp(-delta * t) *
@@ -292,27 +359,32 @@ IbarAbarxn1 <- function(x, n, i, model, ...) {
 #' Fully continuous decreasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(\bar{D}\bar{A})_{x:\overline{n}|}^{1} = \int_0^n (n-t)\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+#' \deqn{(\bar{D}\bar{A})_{x:\overline{n}|}^{1}
+#' = \int_0^n (n-t) v^t {}_tp_x \mu_{x+t}\,dt.}
 #'
 #' @inheritParams IbarAbarxn1
 #'
 #' @return Numeric vector.
 #' @export
 DbarAbarxn1 <- function(x, n, i, model, ...) {
-  xn <- .recycle_x_n_cont(x, n)
-  x <- xn$x
-  n <- xn$n
+  args <- .recycle_cont_vectors(x, n, .check_i_cont(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
 
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
-
-  delta <- interest_convert(i = i)$delta
+  .check_x_cont(x)
+  .check_n_cont(n)
 
   sapply(seq_along(x), function(j) {
     xx <- x[j]
     nn <- n[j]
+    delta <- log(1 + i[j])
 
     upper <- .get_upper_varying_cont(xx, n = nn, model = model, ...)
-    if (upper <= 0) return(0)
+
+    if (upper <= 0) {
+      return(0)
+    }
 
     f <- function(t) {
       val <- (nn - t) * exp(-delta * t) *
@@ -329,27 +401,32 @@ DbarAbarxn1 <- function(x, n, i, model, ...) {
 #' Piecewise-continuous decreasing n-year term insurance
 #'
 #' Computes
-#' \deqn{(D\bar{A})_{x:\overline{n}|}^{1} = \int_0^n \lfloor n+1-t \rfloor\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+#' \deqn{(D\bar{A})_{x:\overline{n}|}^{1}
+#' = \int_0^n \lfloor n+1-t \rfloor v^t {}_tp_x \mu_{x+t}\,dt.}
 #'
 #' @inheritParams IbarAbarxn1
 #'
 #' @return Numeric vector.
 #' @export
 DAbarxn1 <- function(x, n, i, model, ...) {
-  xn <- .recycle_x_n_cont(x, n)
-  x <- xn$x
-  n <- xn$n
+  args <- .recycle_cont_vectors(x, n, .check_i_cont(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
 
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
-
-  delta <- interest_convert(i = i)$delta
+  .check_x_cont(x)
+  .check_n_cont(n)
 
   sapply(seq_along(x), function(j) {
     xx <- x[j]
     nn <- n[j]
+    delta <- log(1 + i[j])
 
     upper <- .get_upper_varying_cont(xx, n = nn, model = model, ...)
-    if (upper <= 0) return(0)
+
+    if (upper <= 0) {
+      return(0)
+    }
 
     f <- function(t) {
       val <- floor(nn + 1 - t) * exp(-delta * t) *

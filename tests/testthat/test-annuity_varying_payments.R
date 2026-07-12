@@ -194,27 +194,27 @@ test_that("functions vectorize over x and n", {
 test_that("functions reject incompatible x and n lengths", {
   expect_error(
     Iaxn(c(40, 45), c(10, 5, 3), 0.05, model = "uniform", omega = 100),
-    "same length|length 1"
+    "compatible lengths"
   )
   expect_error(
     Daxn(c(40, 45), c(10, 5, 3), 0.05, model = "uniform", omega = 100),
-    "same length|length 1"
+    "compatible lengths"
   )
   expect_error(
     Iadotxn(c(40, 45), c(10, 5, 3), 0.05, model = "uniform", omega = 100),
-    "same length|length 1"
+    "compatible lengths"
   )
   expect_error(
     Dadotxn(c(40, 45), c(10, 5, 3), 0.05, model = "uniform", omega = 100),
-    "same length|length 1"
+    "compatible lengths"
   )
   expect_error(
     Iabarxn(c(40, 45), c(10, 5, 3), 0.05, model = "uniform", omega = 100),
-    "same length|length 1"
+    "compatible lengths"
   )
   expect_error(
     Dabarxn(c(40, 45), c(10, 5, 3), 0.05, model = "uniform", omega = 100),
-    "same length|length 1"
+    "compatible lengths"
   )
 })
 
@@ -245,4 +245,31 @@ test_that("varying annuity values are finite in standard cases", {
   )
 
   expect_true(all(is.finite(vals)))
+})
+
+test_that("varying-payment annuities work with life tables", {
+  tbl <- life_table(x = 0:3, lx = c(100000, 80000, 50000, 0))
+  v <- 1 / 1.05
+
+  expect_equal(
+    Iax(0, i = 0.05, tbl = tbl),
+    1 * v * 0.8 + 2 * v^2 * 0.5
+  )
+
+  expect_equal(
+    Iadotx(0, i = 0.05, tbl = tbl),
+    1 + 2 * v * 0.8 + 3 * v^2 * 0.5
+  )
+})
+
+test_that("varying-payment annuities vectorize over i", {
+  out <- Iax(
+    x = 40,
+    i = c(0.03, 0.05),
+    model = "uniform",
+    omega = 100
+  )
+
+  expect_length(out, 2)
+  expect_true(out[1] > out[2])
 })

@@ -26,5 +26,7 @@ Numeric vector of APVs.
 }
 \description{
 Computes
-\eqn{A_x^{(m)} = \sum_{j=0}^\infty v^{(j+1)/m}\Pr(j/m < T_x \le (j+1)/m)}.
+\eqn{A_x^{(m)} =
+\sum_{j=0}^{\infty} v^{(j+1)/m}
+\Pr(j/m < T_x \le (j+1)/m)}.
 }

@@ -22,5 +22,5 @@ Numeric vector of APVs.
 }
 \description{
 Computes
-\eqn{{}_{n\mid}\bar{A}_x = v^n\,{}_np_x\,\bar{A}_{x+n}}.
+\eqn{{}_{n\mid}\bar{A}_x = v^n {}_n p_x \bar{A}_{x+n}}.
 }

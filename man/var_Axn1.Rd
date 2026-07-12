@@ -23,5 +23,6 @@ var_Axn1(x, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector of variances.
 }
 \description{
-Computes \eqn{\mathrm{Var}(Z_{x:\overline{n}|}^{1}) = {}^{2}A_{x:\overline{n}|}^{1} - (A_{x:\overline{n}|}^{1})^2}.
+Computes \eqn{\mathrm{Var}(Z_{x:\overline{n}|}^{1}) =
+{}^{2}A_{x:\overline{n}|}^{1} - (A_{x:\overline{n}|}^{1})^2}.
 }

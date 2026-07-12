@@ -2,31 +2,39 @@
 % Please edit documentation in R/reserve_ch10_ext.R
 \name{tVxn_ret}
 \alias{tVxn_ret}
-\title{Endowment insurance reserve by retrospective method}
+\title{Retrospective endowment insurance reserve}
 \usage{
-tVxn_ret(x, n, t, i, model, ...)
+tVxn_ret(x, n, t, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
-\item{x}{Issue age.}
+\item{x}{Issue age. May be scalar or vector.}
 
-\item{n}{Term in years.}
+\item{n}{Nonnegative integer contract term. May be scalar or vector.}
 
-\item{t}{Duration.}
+\item{t}{Nonnegative integer duration. May be scalar or vector.}
 
-\item{i}{Effective annual interest rate.}
+\item{i}{Effective annual interest rate. May be scalar or vector.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model.}
 
-\item{...}{Additional model parameters.}
+\item{...}{Additional parameters passed to the actuarial functions.}
+
+\item{tbl}{Optional life table object. Supply by name.}
 }
 \value{
-Numeric vector.
+Numeric vector of retrospective reserve values.
 }
 \description{
-Computes the Chapter 10 retrospective reserve
-\eqn{{}_tV_{x:\overline{n}|} = P_{x:\overline{n}|} \ddot{s}_{x:\overline{t}|} - {}_tk_x}
-for \eqn{t \le n}.
+Computes the retrospective reserve for an endowment insurance at a
+duration satisfying \eqn{0 \le t \le n}. At maturity, the reserve is 1.
 }
 \examples{
-tVxn_ret(40, n = 20, t = 10, i = 0.05, model = "uniform", omega = 100)
+tVxn_ret(
+  40,
+  n = 20,
+  t = 10,
+  i = 0.05,
+  model = "uniform",
+  omega = 100
+)
 }

@@ -2,28 +2,41 @@
 % Please edit documentation in R/reserve_ch10_ext.R
 \name{PnAdotx}
 \alias{PnAdotx}
-\title{Deferred annuity-due premium}
+\title{Net premium for a deferred annuity-due}
 \usage{
-PnAdotx(x, n, i, model, ...)
+PnAdotx(x, n, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
-\item{x}{Issue age.}
+\item{x}{Issue age. May be scalar or vector.}
 
-\item{n}{Deferral period.}
+\item{n}{Positive integer deferral period. May be scalar or vector.}
 
-\item{i}{Effective annual interest rate.}
+\item{i}{Effective annual interest rate. May be scalar or vector.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model.}
 
-\item{...}{Additional model parameters.}
+\item{...}{Additional parameters passed to the actuarial functions.}
+
+\item{tbl}{Optional life table object. Supply by name.}
 }
 \value{
-Numeric vector.
+Numeric vector of net annual premiums.
 }
 \description{
 Computes
-\eqn{P({}_{n|}\ddot{a}_x) = {}_{n|}\ddot{a}_x / \ddot{a}_{x:\overline{n}|}}.
+\deqn{
+P({}_{n|}\ddot{a}_x)
+=
+\frac{{}_{n|}\ddot{a}_x}
+{\ddot{a}_{x:\overline{n}|}}.
+}
 }
 \examples{
-PnAdotx(40, n = 20, i = 0.05, model = "uniform", omega = 100)
+PnAdotx(
+  40,
+  n = 20,
+  i = 0.05,
+  model = "uniform",
+  omega = 100
+)
 }

@@ -231,3 +231,32 @@ test_that("functions reject non-integer n * m", {
     "n \\* m must be an integer"
   )
 })
+
+
+
+testthat::test_that("m-thly annuities vectorize over interest rates", {
+  out <- ax_m(
+    x = 40,
+    m = 12,
+    i = c(0.03, 0.05),
+    model = "uniform",
+    omega = 100
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(out[1] > out[2])
+})
+
+testthat::test_that("m-thly temporary annuities recycle x, n, and i", {
+  out <- axn_m(
+    x = c(40, 50),
+    n = 10,
+    m = 12,
+    i = c(0.03, 0.05),
+    model = "uniform",
+    omega = 100
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+})

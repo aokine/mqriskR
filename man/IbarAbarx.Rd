@@ -20,5 +20,6 @@ Numeric vector.
 }
 \description{
 Computes
-\deqn{(\bar{I}\bar{A})_x = \int_0^\infty t\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+\deqn{(\bar{I}\bar{A})_x =
+\int_0^\infty t v^t {}_tp_x \mu_{x+t}\,dt.}
 }

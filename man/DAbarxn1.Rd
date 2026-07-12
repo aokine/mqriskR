@@ -22,5 +22,6 @@ Numeric vector.
 }
 \description{
 Computes
-\deqn{(D\bar{A})_{x:\overline{n}|}^{1} = \int_0^n \lfloor n+1-t \rfloor\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+\deqn{(D\bar{A})_{x:\overline{n}|}^{1}
+= \int_0^n \lfloor n+1-t \rfloor v^t {}_tp_x \mu_{x+t}\,dt.}
 }

@@ -1,33 +1,21 @@
-#' Annuity-insurance relationships (Chapter 8)
+#' Annuity-insurance relationships
 #'
-#' This file provides the core Chapter 8 identities linking annual and
-#' continuous annuity functions to the corresponding insurance functions.
-#'
-#' Included identities:
-#' \itemize{
-#'   \item whole life immediate: \eqn{a_x = (v - A_x)/d}
-#'   \item whole life due: \eqn{\ddot{a}_x = (1 - A_x)/d}
-#'   \item whole life continuous: \eqn{\bar{a}_x = (1 - \bar{A}_x)/\delta}
-#'   \item temporary immediate: \eqn{a_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d - 1 + {}_nE_x}
-#'   \item temporary due: \eqn{\ddot{a}_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d}
-#'   \item temporary continuous: \eqn{\bar{a}_{x:\overline{n}|} = (1 - \bar{A}_{x:\overline{n}|})/\delta}
-#'   \item deferred immediate: \eqn{{}_{n\mid}a_x = {}_nE_x a_{x+n}}
-#'   \item deferred due: \eqn{{}_{n\mid}\ddot{a}_x = {}_nE_x \ddot{a}_{x+n}}
-#'   \item deferred continuous: \eqn{{}_{n\mid}\bar{a}_x = {}_nE_x \bar{a}_{x+n}}
-#' }
-#'
-#' These are wrapper functions that evaluate the Chapter 8 relationships
-#' using the Chapter 7 insurance functions already implemented in the package.
+#' Identities linking annual and continuous annuity functions to the
+#' corresponding insurance functions.
 #'
 #' @param x Age.
-#' @param n Term in years.
+#' @param n Term or deferral period in years.
 #' @param i Effective annual interest rate.
-#' @param model Survival model.
-#' @param ... Additional model parameters passed to the survival model.
+#' @param tbl Optional life table object for discrete identities.
+#' @param model Optional survival model name.
+#' @param ... Additional model parameters.
 #' @param k_max Maximum summation horizon for non-terminating models.
 #' @param tol Truncation tolerance for non-terminating models.
 #'
-#' @return Numeric vector.
+#' @return
+#' Numeric vector containing the annuity value computed from the corresponding
+#' annuity-insurance identity.
+#'
 #' @name annuity_relationships
 NULL
 
@@ -35,41 +23,63 @@ NULL
 # Internal helpers
 # -------------------------------------------------------------------------
 
-#' @noRd
 .check_rel_i <- function(i) {
   i <- as.numeric(i)
-  if (length(i) != 1L || !is.finite(i) || i <= -1) {
-    stop("i must be a single finite number greater than -1.", call. = FALSE)
+
+  if (length(i) == 0L || any(!is.finite(i)) || any(i <= -1)) {
+    stop("i must contain finite values greater than -1.", call. = FALSE)
   }
+
   i
 }
 
-#' @noRd
 .check_rel_n <- function(n) {
   n <- as.numeric(n)
+
   if (length(n) != 1L || !is.finite(n) || n < 0) {
     stop("n must be a single nonnegative number.", call. = FALSE)
   }
+
   n
 }
 
-#' @noRd
-.recycle_rel_xn <- function(x, n) {
-  x <- as.numeric(x)
-  n <- as.numeric(n)
+.check_rel_integer_n <- function(n) {
+  n <- .check_rel_n(n)
 
-  if (length(x) == 0L || length(n) == 0L) {
-    stop("x and n must have positive length.", call. = FALSE)
+  if (abs(n - round(n)) > 1e-10) {
+    stop("For annual annuity relationships, n must be an integer.", call. = FALSE)
   }
 
-  if (length(x) == 1L && length(n) > 1L) x <- rep(x, length(n))
-  if (length(n) == 1L && length(x) > 1L) n <- rep(n, length(x))
+  as.integer(round(n))
+}
 
-  if (length(x) != length(n)) {
-    stop("x and n must have the same length, or one must have length 1.", call. = FALSE)
+.recycle_rel_vectors <- function(...) {
+  args <- lapply(list(...), as.numeric)
+  lens <- vapply(args, length, integer(1))
+
+  if (any(lens == 0L)) {
+    stop("All arguments must have positive length.", call. = FALSE)
   }
 
-  list(x = x, n = n)
+  if (any(vapply(args, function(z) any(!is.finite(z)), logical(1)))) {
+    stop("All arguments must contain finite numeric values.", call. = FALSE)
+  }
+
+  common_len <- max(lens)
+
+  if (any(!(lens %in% c(1L, common_len)))) {
+    stop("Arguments must have compatible lengths.", call. = FALSE)
+  }
+
+  lapply(args, function(z) if (length(z) == 1L) rep(z, common_len) else z)
+}
+
+.check_rel_x <- function(x) {
+  if (any(x < 0)) {
+    stop("x must be nonnegative.", call. = FALSE)
+  }
+
+  invisible(TRUE)
 }
 
 # -------------------------------------------------------------------------
@@ -82,12 +92,19 @@ NULL
 #'
 #' @rdname annuity_relationships
 #' @export
-annuity_identity_ax <- function(x, i, model, ...) {
-  .check_rel_i(i)
-  d <- i / (1 + i)
-  v <- 1 / (1 + i)
+annuity_identity_ax <- function(x, i, model = NULL, ..., tbl = NULL) {
+  args <- .recycle_rel_vectors(x, .check_rel_i(i))
+  x <- args[[1L]]
+  i <- args[[2L]]
 
-  (v - Ax(x, i, model = model, ...)) / d
+  .check_rel_x(x)
+
+  sapply(seq_along(x), function(j) {
+    d <- i[j] / (1 + i[j])
+    v <- 1 / (1 + i[j])
+
+    (v - Ax(x[j], i[j], tbl = tbl, model = model, ...)) / d
+  })
 }
 
 #' Whole life annuity-due from insurance identity
@@ -96,11 +113,18 @@ annuity_identity_ax <- function(x, i, model, ...) {
 #'
 #' @rdname annuity_relationships
 #' @export
-annuity_identity_adotx <- function(x, i, model, ...) {
-  .check_rel_i(i)
-  d <- i / (1 + i)
+annuity_identity_adotx <- function(x, i, model = NULL, ..., tbl = NULL) {
+  args <- .recycle_rel_vectors(x, .check_rel_i(i))
+  x <- args[[1L]]
+  i <- args[[2L]]
 
-  (1 - Ax(x, i, model = model, ...)) / d
+  .check_rel_x(x)
+
+  sapply(seq_along(x), function(j) {
+    d <- i[j] / (1 + i[j])
+
+    (1 - Ax(x[j], i[j], tbl = tbl, model = model, ...)) / d
+  })
 }
 
 #' Continuous whole life annuity from insurance identity
@@ -110,10 +134,17 @@ annuity_identity_adotx <- function(x, i, model, ...) {
 #' @rdname annuity_relationships
 #' @export
 annuity_identity_abarx <- function(x, i, model, ...) {
-  .check_rel_i(i)
-  delta <- log(1 + i)
+  args <- .recycle_rel_vectors(x, .check_rel_i(i))
+  x <- args[[1L]]
+  i <- args[[2L]]
 
-  (1 - Abarx(x, i, model = model, ...)) / delta
+  .check_rel_x(x)
+
+  sapply(seq_along(x), function(j) {
+    delta <- log(1 + i[j])
+
+    (1 - Abarx(x[j], i[j], model = model, ...)) / delta
+  })
 }
 
 # -------------------------------------------------------------------------
@@ -123,74 +154,70 @@ annuity_identity_abarx <- function(x, i, model, ...) {
 #' Temporary annuity-immediate from insurance identity
 #'
 #' Computes
-#' \eqn{a_{x:\overline{n}|} = \ddot{a}_{x:\overline{n}|} - 1 + {}_nE_x}
-#' together with
-#' \eqn{\ddot{a}_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d}.
-#'
-#' Hence
 #' \eqn{a_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d - 1 + {}_nE_x}.
 #'
 #' @rdname annuity_relationships
 #' @export
-annuity_identity_axn <- function(x, n, i, model, ...) {
-  .check_rel_i(i)
-  d <- i / (1 + i)
-  xn <- .recycle_rel_xn(x, n)
-  x <- xn$x
-  n <- xn$n
+annuity_identity_axn <- function(x, n, i, model = NULL, ..., tbl = NULL) {
+  args <- .recycle_rel_vectors(x, n, .check_rel_i(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
+
+  .check_rel_x(x)
 
   sapply(seq_along(x), function(j) {
-    nn <- .check_rel_n(n[j])
-    if (abs(nn - round(nn)) > 1e-10) {
-      stop("For annual annuity relationships, n must be an integer.", call. = FALSE)
-    }
-    nn <- as.integer(round(nn))
+    nn <- .check_rel_integer_n(n[j])
+    d <- i[j] / (1 + i[j])
 
-    (1 - Axn(x[j], nn, i, model = model, ...)) / d - 1 +
-      nEx(x[j], nn, i, model = model, ...)
+    (1 - Axn(x[j], nn, i[j], tbl = tbl, model = model, ...)) / d - 1 +
+      nEx(x[j], nn, i[j], tbl = tbl, model = model, ...)
   })
 }
 
 #' Temporary annuity-due from insurance identity
 #'
-#' Computes \eqn{\ddot{a}_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d}.
+#' Computes \eqn{\ddot{a}_{x:\overline{n}|} =
+#' (1 - A_{x:\overline{n}|})/d}.
 #'
 #' @rdname annuity_relationships
 #' @export
-annuity_identity_adotxn <- function(x, n, i, model, ...) {
-  .check_rel_i(i)
-  d <- i / (1 + i)
-  xn <- .recycle_rel_xn(x, n)
-  x <- xn$x
-  n <- xn$n
+annuity_identity_adotxn <- function(x, n, i, model = NULL, ..., tbl = NULL) {
+  args <- .recycle_rel_vectors(x, n, .check_rel_i(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
+
+  .check_rel_x(x)
 
   sapply(seq_along(x), function(j) {
-    nn <- .check_rel_n(n[j])
-    if (abs(nn - round(nn)) > 1e-10) {
-      stop("For annual annuity relationships, n must be an integer.", call. = FALSE)
-    }
-    nn <- as.integer(round(nn))
+    nn <- .check_rel_integer_n(n[j])
+    d <- i[j] / (1 + i[j])
 
-    (1 - Axn(x[j], nn, i, model = model, ...)) / d
+    (1 - Axn(x[j], nn, i[j], tbl = tbl, model = model, ...)) / d
   })
 }
 
 #' Continuous temporary annuity from insurance identity
 #'
-#' Computes \eqn{\bar{a}_{x:\overline{n}|} = (1 - \bar{A}_{x:\overline{n}|})/\delta}.
+#' Computes \eqn{\bar{a}_{x:\overline{n}|} =
+#' (1 - \bar{A}_{x:\overline{n}|})/\delta}.
 #'
 #' @rdname annuity_relationships
 #' @export
 annuity_identity_abarxn <- function(x, n, i, model, ...) {
-  .check_rel_i(i)
-  delta <- log(1 + i)
-  xn <- .recycle_rel_xn(x, n)
-  x <- xn$x
-  n <- xn$n
+  args <- .recycle_rel_vectors(x, n, .check_rel_i(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
+
+  .check_rel_x(x)
 
   sapply(seq_along(x), function(j) {
     nn <- .check_rel_n(n[j])
-    (1 - Abarxn(x[j], nn, i, model = model, ...)) / delta
+    delta <- log(1 + i[j])
+
+    (1 - Abarxn(x[j], nn, i[j], model = model, ...)) / delta
   })
 }
 
@@ -200,67 +227,84 @@ annuity_identity_abarxn <- function(x, n, i, model, ...) {
 
 #' Deferred annuity-immediate from pure endowment identity
 #'
-#' Computes \eqn{{}_{n|}a_x = {}_nE_x\, a_{x+n}}.
+#' Computes \eqn{{}_{n|}a_x = {}_nE_x a_{x+n}}.
 #'
 #' @rdname annuity_relationships
 #' @export
-annuity_identity_nax <- function(x, n, i, model, ..., k_max = 5000, tol = 1e-12) {
-  .check_rel_i(i)
-  xn <- .recycle_rel_xn(x, n)
-  x <- xn$x
-  n <- xn$n
+annuity_identity_nax <- function(x, n, i, model = NULL, ..., tbl = NULL,
+                                 k_max = 5000, tol = 1e-12) {
+  args <- .recycle_rel_vectors(x, n, .check_rel_i(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
+
+  .check_rel_x(x)
 
   sapply(seq_along(x), function(j) {
-    nn <- .check_rel_n(n[j])
-    if (abs(nn - round(nn)) > 1e-10) {
-      stop("For annual annuity relationships, n must be an integer.", call. = FALSE)
-    }
-    nn <- as.integer(round(nn))
+    nn <- .check_rel_integer_n(n[j])
 
-    nEx(x[j], nn, i, model = model, ...) *
-      ax(x[j] + nn, i, model = model, ..., k_max = k_max, tol = tol)
+    nEx(x[j], nn, i[j], tbl = tbl, model = model, ...) *
+      ax(
+        x[j] + nn,
+        i[j],
+        tbl = tbl,
+        model = model,
+        ...,
+        k_max = k_max,
+        tol = tol
+      )
   })
 }
 
 #' Deferred annuity-due from pure endowment identity
 #'
-#' Computes \eqn{{}_{n|}\ddot{a}_x = {}_nE_x\, \ddot{a}_{x+n}}.
+#' Computes \eqn{{}_{n|}\ddot{a}_x = {}_nE_x \ddot{a}_{x+n}}.
 #'
 #' @rdname annuity_relationships
 #' @export
-annuity_identity_nadotx <- function(x, n, i, model, ..., k_max = 5000, tol = 1e-12) {
-  .check_rel_i(i)
-  xn <- .recycle_rel_xn(x, n)
-  x <- xn$x
-  n <- xn$n
+annuity_identity_nadotx <- function(x, n, i, model = NULL, ..., tbl = NULL,
+                                    k_max = 5000, tol = 1e-12) {
+  args <- .recycle_rel_vectors(x, n, .check_rel_i(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
+
+  .check_rel_x(x)
 
   sapply(seq_along(x), function(j) {
-    nn <- .check_rel_n(n[j])
-    if (abs(nn - round(nn)) > 1e-10) {
-      stop("For annual annuity relationships, n must be an integer.", call. = FALSE)
-    }
-    nn <- as.integer(round(nn))
+    nn <- .check_rel_integer_n(n[j])
 
-    nEx(x[j], nn, i, model = model, ...) *
-      adotx(x[j] + nn, i, model = model, ..., k_max = k_max, tol = tol)
+    nEx(x[j], nn, i[j], tbl = tbl, model = model, ...) *
+      adotx(
+        x[j] + nn,
+        i[j],
+        tbl = tbl,
+        model = model,
+        ...,
+        k_max = k_max,
+        tol = tol
+      )
   })
 }
 
 #' Deferred continuous annuity from pure endowment identity
 #'
-#' Computes \eqn{{}_{n|}\bar{a}_x = {}_nE_x\, \bar{a}_{x+n}}.
+#' Computes \eqn{{}_{n|}\bar{a}_x = {}_nE_x \bar{a}_{x+n}}.
 #'
 #' @rdname annuity_relationships
 #' @export
 annuity_identity_nabarx <- function(x, n, i, model, ..., tol = 1e-10) {
-  .check_rel_i(i)
-  xn <- .recycle_rel_xn(x, n)
-  x <- xn$x
-  n <- xn$n
+  args <- .recycle_rel_vectors(x, n, .check_rel_i(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
+
+  .check_rel_x(x)
 
   sapply(seq_along(x), function(j) {
     nn <- .check_rel_n(n[j])
-    nEx(x[j], nn, i, model = model, ...) *
-      abarx(x[j] + nn, i, model = model, ..., tol = tol)
+
+    nEx(x[j], nn, i[j], model = model, ...) *
+      abarx(x[j] + nn, i[j], model = model, ..., tol = tol)
   })
 }

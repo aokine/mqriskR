@@ -23,5 +23,5 @@ nEx(x, n, i, tbl = NULL, model = NULL, ...)
 Numeric vector of APVs.
 }
 \description{
-Computes \eqn{{}_nE_x = v^n \, {}_n p_x}.
+Computes \eqn{{}_nE_x = v^n {}_n p_x}.
 }

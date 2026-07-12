@@ -356,3 +356,26 @@ test_that("annual annuity functions reject non-integer n where appropriate", {
     "integer"
   )
 })
+
+
+testthat::test_that("annual annuities work with life tables", {
+  tbl <- life_table(x = 0:3, lx = c(100000, 80000, 50000, 0))
+  v <- 1 / 1.05
+
+  testthat::expect_equal(
+    ax(0, i = 0.05, tbl = tbl),
+    v * 0.8 + v^2 * 0.5
+  )
+
+  testthat::expect_equal(
+    adotx(0, i = 0.05, tbl = tbl),
+    1 + v * 0.8 + v^2 * 0.5
+  )
+})
+
+testthat::test_that("annual annuities vectorize over interest rates", {
+  out <- ax(40, i = c(0.03, 0.05), model = "uniform", omega = 100)
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(out[1] > out[2])
+})

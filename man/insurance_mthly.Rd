@@ -2,22 +2,8 @@
 % Please edit documentation in R/insurance_mthly.R
 \name{insurance_mthly}
 \alias{insurance_mthly}
-\title{m-thly insurance models (Chapter 7)}
+\title{m-thly insurance models}
 \description{
-Exact m-thly contingent payment / insurance functions matching Chapter 7 notation.
-}
-\details{
-These functions handle:
-\itemize{
-  \item m-thly whole life insurance: \eqn{A_x^{(m)}},
-  \item m-thly term insurance: \eqn{A_{x:\overline{n}|}^{1(m)}},
-  \item m-thly deferred insurance: \eqn{{}_{n\mid}A_x^{(m)}},
-  \item m-thly endowment insurance: \eqn{A_{x:\overline{n}|}^{(m)}},
-  \item second moments and variances.
-}
-
-These functions are evaluated exactly from the parametric survival-model
-framework. For UDD approximations from annual life tables, use the
-corresponding *_udd helpers in insurance_utils.R.
+Exact m-thly contingent payment and insurance functions.
 }
 \keyword{internal}

@@ -4,7 +4,7 @@
 \alias{tVxn}
 \title{Endowment insurance net level premium reserve}
 \usage{
-tVxn(x, n, t, i, model, ...)
+tVxn(x, n, t, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
 \item{x}{Issue age.}
@@ -15,15 +15,17 @@ tVxn(x, n, t, i, model, ...)
 
 \item{i}{Effective annual interest rate.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model name.}
 
 \item{...}{Additional model parameters.}
+
+\item{tbl}{Optional life table object.}
 }
 \value{
-Numeric vector.
+A numeric vector of values.
 }
 \description{
-Computes the Chapter 10 prospective reserve for an n-year endowment insurance.
+Computes the prospective reserve for an n-year endowment insurance.
 }
 \examples{
 tVxn(40, n = 20, t = 10, i = 0.05, model = "uniform", omega = 100)

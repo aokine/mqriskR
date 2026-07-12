@@ -1,7 +1,10 @@
-#' Chapter 9 premium, loss, and expense functions
+#' Premium, loss, and expense functions
 #'
-#' Functions in this file implement Chapter 9 funding-plan formulas,
-#' including:
+#' Functions for net and gross premiums, present-value-of-loss moments,
+#' continuous-payment premium rates, and premiums payable more frequently
+#' than annually.
+#'
+#' The functions include:
 #' \itemize{
 #'   \item net annual premiums under the equivalence principle,
 #'   \item limited-payment premiums,
@@ -12,62 +15,35 @@
 #'   \item a basic gross premium formula for whole life insurance.
 #' }
 #'
-#' Naming follows Chapter 9 notation as closely as possible:
-#' \itemize{
-#'   \item \code{Px()} = whole life annual premium
-#'   \item \code{Pxn1()} = term insurance annual premium
-#'   \item \code{PnEx()} = pure endowment annual premium
-#'   \item \code{Pxn()} = endowment insurance annual premium
-#'   \item \code{tPx()} = limited-payment whole life annual premium
-#'   \item \code{tPxn1()} = limited-payment term insurance annual premium
-#'   \item \code{tPnEx()} = limited-payment pure endowment annual premium
-#'   \item \code{tPxn()} = limited-payment endowment insurance annual premium
-#'   \item \code{PnAx()} = deferred insurance annual premium
-#'   \item \code{tPnAx()} = limited-payment deferred insurance annual premium
-#'   \item \code{Pbarx()} = continuous-payment premium for discrete whole life insurance
-#'   \item \code{Pbarxn1()} = continuous-payment premium for discrete term insurance
-#'   \item \code{Pbarxn()} = continuous-payment premium for discrete endowment insurance
-#'   \item \code{PbarAbarx()} = fully continuous premium for continuous whole life insurance
-#'   \item \code{PbarAbarxn1()} = fully continuous premium for continuous term insurance
-#'   \item \code{PbarAbarxn()} = fully continuous premium for continuous endowment insurance
-#'   \item \code{Px_m()} = true fractional whole life annual premium
-#'   \item \code{Pxn1_m()} = true fractional term insurance annual premium
-#'   \item \code{Pxn_m()} = true fractional endowment insurance annual premium
-#'   \item \code{PnAx_m()} = true fractional deferred insurance annual premium
-#' }
+#' The discrete premium functions may be evaluated from either a life table
+#' supplied through \code{tbl} or a parametric survival model supplied through
+#' \code{model}. Continuous-payment premium functions are evaluated through
+#' the corresponding continuous insurance and annuity functions.
 #'
-#' The discrete premium functions can be evaluated from either a life table
-#' via \code{tbl = ...} or from a parametric model via \code{model = ...}.
+#' Scalar inputs retain their existing behavior. Where mathematically
+#' meaningful, numeric inputs may also be vectors. Inputs are evaluated
+#' elementwise when they have a common length, and scalar inputs are recycled.
 #'
-#' The continuous-premium-rate functions use the continuous annuity functions
-#' already in the package, so they are written for the parametric survival
-#' model framework.
-#'
-#' @name premium_ch9
-#' @aliases Px Pxn1 PnEx Pxn tPx tPxn1 tPnEx tPxn PnAx tPnAx
-#' @aliases Pbarx Pbarxn1 Pbarxn PbarAbarx PbarAbarxn1 PbarAbarxn
-#' @aliases Px_m Pxn1_m Pxn_m PnAx_m
-#' @aliases EL0x varL0x EL0xn1 varL0xn1 EL0xn varL0xn
-#' @aliases EL0barAbarx varL0barAbarx
-#' @aliases Gx
-#' @param x Age.
-#' @param n Term.
-#' @param t Premium-paying period.
-#' @param m Number of payments per year.
-#' @param i Effective annual interest rate.
-#' @param P Premium amount or premium rate.
+#' @param x Age. May be scalar or vector.
+#' @param n Term. May be scalar or vector of nonnegative integers.
+#' @param t Premium-paying period. May be scalar or vector of nonnegative integers.
+#' @param m Number of payments per year. Must be a positive integer scalar.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param P Premium amount or premium rate. May be scalar or vector.
 #' @param tbl Optional life table object.
 #' @param model Optional parametric survival model name.
 #' @param ... Additional arguments passed to survival-model functions.
 #' @param tol Numerical tolerance for functions that truncate infinite sums.
 #' @param k_max Maximum summation horizon for functions that truncate infinite sums.
-#' @param benefit Benefit amount.
-#' @param first_premium_pct First-year premium expense proportion.
-#' @param renewal_premium_pct Renewal premium expense proportion.
-#' @param first_policy_exp First-year fixed expense.
-#' @param renewal_policy_exp Renewal fixed expense each year after the first.
-#' @param settlement_exp Settlement expense incurred at benefit payment.
+#' @param benefit Benefit amount. May be scalar or vector.
+#' @param first_premium_pct First-year premium expense proportion. May be scalar or vector.
+#' @param renewal_premium_pct Renewal premium expense proportion. May be scalar or vector.
+#' @param first_policy_exp First-year fixed expense. May be scalar or vector.
+#' @param renewal_policy_exp Renewal fixed expense after the first year. May be scalar or vector.
+#' @param settlement_exp Settlement expense incurred at benefit payment. May be scalar or vector.
+#'
 #' @return Numeric vector.
+#' @name premium_functions
 NULL
 
 # -------------------------------------------------------------------------
@@ -75,402 +51,620 @@ NULL
 # -------------------------------------------------------------------------
 
 #' @noRd
-.check_i_ch9 <- function(i) {
+.check_premium_interest <- function(i) {
   i <- as.numeric(i)
-  if (length(i) != 1L || !is.finite(i) || i <= -1) {
-    stop("i must be a single finite number greater than -1.", call. = FALSE)
+  if (length(i) == 0L || any(!is.finite(i)) || any(i <= -1)) {
+    stop("i must contain finite values greater than -1.", call. = FALSE)
   }
   i
 }
 
 #' @noRd
-.check_m_ch9 <- function(m) {
+.check_premium_frequency <- function(m) {
   m <- as.numeric(m)
-  if (length(m) != 1L || !is.finite(m) || m <= 0 || abs(m - round(m)) > 1e-10) {
+  if (length(m) != 1L || !is.finite(m) || m <= 0 ||
+      abs(m - round(m)) > 1e-10) {
     stop("m must be a positive integer.", call. = FALSE)
   }
   as.integer(round(m))
 }
 
 #' @noRd
-.check_t_scalar_ch9 <- function(t, name = "t") {
-  t <- as.numeric(t)
-  if (length(t) != 1L || !is.finite(t) || t < 0 || abs(t - round(t)) > 1e-10) {
-    stop(sprintf("%s must be a single nonnegative integer.", name), call. = FALSE)
-  }
-  as.integer(round(t))
-}
-
-#' @noRd
-.recycle_xn_ch9 <- function(x, n) {
+.check_premium_age <- function(x) {
   x <- as.numeric(x)
-  n <- as.numeric(n)
-
-  if (length(x) == 0L || length(n) == 0L) {
-    stop("x and n must have positive length.", call. = FALSE)
-  }
-  if (any(!is.finite(x)) || any(x < 0)) {
+  if (length(x) == 0L || any(!is.finite(x)) || any(x < 0)) {
     stop("x must contain nonnegative finite values.", call. = FALSE)
   }
-  if (any(!is.finite(n)) || any(n < 0) || any(abs(n - round(n)) > 1e-10)) {
-    stop("n must contain nonnegative integer values.", call. = FALSE)
-  }
-
-  if (length(x) == 1L && length(n) > 1L) x <- rep(x, length(n))
-  if (length(n) == 1L && length(x) > 1L) n <- rep(n, length(x))
-
-  if (length(x) != length(n)) {
-    stop("x and n must have the same length, or one must have length 1.", call. = FALSE)
-  }
-
-  list(x = x, n = as.integer(round(n)))
+  x
 }
 
 #' @noRd
-.recycle_xnt_ch9 <- function(x, n, t) {
-  xn <- .recycle_xn_ch9(x, n)
-  x <- xn$x
-  n <- xn$n
-  t <- as.numeric(t)
+.check_premium_integer <- function(z, name) {
+  z <- as.numeric(z)
+  if (length(z) == 0L || any(!is.finite(z)) || any(z < 0) ||
+      any(abs(z - round(z)) > 1e-10)) {
+    stop(sprintf("%s must contain nonnegative integer values.", name),
+         call. = FALSE)
+  }
+  as.integer(round(z))
+}
 
-  if (length(t) == 0L || any(!is.finite(t)) || any(t < 0) || any(abs(t - round(t)) > 1e-10)) {
-    stop("t must contain nonnegative integer values.", call. = FALSE)
+#' @noRd
+.check_premium_numeric <- function(z, name) {
+  z <- as.numeric(z)
+  if (length(z) == 0L || any(!is.finite(z))) {
+    stop(sprintf("%s must contain finite numeric values.", name),
+         call. = FALSE)
+  }
+  z
+}
+
+#' @noRd
+.recycle_premium_vectors <- function(...) {
+  values <- list(...)
+  lens <- vapply(values, length, integer(1))
+
+  if (length(values) == 0L || any(lens == 0L)) {
+    stop("Arguments must have positive length.", call. = FALSE)
   }
 
-  if (length(t) == 1L && length(x) > 1L) t <- rep(t, length(x))
-  if (length(x) == 1L && length(t) > 1L) {
-    x <- rep(x, length(t))
-    n <- rep(n, length(t))
+  target <- max(lens)
+  if (!all(lens %in% c(1L, target))) {
+    stop("Arguments must have compatible lengths.", call. = FALSE)
   }
 
-  if (length(x) != length(t)) {
-    stop("x, n, and t must have compatible lengths.", call. = FALSE)
-  }
+  lapply(values, rep_len, length.out = target)
+}
 
-  list(x = x, n = n, t = as.integer(round(t)))
+#' @noRd
+.validate_premium_source <- function(tbl, model) {
+  if (is.null(tbl) && is.null(model)) {
+    stop("Supply either tbl or model.", call. = FALSE)
+  }
+  invisible(TRUE)
+}
+
+#' @noRd
+.map_premium <- function(args, FUN) {
+  n <- length(args[[1L]])
+  vapply(seq_len(n), function(j) {
+    current <- lapply(args, `[[`, j)
+    do.call(FUN, current)
+  }, numeric(1))
 }
 
 # -------------------------------------------------------------------------
 # Annual net premiums
 # -------------------------------------------------------------------------
 
-#' @rdname premium_ch9
-#' @param x Age.
-#' @param i Effective annual interest rate.
-#' @param tbl Optional life table object.
-#' @param model Optional parametric survival model name.
-#' @param ... Additional arguments passed to survival-model functions.
-#' @return Numeric vector.
+#' Whole life annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 Px <- function(x, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  Ax(x, i = i, tbl = tbl, model = model, ...) /
-    adotx(x, i = i, model = model, ..., k_max = 5000, tol = 1e-12)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, i = i)
+
+  .map_premium(args, function(x, i) {
+    Ax(x, i = i, tbl = tbl, model = model, ...) /
+      adotx(x, i = i, tbl = tbl, model = model, ...,
+            k_max = 5000, tol = 1e-12)
+  })
 }
 
-#' @rdname premium_ch9
-#' @param n Term.
-#' @return Numeric vector.
+#' Term insurance annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 Pxn1 <- function(x, n, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  Axn1(x, n, i = i, tbl = tbl, model = model, ...) /
-    adotxn(x, n, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    Axn1(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotxn(x, n, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Pure endowment annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 PnEx <- function(x, n, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  nEx(x, n, i = i, tbl = tbl, model = model, ...) /
-    adotxn(x, n, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    nEx(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotxn(x, n, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Endowment insurance annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 Pxn <- function(x, n, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  Axn(x, n, i = i, tbl = tbl, model = model, ...) /
-    adotxn(x, n, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    Axn(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotxn(x, n, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @param t Premium-paying period.
-#' @return Numeric vector.
+#' Limited-payment whole life annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 tPx <- function(x, t, i, tbl = NULL, model = NULL, ...) {
-  tt <- .check_t_scalar_ch9(t, "t")
-  .check_i_ch9(i)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  t <- .check_premium_integer(t, "t")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, t = t, i = i)
 
-  Ax(x, i = i, tbl = tbl, model = model, ...) /
-    adotxn(x, tt, i = i, model = model, ...)
+  .map_premium(args, function(x, t, i) {
+    Ax(x, i = i, tbl = tbl, model = model, ...) /
+      adotxn(x, t, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Limited-payment term insurance annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 tPxn1 <- function(x, n, t, i, tbl = NULL, model = NULL, ...) {
-  xnt <- .recycle_xnt_ch9(x, n, t)
-  if (any(xnt$t > xnt$n)) {
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  t <- .check_premium_integer(t, "t")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, t = t, i = i)
+
+  if (any(args$t > args$n)) {
     stop("For t-pay n-year contracts, t must satisfy t <= n.", call. = FALSE)
   }
 
-  Axn1(xnt$x, xnt$n, i = i, tbl = tbl, model = model, ...) /
-    adotxn(xnt$x, xnt$t, i = i, model = model, ...)
+  .map_premium(args, function(x, n, t, i) {
+    Axn1(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotxn(x, t, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Limited-payment pure endowment annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 tPnEx <- function(x, n, t, i, tbl = NULL, model = NULL, ...) {
-  xnt <- .recycle_xnt_ch9(x, n, t)
-  if (any(xnt$t > xnt$n)) {
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  t <- .check_premium_integer(t, "t")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, t = t, i = i)
+
+  if (any(args$t > args$n)) {
     stop("For t-pay n-year contracts, t must satisfy t <= n.", call. = FALSE)
   }
 
-  nEx(xnt$x, xnt$n, i = i, tbl = tbl, model = model, ...) /
-    adotxn(xnt$x, xnt$t, i = i, model = model, ...)
+  .map_premium(args, function(x, n, t, i) {
+    nEx(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotxn(x, t, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Limited-payment endowment insurance annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 tPxn <- function(x, n, t, i, tbl = NULL, model = NULL, ...) {
-  xnt <- .recycle_xnt_ch9(x, n, t)
-  if (any(xnt$t > xnt$n)) {
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  t <- .check_premium_integer(t, "t")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, t = t, i = i)
+
+  if (any(args$t > args$n)) {
     stop("For t-pay n-year contracts, t must satisfy t <= n.", call. = FALSE)
   }
 
-  Axn(xnt$x, xnt$n, i = i, tbl = tbl, model = model, ...) /
-    adotxn(xnt$x, xnt$t, i = i, model = model, ...)
+  .map_premium(args, function(x, n, t, i) {
+    Axn(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotxn(x, t, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Deferred insurance annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 PnAx <- function(x, n, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  nAx(x, n, i = i, tbl = tbl, model = model, ...) /
-    adotx(x, i = i, model = model, ..., k_max = 5000, tol = 1e-12)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    nAx(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotx(x, i = i, tbl = tbl, model = model, ...,
+            k_max = 5000, tol = 1e-12)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Limited-payment deferred insurance annual net premium
+#'
+#' @rdname premium_functions
 #' @export
 tPnAx <- function(x, n, t, i, tbl = NULL, model = NULL, ...) {
-  xnt <- .recycle_xnt_ch9(x, n, t)
-  if (any(xnt$t > xnt$n)) {
-    stop("For deferred insurance with limited premiums, t must satisfy t <= n.", call. = FALSE)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  t <- .check_premium_integer(t, "t")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, t = t, i = i)
+
+  if (any(args$t > args$n)) {
+    stop("For deferred insurance with limited premiums, t must satisfy t <= n.",
+         call. = FALSE)
   }
 
-  nAx(xnt$x, xnt$n, i = i, tbl = tbl, model = model, ...) /
-    adotxn(xnt$x, xnt$t, i = i, model = model, ...)
+  .map_premium(args, function(x, n, t, i) {
+    nAx(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotxn(x, t, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
 # -------------------------------------------------------------------------
-# Continuous payment premiums for discrete benefits
+# Continuous-payment premiums for discrete benefits
 # -------------------------------------------------------------------------
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Continuous-payment premium rate for discrete whole life insurance
+#'
+#' @rdname premium_functions
 #' @export
 Pbarx <- function(x, i, model, ..., tol = 1e-10) {
-  .check_i_ch9(i)
-  Ax(x, i = i, model = model, ...) /
-    abarx(x, i = i, model = model, ..., tol = tol)
+  x <- .check_premium_age(x)
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, i = i)
+
+  .map_premium(args, function(x, i) {
+    Ax(x, i = i, model = model, ...) /
+      abarx(x, i = i, model = model, ..., tol = tol)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Continuous-payment premium rate for discrete term insurance
+#'
+#' @rdname premium_functions
 #' @export
 Pbarxn1 <- function(x, n, i, model, ...) {
-  .check_i_ch9(i)
-  Axn1(x, n, i = i, model = model, ...) /
-    abarxn(x, n, i = i, model = model, ...)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    Axn1(x, n, i = i, model = model, ...) /
+      abarxn(x, n, i = i, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Continuous-payment premium rate for discrete endowment insurance
+#'
+#' @rdname premium_functions
 #' @export
 Pbarxn <- function(x, n, i, model, ...) {
-  .check_i_ch9(i)
-  Axn(x, n, i = i, model = model, ...) /
-    abarxn(x, n, i = i, model = model, ...)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    Axn(x, n, i = i, model = model, ...) /
+      abarxn(x, n, i = i, model = model, ...)
+  })
 }
 
 # -------------------------------------------------------------------------
 # Fully continuous premium rates
 # -------------------------------------------------------------------------
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Fully continuous premium rate for whole life insurance
+#'
+#' @rdname premium_functions
 #' @export
 PbarAbarx <- function(x, i, model, ..., tol = 1e-10) {
-  .check_i_ch9(i)
-  Abarx(x, i = i, model = model, ...) /
-    abarx(x, i = i, model = model, ..., tol = tol)
+  x <- .check_premium_age(x)
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, i = i)
+
+  .map_premium(args, function(x, i) {
+    Abarx(x, i = i, model = model, ...) /
+      abarx(x, i = i, model = model, ..., tol = tol)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Fully continuous premium rate for term insurance
+#'
+#' @rdname premium_functions
 #' @export
 PbarAbarxn1 <- function(x, n, i, model, ...) {
-  .check_i_ch9(i)
-  Abarxn1(x, n, i = i, model = model, ...) /
-    abarxn(x, n, i = i, model = model, ...)
+  x <- .check_premium_age(x)
+  n <- .check_premium_numeric(n, "n")
+  if (any(n < 0)) stop("n must be nonnegative.", call. = FALSE)
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    Abarxn1(x, n, i = i, model = model, ...) /
+      abarxn(x, n, i = i, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Fully continuous premium rate for endowment insurance
+#'
+#' @rdname premium_functions
 #' @export
 PbarAbarxn <- function(x, n, i, model, ...) {
-  .check_i_ch9(i)
-  Abarxn(x, n, i = i, model = model, ...) /
-    abarxn(x, n, i = i, model = model, ...)
+  x <- .check_premium_age(x)
+  n <- .check_premium_numeric(n, "n")
+  if (any(n < 0)) stop("n must be nonnegative.", call. = FALSE)
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    Abarxn(x, n, i = i, model = model, ...) /
+      abarxn(x, n, i = i, model = model, ...)
+  })
 }
 
 # -------------------------------------------------------------------------
 # True fractional premiums
 # -------------------------------------------------------------------------
 
-#' @rdname premium_ch9
-#' @param m Number of payments per year.
-#' @return Numeric vector.
+#' True fractional whole life premium
+#'
+#' @rdname premium_functions
 #' @export
 Px_m <- function(x, m, i, tbl = NULL, model = NULL, ...) {
-  m <- .check_m_ch9(m)
-  Ax(x, i = i, tbl = tbl, model = model, ...) /
-    adotx_m(x, m = m, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  m <- .check_premium_frequency(m)
+  x <- .check_premium_age(x)
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, i = i)
+
+  .map_premium(args, function(x, i) {
+    Ax(x, i = i, tbl = tbl, model = model, ...) /
+      adotx_m(x, m = m, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' True fractional term insurance premium
+#'
+#' @rdname premium_functions
 #' @export
 Pxn1_m <- function(x, n, m, i, tbl = NULL, model = NULL, ...) {
-  m <- .check_m_ch9(m)
-  Axn1(x, n, i = i, tbl = tbl, model = model, ...) /
-    adotxn_m(x, n, m = m, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  m <- .check_premium_frequency(m)
+  x <- .check_premium_age(x)
+  n <- .check_premium_numeric(n, "n")
+  if (any(n < 0)) stop("n must be nonnegative.", call. = FALSE)
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    Axn1(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotxn_m(x, n, m = m, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' True fractional endowment insurance premium
+#'
+#' @rdname premium_functions
 #' @export
 Pxn_m <- function(x, n, m, i, tbl = NULL, model = NULL, ...) {
-  m <- .check_m_ch9(m)
-  Axn(x, n, i = i, tbl = tbl, model = model, ...) /
-    adotxn_m(x, n, m = m, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  m <- .check_premium_frequency(m)
+  x <- .check_premium_age(x)
+  n <- .check_premium_numeric(n, "n")
+  if (any(n < 0)) stop("n must be nonnegative.", call. = FALSE)
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    Axn(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotxn_m(x, n, m = m, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' True fractional deferred insurance premium
+#'
+#' @rdname premium_functions
 #' @export
 PnAx_m <- function(x, n, m, i, tbl = NULL, model = NULL, ...) {
-  m <- .check_m_ch9(m)
-  nAx(x, n, i = i, tbl = tbl, model = model, ...) /
-    adotx_m(x, m = m, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  m <- .check_premium_frequency(m)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, i = i)
+
+  .map_premium(args, function(x, n, i) {
+    nAx(x, n, i = i, tbl = tbl, model = model, ...) /
+      adotx_m(x, m = m, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
 # -------------------------------------------------------------------------
 # Present-value-of-loss means and variances
 # -------------------------------------------------------------------------
 
-#' @rdname premium_ch9
-#' @param P Premium amount or premium rate.
-#' @return Numeric vector.
+#' Expected present value of loss for whole life insurance
+#'
+#' @rdname premium_functions
 #' @export
 EL0x <- function(x, P, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  P <- as.numeric(P)
-  Ax(x, i = i, tbl = tbl, model = model, ...) -
-    P * adotx(x, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  P <- .check_premium_numeric(P, "P")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, P = P, i = i)
+
+  .map_premium(args, function(x, P, i) {
+    Ax(x, i = i, tbl = tbl, model = model, ...) -
+      P * adotx(x, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
-#' @return Numeric vector.
+#' Variance of present value of loss for whole life insurance
+#'
+#' @rdname premium_functions
 #' @export
-varL0x <- function(x, P, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) {
-  .check_i_ch9(i)
-  P <- as.numeric(P)
-  d <- i / (1 + i)
+varL0x <- function(x, P, i, tbl = NULL, model = NULL, ...,
+                   tol = 1e-12, k_max = 5000) {
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  P <- .check_premium_numeric(P, "P")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, P = P, i = i)
 
-  (1 + P / d)^2 *
-    var_Ax(x, i = i, tbl = tbl, model = model, ..., tol = tol, k_max = k_max)
+  .map_premium(args, function(x, P, i) {
+    d <- i / (1 + i)
+    (1 + P / d)^2 *
+      var_Ax(x, i = i, tbl = tbl, model = model, ...,
+             tol = tol, k_max = k_max)
+  })
 }
 
-#' @rdname premium_ch9
+#' Expected present value of loss for term insurance
+#'
+#' @rdname premium_functions
 #' @export
 EL0xn1 <- function(x, n, P, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  P <- as.numeric(P)
-  Axn1(x, n, i = i, tbl = tbl, model = model, ...) -
-    P * adotxn(x, n, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  P <- .check_premium_numeric(P, "P")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, P = P, i = i)
+
+  .map_premium(args, function(x, n, P, i) {
+    Axn1(x, n, i = i, tbl = tbl, model = model, ...) -
+      P * adotxn(x, n, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
+#' Variance of present value of loss for term insurance
+#'
+#' @rdname premium_functions
 #' @export
 varL0xn1 <- function(x, n, P, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  P <- as.numeric(P)
-  d <- i / (1 + i)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  P <- .check_premium_numeric(P, "P")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, P = P, i = i)
 
-  (1 + P / d)^2 *
-    var_Axn1(x, n, i = i, tbl = tbl, model = model, ...)
+  .map_premium(args, function(x, n, P, i) {
+    d <- i / (1 + i)
+    (1 + P / d)^2 *
+      var_Axn1(x, n, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
+#' Expected present value of loss for endowment insurance
+#'
+#' @rdname premium_functions
 #' @export
 EL0xn <- function(x, n, P, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  P <- as.numeric(P)
-  Axn(x, n, i = i, tbl = tbl, model = model, ...) -
-    P * adotxn(x, n, i = i, model = model, ...)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  P <- .check_premium_numeric(P, "P")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, P = P, i = i)
+
+  .map_premium(args, function(x, n, P, i) {
+    Axn(x, n, i = i, tbl = tbl, model = model, ...) -
+      P * adotxn(x, n, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
+#' Variance of present value of loss for endowment insurance
+#'
+#' @rdname premium_functions
 #' @export
 varL0xn <- function(x, n, P, i, tbl = NULL, model = NULL, ...) {
-  .check_i_ch9(i)
-  P <- as.numeric(P)
-  d <- i / (1 + i)
+  .validate_premium_source(tbl, model)
+  x <- .check_premium_age(x)
+  n <- .check_premium_integer(n, "n")
+  P <- .check_premium_numeric(P, "P")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, n = n, P = P, i = i)
 
-  (1 + P / d)^2 *
-    var_Axn(x, n, i = i, tbl = tbl, model = model, ...)
+  .map_premium(args, function(x, n, P, i) {
+    d <- i / (1 + i)
+    (1 + P / d)^2 *
+      var_Axn(x, n, i = i, tbl = tbl, model = model, ...)
+  })
 }
 
-#' @rdname premium_ch9
+#' Expected present value of loss for fully continuous whole life insurance
+#'
+#' @rdname premium_functions
 #' @export
 EL0barAbarx <- function(x, P, i, model, ..., tol = 1e-10) {
-  .check_i_ch9(i)
-  P <- as.numeric(P)
-  Abarx(x, i = i, model = model, ...) -
-    P * abarx(x, i = i, model = model, ..., tol = tol)
+  x <- .check_premium_age(x)
+  P <- .check_premium_numeric(P, "P")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, P = P, i = i)
+
+  .map_premium(args, function(x, P, i) {
+    Abarx(x, i = i, model = model, ...) -
+      P * abarx(x, i = i, model = model, ..., tol = tol)
+  })
 }
 
-#' @rdname premium_ch9
+#' Variance of present value of loss for fully continuous whole life insurance
+#'
+#' @rdname premium_functions
 #' @export
 varL0barAbarx <- function(x, P, i, model, ...) {
-  .check_i_ch9(i)
-  P <- as.numeric(P)
-  delta <- log(1 + i)
+  x <- .check_premium_age(x)
+  P <- .check_premium_numeric(P, "P")
+  i <- .check_premium_interest(i)
+  args <- .recycle_premium_vectors(x = x, P = P, i = i)
 
-  (1 + P / delta)^2 *
-    var_Abarx(x, i = i, model = model, ...)
+  .map_premium(args, function(x, P, i) {
+    delta <- log(1 + i)
+    (1 + P / delta)^2 *
+      var_Abarx(x, i = i, model = model, ...)
+  })
 }
 
 # -------------------------------------------------------------------------
 # Gross premium with expenses: whole life, fully discrete
 # -------------------------------------------------------------------------
 
-#' @rdname premium_ch9
-#' @param benefit Benefit amount.
-#' @param first_premium_pct First-year premium expense proportion.
-#' @param renewal_premium_pct Renewal premium expense proportion.
-#' @param first_policy_exp First-year fixed expense.
-#' @param renewal_policy_exp Renewal fixed expense each year after the first.
-#' @param settlement_exp Settlement expense incurred at benefit payment.
-#' @return Numeric vector.
+#' Gross premium for whole life insurance with expenses
+#'
+#' @rdname premium_functions
 #' @export
 Gx <- function(x,
                i,
@@ -483,23 +677,58 @@ Gx <- function(x,
                tbl = NULL,
                model = NULL,
                ...) {
-  .check_i_ch9(i)
+  .validate_premium_source(tbl, model)
 
-  Ax_val <- Ax(x, i = i, tbl = tbl, model = model, ...)
-  ax_val <- ax(x, i = i, model = model, ...)
-  adotx_val <- adotx(x, i = i, model = model, ...)
+  x <- .check_premium_age(x)
+  i <- .check_premium_interest(i)
+  benefit <- .check_premium_numeric(benefit, "benefit")
+  first_premium_pct <- .check_premium_numeric(
+    first_premium_pct, "first_premium_pct"
+  )
+  renewal_premium_pct <- .check_premium_numeric(
+    renewal_premium_pct, "renewal_premium_pct"
+  )
+  first_policy_exp <- .check_premium_numeric(
+    first_policy_exp, "first_policy_exp"
+  )
+  renewal_policy_exp <- .check_premium_numeric(
+    renewal_policy_exp, "renewal_policy_exp"
+  )
+  settlement_exp <- .check_premium_numeric(
+    settlement_exp, "settlement_exp"
+  )
 
-  num <- (benefit + settlement_exp) * Ax_val +
-    first_policy_exp +
-    renewal_policy_exp * ax_val
+  args <- .recycle_premium_vectors(
+    x = x,
+    i = i,
+    benefit = benefit,
+    first_premium_pct = first_premium_pct,
+    renewal_premium_pct = renewal_premium_pct,
+    first_policy_exp = first_policy_exp,
+    renewal_policy_exp = renewal_policy_exp,
+    settlement_exp = settlement_exp
+  )
 
-  den <- adotx_val -
-    first_premium_pct -
-    renewal_premium_pct * ax_val
+  .map_premium(
+    args,
+    function(x, i, benefit, first_premium_pct, renewal_premium_pct,
+             first_policy_exp, renewal_policy_exp, settlement_exp) {
+      Ax_val <- Ax(x, i = i, tbl = tbl, model = model, ...)
+      ax_val <- ax(x, i = i, tbl = tbl, model = model, ...)
+      adotx_val <- adotx(x, i = i, tbl = tbl, model = model, ...)
 
-  if (any(den <= 0)) {
-    stop("Gross premium denominator must be positive.", call. = FALSE)
-  }
+      numerator <- (benefit + settlement_exp) * Ax_val +
+        first_policy_exp + renewal_policy_exp * ax_val
 
-  num / den
+      denominator <- adotx_val -
+        first_premium_pct - renewal_premium_pct * ax_val
+
+      if (!is.finite(denominator) || denominator <= 0) {
+        stop("Gross premium denominator must be positive.", call. = FALSE)
+      }
+
+      numerator / denominator
+    }
+  )
 }
+

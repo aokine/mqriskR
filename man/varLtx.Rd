@@ -4,7 +4,7 @@
 \alias{varLtx}
 \title{Variance of present value of loss at duration t for whole life insurance}
 \usage{
-varLtx(x, t, i, P, model, ...)
+varLtx(x, t, i, P, model = NULL, ..., tbl = NULL)
 }
 \arguments{
 \item{x}{Issue age.}
@@ -15,15 +15,17 @@ varLtx(x, t, i, P, model, ...)
 
 \item{P}{Annual premium.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model name.}
 
 \item{...}{Additional model parameters.}
+
+\item{tbl}{Optional life table object.}
 }
 \value{
-Numeric vector.
+A numeric vector of values.
 }
 \description{
-Computes the Chapter 10 conditional variance
+Computes the conditional variance
 \eqn{\mathrm{Var}({}_tL_x \mid K_x \ge t)}
 for a fully discrete whole life insurance.
 }

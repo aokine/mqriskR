@@ -2,28 +2,43 @@
 % Please edit documentation in R/reserve_ch10_ext.R
 \name{tVx_ret}
 \alias{tVx_ret}
-\title{Whole life net level premium reserve by retrospective method}
+\title{Retrospective whole life reserve}
 \usage{
-tVx_ret(x, t, i, model, ...)
+tVx_ret(x, t, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
-\item{x}{Issue age.}
+\item{x}{Issue age. May be scalar or vector.}
 
-\item{t}{Duration.}
+\item{t}{Nonnegative integer duration. May be scalar or vector.}
 
-\item{i}{Effective annual interest rate.}
+\item{i}{Effective annual interest rate. May be scalar or vector.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model.}
 
-\item{...}{Additional model parameters.}
+\item{...}{Additional parameters passed to the actuarial functions.}
+
+\item{tbl}{Optional life table object. Supply by name.}
 }
 \value{
-Numeric vector.
+Numeric vector of retrospective reserve values.
 }
 \description{
-Computes the Chapter 10 retrospective reserve
-\eqn{{}_tV_x = P_x \ddot{s}_{x:\overline{t}|} - {}_tk_x}.
+Computes the retrospective net level premium reserve
+\deqn{{}_tV_x =
+P_x\ddot{s}_{x:\overline{t}|}
+-
+\frac{A_{x:\overline{t}|}^{1}}{{}_tE_x}.}
+}
+\details{
+The mortality basis may be supplied through either a life table or a
+parametric survival model.
 }
 \examples{
-tVx_ret(40, t = 10, i = 0.05, model = "uniform", omega = 100)
+tVx_ret(
+  40,
+  t = 10,
+  i = 0.05,
+  model = "uniform",
+  omega = 100
+)
 }

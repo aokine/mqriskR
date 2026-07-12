@@ -2,9 +2,9 @@
 % Please edit documentation in R/insurance_utils.R
 \name{insurance_utils}
 \alias{insurance_utils}
-\title{Insurance utilities (Chapter 7)}
+\title{Insurance utilities}
 \description{
-Helper functions for Chapter 7 insurance models.
+Helper functions for insurance models.
 }
 \details{
 These utilities focus on:

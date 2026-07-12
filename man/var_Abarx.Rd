@@ -19,5 +19,6 @@ var_Abarx(x, i, model, ...)
 Numeric vector of variances.
 }
 \description{
-Computes \eqn{\mathrm{Var}(\bar{Z}_x) = {}^{2}\bar{A}_x - \bar{A}_x^2}.
+Computes \eqn{\mathrm{Var}(\bar{Z}_x) =
+{}^{2}\bar{A}_x - \bar{A}_x^2}.
 }

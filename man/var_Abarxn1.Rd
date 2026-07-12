@@ -22,5 +22,7 @@ Numeric vector of variances.
 }
 \description{
 Computes
-\eqn{\mathrm{Var}(\bar{Z}_{x:\overline{n}|}^{1}) = {}^{2}\bar{A}_{x:\overline{n}|}^{1} - (\bar{A}_{x:\overline{n}|}^{1})^2}.
+\eqn{\mathrm{Var}(\bar{Z}_{x:\overline{n}|}^{1}) =
+{}^{2}\bar{A}_{x:\overline{n}|}^{1}
+- (\bar{A}_{x:\overline{n}|}^{1})^2}.
 }

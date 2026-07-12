@@ -280,3 +280,23 @@ test_that("invalid inputs are rejected", {
   expect_error(nEx(1, 2.5, 0.05, tbl = tbl))
   expect_error(Ax(1, -1, tbl = tbl))
 })
+
+
+
+testthat::test_that("Ax works with closed finite life tables", {
+  tbl <- life_table(x = 0:3, lx = c(100000, 80000, 50000, 0))
+  v <- 1 / 1.05
+
+  expected <- v * 0.2 + v^2 * 0.3 + v^3 * 0.5
+
+  testthat::expect_equal(Ax(0, i = 0.05, tbl = tbl), expected)
+  testthat::expect_equal(Ax(0:2, i = 0.05, tbl = tbl), c(expected, v * 0.375 + v^2 * 0.625, v))
+})
+
+testthat::test_that("term insurance works near terminal age", {
+  tbl <- life_table(x = 0:3, lx = c(100000, 80000, 50000, 0))
+
+  testthat::expect_equal(Axn1(2, n = 1, i = 0.05, tbl = tbl), 1 / 1.05)
+  testthat::expect_equal(nEx(2, n = 1, i = 0.05, tbl = tbl), 0)
+  testthat::expect_equal(Axn(2, n = 1, i = 0.05, tbl = tbl), 1 / 1.05)
+})

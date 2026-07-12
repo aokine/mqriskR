@@ -20,7 +20,7 @@ GI_disc(Vt, Vt1, P, i_actual, q_assumed, B = 1)
 \item{B}{Benefit amount. Defaults to 1.}
 }
 \value{
-Numeric vector.
+A numeric vector of values.
 }
 \description{
 Interest gain for a discrete insurance contract

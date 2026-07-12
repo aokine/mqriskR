@@ -2,25 +2,8 @@
 % Please edit documentation in R/insurance_discrete.R
 \name{insurance_discrete}
 \alias{insurance_discrete}
-\title{Discrete insurance models (Chapter 7)}
+\title{Discrete insurance models}
 \description{
-Discrete contingent payment / insurance functions matching Chapter 7 notation.
-}
-\details{
-These functions handle:
-\itemize{
-  \item whole life insurance: \eqn{A_x},
-  \item term insurance: \eqn{A_{x:\overline{n}|}^{1}},
-  \item deferred insurance: \eqn{{}_{n\mid}A_x},
-  \item pure endowment: \eqn{{}_nE_x},
-  \item endowment insurance: \eqn{A_{x:\overline{n}|}},
-  \item second moments and variances.
-}
-
-The functions may be evaluated from either:
-\itemize{
-  \item a life table object via \code{tbl = ...}, or
-  \item a parametric survival model via \code{model = ...} and additional parameters.
-}
+Discrete contingent payment and insurance functions.
 }
 \keyword{internal}

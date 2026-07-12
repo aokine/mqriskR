@@ -20,5 +20,6 @@ Numeric vector.
 }
 \description{
 Computes
-\deqn{(I\bar{A})_x = \int_0^\infty \lfloor t+1 \rfloor\, v^t\, {}_tp_x\, \mu_{x+t}\, dt.}
+\deqn{(I\bar{A})_x =
+\int_0^\infty \lfloor t+1 \rfloor v^t {}_tp_x \mu_{x+t}\,dt.}
 }

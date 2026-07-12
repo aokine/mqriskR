@@ -11,23 +11,41 @@
 \alias{annuity_identity_nax}
 \alias{annuity_identity_nadotx}
 \alias{annuity_identity_nabarx}
-\title{Annuity-insurance relationships (Chapter 8)}
+\title{Annuity-insurance relationships}
 \usage{
-annuity_identity_ax(x, i, model, ...)
+annuity_identity_ax(x, i, model = NULL, ..., tbl = NULL)
 
-annuity_identity_adotx(x, i, model, ...)
+annuity_identity_adotx(x, i, model = NULL, ..., tbl = NULL)
 
 annuity_identity_abarx(x, i, model, ...)
 
-annuity_identity_axn(x, n, i, model, ...)
+annuity_identity_axn(x, n, i, model = NULL, ..., tbl = NULL)
 
-annuity_identity_adotxn(x, n, i, model, ...)
+annuity_identity_adotxn(x, n, i, model = NULL, ..., tbl = NULL)
 
 annuity_identity_abarxn(x, n, i, model, ...)
 
-annuity_identity_nax(x, n, i, model, ..., k_max = 5000, tol = 1e-12)
+annuity_identity_nax(
+  x,
+  n,
+  i,
+  model = NULL,
+  ...,
+  tbl = NULL,
+  k_max = 5000,
+  tol = 1e-12
+)
 
-annuity_identity_nadotx(x, n, i, model, ..., k_max = 5000, tol = 1e-12)
+annuity_identity_nadotx(
+  x,
+  n,
+  i,
+  model = NULL,
+  ...,
+  tbl = NULL,
+  k_max = 5000,
+  tol = 1e-12
+)
 
 annuity_identity_nabarx(x, n, i, model, ..., tol = 1e-10)
 }
@@ -36,22 +54,25 @@ annuity_identity_nabarx(x, n, i, model, ..., tol = 1e-10)
 
 \item{i}{Effective annual interest rate.}
 
-\item{model}{Survival model.}
+\item{model}{Optional survival model name.}
 
-\item{...}{Additional model parameters passed to the survival model.}
+\item{...}{Additional model parameters.}
 
-\item{n}{Term in years.}
+\item{tbl}{Optional life table object for discrete identities.}
+
+\item{n}{Term or deferral period in years.}
 
 \item{k_max}{Maximum summation horizon for non-terminating models.}
 
 \item{tol}{Truncation tolerance for non-terminating models.}
 }
 \value{
-Numeric vector.
+Numeric vector containing the annuity value computed from the corresponding
+annuity-insurance identity.
 }
 \description{
-This file provides the core Chapter 8 identities linking annual and
-continuous annuity functions to the corresponding insurance functions.
+Identities linking annual and continuous annuity functions to the
+corresponding insurance functions.
 
 Computes \eqn{a_x = (v - A_x)/d}.
 
@@ -60,37 +81,17 @@ Computes \eqn{\ddot{a}_x = (1 - A_x)/d}.
 Computes \eqn{\bar{a}_x = (1 - \bar{A}_x)/\delta}.
 
 Computes
-\eqn{a_{x:\overline{n}|} = \ddot{a}_{x:\overline{n}|} - 1 + {}_nE_x}
-together with
-\eqn{\ddot{a}_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d}.
-
-Computes \eqn{\ddot{a}_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d}.
-
-Computes \eqn{\bar{a}_{x:\overline{n}|} = (1 - \bar{A}_{x:\overline{n}|})/\delta}.
-
-Computes \eqn{{}_{n|}a_x = {}_nE_x\, a_{x+n}}.
-
-Computes \eqn{{}_{n|}\ddot{a}_x = {}_nE_x\, \ddot{a}_{x+n}}.
-
-Computes \eqn{{}_{n|}\bar{a}_x = {}_nE_x\, \bar{a}_{x+n}}.
-}
-\details{
-Included identities:
-\itemize{
-  \item whole life immediate: \eqn{a_x = (v - A_x)/d}
-  \item whole life due: \eqn{\ddot{a}_x = (1 - A_x)/d}
-  \item whole life continuous: \eqn{\bar{a}_x = (1 - \bar{A}_x)/\delta}
-  \item temporary immediate: \eqn{a_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d - 1 + {}_nE_x}
-  \item temporary due: \eqn{\ddot{a}_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d}
-  \item temporary continuous: \eqn{\bar{a}_{x:\overline{n}|} = (1 - \bar{A}_{x:\overline{n}|})/\delta}
-  \item deferred immediate: \eqn{{}_{n\mid}a_x = {}_nE_x a_{x+n}}
-  \item deferred due: \eqn{{}_{n\mid}\ddot{a}_x = {}_nE_x \ddot{a}_{x+n}}
-  \item deferred continuous: \eqn{{}_{n\mid}\bar{a}_x = {}_nE_x \bar{a}_{x+n}}
-}
-
-These are wrapper functions that evaluate the Chapter 8 relationships
-using the Chapter 7 insurance functions already implemented in the package.
-
-Hence
 \eqn{a_{x:\overline{n}|} = (1 - A_{x:\overline{n}|})/d - 1 + {}_nE_x}.
+
+Computes \eqn{\ddot{a}_{x:\overline{n}|} =
+(1 - A_{x:\overline{n}|})/d}.
+
+Computes \eqn{\bar{a}_{x:\overline{n}|} =
+(1 - \bar{A}_{x:\overline{n}|})/\delta}.
+
+Computes \eqn{{}_{n|}a_x = {}_nE_x a_{x+n}}.
+
+Computes \eqn{{}_{n|}\ddot{a}_x = {}_nE_x \ddot{a}_{x+n}}.
+
+Computes \eqn{{}_{n|}\bar{a}_x = {}_nE_x \bar{a}_{x+n}}.
 }

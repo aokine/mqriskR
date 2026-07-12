@@ -318,3 +318,33 @@ test_that("relationship functions return finite values in standard cases", {
     annuity_identity_abarxn(40, 10, i, model = "exponential", lambda = 0.02)
   ))
 })
+
+
+
+testthat::test_that("annuity-insurance relationships work with life tables", {
+  tbl <- life_table(x = 0:3, lx = c(100000, 80000, 50000, 0))
+
+  testthat::expect_equal(
+    annuity_identity_ax(0, i = 0.05, tbl = tbl),
+    ax(0, i = 0.05, tbl = tbl),
+    tolerance = 1e-10
+  )
+
+  testthat::expect_equal(
+    annuity_identity_adotx(0, i = 0.05, tbl = tbl),
+    adotx(0, i = 0.05, tbl = tbl),
+    tolerance = 1e-10
+  )
+})
+
+testthat::test_that("annuity-insurance relationships vectorize over i", {
+  out <- annuity_identity_ax(
+    x = 40,
+    i = c(0.03, 0.05),
+    model = "uniform",
+    omega = 100
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(out[1] > out[2])
+})

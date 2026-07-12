@@ -1,22 +1,6 @@
-#' Discrete insurance models (Chapter 7)
+#' Discrete insurance models
 #'
-#' Discrete contingent payment / insurance functions matching Chapter 7 notation.
-#'
-#' These functions handle:
-#' \itemize{
-#'   \item whole life insurance: \eqn{A_x},
-#'   \item term insurance: \eqn{A_{x:\overline{n}|}^{1}},
-#'   \item deferred insurance: \eqn{{}_{n\mid}A_x},
-#'   \item pure endowment: \eqn{{}_nE_x},
-#'   \item endowment insurance: \eqn{A_{x:\overline{n}|}},
-#'   \item second moments and variances.
-#' }
-#'
-#' The functions may be evaluated from either:
-#' \itemize{
-#'   \item a life table object via \code{tbl = ...}, or
-#'   \item a parametric survival model via \code{model = ...} and additional parameters.
-#' }
+#' Discrete contingent payment and insurance functions.
 #'
 #' @name insurance_discrete
 #' @keywords internal
@@ -26,51 +10,18 @@ NULL
 # Internal helpers
 # ------------------------------------------------------------
 
-#' @noRd
-.get_px1_discrete <- function(x, tbl = NULL, model = NULL, ...) {
-  if (!is.null(tbl)) {
-    return(npx(tbl, x = x, n = 1))
-  }
-  if (is.null(model)) {
-    stop("Supply either tbl or model.", call. = FALSE)
-  }
-  tpx(1, x = x, model = model, ...)
-}
-
-#' @noRd
-.get_qx1_discrete <- function(x, tbl = NULL, model = NULL, ...) {
-  if (!is.null(tbl)) {
-    return(nqx(tbl, x = x, n = 1))
-  }
-  if (is.null(model)) {
-    stop("Supply either tbl or model.", call. = FALSE)
-  }
-  tqx(1, x = x, model = model, ...)
-}
-
-#' @noRd
 .get_npx_discrete <- function(x, n, tbl = NULL, model = NULL, ...) {
-  if (!is.null(tbl)) {
-    return(npx(tbl, x = x, n = n))
-  }
-  if (is.null(model)) {
-    stop("Supply either tbl or model.", call. = FALSE)
-  }
+  if (!is.null(tbl)) return(npx(tbl, x = x, n = n))
+  if (is.null(model)) stop("Supply either tbl or model.", call. = FALSE)
   tpx(n, x = x, model = model, ...)
 }
 
-#' @noRd
 .get_nqx_discrete <- function(x, n, tbl = NULL, model = NULL, ...) {
-  if (!is.null(tbl)) {
-    return(nqx(tbl, x = x, n = n))
-  }
-  if (is.null(model)) {
-    stop("Supply either tbl or model.", call. = FALSE)
-  }
+  if (!is.null(tbl)) return(nqx(tbl, x = x, n = n))
+  if (is.null(model)) stop("Supply either tbl or model.", call. = FALSE)
   tqx(n, x = x, model = model, ...)
 }
 
-#' @noRd
 .recycle_x_n <- function(x, n) {
   x <- as.numeric(x)
   n <- as.numeric(n)
@@ -80,43 +31,53 @@ NULL
   }
   if (any(!is.finite(x))) stop("x must be finite.", call. = FALSE)
   if (any(!is.finite(n))) stop("n must be finite.", call. = FALSE)
-  if (any(x < 0)) stop("x must be >= 0.", call. = FALSE)
-  if (any(n < 0)) stop("n must be >= 0.", call. = FALSE)
-  if (any(abs(n - round(n)) > 1e-10)) stop("n must contain integers only.", call. = FALSE)
+  if (any(x < 0)) stop("x must be nonnegative.", call. = FALSE)
+  if (any(n < 0)) stop("n must be nonnegative.", call. = FALSE)
+  if (any(abs(n - round(n)) > 1e-10)) {
+    stop("n must contain integers only.", call. = FALSE)
+  }
 
-  if (length(x) == 1L && length(n) > 1L) x <- rep(x, length(n))
-  if (length(n) == 1L && length(x) > 1L) n <- rep(n, length(x))
-  if (length(x) != length(n)) {
+  len <- max(length(x), length(n))
+
+  if (!length(x) %in% c(1L, len) || !length(n) %in% c(1L, len)) {
     stop("x and n must have compatible lengths.", call. = FALSE)
   }
 
-  list(x = x, n = n)
+  list(
+    x = if (length(x) == 1L) rep(x, len) else x,
+    n = if (length(n) == 1L) rep(n, len) else n
+  )
 }
 
-#' @noRd
-.max_k_discrete <- function(x, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) {
-  if (!is.null(tbl)) {
-    k <- 0
-    repeat {
-      if (k >= k_max) return(k_max)
-      surv <- .get_npx_discrete(x, k, tbl = tbl)
-      if (surv <= tol) return(k)
-      k <- k + 1
-    }
+.check_i_discrete <- function(i) {
+  i <- as.numeric(i)
+
+  if (length(i) != 1L || !is.finite(i) || i <= -1) {
+    stop("i must be a single value greater than -1.", call. = FALSE)
   }
 
+  i
+}
+
+.max_k_discrete <- function(x, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) {
   for (k in 0:k_max) {
-    surv <- .get_npx_discrete(x, k, model = model, ...)
+    surv <- .get_npx_discrete(x, k, tbl = tbl, model = model, ...)
+
+    if (is.na(surv)) return(max(k - 1L, 0L))
     if (surv <= tol) return(k)
   }
+
   k_max
 }
 
-#' @noRd
 .kq_vec <- function(x, k, tbl = NULL, model = NULL, ...) {
-  # {}_{k|}q_x = {}_k p_x - {}_{k+1} p_x
-  .get_npx_discrete(x, k, tbl = tbl, model = model, ...) -
-    .get_npx_discrete(x, k + 1, tbl = tbl, model = model, ...)
+  p_k <- .get_npx_discrete(x, k, tbl = tbl, model = model, ...)
+  p_k1 <- .get_npx_discrete(x, k + 1, tbl = tbl, model = model, ...)
+
+  if (is.na(p_k)) p_k <- 0
+  if (is.na(p_k1)) p_k1 <- 0
+
+  p_k - p_k1
 }
 
 # ------------------------------------------------------------
@@ -139,11 +100,10 @@ NULL
 #' @export
 Ax <- function(x, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) {
   x <- as.numeric(x)
-  i <- as.numeric(i)
+  i <- .check_i_discrete(i)
 
-  if (any(!is.finite(x))) stop("x must be finite.", call. = FALSE)
-  if (any(x < 0)) stop("x must be >= 0.", call. = FALSE)
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
+  if (length(x) == 0L || any(!is.finite(x))) stop("x must be finite.", call. = FALSE)
+  if (any(x < 0)) stop("x must be nonnegative.", call. = FALSE)
 
   v <- 1 / (1 + i)
 
@@ -151,7 +111,7 @@ Ax <- function(x, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 5000) {
     kk_max <- .max_k_discrete(xx, tbl = tbl, model = model, ..., tol = tol, k_max = k_max)
     k <- 0:kk_max
     probs <- vapply(k, function(kk) .kq_vec(xx, kk, tbl = tbl, model = model, ...), numeric(1))
-    sum(v^(k + 1) * probs)
+    sum(v^(k + 1) * probs, na.rm = TRUE)
   })
 }
 
@@ -172,25 +132,26 @@ Axn1 <- function(x, n, i, tbl = NULL, model = NULL, ...) {
   xn <- .recycle_x_n(x, n)
   x <- xn$x
   n <- xn$n
-
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
+  i <- .check_i_discrete(i)
 
   v <- 1 / (1 + i)
 
   sapply(seq_along(x), function(j) {
     xx <- x[j]
     nn <- n[j]
+
     if (nn == 0) return(0)
 
     k <- 0:(nn - 1)
     probs <- vapply(k, function(kk) .kq_vec(xx, kk, tbl = tbl, model = model, ...), numeric(1))
-    sum(v^(k + 1) * probs)
+
+    sum(v^(k + 1) * probs, na.rm = TRUE)
   })
 }
 
 #' Pure endowment APV
 #'
-#' Computes \eqn{{}_nE_x = v^n \, {}_n p_x}.
+#' Computes \eqn{{}_nE_x = v^n {}_n p_x}.
 #'
 #' @param x Age.
 #' @param n Term.
@@ -205,15 +166,17 @@ nEx <- function(x, n, i, tbl = NULL, model = NULL, ...) {
   xn <- .recycle_x_n(x, n)
   x <- xn$x
   n <- xn$n
+  i <- .check_i_discrete(i)
 
-  if (length(i) != 1L || !is.finite(i) || i <= -1) stop("i must be a single value > -1.", call. = FALSE)
+  p <- .get_npx_discrete(x, n, tbl = tbl, model = model, ...)
+  p[is.na(p)] <- 0
 
-  discount(i, n) * .get_npx_discrete(x, n, tbl = tbl, model = model, ...)
+  discount(i, n) * p
 }
 
 #' Deferred insurance APV
 #'
-#' Computes \eqn{{}_{n\mid}A_x = {}_nE_x \cdot A_{x+n}}.
+#' Computes \eqn{{}_{n\mid}A_x = {}_nE_x A_{x+n}}.
 #'
 #' @param x Age.
 #' @param n Deferral period.
@@ -333,7 +296,8 @@ var_Ax <- function(x, i, tbl = NULL, model = NULL, ..., tol = 1e-12, k_max = 500
 
 #' Variance of term insurance PV
 #'
-#' Computes \eqn{\mathrm{Var}(Z_{x:\overline{n}|}^{1}) = {}^{2}A_{x:\overline{n}|}^{1} - (A_{x:\overline{n}|}^{1})^2}.
+#' Computes \eqn{\mathrm{Var}(Z_{x:\overline{n}|}^{1}) =
+#' {}^{2}A_{x:\overline{n}|}^{1} - (A_{x:\overline{n}|}^{1})^2}.
 #'
 #' @inheritParams Axn1
 #' @return Numeric vector of variances.
@@ -374,13 +338,14 @@ var_Axn <- function(x, n, i, tbl = NULL, model = NULL, ...) {
 }
 
 # ------------------------------------------------------------
-# Covariances from Chapter 7 decompositions
+# Covariances
 # ------------------------------------------------------------
 
 #' Covariance of term and deferred insurance PVs
 #'
 #' Computes
-#' \eqn{\mathrm{Cov}(Z_{x:\overline{n}|}^{1}, {}_{n\mid}Z_x) = -A_{x:\overline{n}|}^{1} \cdot {}_{n\mid}A_x}.
+#' \eqn{\mathrm{Cov}(Z_{x:\overline{n}|}^{1}, {}_{n\mid}Z_x) =
+#' -A_{x:\overline{n}|}^{1} \cdot {}_{n\mid}A_x}.
 #'
 #' @inheritParams Axn1
 #' @return Numeric vector of covariances.
@@ -393,7 +358,8 @@ cov_term_deferred <- function(x, n, i, tbl = NULL, model = NULL, ...) {
 #' Covariance of term insurance and pure endowment PVs
 #'
 #' Computes
-#' \eqn{\mathrm{Cov}(Z_{x:\overline{n}|}^{1}, Z_{x:\overline{n}|}^{1\text{(pure endow)}}) =
+#' \eqn{\mathrm{Cov}(Z_{x:\overline{n}|}^{1},
+#' Z_{x:\overline{n}|}^{1\text{(pure endow)}}) =
 #' -A_{x:\overline{n}|}^{1} \cdot {}_nE_x}.
 #'
 #' @inheritParams Axn1

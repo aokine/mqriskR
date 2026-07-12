@@ -2,31 +2,38 @@
 % Please edit documentation in R/reserve_ch10_ext.R
 \name{tVnAdotx}
 \alias{tVnAdotx}
-\title{Deferred annuity-due reserve}
+\title{Reserve for a deferred annuity-due}
 \usage{
-tVnAdotx(x, n, t, i, model, ...)
+tVnAdotx(x, n, t, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
-\item{x}{Issue age.}
+\item{x}{Issue age. May be scalar or vector.}
 
-\item{n}{Deferral period.}
+\item{n}{Positive integer deferral period. May be scalar or vector.}
 
-\item{t}{Duration.}
+\item{t}{Nonnegative integer duration. May be scalar or vector.}
 
-\item{i}{Effective annual interest rate.}
+\item{i}{Effective annual interest rate. May be scalar or vector.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model.}
 
-\item{...}{Additional model parameters.}
+\item{...}{Additional parameters passed to the actuarial functions.}
+
+\item{tbl}{Optional life table object. Supply by name.}
 }
 \value{
-Numeric vector.
+Numeric vector of reserve values.
 }
 \description{
-Computes the Chapter 10 reserve
-\eqn{{}_tV({}_{n|}\ddot{a}_x)}
-for \eqn{t < n}.
+Computes the reserve during the deferral period, where \eqn{0 \le t < n}.
 }
 \examples{
-tVnAdotx(40, n = 20, t = 10, i = 0.05, model = "uniform", omega = 100)
+tVnAdotx(
+  40,
+  n = 20,
+  t = 10,
+  i = 0.05,
+  model = "uniform",
+  omega = 100
+)
 }

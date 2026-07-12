@@ -178,3 +178,25 @@ test_that("continuous endowment APV is at least the pure endowment component", {
 
   expect_true(endow_val >= pure_val)
 })
+
+
+testthat::test_that("continuous insurance functions vectorize over i", {
+  out <- Abarx(x = 40, i = c(0.03, 0.05), model = "uniform", omega = 100)
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+  testthat::expect_true(out[1] > out[2])
+})
+
+testthat::test_that("continuous term insurance functions recycle x, n, and i", {
+  out <- Abarxn1(
+    x = c(40, 50),
+    n = 10,
+    i = c(0.03, 0.05),
+    model = "uniform",
+    omega = 100
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+})

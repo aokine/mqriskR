@@ -20,10 +20,10 @@ GT_disc(Vt, Vt1, P, i_actual, q_actual, B = 1)
 \item{B}{Benefit amount. Defaults to 1.}
 }
 \value{
-Numeric vector.
+A numeric vector of values.
 }
 \description{
-Computes the Chapter 10 total gain:
+Computes the total gain:
 amount on hand at year-end minus amount required.
 }
 \examples{

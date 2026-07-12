@@ -1,6 +1,6 @@
-#' Insurance utilities (Chapter 7)
+#' Insurance utilities
 #'
-#' Helper functions for Chapter 7 insurance models.
+#' Helper functions for insurance models.
 #'
 #' These utilities focus on:
 #' \itemize{
@@ -17,6 +17,41 @@
 NULL
 
 # ------------------------------------------------------------
+# Internal helpers
+# ------------------------------------------------------------
+
+.check_numeric_finite_ins_util <- function(x, name) {
+  x <- as.numeric(x)
+
+  if (length(x) == 0L || any(!is.finite(x))) {
+    stop(name, " must contain finite numeric values.", call. = FALSE)
+  }
+
+  x
+}
+
+.check_i_ins_util <- function(i) {
+  i <- .check_numeric_finite_ins_util(i, "i")
+
+  if (any(i <= -1)) {
+    stop("i must be greater than -1.", call. = FALSE)
+  }
+
+  i
+}
+
+.check_m_ins_util <- function(m) {
+  m <- as.numeric(m)
+
+  if (length(m) != 1L || !is.finite(m) || m <= 0 ||
+      abs(m - round(m)) > 1e-10) {
+    stop("m must be a positive integer.", call. = FALSE)
+  }
+
+  as.integer(round(m))
+}
+
+# ------------------------------------------------------------
 # Doubled-force helpers for second moments
 # ------------------------------------------------------------
 
@@ -30,9 +65,7 @@ NULL
 #' @return Numeric vector of effective annual rates corresponding to doubled force.
 #' @export
 double_force_i <- function(i) {
-  i <- as.numeric(i)
-  if (any(!is.finite(i))) stop("i must be finite.", call. = FALSE)
-  if (any(i <= -1)) stop("i must be > -1.", call. = FALSE)
+  i <- .check_i_ins_util(i)
   (1 + i)^2 - 1
 }
 
@@ -45,8 +78,7 @@ double_force_i <- function(i) {
 #' @return Numeric vector of doubled forces of interest.
 #' @export
 double_force_delta <- function(delta) {
-  delta <- as.numeric(delta)
-  if (any(!is.finite(delta))) stop("delta must be finite.", call. = FALSE)
+  delta <- .check_numeric_finite_ins_util(delta, "delta")
   2 * delta
 }
 
@@ -65,9 +97,7 @@ double_force_delta <- function(delta) {
 #' @return Numeric vector equal to \eqn{i/\delta}.
 #' @export
 udd_continuous_multiplier <- function(i) {
-  i <- as.numeric(i)
-  if (any(!is.finite(i))) stop("i must be finite.", call. = FALSE)
-  if (any(i <= -1)) stop("i must be > -1.", call. = FALSE)
+  i <- .check_i_ins_util(i)
 
   delta <- log(1 + i)
   ifelse(abs(delta) < 1e-12, 1, i / delta)
@@ -85,12 +115,8 @@ udd_continuous_multiplier <- function(i) {
 #' @return Numeric vector equal to \eqn{i / i^{(m)}}.
 #' @export
 udd_mthly_multiplier <- function(i, m) {
-  i <- as.numeric(i)
-  if (any(!is.finite(i))) stop("i must be finite.", call. = FALSE)
-  if (any(i <= -1)) stop("i must be > -1.", call. = FALSE)
-  if (length(m) != 1 || !is.finite(m) || m <= 0 || m != as.integer(m)) {
-    stop("m must be a positive integer.", call. = FALSE)
-  }
+  i <- .check_i_ins_util(i)
+  m <- .check_m_ins_util(m)
 
   im <- m * ((1 + i)^(1 / m) - 1)
   ifelse(abs(im) < 1e-12, 1, i / im)
@@ -110,8 +136,7 @@ udd_mthly_multiplier <- function(i, m) {
 #' @return Continuous whole life insurance APV under UDD.
 #' @export
 Abarx_udd <- function(Ax, i) {
-  Ax <- as.numeric(Ax)
-  if (any(!is.finite(Ax))) stop("Ax must be finite.", call. = FALSE)
+  Ax <- .check_numeric_finite_ins_util(Ax, "Ax")
   udd_continuous_multiplier(i) * Ax
 }
 
@@ -125,8 +150,7 @@ Abarx_udd <- function(Ax, i) {
 #' @return Continuous term insurance APV under UDD.
 #' @export
 Abarxn1_udd <- function(Axn1, i) {
-  Axn1 <- as.numeric(Axn1)
-  if (any(!is.finite(Axn1))) stop("Axn1 must be finite.", call. = FALSE)
+  Axn1 <- .check_numeric_finite_ins_util(Axn1, "Axn1")
   udd_continuous_multiplier(i) * Axn1
 }
 
@@ -140,8 +164,7 @@ Abarxn1_udd <- function(Axn1, i) {
 #' @return Continuous deferred insurance APV under UDD.
 #' @export
 nAbarx_udd <- function(nAx, i) {
-  nAx <- as.numeric(nAx)
-  if (any(!is.finite(nAx))) stop("nAx must be finite.", call. = FALSE)
+  nAx <- .check_numeric_finite_ins_util(nAx, "nAx")
   udd_continuous_multiplier(i) * nAx
 }
 
@@ -157,11 +180,8 @@ nAbarx_udd <- function(nAx, i) {
 #' @return Continuous endowment insurance APV under UDD.
 #' @export
 Abarxn_udd <- function(Axn1, nEx, i) {
-  Axn1 <- as.numeric(Axn1)
-  nEx <- as.numeric(nEx)
-
-  if (any(!is.finite(Axn1))) stop("Axn1 must be finite.", call. = FALSE)
-  if (any(!is.finite(nEx))) stop("nEx must be finite.", call. = FALSE)
+  Axn1 <- .check_numeric_finite_ins_util(Axn1, "Axn1")
+  nEx <- .check_numeric_finite_ins_util(nEx, "nEx")
 
   Abarxn1_udd(Axn1, i) + nEx
 }
@@ -181,8 +201,7 @@ Abarxn_udd <- function(Axn1, nEx, i) {
 #' @return m-thly whole life insurance APV under UDD.
 #' @export
 Ax_m_udd <- function(Ax, i, m) {
-  Ax <- as.numeric(Ax)
-  if (any(!is.finite(Ax))) stop("Ax must be finite.", call. = FALSE)
+  Ax <- .check_numeric_finite_ins_util(Ax, "Ax")
   udd_mthly_multiplier(i, m) * Ax
 }
 
@@ -197,8 +216,7 @@ Ax_m_udd <- function(Ax, i, m) {
 #' @return m-thly term insurance APV under UDD.
 #' @export
 Axn1_m_udd <- function(Axn1, i, m) {
-  Axn1 <- as.numeric(Axn1)
-  if (any(!is.finite(Axn1))) stop("Axn1 must be finite.", call. = FALSE)
+  Axn1 <- .check_numeric_finite_ins_util(Axn1, "Axn1")
   udd_mthly_multiplier(i, m) * Axn1
 }
 
@@ -213,8 +231,7 @@ Axn1_m_udd <- function(Axn1, i, m) {
 #' @return m-thly deferred insurance APV under UDD.
 #' @export
 nAx_m_udd <- function(nAx, i, m) {
-  nAx <- as.numeric(nAx)
-  if (any(!is.finite(nAx))) stop("nAx must be finite.", call. = FALSE)
+  nAx <- .check_numeric_finite_ins_util(nAx, "nAx")
   udd_mthly_multiplier(i, m) * nAx
 }
 
@@ -231,11 +248,8 @@ nAx_m_udd <- function(nAx, i, m) {
 #' @return m-thly endowment insurance APV under UDD.
 #' @export
 Axn_m_udd <- function(Axn1, nEx, i, m) {
-  Axn1 <- as.numeric(Axn1)
-  nEx <- as.numeric(nEx)
-
-  if (any(!is.finite(Axn1))) stop("Axn1 must be finite.", call. = FALSE)
-  if (any(!is.finite(nEx))) stop("nEx must be finite.", call. = FALSE)
+  Axn1 <- .check_numeric_finite_ins_util(Axn1, "Axn1")
+  nEx <- .check_numeric_finite_ins_util(nEx, "nEx")
 
   Axn1_m_udd(Axn1, i, m) + nEx
 }

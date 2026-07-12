@@ -300,3 +300,266 @@ test_that("extended reserve functions reject invalid inputs", {
     "strictly increasing"
   )
 })
+
+
+testthat::test_that("extended reserve functions work with life tables", {
+  tbl <- life_table(
+    x = 0:5,
+    lx = c(100000, 85000, 65000, 40000, 15000, 0)
+  )
+
+  whole_life <- tVx_ret(
+    x = 0,
+    t = 1,
+    i = 0.05,
+    tbl = tbl
+  )
+
+  deferred <- tVnAx(
+    x = 0,
+    n = 3,
+    t = 1,
+    i = 0.05,
+    tbl = tbl
+  )
+
+  testthat::expect_length(whole_life, 1)
+  testthat::expect_length(deferred, 1)
+  testthat::expect_true(is.finite(whole_life))
+  testthat::expect_true(is.finite(deferred))
+})
+
+
+testthat::test_that("retrospective reserve functions vectorize over interest rates", {
+  out <- tVxn_ret(
+    x = 40,
+    n = 20,
+    t = 10,
+    i = c(0.03, 0.05),
+    model = "uniform",
+    omega = 100
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+})
+
+
+testthat::test_that("retrospective reserves retain maturity values", {
+  testthat::expect_equal(
+    tVxn_ret(
+      x = 40,
+      n = 20,
+      t = 20,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    1
+  )
+
+  testthat::expect_equal(
+    tVxn1_ret(
+      x = 40,
+      n = 20,
+      t = 20,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    0
+  )
+})
+
+
+testthat::test_that("extended reserve functions reject incompatible lengths", {
+  testthat::expect_error(
+    tVnAx(
+      x = c(40, 45),
+      n = c(10, 15, 20),
+      t = 5,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    "length 1 or the common length"
+  )
+
+  testthat::expect_error(
+    htVnAx(
+      x = c(40, 45),
+      n = 20,
+      h = c(5, 10, 15),
+      t = 2,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    "length 1 or the common length"
+  )
+})
+
+
+testthat::test_that("extended reserve functions require one mortality basis", {
+  testthat::expect_error(
+    tVx_ret(
+      x = 40,
+      t = 10,
+      i = 0.05
+    ),
+    "Supply either tbl or model"
+  )
+
+  tbl <- life_table(
+    x = 0:3,
+    lx = c(100000, 70000, 30000, 0)
+  )
+
+  testthat::expect_error(
+    tVx_ret(
+      x = 0,
+      t = 1,
+      i = 0.05,
+      model = "uniform",
+      omega = 100,
+      tbl = tbl
+    ),
+    "Supply only one"
+  )
+})
+
+testthat::test_that("deferred annuity premiums require positive deferral periods", {
+  testthat::expect_error(
+    PnAdotx(
+      x = 40,
+      n = 0,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    "positive integer-like"
+  )
+
+  testthat::expect_error(
+    Pnax(
+      x = 40,
+      n = 0,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    "positive integer-like"
+  )
+})
+
+
+testthat::test_that("continuous gain helpers allow finite negative values", {
+  out <- GT_cont(
+    Vt = -1,
+    Vt1 = 0.5,
+    P = -0.1,
+    delta_actual = -0.01,
+    p_actual = 0.99,
+    benefit = 0,
+    h = 0.25
+  )
+
+  expected <- (-1 - 0.1 * 0.25) *
+    exp(-0.01 * 0.25) -
+    0.99 * 0.5
+
+  testthat::expect_equal(out, expected)
+})
+
+testthat::test_that("Thiele derivative allows negative reserves and interest forces", {
+  out <- thiele_dVdt(
+    V = -10,
+    P = -1,
+    delta = -0.01,
+    mu = 0.02,
+    benefit = 100
+  )
+
+  expected <- -1 +
+    (-0.01) * (-10) -
+    0.02 * (100 - (-10))
+
+  testthat::expect_equal(out, expected)
+})
+
+
+testthat::test_that("backward Thiele step matches its defining formula", {
+  V_next <- 1000
+  P <- 26.96
+  delta <- 0.058
+  mu <- 0.002
+  benefit <- 1000
+  h <- 0.25
+
+  expected <- (
+    V_next -
+      h * P +
+      h * mu * benefit
+  ) / (
+    1 + h * (delta + mu)
+  )
+
+  testthat::expect_equal(
+    thiele_backward_step(
+      V_next = V_next,
+      P = P,
+      delta = delta,
+      mu = mu,
+      benefit = benefit,
+      h = h
+    ),
+    expected
+  )
+})
+
+
+testthat::test_that("backward Thiele path preserves the terminal reserve", {
+  times <- seq(19, 20, by = 0.25)
+
+  out <- thiele_backward_path(
+    times = times,
+    V_terminal = 1000,
+    P = 26.96,
+    delta = 0.058,
+    mu = 0.002,
+    benefit = 1000
+  )
+
+  testthat::expect_length(out, length(times))
+  testthat::expect_equal(out[length(out)], 1000)
+  testthat::expect_true(all(is.finite(out)))
+})
+
+testthat::test_that("backward Thiele path checks step-vector lengths", {
+  times <- seq(0, 1, by = 0.25)
+
+  testthat::expect_error(
+    thiele_backward_path(
+      times = times,
+      V_terminal = 1000,
+      P = c(10, 20),
+      delta = 0.05,
+      mu = 0.01,
+      benefit = 1000
+    ),
+    "P must have length 1 or 4"
+  )
+
+  testthat::expect_error(
+    thiele_backward_path(
+      times = times,
+      V_terminal = c(1000, 1001),
+      P = 10,
+      delta = 0.05,
+      mu = 0.01,
+      benefit = 1000
+    ),
+    "V_terminal must be a finite scalar"
+  )
+})
+

@@ -4,7 +4,7 @@
 \alias{htVx}
 \title{h-pay whole life net level premium reserve}
 \usage{
-htVx(x, h, t, i, model, ...)
+htVx(x, h, t, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
 \item{x}{Issue age.}
@@ -15,15 +15,17 @@ htVx(x, h, t, i, model, ...)
 
 \item{i}{Effective annual interest rate.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model name.}
 
 \item{...}{Additional model parameters.}
+
+\item{tbl}{Optional life table object.}
 }
 \value{
-Numeric vector.
+A numeric vector of values.
 }
 \description{
-Computes the Chapter 10 prospective reserve for an h-pay whole life policy.
+Computes the prospective reserve for an h-pay whole life policy.
 }
 \examples{
 htVx(40, h = 10, t = 5, i = 0.05, model = "uniform", omega = 100)

@@ -7,9 +7,9 @@
 GT_cont(Vt, Vt1, P, delta_actual, p_actual, benefit = 0, h = 1)
 }
 \arguments{
-\item{Vt}{Reserve at time t.}
+\item{Vt}{Reserve at time `t`.}
 
-\item{Vt1}{Reserve at time t+h.}
+\item{Vt1}{Reserve at time `t + h`.}
 
 \item{P}{Premium rate.}
 
@@ -17,16 +17,28 @@ GT_cont(Vt, Vt1, P, delta_actual, p_actual, benefit = 0, h = 1)
 
 \item{p_actual}{Actual survival probability over the step.}
 
-\item{benefit}{Benefit paid at start of step. Default 0.}
+\item{benefit}{Benefit paid at the start of the step.}
 
-\item{h}{Step length. Default 1.}
+\item{h}{Positive step length.}
 }
 \value{
-Numeric vector.
+Numeric vector of gain values.
 }
 \description{
-Total gain for a continuous-style one-step recursion
+Computes the amount accumulated during a step, less the expected reserve
+required at the end of the step.
+}
+\details{
+Reserves, premium rates, benefits, and forces of interest may be negative
+when such values are meaningful for the application. The step length must
+be positive, and the survival probability must lie in \eqn{[0,1]}.
 }
 \examples{
-GT_cont(Vt = 10, Vt1 = 11, P = 1, delta_actual = 0.05, p_actual = 0.99)
+GT_cont(
+  Vt = 10,
+  Vt1 = 11,
+  P = 1,
+  delta_actual = 0.05,
+  p_actual = 0.99
+)
 }

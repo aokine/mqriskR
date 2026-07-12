@@ -25,5 +25,6 @@ var_Ax_m(x, i, m, model, ..., tol = 1e-12, j_max = 100000L)
 Numeric vector of variances.
 }
 \description{
-Computes \eqn{\mathrm{Var}(Z_x^{(m)}) = {}^{2}A_x^{(m)} - (A_x^{(m)})^2}.
+Computes \eqn{\mathrm{Var}(Z_x^{(m)}) =
+{}^{2}A_x^{(m)} - (A_x^{(m)})^2}.
 }

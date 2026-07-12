@@ -208,3 +208,40 @@ test_that("projected annuity values are finite in standard cases", {
   expect_true(is.finite(val1))
   expect_true(is.finite(val2))
 })
+
+
+test_that("mortality improvement annuities vectorize over i", {
+  qx <- rep(0.01, 20)
+  aa <- rep(0.02, 20)
+
+  out <- axn_improved(
+    x0 = 40,
+    n = 10,
+    i = c(0.03, 0.05),
+    qx_base_vec = qx,
+    AAx_vec = aa,
+    base_year = 2020,
+    issue_year = 2025
+  )
+
+  expect_length(out, 2)
+  expect_true(out[1] > out[2])
+})
+
+test_that("mortality improvement annuities reject incompatible vector lengths", {
+  qx <- rep(0.01, 20)
+  aa <- rep(0.02, 20)
+
+  expect_error(
+    axn_improved(
+      x0 = c(40, 45),
+      n = c(5, 10, 15),
+      i = 0.05,
+      qx_base_vec = qx,
+      AAx_vec = aa,
+      base_year = 2020,
+      issue_year = 2025
+    ),
+    "compatible lengths"
+  )
+})

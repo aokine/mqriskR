@@ -2,30 +2,48 @@
 % Please edit documentation in R/reserve_ch10_ext.R
 \name{thiele_backward_step}
 \alias{thiele_backward_step}
-\title{One backward Euler-style Thiele step}
+\title{One backward numerical step for Thiele's equation}
 \usage{
 thiele_backward_step(V_next, P, delta, mu, benefit = 1, h = 1)
 }
 \arguments{
-\item{V_next}{Reserve at time t+h.}
+\item{V_next}{Reserve at time `t + h`.}
 
 \item{P}{Premium rate.}
 
 \item{delta}{Force of interest.}
 
-\item{mu}{Force of mortality at time t.}
+\item{mu}{Nonnegative force of mortality at time `t`.}
 
-\item{benefit}{Benefit amount. Defaults to 1.}
+\item{benefit}{Benefit amount.}
 
-\item{h}{Step size.}
+\item{h}{Positive step size.}
 }
 \value{
-Numeric vector.
+Numeric vector of reserve approximations.
 }
 \description{
-Approximates the reserve at time \eqn{t} from a known reserve at
-time \eqn{t+h}.
+Approximates the reserve at time `t` from a known reserve at time
+`t + h`.
+}
+\details{
+The implemented step is
+\deqn{
+V_t =
+\frac{
+V_{t+h} - hP + h\mu B
+}{
+1 + h(\delta + \mu)
+}.
+}
 }
 \examples{
-thiele_backward_step(V_next = 1000, P = 26.96, delta = 0.058, mu = 0.002, benefit = 1000, h = 1)
+thiele_backward_step(
+  V_next = 1000,
+  P = 26.96,
+  delta = 0.058,
+  mu = 0.002,
+  benefit = 1000,
+  h = 1
+)
 }

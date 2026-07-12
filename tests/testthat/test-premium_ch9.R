@@ -342,3 +342,146 @@ test_that("premium functions return finite values in standard cases", {
   expect_true(all(is.finite(vals)))
   expect_true(all(vals > 0))
 })
+
+
+
+
+test_that("annual premium functions vectorize over interest rates", {
+  out <- Px(
+    x = 40,
+    i = c(0.03, 0.05),
+    model = "uniform",
+    omega = 100
+  )
+
+  expect_length(out, 2)
+  expect_true(all(is.finite(out)))
+})
+
+test_that("term premium functions vectorize over x, n, and i", {
+  out <- Pxn1(
+    x = c(40, 45),
+    n = c(10, 15),
+    i = c(0.04, 0.05),
+    model = "uniform",
+    omega = 100
+  )
+
+  expect_length(out, 2)
+  expect_true(all(is.finite(out)))
+})
+
+test_that("limited-payment premium functions vectorize over t", {
+  out <- tPxn(
+    x = 40,
+    n = c(10, 20),
+    t = c(5, 10),
+    i = 0.05,
+    model = "uniform",
+    omega = 100
+  )
+
+  expect_length(out, 2)
+  expect_true(all(is.finite(out)))
+})
+
+test_that("limited-payment premiums require t not to exceed n", {
+  expect_error(
+    tPxn1(
+      x = 40,
+      n = 10,
+      t = 15,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    "t must satisfy t <= n"
+  )
+})
+
+test_that("premium functions reject incompatible vector lengths", {
+  expect_error(
+    Pxn(
+      x = c(40, 45),
+      n = c(10, 15, 20),
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    "compatible lengths"
+  )
+
+  expect_error(
+    EL0xn(
+      x = c(40, 45),
+      n = c(10, 15),
+      P = c(0.01, 0.02, 0.03),
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    "compatible lengths"
+  )
+})
+
+test_that("loss functions vectorize over premium amounts", {
+  out <- EL0x(
+    x = 40,
+    P = c(0.01, 0.02),
+    i = 0.05,
+    model = "uniform",
+    omega = 100
+  )
+
+  expect_length(out, 2)
+  expect_true(all(is.finite(out)))
+})
+
+test_that("gross premium function vectorizes expense inputs", {
+  out <- Gx(
+    x = c(40, 45),
+    i = 0.05,
+    benefit = c(100000, 150000),
+    first_premium_pct = 0.5,
+    renewal_premium_pct = 0.05,
+    first_policy_exp = c(100, 125),
+    renewal_policy_exp = 25,
+    settlement_exp = 200,
+    model = "uniform",
+    omega = 100
+  )
+
+  expect_length(out, 2)
+  expect_true(all(is.finite(out)))
+  expect_true(all(out > 0))
+})
+
+test_that("premium functions work with a finite life table", {
+  tbl <- life_table(
+    x = 0:3,
+    lx = c(100000, 80000, 50000, 0)
+  )
+
+  out <- Px(
+    x = 0,
+    i = 0.05,
+    tbl = tbl
+  )
+
+  expect_length(out, 1)
+  expect_true(is.finite(out))
+  expect_true(out > 0)
+})
+
+test_that("scalar premium calls preserve scalar behavior", {
+  out <- Px(
+    x = 40,
+    i = 0.05,
+    model = "uniform",
+    omega = 100
+  )
+
+  expect_length(out, 1)
+  expect_true(is.numeric(out))
+  expect_true(is.finite(out))
+})

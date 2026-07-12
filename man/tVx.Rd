@@ -4,7 +4,7 @@
 \alias{tVx}
 \title{Whole life net level premium reserve}
 \usage{
-tVx(x, t, i, model, ...)
+tVx(x, t, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
 \item{x}{Issue age.}
@@ -13,15 +13,17 @@ tVx(x, t, i, model, ...)
 
 \item{i}{Effective annual interest rate.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model name.}
 
 \item{...}{Additional model parameters.}
+
+\item{tbl}{Optional life table object.}
 }
 \value{
-Numeric vector.
+A numeric vector of values.
 }
 \description{
-Computes the Chapter 10 prospective reserve
+Computes the prospective reserve
 for a whole life insurance with annual premiums:
 reserve at duration t equals future APV of benefits minus future APV
 of net premiums.

@@ -2,22 +2,9 @@
 % Please edit documentation in R/insurance_varying_benefits.R
 \name{insurance_varying_benefits}
 \alias{insurance_varying_benefits}
-\title{Insurance models with varying benefits (Chapter 7)}
+\title{Insurance models with varying benefits}
 \description{
 Functions for discrete and continuous contingent payment models with
-varying benefits, matching Chapter 7 notation.
-}
-\details{
-Included functions:
-\itemize{
-  \item \eqn{(IA)_x}
-  \item \eqn{(IA)_{x:\overline{n}|}^{1}}
-  \item \eqn{(DA)_{x:\overline{n}|}^{1}}
-  \item \eqn{(\bar{I}\bar{A})_x}
-  \item \eqn{(I\bar{A})_x}
-  \item \eqn{(\bar{I}\bar{A})_{x:\overline{n}|}^{1}}
-  \item \eqn{(\bar{D}\bar{A})_{x:\overline{n}|}^{1}}
-  \item \eqn{(D\bar{A})_{x:\overline{n}|}^{1}}
-}
+varying benefits.
 }
 \keyword{internal}

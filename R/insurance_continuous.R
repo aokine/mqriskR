@@ -1,18 +1,6 @@
-#' Continuous insurance models (Chapter 7)
+#' Continuous insurance models
 #'
-#' Continuous contingent payment / insurance functions matching Chapter 7 notation.
-#'
-#' These functions handle:
-#' \itemize{
-#'   \item continuous whole life insurance: \eqn{\bar{A}_x},
-#'   \item continuous term insurance: \eqn{\bar{A}_{x:\overline{n}|}^{1}},
-#'   \item continuous deferred insurance: \eqn{{}_{n\mid}\bar{A}_x},
-#'   \item continuous endowment insurance: \eqn{\bar{A}_{x:\overline{n}|}},
-#'   \item second moments and variances.
-#' }
-#'
-#' These functions are evaluated from the parametric survival-model framework
-#' developed earlier in the package.
+#' Continuous contingent payment and insurance functions.
 #'
 #' @name insurance_continuous
 #' @keywords internal
@@ -22,43 +10,69 @@ NULL
 # Internal helpers
 # ------------------------------------------------------------
 
-#' @noRd
-.check_cont_inputs <- function(x, i) {
-  x <- as.numeric(x)
+.check_i_cont <- function(i) {
   i <- as.numeric(i)
 
-  if (any(!is.finite(x))) stop("x must be finite.", call. = FALSE)
-  if (any(x < 0)) stop("x must be >= 0.", call. = FALSE)
-  if (length(i) != 1L || !is.finite(i) || i <= -1) {
-    stop("i must be a single value > -1.", call. = FALSE)
+  if (length(i) == 0L || any(!is.finite(i)) || any(i <= -1)) {
+    stop("i must contain finite values greater than -1.", call. = FALSE)
   }
 
-  list(x = x, i = i)
+  i
 }
 
-#' @noRd
+.recycle_cont_vectors <- function(...) {
+  args <- lapply(list(...), as.numeric)
+  lens <- vapply(args, length, integer(1))
+
+  if (any(lens == 0L)) {
+    stop("All arguments must have positive length.", call. = FALSE)
+  }
+
+  if (any(vapply(args, function(z) any(!is.finite(z)), logical(1)))) {
+    stop("All arguments must contain finite numeric values.", call. = FALSE)
+  }
+
+  common_len <- max(lens)
+
+  if (any(!(lens %in% c(1L, common_len)))) {
+    stop("Arguments must have compatible lengths.", call. = FALSE)
+  }
+
+  lapply(args, function(z) {
+    if (length(z) == 1L) rep(z, common_len) else z
+  })
+}
+
+
 .recycle_x_n_cont <- function(x, n) {
-  x <- as.numeric(x)
-  n <- as.numeric(n)
+  args <- .recycle_cont_vectors(x, n)
 
-  if (length(x) == 0L || length(n) == 0L) {
-    stop("x and n must have positive length.", call. = FALSE)
-  }
-  if (any(!is.finite(x))) stop("x must be finite.", call. = FALSE)
-  if (any(!is.finite(n))) stop("n must be finite.", call. = FALSE)
-  if (any(x < 0)) stop("x must be >= 0.", call. = FALSE)
-  if (any(n < 0)) stop("n must be >= 0.", call. = FALSE)
+  x <- args[[1L]]
+  n <- args[[2L]]
 
-  if (length(x) == 1L && length(n) > 1L) x <- rep(x, length(n))
-  if (length(n) == 1L && length(x) > 1L) n <- rep(n, length(x))
-  if (length(x) != length(n)) {
-    stop("x and n must have compatible lengths.", call. = FALSE)
-  }
+  .check_x_cont(x)
+  .check_n_cont(n)
 
   list(x = x, n = n)
 }
 
-#' @noRd
+
+.check_x_cont <- function(x) {
+  if (any(x < 0)) {
+    stop("x must be nonnegative.", call. = FALSE)
+  }
+
+  invisible(TRUE)
+}
+
+.check_n_cont <- function(n) {
+  if (any(n < 0)) {
+    stop("n must be nonnegative.", call. = FALSE)
+  }
+
+  invisible(TRUE)
+}
+
 .integrate_cont <- function(f, lower, upper) {
   stats::integrate(
     f,
@@ -69,23 +83,30 @@ NULL
   )$value
 }
 
-#' @noRd
 .get_upper_cont <- function(x, n = NULL, model, ...) {
   if (tolower(model) == "uniform") {
     dots <- list(...)
+
     if (is.null(dots$omega)) {
       stop("For model = 'uniform', omega must be supplied.", call. = FALSE)
     }
+
     upper <- dots$omega - x
-    if (!is.null(n)) upper <- pmin(upper, n)
+
+    if (!is.null(n)) {
+      upper <- pmin(upper, n)
+    }
+
     return(pmax(upper, 0))
   }
 
-  if (is.null(n)) return(Inf)
+  if (is.null(n)) {
+    return(Inf)
+  }
+
   n
 }
 
-#' @noRd
 .pure_endowment_cont <- function(x, n, i, model, ...) {
   discount(i, n) * tpx(n, x = x, model = model, ...)
 }
@@ -97,7 +118,7 @@ NULL
 #' Continuous whole life insurance APV
 #'
 #' Computes
-#' \eqn{\bar{A}_x = \int_0^\infty v^t \, {}_t p_x \mu_{x+t}\,dt}.
+#' \eqn{\bar{A}_x = \int_0^\infty v^t {}_t p_x \mu_{x+t}\,dt}.
 #'
 #' @param x Age.
 #' @param i Effective annual interest rate.
@@ -107,15 +128,21 @@ NULL
 #' @return Numeric vector of APVs.
 #' @export
 Abarx <- function(x, i, model, ...) {
-  chk <- .check_cont_inputs(x, i)
-  x <- chk$x
+  args <- .recycle_cont_vectors(x, .check_i_cont(i))
+  x <- args[[1L]]
+  i <- args[[2L]]
 
-  delta <- interest_convert(i = i)$delta
+  .check_x_cont(x)
 
-  sapply(x, function(xx) {
+  sapply(seq_along(x), function(j) {
+    xx <- x[j]
+    delta <- log(1 + i[j])
+
     upper <- .get_upper_cont(xx, model = model, ...)
 
-    if (upper <= 0) return(0)
+    if (upper <= 0) {
+      return(0)
+    }
 
     f <- function(t) {
       val <- exp(-delta * t) *
@@ -132,7 +159,8 @@ Abarx <- function(x, i, model, ...) {
 #' Continuous term insurance APV
 #'
 #' Computes
-#' \eqn{\bar{A}_{x:\overline{n}|}^{1} = \int_0^n v^t \, {}_t p_x \mu_{x+t}\,dt}.
+#' \eqn{\bar{A}_{x:\overline{n}|}^{1} =
+#' \int_0^n v^t {}_t p_x \mu_{x+t}\,dt}.
 #'
 #' @param x Age.
 #' @param n Term.
@@ -143,22 +171,24 @@ Abarx <- function(x, i, model, ...) {
 #' @return Numeric vector of APVs.
 #' @export
 Abarxn1 <- function(x, n, i, model, ...) {
-  xn <- .recycle_x_n_cont(x, n)
-  x <- xn$x
-  n <- xn$n
+  args <- .recycle_cont_vectors(x, n, .check_i_cont(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
 
-  if (length(i) != 1L || !is.finite(i) || i <= -1) {
-    stop("i must be a single value > -1.", call. = FALSE)
-  }
-
-  delta <- interest_convert(i = i)$delta
+  .check_x_cont(x)
+  .check_n_cont(n)
 
   sapply(seq_along(x), function(j) {
     xx <- x[j]
     nn <- n[j]
+    delta <- log(1 + i[j])
 
     upper <- .get_upper_cont(xx, n = nn, model = model, ...)
-    if (upper <= 0) return(0)
+
+    if (upper <= 0) {
+      return(0)
+    }
 
     f <- function(t) {
       val <- exp(-delta * t) *
@@ -175,7 +205,7 @@ Abarxn1 <- function(x, n, i, model, ...) {
 #' Continuous deferred insurance APV
 #'
 #' Computes
-#' \eqn{{}_{n\mid}\bar{A}_x = v^n\,{}_np_x\,\bar{A}_{x+n}}.
+#' \eqn{{}_{n\mid}\bar{A}_x = v^n {}_n p_x \bar{A}_{x+n}}.
 #'
 #' @param x Age.
 #' @param n Deferral period.
@@ -186,9 +216,13 @@ Abarxn1 <- function(x, n, i, model, ...) {
 #' @return Numeric vector of APVs.
 #' @export
 nAbarx <- function(x, n, i, model, ...) {
-  xn <- .recycle_x_n_cont(x, n)
-  x <- xn$x
-  n <- xn$n
+  args <- .recycle_cont_vectors(x, n, .check_i_cont(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
+
+  .check_x_cont(x)
+  .check_n_cont(n)
 
   .pure_endowment_cont(x, n, i, model = model, ...) *
     Abarx(x + n, i, model = model, ...)
@@ -197,7 +231,8 @@ nAbarx <- function(x, n, i, model, ...) {
 #' Continuous endowment insurance APV
 #'
 #' Computes
-#' \eqn{\bar{A}_{x:\overline{n}|} = \bar{A}_{x:\overline{n}|}^{1} + v^n\,{}_np_x}.
+#' \eqn{\bar{A}_{x:\overline{n}|} =
+#' \bar{A}_{x:\overline{n}|}^{1} + v^n {}_n p_x}.
 #'
 #' @param x Age.
 #' @param n Term.
@@ -208,9 +243,10 @@ nAbarx <- function(x, n, i, model, ...) {
 #' @return Numeric vector of APVs.
 #' @export
 Abarxn <- function(x, n, i, model, ...) {
-  xn <- .recycle_x_n_cont(x, n)
-  x <- xn$x
-  n <- xn$n
+  args <- .recycle_cont_vectors(x, n, .check_i_cont(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
 
   Abarxn1(x, n, i, model = model, ...) +
     .pure_endowment_cont(x, n, i, model = model, ...)
@@ -264,9 +300,10 @@ A2nAbarx <- function(x, n, i, model, ...) {
 #' @return Numeric vector of second moments.
 #' @export
 A2barxn <- function(x, n, i, model, ...) {
-  xn <- .recycle_x_n_cont(x, n)
-  x <- xn$x
-  n <- xn$n
+  args <- .recycle_cont_vectors(x, n, .check_i_cont(i))
+  x <- args[[1L]]
+  n <- args[[2L]]
+  i <- args[[3L]]
 
   A2barxn1(x, n, i, model = model, ...) +
     .pure_endowment_cont(x, n, double_force_i(i), model = model, ...)
@@ -278,7 +315,8 @@ A2barxn <- function(x, n, i, model, ...) {
 
 #' Variance of continuous whole life insurance PV
 #'
-#' Computes \eqn{\mathrm{Var}(\bar{Z}_x) = {}^{2}\bar{A}_x - \bar{A}_x^2}.
+#' Computes \eqn{\mathrm{Var}(\bar{Z}_x) =
+#' {}^{2}\bar{A}_x - \bar{A}_x^2}.
 #'
 #' @inheritParams Abarx
 #' @return Numeric vector of variances.
@@ -291,7 +329,9 @@ var_Abarx <- function(x, i, model, ...) {
 #' Variance of continuous term insurance PV
 #'
 #' Computes
-#' \eqn{\mathrm{Var}(\bar{Z}_{x:\overline{n}|}^{1}) = {}^{2}\bar{A}_{x:\overline{n}|}^{1} - (\bar{A}_{x:\overline{n}|}^{1})^2}.
+#' \eqn{\mathrm{Var}(\bar{Z}_{x:\overline{n}|}^{1}) =
+#' {}^{2}\bar{A}_{x:\overline{n}|}^{1}
+#' - (\bar{A}_{x:\overline{n}|}^{1})^2}.
 #'
 #' @inheritParams Abarxn1
 #' @return Numeric vector of variances.

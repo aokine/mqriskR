@@ -4,7 +4,7 @@
 \alias{tVx_m}
 \title{Whole life reserve with m-thly premiums}
 \usage{
-tVx_m(x, t, m, i, model, ...)
+tVx_m(x, t, m, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
 \item{x}{Issue age.}
@@ -15,15 +15,17 @@ tVx_m(x, t, m, i, model, ...)
 
 \item{i}{Effective annual interest rate.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model name.}
 
 \item{...}{Additional model parameters.}
+
+\item{tbl}{Optional life table object.}
 }
 \value{
-Numeric vector.
+A numeric vector of values.
 }
 \description{
-Computes the Chapter 10 reserve for a whole life insurance funded
+Computes the reserve for a whole life insurance funded
 by true m-thly premiums.
 }
 \examples{

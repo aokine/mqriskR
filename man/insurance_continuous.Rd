@@ -2,21 +2,8 @@
 % Please edit documentation in R/insurance_continuous.R
 \name{insurance_continuous}
 \alias{insurance_continuous}
-\title{Continuous insurance models (Chapter 7)}
+\title{Continuous insurance models}
 \description{
-Continuous contingent payment / insurance functions matching Chapter 7 notation.
-}
-\details{
-These functions handle:
-\itemize{
-  \item continuous whole life insurance: \eqn{\bar{A}_x},
-  \item continuous term insurance: \eqn{\bar{A}_{x:\overline{n}|}^{1}},
-  \item continuous deferred insurance: \eqn{{}_{n\mid}\bar{A}_x},
-  \item continuous endowment insurance: \eqn{\bar{A}_{x:\overline{n}|}},
-  \item second moments and variances.
-}
-
-These functions are evaluated from the parametric survival-model framework
-developed earlier in the package.
+Continuous contingent payment and insurance functions.
 }
 \keyword{internal}

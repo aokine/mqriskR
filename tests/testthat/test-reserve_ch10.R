@@ -194,3 +194,191 @@ test_that("ELtx and varLtx reject invalid inputs", {
     "nonnegative finite"
   )
 })
+
+testthat::test_that("annual reserve functions work with life tables", {
+  tbl <- life_table(
+    x = 0:4,
+    lx = c(100000, 80000, 50000, 20000, 0)
+  )
+
+  out <- tVx(
+    x = 0,
+    t = 1,
+    i = 0.05,
+    tbl = tbl
+  )
+
+  testthat::expect_length(out, 1)
+  testthat::expect_true(is.finite(out))
+})
+
+
+testthat::test_that("term and endowment reserves have correct maturity values", {
+  testthat::expect_equal(
+    tVxn1(
+      x = 40,
+      n = 20,
+      t = 20,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    0
+  )
+
+  testthat::expect_equal(
+    tVnEx(
+      x = 40,
+      n = 20,
+      t = 20,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    1
+  )
+
+  testthat::expect_equal(
+    tVxn(
+      x = 40,
+      n = 20,
+      t = 20,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    1
+  )
+})
+
+
+testthat::test_that("reserve functions vectorize over ages and durations", {
+  out <- tVx(
+    x = c(40, 45),
+    t = c(5, 10),
+    i = 0.05,
+    model = "uniform",
+    omega = 100
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+})
+
+
+testthat::test_that("reserve functions recycle scalar arguments", {
+  out <- tVxn(
+    x = c(40, 45),
+    n = 20,
+    t = c(5, 10),
+    i = 0.05,
+    model = "uniform",
+    omega = 100
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+})
+
+
+testthat::test_that("reserve functions reject incompatible lengths", {
+  testthat::expect_error(
+    tVxn1(
+      x = c(40, 45),
+      n = c(10, 15, 20),
+      t = 5,
+      i = 0.05,
+      model = "uniform",
+      omega = 100
+    ),
+    "length 1.*common length"
+  )
+})
+
+
+testthat::test_that("reserve functions require a mortality basis", {
+  testthat::expect_error(
+    tVx(
+      x = 40,
+      t = 10,
+      i = 0.05
+    ),
+    "Supply either tbl or model"
+  )
+})
+
+
+testthat::test_that("reserve functions reject two mortality bases", {
+  tbl <- life_table(
+    x = 0:2,
+    lx = c(100000, 50000, 0)
+  )
+
+  testthat::expect_error(
+    tVx(
+      x = 0,
+      t = 1,
+      i = 0.05,
+      tbl = tbl,
+      model = "uniform",
+      omega = 100
+    ),
+    "not both"
+  )
+})
+
+
+testthat::test_that("reserve functions preserve positional model syntax", {
+  named_result <- tVx(
+    x = 40,
+    t = 10,
+    i = 0.05,
+    model = "uniform",
+    omega = 100
+  )
+
+  positional_result <- tVx(
+    40,
+    10,
+    0.05,
+    "uniform",
+    omega = 100
+  )
+
+  testthat::expect_equal(
+    positional_result,
+    named_result,
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("duration-t loss functions support vectors", {
+  out <- ELtx(
+    x = c(40, 45),
+    t = c(5, 10),
+    i = 0.05,
+    P = c(0.02, 0.025),
+    model = "uniform",
+    omega = 100
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+})
+
+
+testthat::test_that("gain functions vectorize consistently", {
+  out <- GT_disc(
+    Vt = c(0.10, 0.15),
+    Vt1 = c(0.11, 0.16),
+    P = 0.02,
+    i_actual = c(0.04, 0.05),
+    q_actual = 0.01,
+    B = 1
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+})
+

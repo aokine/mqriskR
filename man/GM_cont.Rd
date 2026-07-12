@@ -2,14 +2,14 @@
 % Please edit documentation in R/reserve_ch10_ext.R
 \name{GM_cont}
 \alias{GM_cont}
-\title{Mortality gain helper for continuous-style recursion}
+\title{Mortality gain for a continuous-style recursion}
 \usage{
 GM_cont(Vt, Vt1, P, delta_assumed, p_actual, benefit = 0, h = 1)
 }
 \arguments{
-\item{Vt}{Reserve at time t.}
+\item{Vt}{Reserve at time `t`.}
 
-\item{Vt1}{Reserve at time t+h.}
+\item{Vt1}{Reserve at time `t + h`.}
 
 \item{P}{Premium rate.}
 
@@ -17,16 +17,23 @@ GM_cont(Vt, Vt1, P, delta_assumed, p_actual, benefit = 0, h = 1)
 
 \item{p_actual}{Actual survival probability over the step.}
 
-\item{benefit}{Benefit paid at start of step. Default 0.}
+\item{benefit}{Benefit paid at the start of the step.}
 
-\item{h}{Step length. Default 1.}
+\item{h}{Positive step length.}
 }
 \value{
-Numeric vector.
+Numeric vector of mortality gain values.
 }
 \description{
-Mortality gain helper for continuous-style recursion
+Evaluates the one-step gain using the assumed force of interest and the
+actual survival probability.
 }
 \examples{
-GM_cont(Vt = 10, Vt1 = 11, P = 1, delta_assumed = 0.05, p_actual = 0.99)
+GM_cont(
+  Vt = 10,
+  Vt1 = 11,
+  P = 1,
+  delta_assumed = 0.05,
+  p_actual = 0.99
+)
 }

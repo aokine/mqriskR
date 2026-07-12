@@ -24,5 +24,6 @@ Numeric vector of covariances.
 }
 \description{
 Computes
-\eqn{\mathrm{Cov}(Z_{x:\overline{n}|}^{1}, {}_{n\mid}Z_x) = -A_{x:\overline{n}|}^{1} \cdot {}_{n\mid}A_x}.
+\eqn{\mathrm{Cov}(Z_{x:\overline{n}|}^{1}, {}_{n\mid}Z_x) =
+-A_{x:\overline{n}|}^{1} \cdot {}_{n\mid}A_x}.
 }

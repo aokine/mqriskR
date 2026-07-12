@@ -7,23 +7,33 @@
 thiele_dVdt(V, P, delta, mu, benefit = 1)
 }
 \arguments{
-\item{V}{Reserve at time t.}
+\item{V}{Reserve at time `t`.}
 
 \item{P}{Premium rate.}
 
 \item{delta}{Force of interest.}
 
-\item{mu}{Force of mortality.}
+\item{mu}{Nonnegative force of mortality.}
 
-\item{benefit}{Benefit amount. Defaults to 1.}
+\item{benefit}{Benefit amount.}
 }
 \value{
-Numeric vector.
+Numeric vector of reserve derivatives.
 }
 \description{
 Computes
-\eqn{dV/dt = P + \delta V - \mu(B - V)}.
+\deqn{
+\frac{dV}{dt}
+=
+P + \delta V - \mu(B - V).
+}
 }
 \examples{
-thiele_dVdt(V = 900, P = 25, delta = 0.05, mu = 0.002, benefit = 1000)
+thiele_dVdt(
+  V = 900,
+  P = 25,
+  delta = 0.05,
+  mu = 0.002,
+  benefit = 1000
+)
 }

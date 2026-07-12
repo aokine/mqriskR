@@ -4,7 +4,7 @@
 \alias{tVbarAbarx}
 \title{Fully continuous whole life reserve}
 \usage{
-tVbarAbarx(x, t, i, model, ...)
+tVbarAbarx(x, t, i, model = NULL, ..., tbl = NULL)
 }
 \arguments{
 \item{x}{Issue age.}
@@ -13,15 +13,17 @@ tVbarAbarx(x, t, i, model, ...)
 
 \item{i}{Effective annual interest rate.}
 
-\item{model}{Survival model.}
+\item{model}{Optional parametric survival model name.}
 
 \item{...}{Additional model parameters.}
+
+\item{tbl}{Optional life table object.}
 }
 \value{
-Numeric vector.
+A numeric vector of values.
 }
 \description{
-Computes the Chapter 10 reserve for a whole life insurance with
+Computes the reserve for a whole life insurance with
 continuous premiums and immediate payment of claims.
 }
 \details{

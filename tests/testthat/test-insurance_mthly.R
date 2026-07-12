@@ -203,3 +203,27 @@ test_that("m-thly whole life APV works for exponential model", {
   expect_true(val > 0)
   expect_true(val < 1)
 })
+
+
+testthat::test_that("m-thly insurance functions vectorize over i", {
+  out <- Ax_m(x = 40, i = c(0.03, 0.05), m = 12,
+              model = "uniform", omega = 100)
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+  testthat::expect_true(out[1] > out[2])
+})
+
+testthat::test_that("m-thly term insurance functions recycle x, n, and i", {
+  out <- Axn1_m(
+    x = c(40, 50),
+    n = 10,
+    i = c(0.03, 0.05),
+    m = 12,
+    model = "uniform",
+    omega = 100
+  )
+
+  testthat::expect_length(out, 2)
+  testthat::expect_true(all(is.finite(out)))
+})

@@ -28,5 +28,5 @@ Numeric vector of APVs.
 }
 \description{
 Computes
-\eqn{{}_{n\mid}A_x^{(m)} = v^n\,{}_np_x\,A_{x+n}^{(m)}}.
+\eqn{{}_{n\mid}A_x^{(m)} = v^n {}_np_x A_{x+n}^{(m)}}.
 }

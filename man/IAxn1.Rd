@@ -24,5 +24,6 @@ Numeric vector.
 }
 \description{
 Computes
-\deqn{(IA)_{x:\overline{n}|}^{1} = \sum_{k=0}^{n-1} (k+1) v^{k+1} \Pr(K_x = k).}
+\deqn{(IA)_{x:\overline{n}|}^{1}
+= \sum_{k=0}^{n-1} (k+1) v^{k+1} \Pr(K_x = k).}
 }
