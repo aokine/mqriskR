@@ -2,21 +2,24 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tqxprime_mudd}
 \alias{tqxprime_mudd}
-\title{Independent probabilities \eqn{{}_t q_x^{\prime(j)}} under MUDD}
+\title{Fractional-year associated single-decrement probabilities under MUDD}
 \usage{
 tqxprime_mudd(qxj, t)
 }
 \arguments{
-\item{qxj}{Numeric vector of dependent probabilities \eqn{q_x^{(j)}}.}
+\item{qxj}{Numeric vector of dependent cause-specific decrement
+probabilities.}
 
-\item{t}{Time in [0,1].}
+\item{t}{A single time in \eqn{[0,1]}.}
 }
 \value{
-Numeric vector.
+A numeric vector of associated single-decrement probabilities.
 }
 \description{
-Independent probabilities \eqn{{}_t q_x^{\prime(j)}} under MUDD
+Computes the associated single-decrement probabilities through time
+\code{t} under the multiple-decrement uniform distribution assumption.
 }
 \examples{
-tqxprime_mudd(c(.20, .10), t = 0.5)
+tqxprime_mudd(c(0.20, 0.10), t = 0.5)
+
 }

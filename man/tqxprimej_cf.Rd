@@ -2,21 +2,25 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tqxprimej_cf}
 \alias{tqxprimej_cf}
-\title{Single-decrement failure probability \eqn{{}_t q_x^{\prime(j)}} under constant force}
+\title{Single-decrement failure under a constant force}
 \usage{
 tqxprimej_cf(mu, t)
 }
 \arguments{
-\item{mu}{Force of decrement for cause j.}
+\item{mu}{Nonnegative constant force of decrement. May be scalar or
+vector.}
 
-\item{t}{Time.}
+\item{t}{Nonnegative time. May be scalar or vector.}
 }
 \value{
-Numeric scalar/vector.
+A numeric vector.
 }
 \description{
-Single-decrement failure probability \eqn{{}_t q_x^{\prime(j)}} under constant force
+Computes
+\deqn{{}_tq_x^{\prime(j)}
+=1-\exp(-\mu_jt).}
 }
 \examples{
 tqxprimej_cf(0.10, 5)
+
 }

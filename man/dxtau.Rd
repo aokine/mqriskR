@@ -2,21 +2,24 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{dxtau}
 \alias{dxtau}
-\title{Total decrements \eqn{d_x^{(\tau)}}}
+\title{Total number of decrements}
 \usage{
 dxtau(lxtau, qxj)
 }
 \arguments{
-\item{lxtau}{Number alive at age x in the multiple-decrement table.}
+\item{lxtau}{Number alive at age or duration \eqn{x} in the
+multiple-decrement table.}
 
 \item{qxj}{Numeric vector of cause-specific decrement probabilities.}
 }
 \value{
-Numeric scalar.
+A numeric scalar.
 }
 \description{
-Total decrements \eqn{d_x^{(\tau)}}
+Computes
+\deqn{d_x^{(\tau)}=\sum_j d_x^{(j)}.}
 }
 \examples{
 dxtau(1000, c(0.011, 0.100))
+
 }

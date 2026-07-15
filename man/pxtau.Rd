@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{pxtau}
 \alias{pxtau}
-\title{Survival probability \eqn{p_x^{(\tau)}}}
+\title{Total one-year survival probability}
 \usage{
 pxtau(qxj)
 }
@@ -10,11 +10,13 @@ pxtau(qxj)
 \item{qxj}{Numeric vector of cause-specific decrement probabilities.}
 }
 \value{
-Numeric scalar.
+A numeric scalar.
 }
 \description{
-Survival probability \eqn{p_x^{(\tau)}}
+Computes
+\deqn{p_x^{(\tau)}=1-q_x^{(\tau)}.}
 }
 \examples{
 pxtau(c(0.011, 0.100))
+
 }

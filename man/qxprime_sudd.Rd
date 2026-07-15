@@ -2,21 +2,28 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{qxprime_sudd}
 \alias{qxprime_sudd}
-\title{Independent probabilities \eqn{q_x^{\prime(j)}} from dependent probabilities \eqn{q_x^{(j)}} under SUDD}
+\title{Associated single-decrement probabilities under SUDD}
 \usage{
 qxprime_sudd(q1, q2)
 }
 \arguments{
-\item{q1}{Dependent probability for decrement 1.}
+\item{q1}{Dependent decrement probability for cause 1. May be scalar or
+vector.}
 
-\item{q2}{Dependent probability for decrement 2.}
+\item{q2}{Dependent decrement probability for cause 2. May be scalar or
+vector.}
 }
 \value{
-Numeric vector \code{c(q1prime, q2prime)}.
+For scalar input, a named numeric vector containing
+  \code{q1prime} and \code{q2prime}. For vectorized input, a numeric
+  matrix with columns \code{q1prime} and \code{q2prime}.
 }
 \description{
-Two-decrement case only.
+Converts two dependent multiple-decrement probabilities to associated
+single-decrement probabilities under the single-decrement uniform
+distribution assumption.
 }
 \examples{
 qxprime_sudd(0.20, 0.10)
+
 }

@@ -2,21 +2,28 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tpx_tau_cf}
 \alias{tpx_tau_cf}
-\title{Total survival probability \eqn{{}_t p_x^{(\tau)}} under constant forces}
+\title{Total survival under constant cause-specific forces}
 \usage{
 tpx_tau_cf(mu, t)
 }
 \arguments{
-\item{mu}{Numeric vector of cause-specific forces.}
+\item{mu}{Numeric vector of nonnegative cause-specific forces.}
 
-\item{t}{Time.}
+\item{t}{Nonnegative time. May be scalar or vector.}
 }
 \value{
-Numeric scalar/vector.
+A numeric vector.
 }
 \description{
-Total survival probability \eqn{{}_t p_x^{(\tau)}} under constant forces
+Computes
+\deqn{
+{}_tp_x^{(\tau)}
+=
+\exp\left(-t\sum_j\mu_j\right).
+}
 }
 \examples{
 tpx_tau_cf(c(0.10, 0.20), 5)
+tpx_tau_cf(c(0.10, 0.20), c(1, 5, 10))
+
 }

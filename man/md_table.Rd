@@ -2,30 +2,36 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{md_table}
 \alias{md_table}
-\title{Build a multiple-decrement table}
+\title{Construct a multiple-decrement table}
 \usage{
 md_table(x, qxj, radix = 1e+05)
 }
 \arguments{
-\item{x}{Integer vector of ages or durations.}
+\item{x}{Integer vector of consecutive ages or durations.}
 
-\item{qxj}{Matrix/data.frame of cause-specific decrement probabilities.
-Rows correspond to ages in x, columns correspond to causes.}
+\item{qxj}{Numeric matrix or data frame of cause-specific decrement
+probabilities. Rows correspond to values in \code{x}, and columns
+correspond to causes.}
 
-\item{radix}{Starting \eqn{l_x^{(\tau)}}.}
+\item{radix}{Initial value of \eqn{l_x^{(\tau)}}.}
 }
 \value{
-Data frame containing \eqn{q^{(j)}}, \eqn{q^{(\tau)}},
-  \eqn{p^{(\tau)}}, \eqn{l^{(\tau)}}, \eqn{d^{(j)}}, and \eqn{d^{(\tau)}}.
+An object of classes \code{"md_table"} and \code{"data.frame"}
+  containing age or duration, cause-specific decrement probabilities,
+  total decrement and survival probabilities, numbers alive, and
+  cause-specific and total decrements.
 }
 \description{
-Build a multiple-decrement table
+Constructs a discrete multiple-decrement table from cause-specific
+one-year decrement probabilities.
 }
 \examples{
-x <- 45:50
+ages <- 45:50
 qmat <- cbind(
-  q1 = c(.011, .012, .013, .014, .015, .016),
-  q2 = c(.100, .100, .100, .100, .100, .100)
+  withdrawal = c(0.011, 0.012, 0.013, 0.014, 0.015, 0.016),
+  retirement = rep(0.100, 6)
 )
-md_table(x, qmat, radix = 1000)
+
+md_table(ages, qmat, radix = 1000)
+
 }

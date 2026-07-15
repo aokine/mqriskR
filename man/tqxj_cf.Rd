@@ -2,23 +2,32 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tqxj_cf}
 \alias{tqxj_cf}
-\title{Cause-specific probability \eqn{{}_t q_x^{(j)}} under constant forces}
+\title{Cause-specific decrement probability under constant forces}
 \usage{
 tqxj_cf(mu, j, t)
 }
 \arguments{
-\item{mu}{Numeric vector of cause-specific forces.}
+\item{mu}{Numeric vector of nonnegative cause-specific forces.}
 
-\item{j}{Cause index.}
+\item{j}{Positive integer cause index.}
 
-\item{t}{Time.}
+\item{t}{Nonnegative time. May be scalar or vector.}
 }
 \value{
-Numeric scalar/vector.
+A numeric vector.
 }
 \description{
-Cause-specific probability \eqn{{}_t q_x^{(j)}} under constant forces
+Computes
+\deqn{
+{}_tq_x^{(j)}
+=
+\frac{\mu_j}{\sum_k\mu_k}
+\left[
+1-\exp\left(-t\sum_k\mu_k\right)
+\right].
+}
 }
 \examples{
 tqxj_cf(c(0.10, 0.20), j = 1, t = 5)
+
 }

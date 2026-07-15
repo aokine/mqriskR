@@ -2,26 +2,33 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{npxtau_md}
 \alias{npxtau_md}
-\title{\eqn{{}_n p_x^{(\tau)}} from a multiple-decrement table}
+\title{Multiple-decrement survival probability from a table}
 \usage{
 npxtau_md(tbl, x, n)
 }
 \arguments{
-\item{tbl}{Output from md_table().}
+\item{tbl}{A multiple-decrement table produced by \code{md_table()}.}
 
-\item{x}{Starting age.}
+\item{x}{Starting age or duration. May be scalar or vector.}
 
-\item{n}{Number of years.}
+\item{n}{Nonnegative integer term. May be scalar or vector.}
 }
 \value{
-Numeric scalar.
+A numeric vector of survival probabilities.
 }
 \description{
-\eqn{{}_n p_x^{(\tau)}} from a multiple-decrement table
+Computes
+\deqn{{}_np_x^{(\tau)}
+=\prod_{k=0}^{n-1}p_{x+k}^{(\tau)}.}
 }
 \examples{
-x <- 45:50
-qmat <- cbind(q1 = c(.011, .012, .013, .014, .015, .016), q2 = rep(.1, 6))
-tbl <- md_table(x, qmat, radix = 1000)
+ages <- 45:50
+qmat <- cbind(
+  q1 = c(0.011, 0.012, 0.013, 0.014, 0.015, 0.016),
+  q2 = rep(0.100, 6)
+)
+tbl <- md_table(ages, qmat, radix = 1000)
+
 npxtau_md(tbl, x = 46, n = 3)
+
 }

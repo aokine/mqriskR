@@ -2,21 +2,25 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{tpxprimej_cf}
 \alias{tpxprimej_cf}
-\title{Single-decrement survival probability \eqn{{}_t p_x^{\prime(j)}} under constant force}
+\title{Single-decrement survival under a constant force}
 \usage{
 tpxprimej_cf(mu, t)
 }
 \arguments{
-\item{mu}{Force of decrement for cause j.}
+\item{mu}{Nonnegative constant force of decrement. May be scalar or
+vector.}
 
-\item{t}{Time.}
+\item{t}{Nonnegative time. May be scalar or vector.}
 }
 \value{
-Numeric scalar/vector.
+A numeric vector.
 }
 \description{
-Single-decrement survival probability \eqn{{}_t p_x^{\prime(j)}} under constant force
+Computes
+\deqn{{}_tp_x^{\prime(j)}=\exp(-\mu_jt).}
 }
 \examples{
 tpxprimej_cf(0.10, 5)
+tpxprimej_cf(0.10, c(1, 5, 10))
+
 }

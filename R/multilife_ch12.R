@@ -1,498 +1,1152 @@
-#' Multi-life functions for Chapter 12
-#'
-#' Core Chapter 12 functions for two-life joint-life and last-survivor models,
-#' including survival probabilities, annuities, insurances, and reversionary annuities.
-#'
-#' @name multilife_ch12
-#' @keywords internal
-NULL
-
 # -------------------------------------------------------------------------
 # Internal helpers
 # -------------------------------------------------------------------------
 
 #' @noRd
-.recycle3_ch12 <- function(a, b, c,
-                           a_name = "a", b_name = "b", c_name = "c") {
-  n <- max(length(a), length(b), length(c))
-
-  if (!length(a) %in% c(1L, n)) {
-    stop(a_name, " must have length 1 or common length.", call. = FALSE)
-  }
-  if (!length(b) %in% c(1L, n)) {
-    stop(b_name, " must have length 1 or common length.", call. = FALSE)
-  }
-  if (!length(c) %in% c(1L, n)) {
-    stop(c_name, " must have length 1 or common length.", call. = FALSE)
+.multilife_check_basis <- function(tbl = NULL, model = NULL) {
+  if (is.null(tbl) && is.null(model)) {
+    stop("Supply either tbl or model.", call. = FALSE)
   }
 
-  if (length(a) == 1L) a <- rep(a, n)
-  if (length(b) == 1L) b <- rep(b, n)
-  if (length(c) == 1L) c <- rep(c, n)
+  if (!is.null(tbl) && !is.null(model)) {
+    stop("Supply only one of tbl or model, not both.", call. = FALSE)
+  }
 
-  list(a = a, b = b, c = c)
+  if (!is.null(tbl)) {
+    .validate_life_table(tbl)
+  }
+
+  invisible(TRUE)
 }
 
 #' @noRd
-.check_i_ch12 <- function(i) {
-  i <- as.numeric(i)
-  if (length(i) == 0L || any(!is.finite(i)) || any(i <= -1)) {
-    stop("i must contain finite values greater than -1.", call. = FALSE)
+.multilife_check_nonnegative <- function(x, name) {
+  x <- as.numeric(x)
+
+  if (length(x) == 0L) {
+    stop(name, " must have positive length.", call. = FALSE)
   }
+
+  if (any(!is.finite(x)) || any(x < 0)) {
+    stop(
+      name,
+      " must contain nonnegative finite values.",
+      call. = FALSE
+    )
+  }
+
+  x
+}
+
+#' @noRd
+.multilife_check_integerish <- function(x, name) {
+  x <- .multilife_check_nonnegative(x, name)
+
+  if (any(abs(x - round(x)) > 1e-10)) {
+    stop(
+      name,
+      " must contain nonnegative integer-like values.",
+      call. = FALSE
+    )
+  }
+
+  as.integer(round(x))
+}
+
+#' @noRd
+.multilife_check_interest <- function(i) {
+  i <- as.numeric(i)
+
+  if (length(i) == 0L) {
+    stop("i must have positive length.", call. = FALSE)
+  }
+
+  if (any(!is.finite(i)) || any(i <= -1)) {
+    stop(
+      "i must contain finite values greater than -1.",
+      call. = FALSE
+    )
+  }
+
   i
 }
 
 #' @noRd
-.sum_until_tol_ch12 <- function(fun, k_max = 5000L, tol = 1e-12) {
-  ks <- 0:(k_max - 1L)
-  vals <- fun(ks)
-  vals[!is.finite(vals)] <- 0
-  s <- sum(vals)
+.multilife_check_sum_controls <- function(k_max, tol) {
+  k_max <- as.numeric(k_max)
+  tol <- as.numeric(tol)
 
-  if (length(vals) > 0L && abs(tail(vals, 1L)) > tol) {
-    warning("Series may not have converged; consider increasing k_max.", call. = FALSE)
+  if (length(k_max) != 1L ||
+      !is.finite(k_max) ||
+      k_max <= 0 ||
+      abs(k_max - round(k_max)) > 1e-10) {
+    stop("k_max must be a positive integer.", call. = FALSE)
   }
 
-  s
+  if (length(tol) != 1L || !is.finite(tol) || tol <= 0) {
+    stop("tol must be a positive finite number.", call. = FALSE)
+  }
+
+  list(
+    k_max = as.integer(round(k_max)),
+    tol = tol
+  )
+}
+
+#' @noRd
+.multilife_recycle <- function(..., .names = NULL) {
+  values <- list(...)
+
+  if (length(values) == 0L) {
+    return(values)
+  }
+
+  lengths <- vapply(values, length, integer(1))
+
+  if (any(lengths == 0L)) {
+    stop("Inputs must have positive length.", call. = FALSE)
+  }
+
+  common_length <- max(lengths)
+
+  if (is.null(.names)) {
+    .names <- paste0("Argument ", seq_along(values))
+  }
+
+  if (length(.names) != length(values)) {
+    stop(
+      ".names must have the same length as the supplied arguments.",
+      call. = FALSE
+    )
+  }
+
+  for (j in seq_along(values)) {
+    if (!lengths[j] %in% c(1L, common_length)) {
+      stop(
+        .names[j],
+        " must have length 1 or the common length ",
+        common_length,
+        ".",
+        call. = FALSE
+      )
+    }
+
+    values[[j]] <- rep(values[[j]], length.out = common_length)
+  }
+
+  values
+}
+
+#' @noRd
+.multilife_table_survival <- function(tbl, x, t) {
+  x <- as.numeric(x)
+  t <- as.numeric(t)
+
+  values <- .multilife_recycle(
+    x,
+    t,
+    .names = c("x", "t")
+  )
+
+  x <- values[[1]]
+  t <- values[[2]]
+
+  out <- numeric(length(x))
+
+  # Survival for zero years is always one, including at the limiting age.
+  zero_time <- t == 0
+  out[zero_time] <- 1
+
+  positive_time <- !zero_time
+
+  if (any(positive_time)) {
+    out[positive_time] <- npx(
+      tbl,
+      x = x[positive_time],
+      n = t[positive_time]
+    )
+  }
+
+  out[!is.finite(out)] <- 0
+  pmin(pmax(out, 0), 1)
+}
+
+#' @noRd
+.multilife_single_survival <- function(x, t, tbl = NULL, model = NULL, ...) {
+  .multilife_check_basis(tbl, model)
+
+  values <- .multilife_recycle(
+    x,
+    t,
+    .names = c("x", "t")
+  )
+
+  x <- values[[1]]
+  t <- values[[2]]
+
+  if (!is.null(tbl)) {
+    return(.multilife_table_survival(tbl, x, t))
+  }
+
+  out <- tpx(
+    x = x,
+    t = t,
+    model = model,
+    ...
+  )
+
+  pmin(pmax(out, 0), 1)
+}
+
+#' @noRd
+.multilife_joint_table_horizon <- function(tbl, x, y) {
+  maximum_age <- max(tbl$x, na.rm = TRUE)
+
+  lx_x <- lx(tbl, x = x)
+  lx_y <- lx(tbl, x = y)
+
+  if (is.na(lx_x) || is.na(lx_y)) {
+    if (x > maximum_age || y > maximum_age) {
+      return(-1L)
+    }
+
+    stop(
+      "One or both ages are not available in the life table.",
+      call. = FALSE
+    )
+  }
+
+  if (lx_x <= 0 || lx_y <= 0) {
+    return(-1L)
+  }
+
+  max(
+    floor(min(maximum_age - x, maximum_age - y)),
+    0L
+  )
+}
+
+#' @noRd
+.multilife_sum_series <- function(fun, start, end, tol,
+                                  warn_if_unconverged = FALSE) {
+  if (end < start) {
+    return(0)
+  }
+
+  times <- seq.int(start, end)
+  values <- fun(times)
+
+  values[!is.finite(values)] <- 0
+  total <- sum(values)
+
+  if (warn_if_unconverged &&
+      length(values) > 0L &&
+      abs(tail(values, 1L)) > tol) {
+    warning(
+      "Series may not have converged; consider increasing k_max.",
+      call. = FALSE
+    )
+  }
+
+  total
 }
 
 # -------------------------------------------------------------------------
 # Joint-life and last-survivor survival probabilities
 # -------------------------------------------------------------------------
 
-#' Joint-life survival probability
+#' Multi-life survival and failure probabilities
 #'
-#' Computes \eqn{{}_tp_{xy} = {}_tp_x\,{}_tp_y} under independence.
+#' Computes joint-life and last-survivor survival and failure probabilities
+#' for two independent lives.
 #'
-#' @param x Age of first life.
-#' @param y Age of second life.
-#' @param t Time.
-#' @param tbl Life table.
-#' @param model Survival model.
-#' @param ... Additional model parameters.
+#' \code{tpxy()} computes
+#' \eqn{{}_t p_{xy} = {}_t p_x\,{}_t p_y}.
 #'
-#' @return Numeric vector.
+#' \code{tqxy()} computes
+#' \eqn{{}_t q_{xy} = 1 - {}_t p_{xy}}.
+#'
+#' \code{tpxybar()} computes
+#' \eqn{{}_t p_{\overline{xy}}
+#' = {}_t p_x + {}_t p_y - {}_t p_{xy}}.
+#'
+#' \code{tqxybar()} computes
+#' \eqn{{}_t q_{\overline{xy}}
+#' = 1 - {}_t p_{\overline{xy}}}.
+#'
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param t Nonnegative duration. May be scalar or vector.
+#' @param tbl Optional life table object.
+#' @param model Optional parametric survival model.
+#' @param ... Additional parameters passed to the survival model.
+#'
+#' @return A numeric vector of probabilities.
+#'
 #' @examples
 #' tpxy(40, 50, t = 10, model = "uniform", omega = 100)
+#' tqxy(40, 50, t = 10, model = "uniform", omega = 100)
+#' tpxybar(40, 50, t = 10, model = "uniform", omega = 100)
+#' tqxybar(40, 50, t = 10, model = "uniform", omega = 100)
+#'
+#' @rdname multilife_survival
 #' @export
 tpxy <- function(x, y, t, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  t <- .check_nonneg_numeric(t, "t")
+  .multilife_check_basis(tbl, model)
 
-  xyt <- .recycle3_ch12(x, y, t, "x", "y", "t")
-  x <- xyt$a
-  y <- xyt$b
-  t <- xyt$c
+  x <- .multilife_check_nonnegative(x, "x")
+  y <- .multilife_check_nonnegative(y, "y")
+  t <- .multilife_check_nonnegative(t, "t")
 
-  tpx(x = x, t = t, tbl = tbl, model = model, ...) *
-    tpx(x = y, t = t, tbl = tbl, model = model, ...)
+  values <- .multilife_recycle(
+    x,
+    y,
+    t,
+    .names = c("x", "y", "t")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  t <- values[[3]]
+
+  out <- .multilife_single_survival(
+    x = x,
+    t = t,
+    tbl = tbl,
+    model = model,
+    ...
+  ) * .multilife_single_survival(
+    x = y,
+    t = t,
+    tbl = tbl,
+    model = model,
+    ...
+  )
+
+  pmin(pmax(out, 0), 1)
 }
 
-#' Joint-life failure probability
-#'
-#' Computes \eqn{{}_tq_{xy} = 1 - {}_tp_{xy}}.
-#'
-#' @inheritParams tpxy
-#' @return Numeric vector.
-#' @examples
-#' tqxy(40, 50, t = 10, model = "uniform", omega = 100)
+#' @rdname multilife_survival
 #' @export
 tqxy <- function(x, y, t, tbl = NULL, model = NULL, ...) {
-  1 - tpxy(x = x, y = y, t = t, tbl = tbl, model = model, ...)
+  1 - tpxy(
+    x = x,
+    y = y,
+    t = t,
+    tbl = tbl,
+    model = model,
+    ...
+  )
 }
 
-#' Last-survivor survival probability
-#'
-#' Computes \eqn{{}_tp_{\overline{xy}} = {}_tp_x + {}_tp_y - {}_tp_{xy}}.
-#'
-#' @inheritParams tpxy
-#' @return Numeric vector.
-#' @examples
-#' tpxybar(40, 50, t = 10, model = "uniform", omega = 100)
+#' @rdname multilife_survival
 #' @export
 tpxybar <- function(x, y, t, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  t <- .check_nonneg_numeric(t, "t")
+  .multilife_check_basis(tbl, model)
 
-  xyt <- .recycle3_ch12(x, y, t, "x", "y", "t")
-  x <- xyt$a
-  y <- xyt$b
-  t <- xyt$c
+  x <- .multilife_check_nonnegative(x, "x")
+  y <- .multilife_check_nonnegative(y, "y")
+  t <- .multilife_check_nonnegative(t, "t")
 
-  tpx(x = x, t = t, tbl = tbl, model = model, ...) +
-    tpx(x = y, t = t, tbl = tbl, model = model, ...) -
-    tpxy(x = x, y = y, t = t, tbl = tbl, model = model, ...)
+  values <- .multilife_recycle(
+    x,
+    y,
+    t,
+    .names = c("x", "y", "t")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  t <- values[[3]]
+
+  px <- .multilife_single_survival(
+    x = x,
+    t = t,
+    tbl = tbl,
+    model = model,
+    ...
+  )
+
+  py <- .multilife_single_survival(
+    x = y,
+    t = t,
+    tbl = tbl,
+    model = model,
+    ...
+  )
+
+  out <- px + py - px * py
+
+  pmin(pmax(out, 0), 1)
 }
 
-#' Last-survivor failure probability
-#'
-#' Computes \eqn{{}_tq_{\overline{xy}} = 1 - {}_tp_{\overline{xy}}}.
-#'
-#' @inheritParams tpxy
-#' @return Numeric vector.
-#' @examples
-#' tqxybar(40, 50, t = 10, model = "uniform", omega = 100)
+#' @rdname multilife_survival
 #' @export
 tqxybar <- function(x, y, t, tbl = NULL, model = NULL, ...) {
-  1 - tpxybar(x = x, y = y, t = t, tbl = tbl, model = model, ...)
+  1 - tpxybar(
+    x = x,
+    y = y,
+    t = t,
+    tbl = tbl,
+    model = model,
+    ...
+  )
 }
 
 # -------------------------------------------------------------------------
 # Pure endowments
 # -------------------------------------------------------------------------
 
-#' Joint-life pure endowment
+#' Multi-life pure endowments
 #'
-#' Computes \eqn{{}_nE_{xy} = v^n\,{}_np_{xy}}.
+#' Computes pure endowment actuarial present values for joint-life and
+#' last-survivor statuses.
 #'
-#' @param n Term.
-#' @inheritParams tpxy
-#' @param i Effective annual interest rate.
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param n Nonnegative integer term. May be scalar or vector.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param tbl Optional life table object.
+#' @param model Optional parametric survival model.
+#' @param ... Additional parameters passed to the survival model.
 #'
-#' @return Numeric vector.
+#' @return A numeric vector of actuarial present values.
+#'
 #' @examples
 #' nExy(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
+#' nExybar(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
+#'
+#' @rdname multilife_pure_endowment
 #' @export
 nExy <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  n <- .check_nonneg_integerish(n, "n")
-  i <- .check_i_ch12(i)
+  .multilife_check_basis(tbl, model)
 
-  xyn <- .recycle3_ch12(x, y, n, "x", "y", "n")
-  x <- xyn$a
-  y <- xyn$b
-  n <- xyn$c
+  x <- .multilife_check_nonnegative(x, "x")
+  y <- .multilife_check_nonnegative(y, "y")
+  n <- .multilife_check_integerish(n, "n")
+  i <- .multilife_check_interest(i)
 
-  (1 / (1 + i))^n * tpxy(x = x, y = y, t = n, tbl = tbl, model = model, ...)
+  values <- .multilife_recycle(
+    x,
+    y,
+    n,
+    i,
+    .names = c("x", "y", "n", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  n <- values[[3]]
+  i <- values[[4]]
+
+  discount(i, n) * tpxy(
+    x = x,
+    y = y,
+    t = n,
+    tbl = tbl,
+    model = model,
+    ...
+  )
 }
 
-#' Last-survivor pure endowment
-#'
-#' Computes \eqn{{}_nE_{\overline{xy}} = v^n\,{}_np_{\overline{xy}}}.
-#'
-#' @inheritParams nExy
-#' @return Numeric vector.
-#' @examples
-#' nExybar(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
+#' @rdname multilife_pure_endowment
 #' @export
 nExybar <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  n <- .check_nonneg_integerish(n, "n")
-  i <- .check_i_ch12(i)
+  .multilife_check_basis(tbl, model)
 
-  xyn <- .recycle3_ch12(x, y, n, "x", "y", "n")
-  x <- xyn$a
-  y <- xyn$b
-  n <- xyn$c
+  x <- .multilife_check_nonnegative(x, "x")
+  y <- .multilife_check_nonnegative(y, "y")
+  n <- .multilife_check_integerish(n, "n")
+  i <- .multilife_check_interest(i)
 
-  (1 / (1 + i))^n * tpxybar(x = x, y = y, t = n, tbl = tbl, model = model, ...)
-}
+  values <- .multilife_recycle(
+    x,
+    y,
+    n,
+    i,
+    .names = c("x", "y", "n", "i")
+  )
 
-# -------------------------------------------------------------------------
-# Joint-life annuities and insurances
-# -------------------------------------------------------------------------
+  x <- values[[1]]
+  y <- values[[2]]
+  n <- values[[3]]
+  i <- values[[4]]
 
-#' Joint-life temporary annuity-due
-#'
-#' Computes \eqn{\ddot{a}_{xy:\overline{n}|}}.
-#'
-#' @inheritParams nExy
-#' @return Numeric vector.
-#' @examples
-#' adotxyn(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
-#' @export
-adotxyn <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  n <- .check_nonneg_integerish(n, "n")
-  i <- .check_i_ch12(i)
-
-  xyn <- .recycle3_ch12(x, y, n, "x", "y", "n")
-  x <- xyn$a
-  y <- xyn$b
-  n <- xyn$c
-
-  sapply(seq_along(x), function(j) {
-    k <- 0:(n[j] - 1L)
-    sum((1 / (1 + i[j]))^k *
-          tpxy(x = x[j], y = y[j], t = k, tbl = tbl, model = model, ...))
-  })
-}
-
-#' Joint-life temporary annuity-immediate
-#'
-#' Computes \eqn{a_{xy:\overline{n}|}}.
-#'
-#' Shared documentation topic used to avoid filename collisions with
-#' case-distinct function names on case-insensitive file systems.
-#'
-#' @name axyn_ch12
-#' @aliases axyn
-#' @inheritParams adotxyn
-#' @return Numeric vector.
-#' @examples
-#' axyn(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
-#' @export
-axyn <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  adotxyn(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...) -
-    nExy(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...)
-}
-
-#' Joint-life whole life annuity-due
-#'
-#' Computes \eqn{\ddot{a}_{xy}}.
-#'
-#' @param k_max Maximum number of terms.
-#' @param tol Convergence tolerance.
-#' @inheritParams nExy
-#' @return Numeric vector.
-#' @examples
-#' adotxy(40, 50, i = 0.05, model = "uniform", omega = 100)
-#' @export
-adotxy <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-12) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  i <- .check_i_ch12(i)
-
-  xyi <- .recycle3_ch12(x, y, i, "x", "y", "i")
-  x <- xyi$a
-  y <- xyi$b
-  i <- xyi$c
-
-  sapply(seq_along(x), function(j) {
-    .sum_until_tol_ch12(
-      fun = function(k) {
-        (1 / (1 + i[j]))^k *
-          tpxy(x = x[j], y = y[j], t = k, tbl = tbl, model = model, ...)
-      },
-      k_max = k_max,
-      tol = tol
-    )
-  })
-}
-
-#' Joint-life whole life annuity-immediate
-#'
-#' Computes \eqn{a_{xy}}.
-#'
-#' Shared documentation topic used to avoid filename collisions with
-#' case-distinct function names on case-insensitive file systems.
-#'
-#' @name axy_ch12
-#' @aliases axy
-#' @inheritParams adotxy
-#' @return Numeric vector.
-#' @examples
-#' axy(40, 50, i = 0.05, model = "uniform", omega = 100)
-#' @export
-axy <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-12) {
-  adotxy(
-    x = x, y = y, i = i, tbl = tbl, model = model, ...,
-    k_max = k_max, tol = tol
-  ) - 1
-}
-
-#' Joint-life term insurance
-#'
-#' Computes \eqn{A^{1}_{xy:\overline{n}|}}.
-#'
-#' @inheritParams nExy
-#' @return Numeric vector.
-#' @examples
-#' Axyn1(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
-#' @export
-Axyn1 <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  d <- i / (1 + i)
-  1 - d * adotxyn(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...) -
-    nExy(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...)
-}
-
-#' Joint-life endowment insurance
-#'
-#' Computes \eqn{A_{xy:\overline{n}|}}.
-#'
-#' @inheritParams nExy
-#' @return Numeric vector.
-#' @examples
-#' Axyn(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
-#' @export
-Axyn <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  Axyn1(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...) +
-    nExy(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...)
-}
-
-#' Joint-life whole life insurance
-#'
-#' Computes \eqn{A_{xy}}.
-#'
-#' @inheritParams adotxy
-#' @return Numeric vector.
-#' @examples
-#' Axy(40, 50, i = 0.05, model = "uniform", omega = 100)
-#' @export
-Axy <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-12) {
-  d <- i / (1 + i)
-  1 - d * adotxy(
-    x = x, y = y, i = i, tbl = tbl, model = model, ...,
-    k_max = k_max, tol = tol
+  discount(i, n) * tpxybar(
+    x = x,
+    y = y,
+    t = n,
+    tbl = tbl,
+    model = model,
+    ...
   )
 }
 
 # -------------------------------------------------------------------------
-# Last-survivor annuities and insurances
+# Joint-life annuities
 # -------------------------------------------------------------------------
 
-#' Last-survivor temporary annuity-due
+#' Joint-life annuities
 #'
-#' Computes \eqn{\ddot{a}_{\overline{xy}:\overline{n}|}}.
+#' Computes temporary and whole life joint-life annuities under independence.
 #'
-#' @inheritParams nExy
-#' @return Numeric vector.
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param n Nonnegative integer term. May be scalar or vector.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param tbl Optional life table object.
+#' @param model Optional parametric survival model.
+#' @param ... Additional parameters passed to the survival model.
+#' @param k_max Maximum summation horizon for non-terminating models.
+#' @param tol Positive convergence tolerance.
+#'
+#' @return A numeric vector of annuity actuarial present values.
+#'
 #' @examples
-#' adotxybarn(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
+#' adotxyn(40, 50, n = 10, i = 0.05,
+#'         model = "uniform", omega = 100)
+#' axyn(40, 50, n = 10, i = 0.05,
+#'      model = "uniform", omega = 100)
+#' adotxy(40, 50, i = 0.05,
+#'        model = "uniform", omega = 100)
+#' axy(40, 50, i = 0.05,
+#'     model = "uniform", omega = 100)
+#'
+#' @rdname joint_life_annuities
 #' @export
-adotxybarn <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  adotxn(x = x, n = n, i = i, tbl = tbl, model = model, ...) +
-    adotxn(x = y, n = n, i = i, tbl = tbl, model = model, ...) -
-    adotxyn(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...)
+adotxyn <- function(x, y, n, i,
+                    tbl = NULL, model = NULL, ...) {
+  .multilife_check_basis(tbl, model)
+
+  x <- .multilife_check_nonnegative(x, "x")
+  y <- .multilife_check_nonnegative(y, "y")
+  n <- .multilife_check_integerish(n, "n")
+  i <- .multilife_check_interest(i)
+
+  values <- .multilife_recycle(
+    x,
+    y,
+    n,
+    i,
+    .names = c("x", "y", "n", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  n <- values[[3]]
+  i <- values[[4]]
+
+  vapply(seq_along(x), function(j) {
+    if (n[j] == 0L) {
+      return(0)
+    }
+
+    times <- 0:(n[j] - 1L)
+
+    sum(
+      discount(i[j], times) *
+        tpxy(
+          x = x[j],
+          y = y[j],
+          t = times,
+          tbl = tbl,
+          model = model,
+          ...
+        )
+    )
+  }, numeric(1))
 }
 
-#' Last-survivor temporary annuity-immediate
-#'
-#' Computes \eqn{a_{\overline{xy}:\overline{n}|}}.
-#'
-#' Shared documentation topic used to avoid filename collisions with
-#' case-distinct function names on case-insensitive file systems.
-#'
-#' @name axybarn_ch12
-#' @aliases axybarn
-#' @inheritParams nExy
-#' @return Numeric vector.
-#' @examples
-#' axybarn(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
+#' @rdname joint_life_annuities
 #' @export
-axybarn <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  axn(x = x, n = n, i = i, tbl = tbl, model = model, ...) +
-    axn(x = y, n = n, i = i, tbl = tbl, model = model, ...) -
-    axyn(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...)
+axyn <- function(x, y, n, i,
+                 tbl = NULL, model = NULL, ...) {
+  adotxyn(
+    x = x,
+    y = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) - 1 + nExy(
+    x = x,
+    y = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  )
 }
 
-#' Last-survivor whole life annuity-due
-#'
-#' Computes \eqn{\ddot{a}_{\overline{xy}}}.
-#'
-#' @inheritParams adotxy
-#' @return Numeric vector.
-#' @examples
-#' adotxybar(40, 50, i = 0.05, model = "uniform", omega = 100)
+#' @rdname joint_life_annuities
 #' @export
-adotxybar <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-12) {
-  adotx(x = x, i = i, tbl = tbl, model = model, ...) +
-    adotx(x = y, i = i, tbl = tbl, model = model, ...) -
-    adotxy(x = x, y = y, i = i, tbl = tbl, model = model, ...,
-           k_max = k_max, tol = tol)
+adotxy <- function(x, y, i,
+                   tbl = NULL, model = NULL, ...,
+                   k_max = 5000L, tol = 1e-12) {
+  .multilife_check_basis(tbl, model)
+
+  x <- .multilife_check_nonnegative(x, "x")
+  y <- .multilife_check_nonnegative(y, "y")
+  i <- .multilife_check_interest(i)
+
+  controls <- .multilife_check_sum_controls(k_max, tol)
+  k_max <- controls$k_max
+  tol <- controls$tol
+
+  values <- .multilife_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  vapply(seq_along(x), function(j) {
+    if (!is.null(tbl)) {
+      upper <- .multilife_joint_table_horizon(
+        tbl = tbl,
+        x = x[j],
+        y = y[j]
+      )
+
+      if (upper < 0L) {
+        return(0)
+      }
+
+      return(.multilife_sum_series(
+        fun = function(k) {
+          discount(i[j], k) *
+            tpxy(
+              x = x[j],
+              y = y[j],
+              t = k,
+              tbl = tbl
+            )
+        },
+        start = 0L,
+        end = upper,
+        tol = tol
+      ))
+    }
+
+    .multilife_sum_series(
+      fun = function(k) {
+        discount(i[j], k) *
+          tpxy(
+            x = x[j],
+            y = y[j],
+            t = k,
+            model = model,
+            ...
+          )
+      },
+      start = 0L,
+      end = k_max - 1L,
+      tol = tol,
+      warn_if_unconverged = TRUE
+    )
+  }, numeric(1))
 }
 
-#' Last-survivor whole life annuity-immediate
-#'
-#' Computes \eqn{a_{\overline{xy}}}.
-#'
-#' Shared documentation topic used to avoid filename collisions with
-#' case-distinct function names on case-insensitive file systems.
-#'
-#' @name axybar_ch12
-#' @aliases axybar
-#' @inheritParams adotxybar
-#' @return Numeric vector.
-#' @examples
-#' axybar(40, 50, i = 0.05, model = "uniform", omega = 100)
+#' @rdname joint_life_annuities
 #' @export
-axybar <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-12) {
-  ax(x = x, i = i, tbl = tbl, model = model, ...) +
-    ax(x = y, i = i, tbl = tbl, model = model, ...) -
-    axy(x = x, y = y, i = i, tbl = tbl, model = model, ...,
-        k_max = k_max, tol = tol)
+axy <- function(x, y, i,
+                tbl = NULL, model = NULL, ...,
+                k_max = 5000L, tol = 1e-12) {
+  .multilife_check_basis(tbl, model)
+
+  x <- .multilife_check_nonnegative(x, "x")
+  y <- .multilife_check_nonnegative(y, "y")
+  i <- .multilife_check_interest(i)
+
+  controls <- .multilife_check_sum_controls(k_max, tol)
+  k_max <- controls$k_max
+  tol <- controls$tol
+
+  values <- .multilife_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  vapply(seq_along(x), function(j) {
+    if (!is.null(tbl)) {
+      upper <- .multilife_joint_table_horizon(
+        tbl = tbl,
+        x = x[j],
+        y = y[j]
+      )
+
+      if (upper < 1L) {
+        return(0)
+      }
+
+      return(.multilife_sum_series(
+        fun = function(k) {
+          discount(i[j], k) *
+            tpxy(
+              x = x[j],
+              y = y[j],
+              t = k,
+              tbl = tbl
+            )
+        },
+        start = 1L,
+        end = upper,
+        tol = tol
+      ))
+    }
+
+    .multilife_sum_series(
+      fun = function(k) {
+        discount(i[j], k) *
+          tpxy(
+            x = x[j],
+            y = y[j],
+            t = k,
+            model = model,
+            ...
+          )
+      },
+      start = 1L,
+      end = k_max,
+      tol = tol,
+      warn_if_unconverged = TRUE
+    )
+  }, numeric(1))
 }
 
-#' Last-survivor term insurance
+# -------------------------------------------------------------------------
+# Joint-life insurance
+# -------------------------------------------------------------------------
+
+#' Joint-life insurance functions
 #'
-#' Computes \eqn{A^{1}_{\overline{xy}:\overline{n}|}}.
+#' Computes temporary and whole-life insurance values for two lives under
+#' the joint-life status.
 #'
-#' @inheritParams nExy
-#' @return Numeric vector.
-#' @examples
-#' Axybarn1(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
+#' \code{Axyn1()} computes an \code{n}-year joint-life term insurance.
+#'
+#' \code{Axyn()} computes an \code{n}-year joint-life endowment insurance.
+#'
+#' \code{Axy()} computes joint-life whole-life insurance.
+#'
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param n Term in years. May be scalar or vector.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param tbl Optional life table object.
+#' @param model Optional parametric survival model.
+#' @param ... Additional parameters passed to the survival model or
+#'   life-table functions.
+#' @param k_max Maximum number of terms used for an infinite series.
+#' @param tol Numerical tolerance used to assess convergence.
+#'
+#' @return A numeric vector of actuarial present values.
+#'
+#' @name joint_life_insurance
 #' @export
-Axybarn1 <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  Axn1(x = x, n = n, i = i, tbl = tbl, model = model, ...) +
-    Axn1(x = y, n = n, i = i, tbl = tbl, model = model, ...) -
-    Axyn1(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...)
+Axyn1 <- function(x, y, n, i,
+                  tbl = NULL, model = NULL, ...) {
+  .multilife_check_basis(tbl, model)
+
+  i <- .multilife_check_interest(i)
+
+  d <- i / (1 + i)
+
+  1 -
+    d * adotxyn(
+      x = x,
+      y = y,
+      n = n,
+      i = i,
+      tbl = tbl,
+      model = model,
+      ...
+    ) -
+    nExy(
+      x = x,
+      y = y,
+      n = n,
+      i = i,
+      tbl = tbl,
+      model = model,
+      ...
+    )
 }
 
-#' Last-survivor endowment insurance
-#'
-#' Computes \eqn{A_{\overline{xy}:\overline{n}|}}.
-#'
-#' @inheritParams nExy
-#' @return Numeric vector.
-#' @examples
-#' Axybarn(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
+#' @rdname joint_life_insurance
 #' @export
-Axybarn <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
-  Axybarn1(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...) +
-    nExybar(x = x, y = y, n = n, i = i, tbl = tbl, model = model, ...)
+Axyn <- function(x, y, n, i,
+                 tbl = NULL, model = NULL, ...) {
+  Axyn1(
+    x = x,
+    y = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) + nExy(
+    x = x,
+    y = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  )
 }
 
-#' Last-survivor whole life insurance
-#'
-#' Computes \eqn{A_{\overline{xy}} = A_x + A_y - A_{xy}}.
-#'
-#' @inheritParams adotxy
-#' @return Numeric vector.
-#' @examples
-#' Axybar(40, 50, i = 0.05, model = "uniform", omega = 100)
+#' @rdname joint_life_insurance
 #' @export
-Axybar <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-12) {
-  Ax(x = x, i = i, tbl = tbl, model = model, ...) +
-    Ax(x = y, i = i, tbl = tbl, model = model, ...) -
-    Axy(x = x, y = y, i = i, tbl = tbl, model = model, ...,
-        k_max = k_max, tol = tol)
+Axy <- function(x, y, i,
+                tbl = NULL, model = NULL, ...,
+                k_max = 5000L, tol = 1e-12) {
+  .multilife_check_basis(tbl, model)
+
+  i <- .multilife_check_interest(i)
+  d <- i / (1 + i)
+
+  1 - d * adotxy(
+    x = x,
+    y = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...,
+    k_max = k_max,
+    tol = tol
+  )
+}
+
+# -------------------------------------------------------------------------
+# Last-survivor annuities
+# -------------------------------------------------------------------------
+
+#' Last-survivor annuity functions
+#'
+#' Computes temporary and whole-life annuities for two lives under the
+#' last-survivor status.
+#'
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param n Term in years. May be scalar or vector.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param tbl Optional life table object.
+#' @param model Optional parametric survival model.
+#' @param ... Additional parameters passed to the survival model or
+#'   life-table functions.
+#' @param k_max Maximum number of terms used for an infinite series.
+#' @param tol Numerical tolerance used to assess convergence.
+#'
+#' @return A numeric vector of actuarial present values.
+#'
+#' @name last_survivor_annuities
+#' @export
+adotxybarn <- function(x, y, n, i,
+                       tbl = NULL, model = NULL, ...) {
+  adotxn(
+    x = x,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) + adotxn(
+    x = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) - adotxyn(
+    x = x,
+    y = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  )
+}
+
+#' @rdname last_survivor_annuities
+#' @export
+axybarn <- function(x, y, n, i,
+                    tbl = NULL, model = NULL, ...) {
+  axn(
+    x = x,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) + axn(
+    x = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) - axyn(
+    x = x,
+    y = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  )
+}
+
+#' @rdname last_survivor_annuities
+#' @export
+adotxybar <- function(x, y, i,
+                      tbl = NULL, model = NULL, ...,
+                      k_max = 5000L, tol = 1e-12) {
+  adotx(
+    x = x,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) + adotx(
+    x = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) - adotxy(
+    x = x,
+    y = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...,
+    k_max = k_max,
+    tol = tol
+  )
+}
+
+#' @rdname last_survivor_annuities
+#' @export
+axybar <- function(x, y, i,
+                   tbl = NULL, model = NULL, ...,
+                   k_max = 5000L, tol = 1e-12) {
+  ax(
+    x = x,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) + ax(
+    x = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) - axy(
+    x = x,
+    y = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...,
+    k_max = k_max,
+    tol = tol
+  )
+}
+
+# -------------------------------------------------------------------------
+# Last-survivor insurance
+# -------------------------------------------------------------------------
+
+#' Last-survivor insurance functions
+#'
+#' Computes temporary and whole-life insurance values for two lives under
+#' the last-survivor status.
+#'
+#' \code{Axybarn1()} computes temporary insurance payable at the second
+#' death within the term.
+#'
+#' \code{Axybarn()} computes last-survivor endowment insurance.
+#'
+#' \code{Axybar()} computes last-survivor whole-life insurance.
+#'
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param n Term in years. May be scalar or vector.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param tbl Optional life table object.
+#' @param model Optional parametric survival model.
+#' @param ... Additional parameters passed to the survival model or
+#'   life-table functions.
+#' @param k_max Maximum number of terms used for an infinite series.
+#' @param tol Numerical tolerance used to assess convergence.
+#'
+#' @return A numeric vector of actuarial present values.
+#'
+#' @name last_survivor_insurance
+#' @export
+Axybarn1 <- function(x, y, n, i,
+                     tbl = NULL, model = NULL, ...) {
+  Axn1(
+    x = x,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) + Axn1(
+    x = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) - Axyn1(
+    x = x,
+    y = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  )
+}
+
+#' @rdname last_survivor_insurance
+#' @export
+Axybarn <- function(x, y, n, i,
+                    tbl = NULL, model = NULL, ...) {
+  Axybarn1(
+    x = x,
+    y = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) + nExybar(
+    x = x,
+    y = y,
+    n = n,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  )
+}
+
+#' @rdname last_survivor_insurance
+#' @export
+Axybar <- function(x, y, i,
+                   tbl = NULL, model = NULL, ...,
+                   k_max = 5000L, tol = 1e-12) {
+  Ax(
+    x = x,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) + Ax(
+    x = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) - Axy(
+    x = x,
+    y = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...,
+    k_max = k_max,
+    tol = tol
+  )
 }
 
 # -------------------------------------------------------------------------
 # Reversionary annuities
 # -------------------------------------------------------------------------
 
-#' Reversionary annuity to (y) after death of (x)
+#' Reversionary annuity functions
 #'
-#' Computes \eqn{a_{x|y} = a_y - a_{xy}}.
+#' Computes reversionary whole-life annuities payable to one life after the
+#' death of the other life.
 #'
-#' @inheritParams adotxy
-#' @return Numeric vector.
-#' @examples
-#' ax_y(40, 50, i = 0.05, model = "uniform", omega = 100)
+#' \code{ax_y()} computes an annuity payable to the second life after the
+#' death of the first life.
+#'
+#' \code{ay_x()} computes an annuity payable to the first life after the
+#' death of the second life.
+#'
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param tbl Optional life table object.
+#' @param model Optional parametric survival model.
+#' @param ... Additional parameters passed to the survival model or
+#'   life-table functions.
+#' @param k_max Maximum number of terms used for an infinite series.
+#' @param tol Numerical tolerance used to assess convergence.
+#'
+#' @return A numeric vector of actuarial present values.
+#'
+#' @name reversionary_annuities
 #' @export
-ax_y <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-12) {
-  ax(x = y, i = i, tbl = tbl, model = model, ...) -
-    axy(x = x, y = y, i = i, tbl = tbl, model = model, ...,
-        k_max = k_max, tol = tol)
+ax_y <- function(x, y, i,
+                 tbl = NULL, model = NULL, ...,
+                 k_max = 5000L, tol = 1e-12) {
+  ax(
+    x = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) - axy(
+    x = x,
+    y = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...,
+    k_max = k_max,
+    tol = tol
+  )
 }
 
-#' Reversionary annuity to (x) after death of (y)
-#'
-#' Computes \eqn{a_{y|x} = a_x - a_{xy}}.
-#'
-#' @inheritParams adotxy
-#' @return Numeric vector.
-#' @examples
-#' ay_x(40, 50, i = 0.05, model = "uniform", omega = 100)
+#' @rdname reversionary_annuities
 #' @export
-ay_x <- function(x, y, i, tbl = NULL, model = NULL, ..., k_max = 5000, tol = 1e-12) {
-  ax(x = x, i = i, tbl = tbl, model = model, ...) -
-    axy(x = x, y = y, i = i, tbl = tbl, model = model, ...,
-        k_max = k_max, tol = tol)
+ay_x <- function(x, y, i,
+                 tbl = NULL, model = NULL, ...,
+                 k_max = 5000L, tol = 1e-12) {
+  ax(
+    x = x,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...
+  ) - axy(
+    x = x,
+    y = y,
+    i = i,
+    tbl = tbl,
+    model = model,
+    ...,
+    k_max = k_max,
+    tol = tol
+  )
 }

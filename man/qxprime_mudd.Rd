@@ -2,19 +2,23 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{qxprime_mudd}
 \alias{qxprime_mudd}
-\title{Independent probabilities \eqn{q_x^{\prime(j)}} from dependent probabilities \eqn{q_x^{(j)}} under MUDD}
+\title{Associated single-decrement probabilities under MUDD}
 \usage{
 qxprime_mudd(qxj)
 }
 \arguments{
-\item{qxj}{Numeric vector of dependent probabilities \eqn{q_x^{(j)}}.}
+\item{qxj}{Numeric vector of dependent cause-specific decrement
+probabilities.}
 }
 \value{
-Numeric vector of independent probabilities \eqn{q_x^{\prime(j)}}.
+A numeric vector of associated single-decrement probabilities.
 }
 \description{
-Independent probabilities \eqn{q_x^{\prime(j)}} from dependent probabilities \eqn{q_x^{(j)}} under MUDD
+Converts dependent multiple-decrement probabilities to associated
+single-decrement probabilities under the multiple-decrement uniform
+distribution assumption.
 }
 \examples{
-qxprime_mudd(c(.20, .10))
+qxprime_mudd(c(0.20, 0.10))
+
 }

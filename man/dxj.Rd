@@ -2,21 +2,25 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{dxj}
 \alias{dxj}
-\title{Cause-specific decrements \eqn{d_x^{(j)}}}
+\title{Cause-specific numbers of decrements}
 \usage{
 dxj(lxtau, qxj)
 }
 \arguments{
-\item{lxtau}{Number alive at age x in the multiple-decrement table.}
+\item{lxtau}{Number alive at age or duration \eqn{x} in the
+multiple-decrement table.}
 
 \item{qxj}{Numeric vector of cause-specific decrement probabilities.}
 }
 \value{
-Numeric vector.
+A numeric vector containing the number of decrements from each
+  cause.
 }
 \description{
-Cause-specific decrements \eqn{d_x^{(j)}}
+Computes
+\deqn{d_x^{(j)}=l_x^{(\tau)}q_x^{(j)}.}
 }
 \examples{
 dxj(1000, c(0.011, 0.100))
+
 }

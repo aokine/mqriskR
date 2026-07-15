@@ -1,358 +1,1016 @@
-#' Extended multi-life functions for Chapter 12
-#'
-#' Additional Chapter 12 functions for contingent probabilities,
-#' continuous contingent insurances, and continuous multi-life annuities.
-#'
-#' @name multilife_ch12_ext
-#' @keywords internal
-NULL
-
 # -------------------------------------------------------------------------
-# Shared documentation block
-# -------------------------------------------------------------------------
-
-#' Shared parameters for Chapter 12 continuous multi-life functions
-#'
-#' @param x Age of first life.
-#' @param y Age of second life.
-#' @param i Effective annual interest rate.
-#' @param n Term in years.
-#' @param tbl Life table.
-#' @param model Survival model.
-#' @param ... Additional model parameters.
-#'
-#' @name ch12_multilife_cont_params
-#' @keywords internal
-NULL
-
-# -------------------------------------------------------------------------
-# Internal helpers
+# Internal validation and recycling helpers
 # -------------------------------------------------------------------------
 
 #' @noRd
-.check_delta_ch12 <- function(i) {
-  i <- as.numeric(i)
-  if (length(i) == 0L || any(!is.finite(i)) || any(i <= -1)) {
-    stop("i must contain finite values greater than -1.", call. = FALSE)
+.multilife_ext_check_basis <- function(tbl = NULL,
+                                       model = NULL,
+                                       require_continuous = TRUE) {
+  if (is.null(tbl) && is.null(model)) {
+    stop("Supply either tbl or model.", call. = FALSE)
   }
-  log(1 + i)
+
+  if (!is.null(tbl) && !is.null(model)) {
+    stop("Supply only one of tbl or model, not both.", call. = FALSE)
+  }
+
+  if (!is.null(tbl)) {
+    .validate_life_table(tbl)
+
+    if (isTRUE(require_continuous)) {
+      stop(
+        paste0(
+          "Continuous multi-life calculations require a parametric model. ",
+          "An annual life table does not determine within-year survival ",
+          "or forces of mortality without an interpolation assumption."
+        ),
+        call. = FALSE
+      )
+    }
+  }
+
+  if (!is.null(model)) {
+    if (length(model) != 1L ||
+        !is.character(model) ||
+        is.na(model) ||
+        !nzchar(model)) {
+      stop("model must be a single nonempty character string.",
+           call. = FALSE)
+    }
+  }
+
+  invisible(TRUE)
 }
 
+
+#' @noRd
+.multilife_ext_check_nonnegative <- function(x, name) {
+  x <- as.numeric(x)
+
+  if (length(x) == 0L) {
+    stop(name, " must have positive length.", call. = FALSE)
+  }
+
+  if (any(!is.finite(x)) || any(x < 0)) {
+    stop(
+      name,
+      " must contain nonnegative finite values.",
+      call. = FALSE
+    )
+  }
+
+  x
+}
+
+
+#' @noRd
+.multilife_ext_check_interest <- function(i) {
+  i <- as.numeric(i)
+
+  if (length(i) == 0L) {
+    stop("i must have positive length.", call. = FALSE)
+  }
+
+  if (any(!is.finite(i)) || any(i <= -1)) {
+    stop(
+      "i must contain finite values greater than -1.",
+      call. = FALSE
+    )
+  }
+
+  i
+}
+
+
+#' @noRd
+.multilife_ext_recycle <- function(..., .names = NULL) {
+  values <- list(...)
+
+  if (length(values) == 0L) {
+    return(values)
+  }
+
+  lengths <- vapply(values, length, integer(1))
+
+  if (any(lengths == 0L)) {
+    stop("Inputs must have positive length.", call. = FALSE)
+  }
+
+  common_length <- max(lengths)
+
+  if (is.null(.names)) {
+    .names <- paste0("Argument ", seq_along(values))
+  }
+
+  if (length(.names) != length(values)) {
+    stop(
+      ".names must have the same length as the supplied arguments.",
+      call. = FALSE
+    )
+  }
+
+  for (j in seq_along(values)) {
+    if (!lengths[j] %in% c(1L, common_length)) {
+      stop(
+        .names[j],
+        " must have length 1 or the common length ",
+        common_length,
+        ".",
+        call. = FALSE
+      )
+    }
+
+    values[[j]] <- rep(values[[j]], length.out = common_length)
+  }
+
+  values
+}
+
+
+#' @noRd
+.multilife_ext_upper <- function(x,
+                                 y,
+                                 n = NULL,
+                                 model,
+                                 ...) {
+  if (tolower(model) == "uniform") {
+    dots <- list(...)
+
+    if (is.null(dots$omega) ||
+        length(dots$omega) != 1L ||
+        !is.finite(dots$omega)) {
+      stop(
+        "For model = 'uniform', omega must be supplied as a finite scalar.",
+        call. = FALSE
+      )
+    }
+
+    upper <- min(dots$omega - x, dots$omega - y)
+
+    if (!is.null(n)) {
+      upper <- min(upper, n)
+    }
+
+    return(max(upper, 0))
+  }
+
+  if (!is.null(n)) {
+    return(n)
+  }
+
+  Inf
+}
+
+
+#' @noRd
+.multilife_ext_integrate <- function(f, upper) {
+  if (!is.finite(upper) && upper != Inf) {
+    stop("The integration limit must be finite or Inf.", call. = FALSE)
+  }
+
+  if (upper <= 0) {
+    return(0)
+  }
+
+  value <- stats::integrate(
+    f,
+    lower = 0,
+    upper = upper,
+    rel.tol = 1e-9,
+    subdivisions = 1000L,
+    stop.on.error = TRUE
+  )$value
+
+  if (!is.finite(value)) {
+    stop("The continuous multi-life integral did not return a finite value.",
+         call. = FALSE)
+  }
+
+  value
+}
+
+
+#' @noRd
+.multilife_ext_joint_survival <- function(t, x, y, model, ...) {
+  tpxy(
+    x = x,
+    y = y,
+    t = t,
+    model = model,
+    ...
+  )
+}
+
+
+#' @noRd
+.multilife_ext_single_survival <- function(t, x, model, ...) {
+  tpx(
+    t = t,
+    x = x,
+    model = model,
+    ...
+  )
+}
+
+
+#' @noRd
+.multilife_ext_hazard <- function(age, model, ...) {
+  hazard0(
+    age,
+    model = model,
+    ...
+  )
+}
+
+
 # -------------------------------------------------------------------------
-# Contingent probability functions
+# Contingent probabilities
 # -------------------------------------------------------------------------
 
-#' Probability that (x) fails before (y) within n years
+#' Contingent multi-life probabilities
 #'
-#' Computes \eqn{{}_n q_{xy}^{1} = \int_0^n {}_tp_{xy}\mu_{x+t}\,dt}
-#' under independence.
+#' Computes probabilities associated with the order of death of two
+#' independent lives over a specified term.
 #'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
+#' \code{tqxy1()} gives the probability that the first life dies before the
+#' second life within \code{n} years.
+#'
+#' \code{tqyx1()} gives the probability that the second life dies before the
+#' first life within \code{n} years.
+#'
+#' \code{tqxy2()} gives the probability that the first life dies after the
+#' second life but within \code{n} years.
+#'
+#' \code{tqyx2()} gives the probability that the second life dies after the
+#' first life but within \code{n} years.
+#'
+#' These functions require a parametric survival model because an annual life
+#' table does not uniquely determine the within-year order of death without
+#' an additional interpolation assumption.
+#'
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param n Term in years. May be scalar or vector.
+#' @param tbl Optional life table object. Retained for backward compatibility;
+#'   these continuous calculations require \code{model}.
+#' @param model Parametric survival model.
+#' @param ... Additional parameters passed to the survival and hazard
+#'   functions.
+#'
+#' @return A numeric vector of contingent probabilities.
+#'
 #' @examples
-#' tqxy1(40, 50, n = 10, model = "uniform", omega = 100)
+#' tqxy1(
+#'   40, 50, n = 10,
+#'   model = "uniform", omega = 100
+#' )
+#'
+#' tqyx1(
+#'   40, 50, n = 10,
+#'   model = "uniform", omega = 100
+#' )
+#'
+#' @rdname multilife_contingent_probabilities
 #' @export
 tqxy1 <- function(x, y, n, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  n <- .check_nonneg_numeric(n, "n")
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
 
-  xyn <- .recycle3_ch12(x, y, n, "x", "y", "n")
-  x <- xyn$a
-  y <- xyn$b
-  n <- xyn$c
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  n <- .multilife_ext_check_nonnegative(n, "n")
 
-  sapply(seq_along(x), function(j) {
-    integrate(
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    n,
+    .names = c("x", "y", "n")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  n <- values[[3]]
+
+  vapply(seq_along(x), function(j) {
+    upper <- .multilife_ext_upper(
+      x = x[j],
+      y = y[j],
+      n = n[j],
+      model = model,
+      ...
+    )
+
+    .multilife_ext_integrate(
       function(t) {
-        tpxy(x = x[j], y = y[j], t = t, tbl = tbl, model = model, ...) *
-          hazard0(x[j] + t, tbl = tbl, model = model, ...)
+        value <- .multilife_ext_joint_survival(
+          t = t,
+          x = x[j],
+          y = y[j],
+          model = model,
+          ...
+        ) * .multilife_ext_hazard(
+          age = x[j] + t,
+          model = model,
+          ...
+        )
+
+        value[!is.finite(value)] <- 0
+        value
       },
-      lower = 0, upper = n[j]
-    )$value
-  })
+      upper = upper
+    )
+  }, numeric(1))
 }
 
-#' Probability that (y) fails before (x) within n years
-#'
-#' Computes \eqn{{}_n q_{xy}^{\hspace{1mm}1} = \int_0^n {}_tp_{xy}\mu_{y+t}\,dt}
-#' under independence.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' tqyx1(40, 50, n = 10, model = "uniform", omega = 100)
+
+#' @rdname multilife_contingent_probabilities
 #' @export
 tqyx1 <- function(x, y, n, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  n <- .check_nonneg_numeric(n, "n")
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
 
-  xyn <- .recycle3_ch12(x, y, n, "x", "y", "n")
-  x <- xyn$a
-  y <- xyn$b
-  n <- xyn$c
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  n <- .multilife_ext_check_nonnegative(n, "n")
 
-  sapply(seq_along(x), function(j) {
-    integrate(
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    n,
+    .names = c("x", "y", "n")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  n <- values[[3]]
+
+  vapply(seq_along(x), function(j) {
+    upper <- .multilife_ext_upper(
+      x = x[j],
+      y = y[j],
+      n = n[j],
+      model = model,
+      ...
+    )
+
+    .multilife_ext_integrate(
       function(t) {
-        tpxy(x = x[j], y = y[j], t = t, tbl = tbl, model = model, ...) *
-          hazard0(y[j] + t, tbl = tbl, model = model, ...)
+        value <- .multilife_ext_joint_survival(
+          t = t,
+          x = x[j],
+          y = y[j],
+          model = model,
+          ...
+        ) * .multilife_ext_hazard(
+          age = y[j] + t,
+          model = model,
+          ...
+        )
+
+        value[!is.finite(value)] <- 0
+        value
       },
-      lower = 0, upper = n[j]
-    )$value
-  })
+      upper = upper
+    )
+  }, numeric(1))
 }
 
-#' Probability that (x) fails after (y) within n years
-#'
-#' Computes \eqn{{}_n q_{xy}^{2} = {}_n q_x - {}_n q_{xy}^{1}}.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' tqxy2(40, 50, n = 10, model = "uniform", omega = 100)
+
+#' @rdname multilife_contingent_probabilities
 #' @export
 tqxy2 <- function(x, y, n, tbl = NULL, model = NULL, ...) {
-  tqx(x = x, t = n, tbl = tbl, model = model, ...) -
-    tqxy1(x = x, y = y, n = n, tbl = tbl, model = model, ...)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
+
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  n <- .multilife_ext_check_nonnegative(n, "n")
+
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    n,
+    .names = c("x", "y", "n")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  n <- values[[3]]
+
+  qx <- 1 - .multilife_ext_single_survival(
+    t = n,
+    x = x,
+    model = model,
+    ...
+  )
+
+  out <- qx - tqxy1(
+    x = x,
+    y = y,
+    n = n,
+    model = model,
+    ...
+  )
+
+  pmax(out, 0)
 }
 
-#' Probability that (y) fails after (x) within n years
-#'
-#' Computes \eqn{{}_n q_{xy}^{\hspace{1mm}2} = {}_n q_y - {}_n q_{xy}^{\hspace{1mm}1}}.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' tqyx2(40, 50, n = 10, model = "uniform", omega = 100)
+
+#' @rdname multilife_contingent_probabilities
 #' @export
 tqyx2 <- function(x, y, n, tbl = NULL, model = NULL, ...) {
-  tqx(x = y, t = n, tbl = tbl, model = model, ...) -
-    tqyx1(x = x, y = y, n = n, tbl = tbl, model = model, ...)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
+
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  n <- .multilife_ext_check_nonnegative(n, "n")
+
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    n,
+    .names = c("x", "y", "n")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  n <- values[[3]]
+
+  qy <- 1 - .multilife_ext_single_survival(
+    t = n,
+    x = y,
+    model = model,
+    ...
+  )
+
+  out <- qy - tqyx1(
+    x = x,
+    y = y,
+    n = n,
+    model = model,
+    ...
+  )
+
+  pmax(out, 0)
 }
 
+
 # -------------------------------------------------------------------------
-# Continuous annuities
+# Continuous multi-life annuities
 # -------------------------------------------------------------------------
 
-#' Continuous joint-life whole life annuity
+#' Continuous multi-life annuities
 #'
-#' Computes \eqn{\overline{a}_{xy} = \int_0^\infty v^t\,{}_tp_{xy}\,dt}.
+#' Computes continuous joint-life, last-survivor, and reversionary whole-life
+#' annuities for two independent lives.
 #'
-#' Shared documentation topic used to avoid filename collisions with
-#' case-distinct function names on case-insensitive file systems.
+#' \code{abarxy()} computes the joint-life annuity.
 #'
-#' @name abarxy_ch12
-#' @aliases abarxy
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
+#' \code{abarxybar()} computes the last-survivor annuity.
+#'
+#' \code{abarx_y()} computes the reversionary annuity payable to the second
+#' life after the death of the first.
+#'
+#' \code{abary_x()} computes the reversionary annuity payable to the first
+#' life after the death of the second.
+#'
+#' These functions require a parametric survival model.
+#'
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param tbl Optional life table object. Retained for backward compatibility;
+#'   these continuous calculations require \code{model}.
+#' @param model Parametric survival model.
+#' @param ... Additional parameters passed to the survival functions.
+#'
+#' @return A numeric vector of actuarial present values.
+#'
 #' @examples
-#' abarxy(40, 50, i = 0.05, model = "uniform", omega = 100)
+#' abarxy(
+#'   40, 50, i = 0.05,
+#'   model = "uniform", omega = 100
+#' )
+#'
+#' abarxybar(
+#'   40, 50, i = 0.05,
+#'   model = "uniform", omega = 100
+#' )
+#'
+#' @rdname multilife_continuous_annuities
 #' @export
 abarxy <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  i <- .check_i_ch12(i)
-  delta <- .check_delta_ch12(i)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
 
-  xyi <- .recycle3_ch12(x, y, delta, "x", "y", "i")
-  x <- xyi$a
-  y <- xyi$b
-  delta <- xyi$c
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
 
-  sapply(seq_along(x), function(j) {
-    integrate(
-      function(t) exp(-delta[j] * t) *
-        tpxy(x = x[j], y = y[j], t = t, tbl = tbl, model = model, ...),
-      lower = 0, upper = Inf
-    )$value
-  })
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  delta <- log1p(i)
+
+  vapply(seq_along(x), function(j) {
+    upper <- .multilife_ext_upper(
+      x = x[j],
+      y = y[j],
+      model = model,
+      ...
+    )
+
+    .multilife_ext_integrate(
+      function(t) {
+        value <- exp(-delta[j] * t) *
+          .multilife_ext_joint_survival(
+            t = t,
+            x = x[j],
+            y = y[j],
+            model = model,
+            ...
+          )
+
+        value[!is.finite(value)] <- 0
+        value
+      },
+      upper = upper
+    )
+  }, numeric(1))
 }
 
-#' Continuous last-survivor whole life annuity
-#'
-#' Computes \eqn{\overline{a}_{\overline{xy}} = \overline{a}_x + \overline{a}_y - \overline{a}_{xy}}.
-#'
-#' Shared documentation topic used to avoid filename collisions with
-#' case-distinct function names on case-insensitive file systems.
-#'
-#' @name abarxybar_ch12
-#' @aliases abarxybar
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' abarxybar(40, 50, i = 0.05, model = "uniform", omega = 100)
+
+#' @rdname multilife_continuous_annuities
 #' @export
 abarxybar <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  abarx(x = x, i = i, tbl = tbl, model = model, ...) +
-    abarx(x = y, i = i, tbl = tbl, model = model, ...) -
-    abarxy(x = x, y = y, i = i, tbl = tbl, model = model, ...)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
+
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
+
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  abarx(
+    x = x,
+    i = i,
+    model = model,
+    ...
+  ) +
+    abarx(
+      x = y,
+      i = i,
+      model = model,
+      ...
+    ) -
+    abarxy(
+      x = x,
+      y = y,
+      i = i,
+      model = model,
+      ...
+    )
 }
 
-#' Continuous reversionary annuity to (y) after death of (x)
-#'
-#' Computes \eqn{\overline{a}_{x|y} = \overline{a}_y - \overline{a}_{xy}}.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' abarx_y(40, 50, i = 0.05, model = "uniform", omega = 100)
+
+#' @rdname multilife_continuous_annuities
 #' @export
 abarx_y <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  abarx(x = y, i = i, tbl = tbl, model = model, ...) -
-    abarxy(x = x, y = y, i = i, tbl = tbl, model = model, ...)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
+
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
+
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  abarx(
+    x = y,
+    i = i,
+    model = model,
+    ...
+  ) -
+    abarxy(
+      x = x,
+      y = y,
+      i = i,
+      model = model,
+      ...
+    )
 }
 
-#' Continuous reversionary annuity to (x) after death of (y)
-#'
-#' Computes \eqn{\overline{a}_{y|x} = \overline{a}_x - \overline{a}_{xy}}.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' abary_x(40, 50, i = 0.05, model = "uniform", omega = 100)
+
+#' @rdname multilife_continuous_annuities
 #' @export
 abary_x <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  abarx(x = x, i = i, tbl = tbl, model = model, ...) -
-    abarxy(x = x, y = y, i = i, tbl = tbl, model = model, ...)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
+
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
+
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  abarx(
+    x = x,
+    i = i,
+    model = model,
+    ...
+  ) -
+    abarxy(
+      x = x,
+      y = y,
+      i = i,
+      model = model,
+      ...
+    )
 }
 
+
 # -------------------------------------------------------------------------
-# Continuous insurances
+# Continuous multi-life insurances
 # -------------------------------------------------------------------------
 
-#' Continuous joint-life whole life insurance
+#' Continuous multi-life insurances
 #'
-#' Computes \eqn{\overline{A}_{xy} = 1 - \delta \overline{a}_{xy}}.
+#' Computes continuous joint-life, last-survivor, and contingent whole-life
+#' insurance values for two independent lives.
 #'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
+#' \code{Abarxy()} computes joint-life insurance payable at the first death.
+#'
+#' \code{Abarxybar()} computes last-survivor insurance payable at the second
+#' death.
+#'
+#' \code{Abarxy1()} and \code{Abaryx1()} compute contingent insurances payable
+#' when the specified life dies first.
+#'
+#' \code{Abarxy2()} and \code{Abaryx2()} compute contingent insurances payable
+#' when the specified life dies second.
+#'
+#' These functions require a parametric survival model.
+#'
+#' @param x Age of the first life. May be scalar or vector.
+#' @param y Age of the second life. May be scalar or vector.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param tbl Optional life table object. Retained for backward compatibility;
+#'   these continuous calculations require \code{model}.
+#' @param model Parametric survival model.
+#' @param ... Additional parameters passed to the survival and hazard
+#'   functions.
+#'
+#' @return A numeric vector of actuarial present values.
+#'
 #' @examples
-#' Abarxy(40, 50, i = 0.05, model = "uniform", omega = 100)
+#' Abarxy(
+#'   40, 50, i = 0.05,
+#'   model = "uniform", omega = 100
+#' )
+#'
+#' Abarxy1(
+#'   40, 50, i = 0.05,
+#'   model = "uniform", omega = 100
+#' )
+#'
+#' @rdname multilife_continuous_insurances
 #' @export
 Abarxy <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  delta <- .check_delta_ch12(i)
-  1 - delta * abarxy(x = x, y = y, i = i, tbl = tbl, model = model, ...)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
+
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
+
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  1 - log1p(i) * abarxy(
+    x = x,
+    y = y,
+    i = i,
+    model = model,
+    ...
+  )
 }
 
-#' Continuous last-survivor whole life insurance
-#'
-#' Computes \eqn{\overline{A}_{\overline{xy}} = \overline{A}_x + \overline{A}_y - \overline{A}_{xy}}.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' Abarxybar(40, 50, i = 0.05, model = "uniform", omega = 100)
+
+#' @rdname multilife_continuous_insurances
 #' @export
 Abarxybar <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  Abarx(x = x, i = i, tbl = tbl, model = model, ...) +
-    Abarx(x = y, i = i, tbl = tbl, model = model, ...) -
-    Abarxy(x = x, y = y, i = i, tbl = tbl, model = model, ...)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
+
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
+
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  Abarx(
+    x = x,
+    i = i,
+    model = model,
+    ...
+  ) +
+    Abarx(
+      x = y,
+      i = i,
+      model = model,
+      ...
+    ) -
+    Abarxy(
+      x = x,
+      y = y,
+      i = i,
+      model = model,
+      ...
+    )
 }
 
-#' Continuous contingent insurance: benefit on death of (x) if before (y)
-#'
-#' Computes \eqn{\overline{A}_{xy}^{1} = \int_0^\infty v^t\,{}_tp_{xy}\mu_{x+t}\,dt}.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' Abarxy1(40, 50, i = 0.05, model = "uniform", omega = 100)
+
+#' @rdname multilife_continuous_insurances
 #' @export
 Abarxy1 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  i <- .check_i_ch12(i)
-  delta <- .check_delta_ch12(i)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
 
-  dots <- list(...)
-  xyi <- .recycle3_ch12(x, y, delta, "x", "y", "i")
-  x <- xyi$a
-  y <- xyi$b
-  delta <- xyi$c
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
 
-  sapply(seq_along(x), function(j) {
-    upper <- Inf
-    if (!is.null(dots$omega) && is.finite(dots$omega)) {
-      upper <- max(0, min(dots$omega - x[j], dots$omega - y[j]))
-    }
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
 
-    integrate(
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  delta <- log1p(i)
+
+  vapply(seq_along(x), function(j) {
+    upper <- .multilife_ext_upper(
+      x = x[j],
+      y = y[j],
+      model = model,
+      ...
+    )
+
+    .multilife_ext_integrate(
       function(t) {
-        exp(-delta[j] * t) *
-          tpxy(x = x[j], y = y[j], t = t, tbl = tbl, model = model, ...) *
-          hazard0(x[j] + t, tbl = tbl, model = model, ...)
+        value <- exp(-delta[j] * t) *
+          .multilife_ext_joint_survival(
+            t = t,
+            x = x[j],
+            y = y[j],
+            model = model,
+            ...
+          ) *
+          .multilife_ext_hazard(
+            age = x[j] + t,
+            model = model,
+            ...
+          )
+
+        value[!is.finite(value)] <- 0
+        value
       },
-      lower = 0,
       upper = upper
-    )$value
-  })
+    )
+  }, numeric(1))
 }
 
-#' Continuous contingent insurance: benefit on death of (y) if before (x)
-#'
-#' Computes \eqn{\overline{A}_{xy}^{\hspace{1mm}1} = \int_0^\infty v^t\,{}_tp_{xy}\mu_{y+t}\,dt}.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' Abaryx1(40, 50, i = 0.05, model = "uniform", omega = 100)
+
+#' @rdname multilife_continuous_insurances
 #' @export
 Abaryx1 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  x <- .check_nonneg_numeric(x, "x")
-  y <- .check_nonneg_numeric(y, "y")
-  i <- .check_i_ch12(i)
-  delta <- .check_delta_ch12(i)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
 
-  dots <- list(...)
-  xyi <- .recycle3_ch12(x, y, delta, "x", "y", "i")
-  x <- xyi$a
-  y <- xyi$b
-  delta <- xyi$c
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
 
-  sapply(seq_along(x), function(j) {
-    upper <- Inf
-    if (!is.null(dots$omega) && is.finite(dots$omega)) {
-      upper <- max(0, min(dots$omega - x[j], dots$omega - y[j]))
-    }
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
 
-    integrate(
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  delta <- log1p(i)
+
+  vapply(seq_along(x), function(j) {
+    upper <- .multilife_ext_upper(
+      x = x[j],
+      y = y[j],
+      model = model,
+      ...
+    )
+
+    .multilife_ext_integrate(
       function(t) {
-        exp(-delta[j] * t) *
-          tpxy(x = x[j], y = y[j], t = t, tbl = tbl, model = model, ...) *
-          hazard0(y[j] + t, tbl = tbl, model = model, ...)
+        value <- exp(-delta[j] * t) *
+          .multilife_ext_joint_survival(
+            t = t,
+            x = x[j],
+            y = y[j],
+            model = model,
+            ...
+          ) *
+          .multilife_ext_hazard(
+            age = y[j] + t,
+            model = model,
+            ...
+          )
+
+        value[!is.finite(value)] <- 0
+        value
       },
-      lower = 0,
       upper = upper
-    )$value
-  })
+    )
+  }, numeric(1))
 }
 
-#' Continuous contingent insurance: benefit on death of (x) if after (y)
-#'
-#' Computes \eqn{\overline{A}_{xy}^{2} = \overline{A}_x - \overline{A}_{xy}^{1}}.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' Abarxy2(40, 50, i = 0.05, model = "uniform", omega = 100)
+
+#' @rdname multilife_continuous_insurances
 #' @export
 Abarxy2 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  Abarx(x = x, i = i, tbl = tbl, model = model, ...) -
-    Abarxy1(x = x, y = y, i = i, tbl = tbl, model = model, ...)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
+
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
+
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  out <- Abarx(
+    x = x,
+    i = i,
+    model = model,
+    ...
+  ) -
+    Abarxy1(
+      x = x,
+      y = y,
+      i = i,
+      model = model,
+      ...
+    )
+
+  pmax(out, 0)
 }
 
-#' Continuous contingent insurance: benefit on death of (y) if after (x)
-#'
-#' Computes \eqn{\overline{A}_{xy}^{\hspace{1mm}2} = \overline{A}_y - \overline{A}_{xy}^{\hspace{1mm}1}}.
-#'
-#' @inheritParams ch12_multilife_cont_params
-#' @return Numeric vector.
-#' @examples
-#' Abaryx2(40, 50, i = 0.05, model = "uniform", omega = 100)
+
+#' @rdname multilife_continuous_insurances
 #' @export
 Abaryx2 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
-  Abarx(x = y, i = i, tbl = tbl, model = model, ...) -
-    Abaryx1(x = x, y = y, i = i, tbl = tbl, model = model, ...)
+  .multilife_ext_check_basis(
+    tbl = tbl,
+    model = model,
+    require_continuous = TRUE
+  )
+
+  x <- .multilife_ext_check_nonnegative(x, "x")
+  y <- .multilife_ext_check_nonnegative(y, "y")
+  i <- .multilife_ext_check_interest(i)
+
+  values <- .multilife_ext_recycle(
+    x,
+    y,
+    i,
+    .names = c("x", "y", "i")
+  )
+
+  x <- values[[1]]
+  y <- values[[2]]
+  i <- values[[3]]
+
+  out <- Abarx(
+    x = y,
+    i = i,
+    model = model,
+    ...
+  ) -
+    Abaryx1(
+      x = x,
+      y = y,
+      i = i,
+      model = model,
+      ...
+    )
+
+  pmax(out, 0)
 }

@@ -2,19 +2,23 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{qx_dep_cf}
 \alias{qx_dep_cf}
-\title{Dependent probabilities \eqn{q_x^{(j)}} from independent probabilities \eqn{q_x^{\prime(j)}} under constant force}
+\title{Multiple-decrement probabilities under constant forces}
 \usage{
 qx_dep_cf(qxprime)
 }
 \arguments{
-\item{qxprime}{Numeric vector of independent probabilities.}
+\item{qxprime}{Numeric vector of associated single-decrement
+probabilities. Each value must be less than one.}
 }
 \value{
-Numeric vector of dependent probabilities.
+A numeric vector of dependent cause-specific decrement
+  probabilities.
 }
 \description{
-Dependent probabilities \eqn{q_x^{(j)}} from independent probabilities \eqn{q_x^{\prime(j)}} under constant force
+Converts associated single-decrement probabilities to dependent
+cause-specific decrement probabilities under constant forces.
 }
 \examples{
 qx_dep_cf(c(0.20, 0.10))
+
 }

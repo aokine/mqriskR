@@ -2,7 +2,7 @@
 % Please edit documentation in R/decrement_ch13_ext.R
 \name{qxtau}
 \alias{qxtau}
-\title{Total probability of decrement \eqn{q_x^{(\tau)}}}
+\title{Total one-year decrement probability}
 \usage{
 qxtau(qxj)
 }
@@ -10,11 +10,13 @@ qxtau(qxj)
 \item{qxj}{Numeric vector of cause-specific decrement probabilities.}
 }
 \value{
-Numeric scalar.
+A numeric scalar.
 }
 \description{
-Total probability of decrement \eqn{q_x^{(\tau)}}
+Computes the total one-year multiple-decrement probability
+\deqn{q_x^{(\tau)}=\sum_j q_x^{(j)}.}
 }
 \examples{
 qxtau(c(0.011, 0.100))
+
 }
