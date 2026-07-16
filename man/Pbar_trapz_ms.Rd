@@ -2,47 +2,34 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{Pbar_trapz_ms}
 \alias{Pbar_trapz_ms}
-\title{Continuous premium approximation \eqn{\overline{P}} by trapezoidal rule}
+\title{Continuous premium approximation in a disability model}
 \usage{
 Pbar_trapz_ms(t, tp00, tp01, delta, mu02, mu12, B02 = 1, B12 = 1, R = 0)
 }
 \arguments{
-\item{t}{Numeric vector of time points.}
+\item{t}{Strictly increasing nonnegative time points.}
 
-\item{tp00}{Numeric vector of values \eqn{{}_{t}p_{x}^{00}}.}
+\item{tp00}{Healthy-state probabilities.}
 
-\item{tp01}{Numeric vector of values \eqn{{}_{t}p_{x}^{01}}.}
+\item{tp01}{Disabled-state probabilities.}
 
 \item{delta}{Force of interest.}
 
-\item{mu02}{Function of time returning \eqn{\mu_{x+t}^{02}}.}
+\item{mu02}{Healthy-to-deceased intensity function.}
 
-\item{mu12}{Function of time returning \eqn{\mu_{x+t}^{12}}.}
+\item{mu12}{Disabled-to-deceased intensity function.}
 
-\item{B02}{Benefit payable on death while healthy.}
+\item{B02}{Benefit on death while healthy.}
 
-\item{B12}{Benefit payable on death while disabled.}
+\item{B12}{Benefit on death while disabled.}
 
-\item{R}{Continuous income rate while disabled.}
+\item{R}{Continuous disability income rate.}
 }
 \value{
 A numeric scalar.
 }
 \description{
-Approximates the annual continuous premium in the disability model allowing
-for recovery, as in Example 14.18.
-}
-\details{
-The numerator is
-\deqn{
-\int v^t \left[{}_{t}p_{x}^{00}\mu_{x+t}^{02}B^{02}
-+ {}_{t}p_{x}^{01}\mu_{x+t}^{12}B^{12}
-+ {}_{t}p_{x}^{01}R \right] dt
-}
-and the denominator is
-\deqn{
-\int v^t {}_{t}p_{x}^{00} dt
-}
+Approximates a continuous premium rate by trapezoidal integration.
 }
 \examples{
 mu01 <- function(t) 0.10 * t + 0.20
@@ -50,15 +37,19 @@ mu02 <- function(t) 0.20
 mu10 <- function(t) 0.50
 mu12 <- function(t) 0.125 * t + 0.20
 
-ex1410 <- tp00_tp01_euler(
-  h = 0.10, n = 2.0,
-  mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
+probs <- tp00_tp01_euler(
+  h = 0.10,
+  n = 2,
+  mu01 = mu01,
+  mu02 = mu02,
+  mu10 = mu10,
+  mu12 = mu12
 )
 
 Pbar_trapz_ms(
-  t = ex1410$t,
-  tp00 = ex1410$tp00,
-  tp01 = ex1410$tp01,
+  t = probs$t,
+  tp00 = probs$tp00,
+  tp01 = probs$tp01,
   delta = 0.04,
   mu02 = mu02,
   mu12 = mu12,

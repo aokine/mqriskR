@@ -2,7 +2,7 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{gain_loss_md}
 \alias{gain_loss_md}
-\title{Gain or loss in a multiple-decrement model}
+\title{Gain or loss in a two-cause multiple-decrement model}
 \usage{
 gain_loss_md(
   Vt,
@@ -23,58 +23,48 @@ gain_loss_md(
 )
 }
 \arguments{
-\item{Vt}{Gross premium reserve at time \eqn{t}.}
+\item{Vt}{Gross reserve at the beginning of the year.}
 
-\item{G}{Gross premium for the year.}
+\item{G}{Gross premium.}
 
-\item{r}{Percent-of-premium expense factor.}
+\item{r}{Percent-of-premium expense rate.}
 
-\item{e}{Fixed expense at the beginning of the year.}
+\item{e}{Fixed beginning-of-year expense.}
 
-\item{i}{Earned interest rate.}
+\item{i}{Earned effective annual interest rate.}
 
 \item{b1}{Cause 1 benefit.}
 
 \item{b2}{Cause 2 benefit.}
 
-\item{s1}{Claim settlement expense for Cause 1.}
+\item{s1}{Cause 1 settlement expense.}
 
-\item{s2}{Claim settlement expense for Cause 2.}
+\item{s2}{Cause 2 settlement expense.}
 
 \item{q1}{Cause 1 decrement probability.}
 
 \item{q2}{Cause 2 decrement probability.}
 
-\item{Vt1}{Gross premium reserve at time \eqn{t+1}.}
+\item{Vt1}{Gross reserve at the end of the year.}
 
-\item{year_end_cause2}{Logical; if \code{TRUE}, use the year-end Cause 2 form.}
+\item{year_end_cause2}{Whether Cause 2 occurs only at year-end.}
 
-\item{q1prime}{Single-decrement Cause 1 probability for the year-end Cause 2 case.}
+\item{q1prime}{Single-decrement Cause 1 probability for the ordered case.}
 
-\item{q2prime}{Single-decrement Cause 2 probability for the year-end Cause 2 case.}
+\item{q2prime}{Single-decrement Cause 2 probability for the ordered case.}
 }
 \value{
-A numeric scalar.
+A numeric vector of gains or losses.
 }
 \description{
-Computes the gain or loss expression from Section 14.6.
-}
-\details{
-With within-year decrement probabilities, the function evaluates
-\deqn{
-[{}_{t}V^G + G(1-r) - e](1+i)
-- \left[(b^{(1)}+s^{(1)})q^{(1)} + (b^{(2)}+s^{(2)})q^{(2)}
-+ p^{(\tau)} {}_{t+1}V^G \right]
-}
-
-If \code{year_end_cause2 = TRUE}, the Cause 2 decrement is treated as
-occurring only at year end, matching Equation (14.30).
+Computes one-year gain or loss under simultaneous within-year decrement
+probabilities or an ordered case in which Cause 2 occurs at year-end.
+Numeric arguments may be scalar or compatible vectors.
 }
 \examples{
 gain_loss_md(
-  Vt = 115.00, G = 16, r = 0, e = 3, i = 0.06,
-  b1 = 1000, b2 = 110, s1 = 0, s2 = 0,
-  q1 = 0.01, q2 = 0.10, Vt1 = 128.83
+  Vt = 115, G = 16, r = 0, e = 3, i = 0.06,
+  b1 = 1000, b2 = 110, q1 = 0.01, q2 = 0.10, Vt1 = 128.83
 )
 
 }

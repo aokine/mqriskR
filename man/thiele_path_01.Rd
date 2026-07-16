@@ -2,7 +2,7 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{thiele_path_01}
 \alias{thiele_path_01}
-\title{Backward reserve path for the disability model with recovery}
+\title{Backward reserve path for a disability model with recovery}
 \usage{
 thiele_path_01(
   h,
@@ -20,9 +20,9 @@ thiele_path_01(
 )
 }
 \arguments{
-\item{h}{Step size.}
+\item{h}{Positive step size.}
 
-\item{n}{Final time.}
+\item{n}{Nonnegative final time.}
 
 \item{delta}{Force of interest.}
 
@@ -32,36 +32,22 @@ thiele_path_01(
 
 \item{R}{Continuous disability income rate.}
 
-\item{mu01}{Function of time returning \eqn{\mu_{x+t}^{01}}.}
+\item{mu01}{Healthy-to-disabled intensity function.}
 
-\item{mu02}{Function of time returning \eqn{\mu_{x+t}^{02}}.}
+\item{mu02}{Healthy-to-deceased intensity function.}
 
-\item{mu10}{Function of time returning \eqn{\mu_{x+t}^{10}}.}
+\item{mu10}{Disabled-to-healthy intensity function.}
 
-\item{mu12}{Function of time returning \eqn{\mu_{x+t}^{12}}.}
+\item{mu12}{Disabled-to-deceased intensity function.}
 
-\item{V0_n}{Terminal value of \eqn{{}_{n}\overline{V}^{(0)}}.}
+\item{V0_n}{Terminal healthy-state reserve.}
 
-\item{V1_n}{Terminal value of \eqn{{}_{n}\overline{V}^{(1)}}.}
+\item{V1_n}{Terminal disabled-state reserve.}
 }
 \value{
 A data frame with columns \code{t}, \code{tV0}, and \code{tV1}.
 }
 \description{
-Computes the backward Euler reserve path for the healthy-life reserve
-\eqn{{}_{t}\overline{V}^{(0)}} and disabled-life reserve
-\eqn{{}_{t}\overline{V}^{(1)}} using Equations (14.27) and (14.28).
-}
-\examples{
-mu01 <- function(t) 0.10 * t + 0.20
-mu02 <- function(t) 0.20
-mu10 <- function(t) 0.50
-mu12 <- function(t) 0.125 * t + 0.20
-
-thiele_path_01(
-  h = 0.10, n = 2.0, delta = 0.04, Pbar = 446.95,
-  B = 1000, R = 1000,
-  mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
-)
-
+Computes a backward Euler reserve path from terminal healthy-state and
+disabled-state reserves.
 }

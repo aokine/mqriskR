@@ -2,34 +2,34 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{AS_path_md}
 \alias{AS_path_md}
-\title{General projected asset share path (multiple decrements)}
+\title{General projected asset-share path}
 \usage{
 AS_path_md(AS0, G, r, e, b_mat, q_mat, p_tau, i, b_surv = NULL)
 }
 \arguments{
 \item{AS0}{Initial asset share.}
 
-\item{G}{Premium.}
+\item{G}{Premium amount by policy year.}
 
-\item{r}{Expense percentages.}
+\item{r}{Percent-of-premium expense rate by policy year.}
 
-\item{e}{Fixed expenses.}
+\item{e}{Fixed expense by policy year.}
 
-\item{b_mat}{Matrix of benefits (rows = years, cols = causes).}
+\item{b_mat}{Matrix of decrement benefits.}
 
-\item{q_mat}{Matrix of decrement probabilities (same shape as b_mat).}
+\item{q_mat}{Matrix of decrement probabilities.}
 
-\item{p_tau}{In-force probabilities.}
+\item{p_tau}{In-force probability by policy year.}
 
-\item{i}{Interest rate.}
+\item{i}{Effective annual interest rate by policy year.}
 
-\item{b_surv}{Optional survival benefits.}
+\item{b_surv}{Survival benefit by policy year.}
 }
 \value{
-A data frame with columns \code{k} and \code{AS}. Column
-  \code{k} gives the policy year from 0 to \code{n}, and column
-  \code{AS} gives the corresponding projected asset share at each year.
+A data frame with policy year \code{k} and asset share \code{AS}.
 }
 \description{
-General projected asset share path (multiple decrements)
+Computes projected asset shares for a multiple-decrement contract. Rows of
+\code{b_mat} and \code{q_mat} represent policy years and columns represent
+decrement causes.
 }

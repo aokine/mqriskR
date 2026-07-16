@@ -1,196 +1,288 @@
 # =========================================================
-# Chapter 14 helpers for mqriskR
-# Multiple-Decrement Models (Applications)
+# Multiple-decrement applications
 # =========================================================
 
-#' Discrete multiple-decrement insurance APV \eqn{A_{x}^{(j)}}
+# -------------------------------------------------------------------------
+# Internal helpers
+# -------------------------------------------------------------------------
+
+#' @noRd
+.md_check_numeric <- function(x, name) {
+  if (!is.numeric(x) || length(x) == 0L || any(!is.finite(x))) {
+    stop(name, " must contain finite numeric values.", call. = FALSE)
+  }
+  as.numeric(x)
+}
+
+#' @noRd
+.md_check_nonnegative <- function(x, name) {
+  x <- .md_check_numeric(x, name)
+  if (any(x < 0)) stop(name, " must contain nonnegative values.", call. = FALSE)
+  x
+}
+
+#' @noRd
+.md_check_probability <- function(x, name) {
+  x <- .md_check_numeric(x, name)
+  if (any(x < 0 | x > 1)) stop(name, " must contain values in [0, 1].", call. = FALSE)
+  x
+}
+
+#' @noRd
+.md_check_interest <- function(i, name = "i") {
+  i <- .md_check_numeric(i, name)
+  if (any(i <= -1)) stop(name, " must contain values greater than -1.", call. = FALSE)
+  i
+}
+
+#' @noRd
+.md_check_scalar <- function(x, name, lower = -Inf, strict = FALSE) {
+  x <- .md_check_numeric(x, name)
+  if (length(x) != 1L) stop(name, " must be a finite numeric scalar.", call. = FALSE)
+  bad <- if (strict) x <= lower else x < lower
+  if (bad) stop(name, if (strict) " must be greater than " else " must be at least ", lower, ".", call. = FALSE)
+  x
+}
+
+#' @noRd
+.md_check_integer_scalar <- function(x, name, lower = 0L) {
+  x <- .md_check_numeric(x, name)
+  if (length(x) != 1L || x < lower || abs(x - round(x)) > 1e-10) {
+    stop(name, " must be a single integer greater than or equal to ", lower, ".", call. = FALSE)
+  }
+  as.integer(round(x))
+}
+
+#' @noRd
+.md_check_function <- function(x, name) {
+  if (!is.function(x)) stop(name, " must be a function.", call. = FALSE)
+  x
+}
+
+#' @noRd
+.md_recycle <- function(..., .names = NULL) {
+  values <- list(...)
+  lengths <- vapply(values, length, integer(1))
+  if (any(lengths == 0L)) stop("Inputs must have positive length.", call. = FALSE)
+  common <- max(lengths)
+  if (is.null(.names)) .names <- paste0("Argument ", seq_along(values))
+  for (j in seq_along(values)) {
+    if (!lengths[j] %in% c(1L, common)) {
+      stop(.names[j], " must have length 1 or the common length ", common, ".", call. = FALSE)
+    }
+    values[[j]] <- rep(values[[j]], length.out = common)
+  }
+  values
+}
+
+#' @noRd
+.md_check_grid <- function(t) {
+  t <- .md_check_nonnegative(t, "t")
+  if (length(t) < 2L) stop("t must contain at least two time points.", call. = FALSE)
+  if (is.unsorted(t, strictly = TRUE)) stop("t must be strictly increasing.", call. = FALSE)
+  t
+}
+
+#' @noRd
+.md_grid <- function(n, h) {
+  n <- .md_check_scalar(n, "n", lower = 0)
+  h <- .md_check_scalar(h, "h", lower = 0, strict = TRUE)
+  if (n == 0) return(0)
+  out <- seq(0, n, by = h)
+  if (tail(out, 1L) < n) out <- c(out, n)
+  out[length(out)] <- n
+  unique(out)
+}
+
+#' @noRd
+.md_trapz <- function(t, y) {
+  sum(diff(t) * (head(y, -1L) + tail(y, -1L)) / 2)
+}
+
+# -------------------------------------------------------------------------
+# Insurance present values
+# -------------------------------------------------------------------------
+
+#' Discrete multiple-decrement insurance present value
 #'
-#' Computes the actuarial present value of a benefit payable at the end of the
-#' year of decrement if decrement occurs by Cause \eqn{j}, matching Equation
-#' (14.3b) in Chapter 14.
+#' Computes the actuarial present value of a benefit payable at the end of
+#' the year of decrement from a specified cause.
 #'
-#' The function evaluates
-#' \deqn{
-#' A_{x}^{(j)} = \sum_{k=0}^{n-1} v^{k+1} {}_{k}p_{x}^{(\tau)} q_{x+k}^{(j)}
-#' }
-#' with an optional benefit amount multiplier.
+#' @param qj Cause-specific decrement probabilities by policy year.
+#' @param ptau In-force probabilities at the beginning of each policy year.
+#' @param i Effective annual interest rate. May be scalar or vector.
+#' @param benefit Benefit payable on decrement. May be scalar or vector.
 #'
-#' @param qj Numeric vector of conditional probabilities
-#'   \eqn{q_{x+k}^{(j)}} for Cause \eqn{j}.
-#' @param ptau Numeric vector of survival probabilities
-#'   \eqn{{}_{k}p_{x}^{(\tau)}} of remaining in force to duration \eqn{k}.
-#' @param i Effective annual interest rate.
-#' @param benefit Benefit amount payable on decrement by Cause \eqn{j}.
-#'
-#' @return A numeric scalar.
+#' @return A numeric vector of actuarial present values.
 #'
 #' @examples
-#' q1 <- c(.02, .02, .02, .02, .02)
-#' q2 <- c(.03, .04, .05, .06, .00)
-#' q3 <- c(.00, .00, .00, .00, .98)
-#' qtau <- q1 + q2 + q3
-#'
-#' ptau <- numeric(length(qtau))
-#' ptau[1] <- 1
-#' for (k in 2:length(qtau)) {
-#'   ptau[k] <- prod(1 - qtau[1:(k - 1)])
-#' }
-#'
-#' Axj_md(qj = q1, ptau = ptau, i = 0.06, benefit = 1000)
+#' qj <- c(0.02, 0.02, 0.02, 0.02, 0.02)
+#' ptau <- c(1, 0.95, 0.89, 0.82, 0.74)
+#' Axj_md(qj, ptau, i = 0.06, benefit = 1000)
 #'
 #' @export
 Axj_md <- function(qj, ptau, i, benefit = 1) {
-  if (!is.numeric(qj) || !is.numeric(ptau)) {
-    stop("qj and ptau must be numeric vectors.", call. = FALSE)
-  }
-  if (length(qj) != length(ptau)) {
-    stop("qj and ptau must have the same length.", call. = FALSE)
-  }
-  if (!is.numeric(i) || length(i) != 1 || !is.finite(i)) {
-    stop("i must be a finite numeric scalar.", call. = FALSE)
-  }
-  if (!is.numeric(benefit) || length(benefit) != 1 || !is.finite(benefit)) {
-    stop("benefit must be a finite numeric scalar.", call. = FALSE)
-  }
-
-  v <- 1 / (1 + i)
-  k <- seq_along(qj)
-  sum(benefit * v^k * ptau * qj)
+  qj <- .md_check_probability(qj, "qj")
+  ptau <- .md_check_probability(ptau, "ptau")
+  if (length(qj) != length(ptau)) stop("qj and ptau must have the same length.", call. = FALSE)
+  i <- .md_check_interest(i)
+  benefit <- .md_check_nonnegative(benefit, "benefit")
+  vals <- .md_recycle(i, benefit, .names = c("i", "benefit"))
+  times <- seq_along(qj)
+  vapply(seq_along(vals[[1L]]), function(j) {
+    sum(vals[[2L]][j] * (1 + vals[[1L]][j])^(-times) * ptau * qj)
+  }, numeric(1))
 }
 
-#' Continuous multiple-decrement insurance APV \eqn{\overline{A}_{x}^{(j)}}
+#' Continuous multiple-decrement insurance present value
 #'
-#' Computes the actuarial present value of a benefit payable at the moment of
-#' decrement by Cause \eqn{j}, matching Equation (14.4) in Chapter 14.
+#' Approximates the actuarial present value of a benefit payable at the moment
+#' of decrement using the trapezoidal rule.
 #'
-#' The integral is evaluated numerically by the trapezoidal rule:
-#' \deqn{
-#' \overline{A}_{x}^{(j)} = \int_0^T v^t {}_{t}p_{x}^{(\tau)} \mu_{x+t}^{(j)} dt
-#' }
+#' @param t Strictly increasing nonnegative time points.
+#' @param ptau In-force probabilities at the supplied time points.
+#' @param muj Cause-specific decrement intensities at the supplied time points.
+#' @param delta Force of interest. May be scalar or vector.
+#' @param benefit Benefit payable on decrement. May be scalar or vector.
 #'
-#' @param t Numeric vector of time points.
-#' @param ptau Numeric vector of values \eqn{{}_{t}p_{x}^{(\tau)}}.
-#' @param muj Numeric vector of values \eqn{\mu_{x+t}^{(j)}}.
-#' @param delta Force of interest.
-#' @param benefit Benefit amount payable on decrement by Cause \eqn{j}.
-#'
-#' @return A numeric scalar.
+#' @return A numeric vector of actuarial present values.
 #'
 #' @examples
-#' t <- seq(0, 20, by = 0.01)
+#' t <- seq(0, 20, by = 0.1)
 #' ptau <- exp(-0.012 * t)
-#' mu_ac <- rep(0.002, length(t))
-#' Abarxj_md(t, ptau, mu_ac, delta = 0.05, benefit = 2000)
+#' muj <- rep(0.002, length(t))
+#' Abarxj_md(t, ptau, muj, delta = 0.05, benefit = 2000)
 #'
 #' @export
 Abarxj_md <- function(t, ptau, muj, delta, benefit = 1) {
-  if (!(is.numeric(t) && is.numeric(ptau) && is.numeric(muj))) {
-    stop("t, ptau, and muj must be numeric vectors.", call. = FALSE)
-  }
-  if (!(length(t) == length(ptau) && length(t) == length(muj))) {
+  t <- .md_check_grid(t)
+  ptau <- .md_check_probability(ptau, "ptau")
+  muj <- .md_check_nonnegative(muj, "muj")
+  if (length(ptau) != length(t) || length(muj) != length(t)) {
     stop("t, ptau, and muj must have the same length.", call. = FALSE)
   }
-  if (length(t) < 2) {
-    stop("Need at least two time points.", call. = FALSE)
-  }
-  if (!is.numeric(delta) || length(delta) != 1 || !is.finite(delta)) {
-    stop("delta must be a finite numeric scalar.", call. = FALSE)
-  }
-  if (!is.numeric(benefit) || length(benefit) != 1 || !is.finite(benefit)) {
-    stop("benefit must be a finite numeric scalar.", call. = FALSE)
-  }
-
-  vt <- exp(-delta * t)
-  y <- benefit * vt * ptau * muj
-  sum(diff(t) * (head(y, -1) + tail(y, -1)) / 2)
+  delta <- .md_check_numeric(delta, "delta")
+  benefit <- .md_check_nonnegative(benefit, "benefit")
+  vals <- .md_recycle(delta, benefit, .names = c("delta", "benefit"))
+  vapply(seq_along(vals[[1L]]), function(j) {
+    .md_trapz(t, vals[[2L]][j] * exp(-vals[[1L]][j] * t) * ptau * muj)
+  }, numeric(1))
 }
 
-#' Projected asset share path \eqn{{}_{k}AS}
+# -------------------------------------------------------------------------
+# Asset shares
+# -------------------------------------------------------------------------
+
+#' General projected asset-share path
 #'
-#' Computes projected asset shares recursively using Equations (14.5b) and
-#' (14.6b) of Chapter 14, with optional support for a survival benefit payable
-#' at the end of year \eqn{k}.
+#' Computes projected asset shares for a multiple-decrement contract. Rows of
+#' \code{b_mat} and \code{q_mat} represent policy years and columns represent
+#' decrement causes.
 #'
-#' For policy year \eqn{k},
-#' \deqn{
-#' [{}_{k-1}AS + G(1-r_k) - e_k](1+i)
-#' = b_k^{(1)} q_{x+k-1}^{(1)}
-#' + b_k^{(2)} q_{x+k-1}^{(2)}
-#' + p_{x+k-1}^{(\tau)} \left(b_k^{(3)} + {}_{k}AS\right)
-#' }
-#' so that
-#' \deqn{
-#' {}_{k}AS =
-#' \frac{[{}_{k-1}AS + G(1-r_k) - e_k](1+i)
-#' - b_k^{(1)} q_{x+k-1}^{(1)}
-#' - b_k^{(2)} q_{x+k-1}^{(2)}}{p_{x+k-1}^{(\tau)}} - b_k^{(3)}
-#' }
+#' @param AS0 Initial asset share.
+#' @param G Premium amount by policy year.
+#' @param r Percent-of-premium expense rate by policy year.
+#' @param e Fixed expense by policy year.
+#' @param b_mat Matrix of decrement benefits.
+#' @param q_mat Matrix of decrement probabilities.
+#' @param p_tau In-force probability by policy year.
+#' @param i Effective annual interest rate by policy year.
+#' @param b_surv Survival benefit by policy year.
 #'
-#' @param AS0 Initial asset share \eqn{{}_{0}AS}.
-#' @param G Level annual premium.
-#' @param r Numeric vector of percent-of-premium expense factors.
-#' @param e Numeric vector of fixed contract expenses.
-#' @param b1 Numeric vector of Cause 1 benefit amounts.
-#' @param b2 Numeric vector of Cause 2 benefit amounts.
-#' @param q1 Numeric vector of Cause 1 decrement probabilities.
-#' @param q2 Numeric vector of Cause 2 decrement probabilities.
-#' @param p_tau Numeric vector of in-force probabilities.
-#' @param i Effective annual interest rate.
-#' @param b3 Optional numeric vector of survival benefit amounts payable at the
-#'   end of year \eqn{k} conditional on survival through year \eqn{k}. Defaults
-#'   to a zero vector.
+#' @return A data frame with policy year \code{k} and asset share \code{AS}.
 #'
-#' @return A data frame with columns \code{k} and \code{AS}.
+#' @export
+AS_path_md <- function(AS0, G, r, e, b_mat, q_mat, p_tau, i, b_surv = NULL) {
+  AS0 <- .md_check_scalar(AS0, "AS0")
+  if (!is.matrix(b_mat) || !is.matrix(q_mat)) stop("b_mat and q_mat must be matrices.", call. = FALSE)
+  if (!identical(dim(b_mat), dim(q_mat))) stop("b_mat and q_mat must have the same dimensions.", call. = FALSE)
+  if (nrow(b_mat) == 0L || ncol(b_mat) == 0L) stop("b_mat and q_mat must be nonempty.", call. = FALSE)
+  storage.mode(b_mat) <- "double"
+  storage.mode(q_mat) <- "double"
+  if (any(!is.finite(b_mat)) || any(b_mat < 0)) stop("b_mat must contain nonnegative finite values.", call. = FALSE)
+  if (any(!is.finite(q_mat)) || any(q_mat < 0) || any(q_mat > 1)) stop("q_mat must contain values in [0, 1].", call. = FALSE)
+  if (any(rowSums(q_mat) > 1 + 1e-12)) stop("Each row sum of q_mat must not exceed 1.", call. = FALSE)
+
+  n_years <- nrow(b_mat)
+  if (is.null(b_surv)) b_surv <- 0
+  vals <- .md_recycle(
+    .md_check_nonnegative(G, "G"),
+    .md_check_probability(r, "r"),
+    .md_check_nonnegative(e, "e"),
+    .md_check_probability(p_tau, "p_tau"),
+    .md_check_interest(i),
+    .md_check_nonnegative(b_surv, "b_surv"),
+    .names = c("G", "r", "e", "p_tau", "i", "b_surv")
+  )
+  common <- length(vals[[1L]])
+  if (common == 1L) vals <- lapply(vals, rep, length.out = n_years)
+  if (length(vals[[1L]]) != n_years) stop("Yearly inputs must have length 1 or nrow(b_mat).", call. = FALSE)
+  if (any(vals[[4L]] <= 0)) stop("p_tau must be positive in every policy year.", call. = FALSE)
+
+  AS <- numeric(n_years + 1L)
+  AS[1L] <- AS0
+  for (k in seq_len(n_years)) {
+    claims <- sum(b_mat[k, ] * q_mat[k, ])
+    AS[k + 1L] <- ((AS[k] + vals[[1L]][k] * (1 - vals[[2L]][k]) - vals[[3L]][k]) *
+                     (1 + vals[[5L]][k]) - claims) / vals[[4L]][k] - vals[[6L]][k]
+  }
+  data.frame(k = 0:n_years, AS = AS)
+}
+
+#' Projected asset-share path for two decrement causes
+#'
+#' Convenience interface to \code{AS_path_md()} for two causes.
+#'
+#' @param AS0 Initial asset share.
+#' @param G Premium amount by policy year.
+#' @param r Percent-of-premium expense rate by policy year.
+#' @param e Fixed expense by policy year.
+#' @param b1 Cause 1 benefit by policy year.
+#' @param b2 Cause 2 benefit by policy year.
+#' @param q1 Cause 1 probability by policy year.
+#' @param q2 Cause 2 probability by policy year.
+#' @param p_tau In-force probability by policy year.
+#' @param i Effective annual interest rate by policy year.
+#' @param b3 Survival benefit by policy year.
+#'
+#' @return A data frame with policy year \code{k} and asset share \code{AS}.
 #'
 #' @export
 AS_path <- function(AS0, G, r, e, b1, b2, q1, q2, p_tau, i, b3 = NULL) {
-  n <- length(r)
-  lens <- c(length(e), length(b1), length(b2), length(q1), length(q2), length(p_tau))
-  if (any(lens != n)) {
-    stop("All yearly vectors must have the same length.", call. = FALSE)
-  }
-
-  if (is.null(b3)) {
-    b3 <- rep(0, n)
-  }
-  if (length(b3) != n) {
-    stop("b3 must have the same length as the other yearly vectors.", call. = FALSE)
-  }
-
-  AS <- numeric(n + 1)
-  AS[1] <- AS0
-
-  for (k in seq_len(n)) {
-    AS[k + 1] <- ((AS[k] + G * (1 - r[k]) - e[k]) * (1 + i) -
-                    b1[k] * q1[k] - b2[k] * q2[k]) / p_tau[k] - b3[k]
-  }
-
-  data.frame(
-    k = 0:n,
-    AS = AS
+  vals <- .md_recycle(
+    .md_check_nonnegative(b1, "b1"),
+    .md_check_nonnegative(b2, "b2"),
+    .md_check_probability(q1, "q1"),
+    .md_check_probability(q2, "q2"),
+    .names = c("b1", "b2", "q1", "q2")
+  )
+  if (any(vals[[3L]] + vals[[4L]] > 1 + 1e-12)) stop("q1 + q2 must not exceed 1.", call. = FALSE)
+  AS_path_md(
+    AS0 = AS0, G = G, r = r, e = e,
+    b_mat = cbind(cause1 = vals[[1L]], cause2 = vals[[2L]]),
+    q_mat = cbind(cause1 = vals[[3L]], cause2 = vals[[4L]]),
+    p_tau = p_tau, i = i, b_surv = b3
   )
 }
 
-#' Euler approximation for \eqn{{}_{t}p_{x}^{00}} and \eqn{{}_{t}p_{x}^{01}}
+# -------------------------------------------------------------------------
+# Disability-state probabilities and premiums
+# -------------------------------------------------------------------------
+
+#' Euler approximation of disability-state probabilities
 #'
-#' Computes the Euler approximations in the disability model allowing for
-#' recovery, as in Equations (14.20) and (14.21).
+#' Approximates probabilities of being healthy, disabled, or deceased in a
+#' three-state model that allows recovery from disability. The final time is
+#' always included, with a shorter final step when needed.
 #'
-#' The model uses three states:
-#' \itemize{
-#'   \item State 0: healthy
-#'   \item State 1: disabled
-#'   \item State 2: deceased
-#' }
-#'
-#' @param h Step size.
-#' @param n Final time.
-#' @param mu01 Function of time returning \eqn{\mu_{x+t}^{01}}.
-#' @param mu02 Function of time returning \eqn{\mu_{x+t}^{02}}.
-#' @param mu10 Function of time returning \eqn{\mu_{x+t}^{10}}.
-#' @param mu12 Function of time returning \eqn{\mu_{x+t}^{12}}.
-#' @param p00_0 Initial value of \eqn{{}_{0}p_{x}^{00}}.
-#' @param p01_0 Initial value of \eqn{{}_{0}p_{x}^{01}}.
+#' @param h Positive step size.
+#' @param n Nonnegative final time.
+#' @param mu01 Healthy-to-disabled intensity function.
+#' @param mu02 Healthy-to-deceased intensity function.
+#' @param mu10 Disabled-to-healthy intensity function.
+#' @param mu12 Disabled-to-deceased intensity function.
+#' @param p00_0 Initial healthy-state probability.
+#' @param p01_0 Initial disabled-state probability.
 #'
 #' @return A data frame with columns \code{t}, \code{tp00}, \code{tp01},
 #'   and \code{tp02}.
@@ -200,70 +292,52 @@ AS_path <- function(AS0, G, r, e, b1, b2, q1, q2, p_tau, i, b3 = NULL) {
 #' mu02 <- function(t) 0.20
 #' mu10 <- function(t) 0.50
 #' mu12 <- function(t) 0.125 * t + 0.20
-#'
-#' tp00_tp01_euler(
-#'   h = 0.10, n = 2.0,
-#'   mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
-#' )
+#' tp00_tp01_euler(0.10, 2, mu01, mu02, mu10, mu12)
 #'
 #' @export
 tp00_tp01_euler <- function(h, n, mu01, mu02, mu10, mu12,
                             p00_0 = 1, p01_0 = 0) {
-  t_grid <- seq(0, n, by = h)
-  m <- length(t_grid)
+  grid <- .md_grid(n, h)
+  mu01 <- .md_check_function(mu01, "mu01")
+  mu02 <- .md_check_function(mu02, "mu02")
+  mu10 <- .md_check_function(mu10, "mu10")
+  mu12 <- .md_check_function(mu12, "mu12")
+  p00_0 <- .md_check_probability(p00_0, "p00_0")
+  p01_0 <- .md_check_probability(p01_0, "p01_0")
+  if (length(p00_0) != 1L || length(p01_0) != 1L) stop("p00_0 and p01_0 must be scalar.", call. = FALSE)
+  if (p00_0 + p01_0 > 1 + 1e-12) stop("p00_0 + p01_0 must not exceed 1.", call. = FALSE)
 
-  p00 <- numeric(m)
-  p01 <- numeric(m)
-  p02 <- numeric(m)
-
-  p00[1] <- p00_0
-  p01[1] <- p01_0
-  p02[1] <- 1 - p00_0 - p01_0
-
-  for (idx in 1:(m - 1)) {
-    t <- t_grid[idx]
-
-    dp00 <- p01[idx] * mu10(t) - p00[idx] * (mu01(t) + mu02(t))
-    dp01 <- p00[idx] * mu01(t) - p01[idx] * (mu10(t) + mu12(t))
-
-    p00[idx + 1] <- p00[idx] + h * dp00
-    p01[idx + 1] <- p01[idx] + h * dp01
-    p02[idx + 1] <- 1 - p00[idx + 1] - p01[idx + 1]
+  p00 <- numeric(length(grid)); p01 <- numeric(length(grid))
+  p00[1L] <- p00_0; p01[1L] <- p01_0
+  if (length(grid) > 1L) {
+    for (idx in seq_len(length(grid) - 1L)) {
+      time <- grid[idx]; step <- grid[idx + 1L] - grid[idx]
+      rates <- c(mu01(time), mu02(time), mu10(time), mu12(time))
+      if (length(rates) != 4L || any(!is.finite(rates)) || any(rates < 0)) {
+        stop("Intensity functions must return one nonnegative finite value.", call. = FALSE)
+      }
+      dp00 <- p01[idx] * rates[3L] - p00[idx] * (rates[1L] + rates[2L])
+      dp01 <- p00[idx] * rates[1L] - p01[idx] * (rates[3L] + rates[4L])
+      p00[idx + 1L] <- p00[idx] + step * dp00
+      p01[idx + 1L] <- p01[idx] + step * dp01
+    }
   }
-
-  data.frame(
-    t = t_grid,
-    tp00 = p00,
-    tp01 = p01,
-    tp02 = p02
-  )
+  data.frame(t = grid, tp00 = p00, tp01 = p01, tp02 = 1 - p00 - p01)
 }
 
-#' Continuous premium approximation \eqn{\overline{P}} by trapezoidal rule
+#' Continuous premium approximation in a disability model
 #'
-#' Approximates the annual continuous premium in the disability model allowing
-#' for recovery, as in Example 14.18.
+#' Approximates a continuous premium rate by trapezoidal integration.
 #'
-#' The numerator is
-#' \deqn{
-#' \int v^t \left[{}_{t}p_{x}^{00}\mu_{x+t}^{02}B^{02}
-#' + {}_{t}p_{x}^{01}\mu_{x+t}^{12}B^{12}
-#' + {}_{t}p_{x}^{01}R \right] dt
-#' }
-#' and the denominator is
-#' \deqn{
-#' \int v^t {}_{t}p_{x}^{00} dt
-#' }
-#'
-#' @param t Numeric vector of time points.
-#' @param tp00 Numeric vector of values \eqn{{}_{t}p_{x}^{00}}.
-#' @param tp01 Numeric vector of values \eqn{{}_{t}p_{x}^{01}}.
+#' @param t Strictly increasing nonnegative time points.
+#' @param tp00 Healthy-state probabilities.
+#' @param tp01 Disabled-state probabilities.
 #' @param delta Force of interest.
-#' @param mu02 Function of time returning \eqn{\mu_{x+t}^{02}}.
-#' @param mu12 Function of time returning \eqn{\mu_{x+t}^{12}}.
-#' @param B02 Benefit payable on death while healthy.
-#' @param B12 Benefit payable on death while disabled.
-#' @param R Continuous income rate while disabled.
+#' @param mu02 Healthy-to-deceased intensity function.
+#' @param mu12 Disabled-to-deceased intensity function.
+#' @param B02 Benefit on death while healthy.
+#' @param B12 Benefit on death while disabled.
+#' @param R Continuous disability income rate.
 #'
 #' @return A numeric scalar.
 #'
@@ -273,15 +347,19 @@ tp00_tp01_euler <- function(h, n, mu01, mu02, mu10, mu12,
 #' mu10 <- function(t) 0.50
 #' mu12 <- function(t) 0.125 * t + 0.20
 #'
-#' ex1410 <- tp00_tp01_euler(
-#'   h = 0.10, n = 2.0,
-#'   mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
+#' probs <- tp00_tp01_euler(
+#'   h = 0.10,
+#'   n = 2,
+#'   mu01 = mu01,
+#'   mu02 = mu02,
+#'   mu10 = mu10,
+#'   mu12 = mu12
 #' )
 #'
 #' Pbar_trapz_ms(
-#'   t = ex1410$t,
-#'   tp00 = ex1410$tp00,
-#'   tp01 = ex1410$tp01,
+#'   t = probs$t,
+#'   tp00 = probs$tp00,
+#'   tp01 = probs$tp01,
 #'   delta = 0.04,
 #'   mu02 = mu02,
 #'   mu12 = mu12,
@@ -292,279 +370,184 @@ tp00_tp01_euler <- function(h, n, mu01, mu02, mu10, mu12,
 #'
 #' @export
 Pbar_trapz_ms <- function(t, tp00, tp01, delta,
-                          mu02, mu12,
-                          B02 = 1, B12 = 1, R = 0) {
-  if (!(length(t) == length(tp00) && length(t) == length(tp01))) {
-    stop("t, tp00, and tp01 must have the same length.", call. = FALSE)
-  }
-
-  vt <- exp(-delta * t)
-
-  num_y <- vt * (tp00 * mu02(t) * B02 + tp01 * mu12(t) * B12 + tp01 * R)
-  den_y <- vt * tp00
-
-  num <- sum(diff(t) * (head(num_y, -1) + tail(num_y, -1)) / 2)
-  den <- sum(diff(t) * (head(den_y, -1) + tail(den_y, -1)) / 2)
-
+                          mu02, mu12, B02 = 1, B12 = 1, R = 0) {
+  t <- .md_check_grid(t)
+  tp00 <- .md_check_probability(tp00, "tp00")
+  tp01 <- .md_check_probability(tp01, "tp01")
+  if (length(tp00) != length(t) || length(tp01) != length(t)) stop("t, tp00, and tp01 must have the same length.", call. = FALSE)
+  if (any(tp00 + tp01 > 1 + 1e-10)) stop("tp00 + tp01 must not exceed 1.", call. = FALSE)
+  delta <- .md_check_scalar(delta, "delta")
+  B02 <- .md_check_scalar(B02, "B02", lower = 0)
+  B12 <- .md_check_scalar(B12, "B12", lower = 0)
+  R <- .md_check_scalar(R, "R", lower = 0)
+  mu02 <- .md_check_function(mu02, "mu02")
+  mu12 <- .md_check_function(mu12, "mu12")
+  m02 <- rep(as.numeric(mu02(t)), length.out = length(t))
+  m12 <- rep(as.numeric(mu12(t)), length.out = length(t))
+  if (!length(mu02(t)) %in% c(1L, length(t)) || !length(mu12(t)) %in% c(1L, length(t))) stop("mu02 and mu12 must return length 1 or length(t).", call. = FALSE)
+  if (any(!is.finite(m02)) || any(m02 < 0) || any(!is.finite(m12)) || any(m12 < 0)) stop("mu02 and mu12 must return nonnegative finite values.", call. = FALSE)
+  discount <- exp(-delta * t)
+  num <- .md_trapz(t, discount * (tp00 * m02 * B02 + tp01 * m12 * B12 + tp01 * R))
+  den <- .md_trapz(t, discount * tp00)
+  if (!is.finite(den) || den <= 0) stop("The premium present-value denominator must be positive.", call. = FALSE)
   num / den
 }
 
-#' Reserve derivatives for the disability model with recovery
+# -------------------------------------------------------------------------
+# Thiele reserve equations
+# -------------------------------------------------------------------------
+
+#' Reserve derivatives for a disability model with recovery
 #'
-#' Computes the right-hand sides of the coupled Thiele differential equations
-#' in Equations (14.25) and (14.26) for the healthy-life reserve
-#' \eqn{{}_{t}\overline{V}^{(0)}} and the disabled-life reserve
-#' \eqn{{}_{t}\overline{V}^{(1)}}.
-#'
-#' The equations are
-#' \deqn{
-#' \frac{d}{dt}{}_{t}\overline{V}^{(0)}
-#' = \overline{P} + \delta {}_{t}\overline{V}^{(0)}
-#' - \mu_{x+t}^{02}(B-{}_{t}\overline{V}^{(0)})
-#' - \mu_{x+t}^{01}({}_{t}\overline{V}^{(1)}-{}_{t}\overline{V}^{(0)})
-#' }
-#' and
-#' \deqn{
-#' \frac{d}{dt}{}_{t}\overline{V}^{(1)}
-#' = \delta {}_{t}\overline{V}^{(1)} - R
-#' - \mu_{x+t}^{12}(B-{}_{t}\overline{V}^{(1)})
-#' - \mu_{x+t}^{10}({}_{t}\overline{V}^{(0)}-{}_{t}\overline{V}^{(1)})
-#' }
+#' Computes the coupled Thiele reserve derivatives. Numeric arguments may be
+#' scalar or compatible vectors.
 #'
 #' @param t Time.
-#' @param V0 Value of \eqn{{}_{t}\overline{V}^{(0)}}.
-#' @param V1 Value of \eqn{{}_{t}\overline{V}^{(1)}}.
+#' @param V0 Healthy-state reserve.
+#' @param V1 Disabled-state reserve.
 #' @param delta Force of interest.
 #' @param Pbar Continuous premium rate.
 #' @param B Death benefit.
 #' @param R Continuous disability income rate.
-#' @param mu01 Function of time returning \eqn{\mu_{x+t}^{01}}.
-#' @param mu02 Function of time returning \eqn{\mu_{x+t}^{02}}.
-#' @param mu10 Function of time returning \eqn{\mu_{x+t}^{10}}.
-#' @param mu12 Function of time returning \eqn{\mu_{x+t}^{12}}.
+#' @param mu01 Healthy-to-disabled intensity function.
+#' @param mu02 Healthy-to-deceased intensity function.
+#' @param mu10 Disabled-to-healthy intensity function.
+#' @param mu12 Disabled-to-deceased intensity function.
 #'
-#' @return A named numeric vector with components \code{dV0} and \code{dV1}.
-#'
-#' @examples
-#' mu01 <- function(t) 0.10 * t + 0.20
-#' mu02 <- function(t) 0.20
-#' mu10 <- function(t) 0.50
-#' mu12 <- function(t) 0.125 * t + 0.20
-#'
-#' thiele_dVdt_01(
-#'   t = 2.0, V0 = 0, V1 = 0,
-#'   delta = 0.04, Pbar = 446.95,
-#'   B = 1000, R = 1000,
-#'   mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
-#' )
+#' @return A named vector for scalar input or a two-column matrix for
+#'   vectorized input.
 #'
 #' @export
 thiele_dVdt_01 <- function(t, V0, V1, delta, Pbar, B, R,
                            mu01, mu02, mu10, mu12) {
-  if (!is.numeric(t) || length(t) != 1 || !is.finite(t)) {
-    stop("t must be a finite numeric scalar.", call. = FALSE)
-  }
-  if (!is.numeric(V0) || length(V0) != 1 || !is.finite(V0)) {
-    stop("V0 must be a finite numeric scalar.", call. = FALSE)
-  }
-  if (!is.numeric(V1) || length(V1) != 1 || !is.finite(V1)) {
-    stop("V1 must be a finite numeric scalar.", call. = FALSE)
-  }
-  if (!is.numeric(delta) || length(delta) != 1 || !is.finite(delta)) {
-    stop("delta must be a finite numeric scalar.", call. = FALSE)
-  }
-  if (!is.numeric(Pbar) || length(Pbar) != 1 || !is.finite(Pbar)) {
-    stop("Pbar must be a finite numeric scalar.", call. = FALSE)
-  }
-  if (!is.numeric(B) || length(B) != 1 || !is.finite(B)) {
-    stop("B must be a finite numeric scalar.", call. = FALSE)
-  }
-  if (!is.numeric(R) || length(R) != 1 || !is.finite(R)) {
-    stop("R must be a finite numeric scalar.", call. = FALSE)
-  }
-  if (!is.function(mu01) || !is.function(mu02) ||
-      !is.function(mu10) || !is.function(mu12)) {
-    stop("mu01, mu02, mu10, and mu12 must be functions.", call. = FALSE)
-  }
-
-  dV0 <- Pbar + delta * V0 -
-    mu02(t) * (B - V0) -
-    mu01(t) * (V1 - V0)
-
-  dV1 <- delta * V1 - R -
-    mu12(t) * (B - V1) -
-    mu10(t) * (V0 - V1)
-
-  c(dV0 = dV0, dV1 = dV1)
+  vals <- .md_recycle(
+    .md_check_nonnegative(t, "t"), .md_check_numeric(V0, "V0"),
+    .md_check_numeric(V1, "V1"), .md_check_numeric(delta, "delta"),
+    .md_check_numeric(Pbar, "Pbar"), .md_check_nonnegative(B, "B"),
+    .md_check_nonnegative(R, "R"),
+    .names = c("t", "V0", "V1", "delta", "Pbar", "B", "R")
+  )
+  t <- vals[[1L]]; V0 <- vals[[2L]]; V1 <- vals[[3L]]
+  delta <- vals[[4L]]; Pbar <- vals[[5L]]; B <- vals[[6L]]; R <- vals[[7L]]
+  funs <- list(mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12)
+  rates <- lapply(names(funs), function(nm) {
+    fun <- .md_check_function(funs[[nm]], nm)
+    out <- as.numeric(fun(t))
+    if (!length(out) %in% c(1L, length(t))) stop(nm, " must return length 1 or the common length.", call. = FALSE)
+    out <- rep(out, length.out = length(t))
+    if (any(!is.finite(out)) || any(out < 0)) stop(nm, " must return nonnegative finite values.", call. = FALSE)
+    out
+  })
+  dV0 <- Pbar + delta * V0 - rates[[2L]] * (B - V0) - rates[[1L]] * (V1 - V0)
+  dV1 <- delta * V1 - R - rates[[4L]] * (B - V1) - rates[[3L]] * (V0 - V1)
+  if (length(dV0) == 1L) return(c(dV0 = dV0, dV1 = dV1))
+  cbind(dV0 = dV0, dV1 = dV1)
 }
 
-#' Backward reserve path for the disability model with recovery
+#' Backward reserve path for a disability model with recovery
 #'
-#' Computes the backward Euler reserve path for the healthy-life reserve
-#' \eqn{{}_{t}\overline{V}^{(0)}} and disabled-life reserve
-#' \eqn{{}_{t}\overline{V}^{(1)}} using Equations (14.27) and (14.28).
+#' Computes a backward Euler reserve path from terminal healthy-state and
+#' disabled-state reserves.
 #'
-#' @param h Step size.
-#' @param n Final time.
-#' @param delta Force of interest.
-#' @param Pbar Continuous premium rate.
-#' @param B Death benefit.
-#' @param R Continuous disability income rate.
-#' @param mu01 Function of time returning \eqn{\mu_{x+t}^{01}}.
-#' @param mu02 Function of time returning \eqn{\mu_{x+t}^{02}}.
-#' @param mu10 Function of time returning \eqn{\mu_{x+t}^{10}}.
-#' @param mu12 Function of time returning \eqn{\mu_{x+t}^{12}}.
-#' @param V0_n Terminal value of \eqn{{}_{n}\overline{V}^{(0)}}.
-#' @param V1_n Terminal value of \eqn{{}_{n}\overline{V}^{(1)}}.
+#' @inheritParams thiele_dVdt_01
+#' @param h Positive step size.
+#' @param n Nonnegative final time.
+#' @param V0_n Terminal healthy-state reserve.
+#' @param V1_n Terminal disabled-state reserve.
 #'
 #' @return A data frame with columns \code{t}, \code{tV0}, and \code{tV1}.
-#'
-#' @examples
-#' mu01 <- function(t) 0.10 * t + 0.20
-#' mu02 <- function(t) 0.20
-#' mu10 <- function(t) 0.50
-#' mu12 <- function(t) 0.125 * t + 0.20
-#'
-#' thiele_path_01(
-#'   h = 0.10, n = 2.0, delta = 0.04, Pbar = 446.95,
-#'   B = 1000, R = 1000,
-#'   mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
-#' )
 #'
 #' @export
 thiele_path_01 <- function(h, n, delta, Pbar, B, R,
                            mu01, mu02, mu10, mu12,
                            V0_n = 0, V1_n = 0) {
-  if (!is.numeric(h) || length(h) != 1 || !is.finite(h) || h <= 0) {
-    stop("h must be a positive finite numeric scalar.", call. = FALSE)
+  grid <- .md_grid(n, h); back <- rev(grid)
+  delta <- .md_check_scalar(delta, "delta")
+  Pbar <- .md_check_scalar(Pbar, "Pbar")
+  B <- .md_check_scalar(B, "B", lower = 0)
+  R <- .md_check_scalar(R, "R", lower = 0)
+  V0_n <- .md_check_scalar(V0_n, "V0_n")
+  V1_n <- .md_check_scalar(V1_n, "V1_n")
+  V0 <- numeric(length(back)); V1 <- numeric(length(back))
+  V0[1L] <- V0_n; V1[1L] <- V1_n
+  if (length(back) > 1L) {
+    for (idx in seq_len(length(back) - 1L)) {
+      step <- back[idx] - back[idx + 1L]
+      dV <- thiele_dVdt_01(back[idx], V0[idx], V1[idx], delta, Pbar, B, R,
+                           mu01, mu02, mu10, mu12)
+      V0[idx + 1L] <- V0[idx] - step * unname(dV["dV0"])
+      V1[idx + 1L] <- V1[idx] - step * unname(dV["dV1"])
+    }
   }
-  if (!is.numeric(n) || length(n) != 1 || !is.finite(n) || n < 0) {
-    stop("n must be a nonnegative finite numeric scalar.", call. = FALSE)
-  }
-
-  t_grid <- seq(n, 0, by = -h)
-  if (tail(t_grid, 1) != 0) {
-    t_grid <- c(t_grid, 0)
-  }
-  m <- length(t_grid)
-
-  V0 <- numeric(m)
-  V1 <- numeric(m)
-  V0[1] <- V0_n
-  V1[1] <- V1_n
-
-  for (idx in 1:(m - 1)) {
-    t <- t_grid[idx]
-    h_step <- t_grid[idx] - t_grid[idx + 1]
-
-    dV <- thiele_dVdt_01(
-      t = t,
-      V0 = V0[idx],
-      V1 = V1[idx],
-      delta = delta,
-      Pbar = Pbar,
-      B = B,
-      R = R,
-      mu01 = mu01,
-      mu02 = mu02,
-      mu10 = mu10,
-      mu12 = mu12
-    )
-
-    V0[idx + 1] <- V0[idx] - h_step * dV["dV0"]
-    V1[idx + 1] <- V1[idx] - h_step * dV["dV1"]
-  }
-
-  out <- data.frame(
-    t = rev(t_grid),
-    tV0 = rev(V0),
-    tV1 = rev(V1)
-  )
-  rownames(out) <- NULL
-  out
+  data.frame(t = grid, tV0 = rev(V0), tV1 = rev(V1))
 }
 
-#' n-step transition probability for a discrete-time Markov chain
+# -------------------------------------------------------------------------
+# Discrete-time Markov chains
+# -------------------------------------------------------------------------
+
+#' Multi-step transition probability
 #'
-#' Computes the \eqn{(i,j)} entry of \eqn{P^n}, useful for Chapter 14 examples
-#' involving discrete-time multi-state models such as CCRC and risk-class models.
+#' Computes an entry of the matrix power \eqn{P^n}.
 #'
-#' @param P Transition probability matrix.
+#' @param P Square transition-probability matrix.
 #' @param n Nonnegative integer number of steps.
-#' @param i Starting state index.
-#' @param j Ending state index.
+#' @param i Starting-state index.
+#' @param j Ending-state index.
 #'
 #' @return A numeric scalar.
 #'
 #' @examples
-#' P <- matrix(
-#'   c(0.94, 0.03, 0.02, 0.01,
-#'     0.50, 0.30, 0.18, 0.02,
-#'     0.00, 0.00, 0.93, 0.07,
-#'     0.00, 0.00, 0.00, 1.00),
-#'   nrow = 4, byrow = TRUE
-#' )
-#'
-#' markov_nstep_prob(P, n = 3, i = 1, j = 1)
-#' markov_nstep_prob(P, n = 3, i = 1, j = 3)
+#' P <- matrix(c(0.9, 0.1, 0, 1), nrow = 2, byrow = TRUE)
+#' markov_nstep_prob(P, n = 3, i = 1, j = 2)
 #'
 #' @export
 markov_nstep_prob <- function(P, n, i, j) {
-  if (!is.matrix(P)) stop("P must be a matrix.", call. = FALSE)
-  if (n < 0 || n != as.integer(n)) {
-    stop("n must be a nonnegative integer.", call. = FALSE)
-  }
-  if (i < 1 || i > nrow(P) || j < 1 || j > ncol(P)) {
-    stop("i and j must be valid state indices.", call. = FALSE)
-  }
-
+  if (!is.matrix(P) || !is.numeric(P)) stop("P must be a numeric matrix.", call. = FALSE)
+  if (nrow(P) == 0L || nrow(P) != ncol(P)) stop("P must be a nonempty square matrix.", call. = FALSE)
+  if (any(!is.finite(P)) || any(P < 0) || any(P > 1)) stop("P must contain values in [0, 1].", call. = FALSE)
+  if (any(abs(rowSums(P) - 1) > 1e-10)) stop("Each row of P must sum to 1.", call. = FALSE)
+  n <- .md_check_integer_scalar(n, "n", 0L)
+  i <- .md_check_integer_scalar(i, "i", 1L)
+  j <- .md_check_integer_scalar(j, "j", 1L)
+  if (i > nrow(P) || j > ncol(P)) stop("i and j must be valid state indices.", call. = FALSE)
   Pn <- diag(nrow(P))
-  if (n > 0) {
-    for (k in seq_len(n)) {
-      Pn <- Pn %*% P
-    }
-  }
-
-  Pn[i, j]
+  if (n > 0L) for (step in seq_len(n)) Pn <- Pn %*% P
+  unname(Pn[i, j])
 }
 
-#' Gain or loss in a multiple-decrement model
+# -------------------------------------------------------------------------
+# Multiple-decrement gain or loss
+# -------------------------------------------------------------------------
+
+#' Gain or loss in a two-cause multiple-decrement model
 #'
-#' Computes the gain or loss expression from Section 14.6.
+#' Computes one-year gain or loss under simultaneous within-year decrement
+#' probabilities or an ordered case in which Cause 2 occurs at year-end.
+#' Numeric arguments may be scalar or compatible vectors.
 #'
-#' With within-year decrement probabilities, the function evaluates
-#' \deqn{
-#' [{}_{t}V^G + G(1-r) - e](1+i)
-#' - \left[(b^{(1)}+s^{(1)})q^{(1)} + (b^{(2)}+s^{(2)})q^{(2)}
-#' + p^{(\tau)} {}_{t+1}V^G \right]
-#' }
-#'
-#' If \code{year_end_cause2 = TRUE}, the Cause 2 decrement is treated as
-#' occurring only at year end, matching Equation (14.30).
-#'
-#' @param Vt Gross premium reserve at time \eqn{t}.
-#' @param G Gross premium for the year.
-#' @param r Percent-of-premium expense factor.
-#' @param e Fixed expense at the beginning of the year.
-#' @param i Earned interest rate.
+#' @param Vt Gross reserve at the beginning of the year.
+#' @param G Gross premium.
+#' @param r Percent-of-premium expense rate.
+#' @param e Fixed beginning-of-year expense.
+#' @param i Earned effective annual interest rate.
 #' @param b1 Cause 1 benefit.
 #' @param b2 Cause 2 benefit.
-#' @param s1 Claim settlement expense for Cause 1.
-#' @param s2 Claim settlement expense for Cause 2.
+#' @param s1 Cause 1 settlement expense.
+#' @param s2 Cause 2 settlement expense.
 #' @param q1 Cause 1 decrement probability.
 #' @param q2 Cause 2 decrement probability.
-#' @param Vt1 Gross premium reserve at time \eqn{t+1}.
-#' @param year_end_cause2 Logical; if \code{TRUE}, use the year-end Cause 2 form.
-#' @param q1prime Single-decrement Cause 1 probability for the year-end Cause 2 case.
-#' @param q2prime Single-decrement Cause 2 probability for the year-end Cause 2 case.
+#' @param Vt1 Gross reserve at the end of the year.
+#' @param year_end_cause2 Whether Cause 2 occurs only at year-end.
+#' @param q1prime Single-decrement Cause 1 probability for the ordered case.
+#' @param q2prime Single-decrement Cause 2 probability for the ordered case.
 #'
-#' @return A numeric scalar.
+#' @return A numeric vector of gains or losses.
 #'
 #' @examples
 #' gain_loss_md(
-#'   Vt = 115.00, G = 16, r = 0, e = 3, i = 0.06,
-#'   b1 = 1000, b2 = 110, s1 = 0, s2 = 0,
-#'   q1 = 0.01, q2 = 0.10, Vt1 = 128.83
+#'   Vt = 115, G = 16, r = 0, e = 3, i = 0.06,
+#'   b1 = 1000, b2 = 110, q1 = 0.01, q2 = 0.10, Vt1 = 128.83
 #' )
 #'
 #' @export
@@ -573,71 +556,38 @@ gain_loss_md <- function(Vt, G, r, e, i,
                          q1, q2, Vt1,
                          year_end_cause2 = FALSE,
                          q1prime = NULL, q2prime = NULL) {
+  if (!is.logical(year_end_cause2) || length(year_end_cause2) == 0L || anyNA(year_end_cause2)) {
+    stop("year_end_cause2 must be a non-missing logical value or vector.", call. = FALSE)
+  }
+  q1prime <- if (is.null(q1prime)) NA_real_ else .md_check_probability(q1prime, "q1prime")
+  q2prime <- if (is.null(q2prime)) NA_real_ else .md_check_probability(q2prime, "q2prime")
+  vals <- .md_recycle(
+    .md_check_numeric(Vt, "Vt"), .md_check_nonnegative(G, "G"),
+    .md_check_probability(r, "r"), .md_check_nonnegative(e, "e"),
+    .md_check_interest(i), .md_check_nonnegative(b1, "b1"),
+    .md_check_nonnegative(b2, "b2"), .md_check_nonnegative(s1, "s1"),
+    .md_check_nonnegative(s2, "s2"), .md_check_probability(q1, "q1"),
+    .md_check_probability(q2, "q2"), .md_check_numeric(Vt1, "Vt1"),
+    year_end_cause2, q1prime, q2prime,
+    .names = c("Vt", "G", "r", "e", "i", "b1", "b2", "s1", "s2",
+               "q1", "q2", "Vt1", "year_end_cause2", "q1prime", "q2prime")
+  )
+  Vt <- vals[[1L]]; G <- vals[[2L]]; r <- vals[[3L]]; e <- vals[[4L]]
+  i <- vals[[5L]]; b1 <- vals[[6L]]; b2 <- vals[[7L]]; s1 <- vals[[8L]]
+  s2 <- vals[[9L]]; q1 <- vals[[10L]]; q2 <- vals[[11L]]; Vt1 <- vals[[12L]]
+  ordered <- vals[[13L]]; q1prime <- vals[[14L]]; q2prime <- vals[[15L]]
+  if (any(!ordered & q1 + q2 > 1 + 1e-12)) stop("q1 + q2 must not exceed 1.", call. = FALSE)
+  if (any(ordered & (is.na(q1prime) | is.na(q2prime)))) {
+    stop("q1prime and q2prime must be provided when year_end_cause2 = TRUE.", call. = FALSE)
+  }
   lhs <- (Vt + G * (1 - r) - e) * (1 + i)
-
-  rhs <- if (!year_end_cause2) {
-    (b1 + s1) * q1 + (b2 + s2) * q2 + (1 - q1 - q2) * Vt1
-  } else {
-    if (is.null(q1prime) || is.null(q2prime)) {
-      stop("q1prime and q2prime must be provided when year_end_cause2 = TRUE.",
-           call. = FALSE)
-    }
-    (b1 + s1) * q1prime +
-      (b2 + s2) * (1 - q1prime) * q2prime +
-      (1 - q1prime) * (1 - q2prime) * Vt1
-  }
-
+  rhs <- numeric(length(lhs))
+  simultaneous <- !ordered
+  rhs[simultaneous] <- (b1[simultaneous] + s1[simultaneous]) * q1[simultaneous] +
+    (b2[simultaneous] + s2[simultaneous]) * q2[simultaneous] +
+    (1 - q1[simultaneous] - q2[simultaneous]) * Vt1[simultaneous]
+  rhs[ordered] <- (b1[ordered] + s1[ordered]) * q1prime[ordered] +
+    (b2[ordered] + s2[ordered]) * (1 - q1prime[ordered]) * q2prime[ordered] +
+    (1 - q1prime[ordered]) * (1 - q2prime[ordered]) * Vt1[ordered]
   lhs - rhs
-}
-
-#' General projected asset share path (multiple decrements)
-#'
-#' @param AS0 Initial asset share.
-#' @param G Premium.
-#' @param r Expense percentages.
-#' @param e Fixed expenses.
-#' @param b_mat Matrix of benefits (rows = years, cols = causes).
-#' @param q_mat Matrix of decrement probabilities (same shape as b_mat).
-#' @param p_tau In-force probabilities.
-#' @param i Interest rate.
-#' @param b_surv Optional survival benefits.
-#'
-#' @return A data frame with columns \code{k} and \code{AS}. Column
-#'   \code{k} gives the policy year from 0 to \code{n}, and column
-#'   \code{AS} gives the corresponding projected asset share at each year.
-#'
-#' @export
-AS_path_md <- function(AS0, G, r, e, b_mat, q_mat, p_tau, i, b_surv = NULL) {
-
-  if (!is.matrix(b_mat) || !is.matrix(q_mat)) {
-    stop("b_mat and q_mat must be matrices.")
-  }
-  if (!all(dim(b_mat) == dim(q_mat))) {
-    stop("b_mat and q_mat must have same dimensions.")
-  }
-
-  n <- nrow(b_mat)
-
-  if (length(r) != n || length(e) != n || length(p_tau) != n) {
-    stop("All yearly vectors must have length n.")
-  }
-
-  if (is.null(b_surv)) {
-    b_surv <- rep(0, n)
-  }
-
-  AS <- numeric(n + 1)
-  AS[1] <- AS0
-
-  for (k in seq_len(n)) {
-
-    claim_term <- sum(b_mat[k, ] * q_mat[k, ])
-
-    AS[k + 1] <- (
-      (AS[k] + G * (1 - r[k]) - e[k]) * (1 + i)
-      - claim_term
-    ) / p_tau[k] - b_surv[k]
-  }
-
-  data.frame(k = 0:n, AS = AS)
 }

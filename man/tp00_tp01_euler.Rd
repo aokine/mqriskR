@@ -2,52 +2,41 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{tp00_tp01_euler}
 \alias{tp00_tp01_euler}
-\title{Euler approximation for \eqn{{}_{t}p_{x}^{00}} and \eqn{{}_{t}p_{x}^{01}}}
+\title{Euler approximation of disability-state probabilities}
 \usage{
 tp00_tp01_euler(h, n, mu01, mu02, mu10, mu12, p00_0 = 1, p01_0 = 0)
 }
 \arguments{
-\item{h}{Step size.}
+\item{h}{Positive step size.}
 
-\item{n}{Final time.}
+\item{n}{Nonnegative final time.}
 
-\item{mu01}{Function of time returning \eqn{\mu_{x+t}^{01}}.}
+\item{mu01}{Healthy-to-disabled intensity function.}
 
-\item{mu02}{Function of time returning \eqn{\mu_{x+t}^{02}}.}
+\item{mu02}{Healthy-to-deceased intensity function.}
 
-\item{mu10}{Function of time returning \eqn{\mu_{x+t}^{10}}.}
+\item{mu10}{Disabled-to-healthy intensity function.}
 
-\item{mu12}{Function of time returning \eqn{\mu_{x+t}^{12}}.}
+\item{mu12}{Disabled-to-deceased intensity function.}
 
-\item{p00_0}{Initial value of \eqn{{}_{0}p_{x}^{00}}.}
+\item{p00_0}{Initial healthy-state probability.}
 
-\item{p01_0}{Initial value of \eqn{{}_{0}p_{x}^{01}}.}
+\item{p01_0}{Initial disabled-state probability.}
 }
 \value{
 A data frame with columns \code{t}, \code{tp00}, \code{tp01},
   and \code{tp02}.
 }
 \description{
-Computes the Euler approximations in the disability model allowing for
-recovery, as in Equations (14.20) and (14.21).
-}
-\details{
-The model uses three states:
-\itemize{
-  \item State 0: healthy
-  \item State 1: disabled
-  \item State 2: deceased
-}
+Approximates probabilities of being healthy, disabled, or deceased in a
+three-state model that allows recovery from disability. The final time is
+always included, with a shorter final step when needed.
 }
 \examples{
 mu01 <- function(t) 0.10 * t + 0.20
 mu02 <- function(t) 0.20
 mu10 <- function(t) 0.50
 mu12 <- function(t) 0.125 * t + 0.20
-
-tp00_tp01_euler(
-  h = 0.10, n = 2.0,
-  mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
-)
+tp00_tp01_euler(0.10, 2, mu01, mu02, mu10, mu12)
 
 }

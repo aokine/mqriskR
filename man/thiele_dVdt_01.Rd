@@ -2,16 +2,16 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{thiele_dVdt_01}
 \alias{thiele_dVdt_01}
-\title{Reserve derivatives for the disability model with recovery}
+\title{Reserve derivatives for a disability model with recovery}
 \usage{
 thiele_dVdt_01(t, V0, V1, delta, Pbar, B, R, mu01, mu02, mu10, mu12)
 }
 \arguments{
 \item{t}{Time.}
 
-\item{V0}{Value of \eqn{{}_{t}\overline{V}^{(0)}}.}
+\item{V0}{Healthy-state reserve.}
 
-\item{V1}{Value of \eqn{{}_{t}\overline{V}^{(1)}}.}
+\item{V1}{Disabled-state reserve.}
 
 \item{delta}{Force of interest.}
 
@@ -21,50 +21,19 @@ thiele_dVdt_01(t, V0, V1, delta, Pbar, B, R, mu01, mu02, mu10, mu12)
 
 \item{R}{Continuous disability income rate.}
 
-\item{mu01}{Function of time returning \eqn{\mu_{x+t}^{01}}.}
+\item{mu01}{Healthy-to-disabled intensity function.}
 
-\item{mu02}{Function of time returning \eqn{\mu_{x+t}^{02}}.}
+\item{mu02}{Healthy-to-deceased intensity function.}
 
-\item{mu10}{Function of time returning \eqn{\mu_{x+t}^{10}}.}
+\item{mu10}{Disabled-to-healthy intensity function.}
 
-\item{mu12}{Function of time returning \eqn{\mu_{x+t}^{12}}.}
+\item{mu12}{Disabled-to-deceased intensity function.}
 }
 \value{
-A named numeric vector with components \code{dV0} and \code{dV1}.
+A named vector for scalar input or a two-column matrix for
+  vectorized input.
 }
 \description{
-Computes the right-hand sides of the coupled Thiele differential equations
-in Equations (14.25) and (14.26) for the healthy-life reserve
-\eqn{{}_{t}\overline{V}^{(0)}} and the disabled-life reserve
-\eqn{{}_{t}\overline{V}^{(1)}}.
-}
-\details{
-The equations are
-\deqn{
-\frac{d}{dt}{}_{t}\overline{V}^{(0)}
-= \overline{P} + \delta {}_{t}\overline{V}^{(0)}
-- \mu_{x+t}^{02}(B-{}_{t}\overline{V}^{(0)})
-- \mu_{x+t}^{01}({}_{t}\overline{V}^{(1)}-{}_{t}\overline{V}^{(0)})
-}
-and
-\deqn{
-\frac{d}{dt}{}_{t}\overline{V}^{(1)}
-= \delta {}_{t}\overline{V}^{(1)} - R
-- \mu_{x+t}^{12}(B-{}_{t}\overline{V}^{(1)})
-- \mu_{x+t}^{10}({}_{t}\overline{V}^{(0)}-{}_{t}\overline{V}^{(1)})
-}
-}
-\examples{
-mu01 <- function(t) 0.10 * t + 0.20
-mu02 <- function(t) 0.20
-mu10 <- function(t) 0.50
-mu12 <- function(t) 0.125 * t + 0.20
-
-thiele_dVdt_01(
-  t = 2.0, V0 = 0, V1 = 0,
-  delta = 0.04, Pbar = 446.95,
-  B = 1000, R = 1000,
-  mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
-)
-
+Computes the coupled Thiele reserve derivatives. Numeric arguments may be
+scalar or compatible vectors.
 }

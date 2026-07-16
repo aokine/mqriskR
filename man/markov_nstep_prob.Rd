@@ -2,36 +2,27 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{markov_nstep_prob}
 \alias{markov_nstep_prob}
-\title{n-step transition probability for a discrete-time Markov chain}
+\title{Multi-step transition probability}
 \usage{
 markov_nstep_prob(P, n, i, j)
 }
 \arguments{
-\item{P}{Transition probability matrix.}
+\item{P}{Square transition-probability matrix.}
 
 \item{n}{Nonnegative integer number of steps.}
 
-\item{i}{Starting state index.}
+\item{i}{Starting-state index.}
 
-\item{j}{Ending state index.}
+\item{j}{Ending-state index.}
 }
 \value{
 A numeric scalar.
 }
 \description{
-Computes the \eqn{(i,j)} entry of \eqn{P^n}, useful for Chapter 14 examples
-involving discrete-time multi-state models such as CCRC and risk-class models.
+Computes an entry of the matrix power \eqn{P^n}.
 }
 \examples{
-P <- matrix(
-  c(0.94, 0.03, 0.02, 0.01,
-    0.50, 0.30, 0.18, 0.02,
-    0.00, 0.00, 0.93, 0.07,
-    0.00, 0.00, 0.00, 1.00),
-  nrow = 4, byrow = TRUE
-)
-
-markov_nstep_prob(P, n = 3, i = 1, j = 1)
-markov_nstep_prob(P, n = 3, i = 1, j = 3)
+P <- matrix(c(0.9, 0.1, 0, 1), nrow = 2, byrow = TRUE)
+markov_nstep_prob(P, n = 3, i = 1, j = 2)
 
 }

@@ -2,48 +2,29 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{Axj_md}
 \alias{Axj_md}
-\title{Discrete multiple-decrement insurance APV \eqn{A_{x}^{(j)}}}
+\title{Discrete multiple-decrement insurance present value}
 \usage{
 Axj_md(qj, ptau, i, benefit = 1)
 }
 \arguments{
-\item{qj}{Numeric vector of conditional probabilities
-\eqn{q_{x+k}^{(j)}} for Cause \eqn{j}.}
+\item{qj}{Cause-specific decrement probabilities by policy year.}
 
-\item{ptau}{Numeric vector of survival probabilities
-\eqn{{}_{k}p_{x}^{(\tau)}} of remaining in force to duration \eqn{k}.}
+\item{ptau}{In-force probabilities at the beginning of each policy year.}
 
-\item{i}{Effective annual interest rate.}
+\item{i}{Effective annual interest rate. May be scalar or vector.}
 
-\item{benefit}{Benefit amount payable on decrement by Cause \eqn{j}.}
+\item{benefit}{Benefit payable on decrement. May be scalar or vector.}
 }
 \value{
-A numeric scalar.
+A numeric vector of actuarial present values.
 }
 \description{
-Computes the actuarial present value of a benefit payable at the end of the
-year of decrement if decrement occurs by Cause \eqn{j}, matching Equation
-(14.3b) in Chapter 14.
-}
-\details{
-The function evaluates
-\deqn{
-A_{x}^{(j)} = \sum_{k=0}^{n-1} v^{k+1} {}_{k}p_{x}^{(\tau)} q_{x+k}^{(j)}
-}
-with an optional benefit amount multiplier.
+Computes the actuarial present value of a benefit payable at the end of
+the year of decrement from a specified cause.
 }
 \examples{
-q1 <- c(.02, .02, .02, .02, .02)
-q2 <- c(.03, .04, .05, .06, .00)
-q3 <- c(.00, .00, .00, .00, .98)
-qtau <- q1 + q2 + q3
-
-ptau <- numeric(length(qtau))
-ptau[1] <- 1
-for (k in 2:length(qtau)) {
-  ptau[k] <- prod(1 - qtau[1:(k - 1)])
-}
-
-Axj_md(qj = q1, ptau = ptau, i = 0.06, benefit = 1000)
+qj <- c(0.02, 0.02, 0.02, 0.02, 0.02)
+ptau <- c(1, 0.95, 0.89, 0.82, 0.74)
+Axj_md(qj, ptau, i = 0.06, benefit = 1000)
 
 }

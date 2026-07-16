@@ -2,56 +2,36 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{AS_path}
 \alias{AS_path}
-\title{Projected asset share path \eqn{{}_{k}AS}}
+\title{Projected asset-share path for two decrement causes}
 \usage{
 AS_path(AS0, G, r, e, b1, b2, q1, q2, p_tau, i, b3 = NULL)
 }
 \arguments{
-\item{AS0}{Initial asset share \eqn{{}_{0}AS}.}
+\item{AS0}{Initial asset share.}
 
-\item{G}{Level annual premium.}
+\item{G}{Premium amount by policy year.}
 
-\item{r}{Numeric vector of percent-of-premium expense factors.}
+\item{r}{Percent-of-premium expense rate by policy year.}
 
-\item{e}{Numeric vector of fixed contract expenses.}
+\item{e}{Fixed expense by policy year.}
 
-\item{b1}{Numeric vector of Cause 1 benefit amounts.}
+\item{b1}{Cause 1 benefit by policy year.}
 
-\item{b2}{Numeric vector of Cause 2 benefit amounts.}
+\item{b2}{Cause 2 benefit by policy year.}
 
-\item{q1}{Numeric vector of Cause 1 decrement probabilities.}
+\item{q1}{Cause 1 probability by policy year.}
 
-\item{q2}{Numeric vector of Cause 2 decrement probabilities.}
+\item{q2}{Cause 2 probability by policy year.}
 
-\item{p_tau}{Numeric vector of in-force probabilities.}
+\item{p_tau}{In-force probability by policy year.}
 
-\item{i}{Effective annual interest rate.}
+\item{i}{Effective annual interest rate by policy year.}
 
-\item{b3}{Optional numeric vector of survival benefit amounts payable at the
-end of year \eqn{k} conditional on survival through year \eqn{k}. Defaults
-to a zero vector.}
+\item{b3}{Survival benefit by policy year.}
 }
 \value{
-A data frame with columns \code{k} and \code{AS}.
+A data frame with policy year \code{k} and asset share \code{AS}.
 }
 \description{
-Computes projected asset shares recursively using Equations (14.5b) and
-(14.6b) of Chapter 14, with optional support for a survival benefit payable
-at the end of year \eqn{k}.
-}
-\details{
-For policy year \eqn{k},
-\deqn{
-[{}_{k-1}AS + G(1-r_k) - e_k](1+i)
-= b_k^{(1)} q_{x+k-1}^{(1)}
-+ b_k^{(2)} q_{x+k-1}^{(2)}
-+ p_{x+k-1}^{(\tau)} \left(b_k^{(3)} + {}_{k}AS\right)
-}
-so that
-\deqn{
-{}_{k}AS =
-\frac{[{}_{k-1}AS + G(1-r_k) - e_k](1+i)
-- b_k^{(1)} q_{x+k-1}^{(1)}
-- b_k^{(2)} q_{x+k-1}^{(2)}}{p_{x+k-1}^{(\tau)}} - b_k^{(3)}
-}
+Convenience interface to \code{AS_path_md()} for two causes.
 }

@@ -2,38 +2,32 @@
 % Please edit documentation in R/chapter14_multiple_decrement.R
 \name{Abarxj_md}
 \alias{Abarxj_md}
-\title{Continuous multiple-decrement insurance APV \eqn{\overline{A}_{x}^{(j)}}}
+\title{Continuous multiple-decrement insurance present value}
 \usage{
 Abarxj_md(t, ptau, muj, delta, benefit = 1)
 }
 \arguments{
-\item{t}{Numeric vector of time points.}
+\item{t}{Strictly increasing nonnegative time points.}
 
-\item{ptau}{Numeric vector of values \eqn{{}_{t}p_{x}^{(\tau)}}.}
+\item{ptau}{In-force probabilities at the supplied time points.}
 
-\item{muj}{Numeric vector of values \eqn{\mu_{x+t}^{(j)}}.}
+\item{muj}{Cause-specific decrement intensities at the supplied time points.}
 
-\item{delta}{Force of interest.}
+\item{delta}{Force of interest. May be scalar or vector.}
 
-\item{benefit}{Benefit amount payable on decrement by Cause \eqn{j}.}
+\item{benefit}{Benefit payable on decrement. May be scalar or vector.}
 }
 \value{
-A numeric scalar.
+A numeric vector of actuarial present values.
 }
 \description{
-Computes the actuarial present value of a benefit payable at the moment of
-decrement by Cause \eqn{j}, matching Equation (14.4) in Chapter 14.
-}
-\details{
-The integral is evaluated numerically by the trapezoidal rule:
-\deqn{
-\overline{A}_{x}^{(j)} = \int_0^T v^t {}_{t}p_{x}^{(\tau)} \mu_{x+t}^{(j)} dt
-}
+Approximates the actuarial present value of a benefit payable at the moment
+of decrement using the trapezoidal rule.
 }
 \examples{
-t <- seq(0, 20, by = 0.01)
+t <- seq(0, 20, by = 0.1)
 ptau <- exp(-0.012 * t)
-mu_ac <- rep(0.002, length(t))
-Abarxj_md(t, ptau, mu_ac, delta = 0.05, benefit = 2000)
+muj <- rep(0.002, length(t))
+Abarxj_md(t, ptau, muj, delta = 0.05, benefit = 2000)
 
 }
