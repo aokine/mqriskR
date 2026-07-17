@@ -2,28 +2,25 @@
 % Please edit documentation in R/chapter15_variable_interest.R
 \name{z_from_fn1}
 \alias{z_from_fn1}
-\title{Spot rates from forward one-year rates}
+\title{Spot rates from one-year forward rates}
 \usage{
 z_from_fn1(fn1)
 }
 \arguments{
-\item{fn1}{Numeric vector of annual effective forward one-year rates.}
+\item{fn1}{Numeric vector of annual effective one-year forward rates. Each
+value must be greater than \code{-1}.}
 }
 \value{
-Numeric vector of annual effective spot rates.
+A numeric vector of annual effective spot rates.
 }
 \description{
-Converts annual effective forward one-year rates
-\eqn{f_{0,1}, f_{1,1}, \dots, f_{n-1,1}}
-into annual effective spot rates
-\eqn{z_1, z_2, \dots, z_n}.
-}
-\details{
-Since
+Converts annual effective one-year forward rates
+\eqn{f_{0,1},f_{1,1},\ldots,f_{n-1,1}} into annual effective spot rates:
 \deqn{
-(1+z_n)^n = \prod_{j=0}^{n-1}(1+f_{j,1}),
+(1+z_n)^n
+=
+\prod_{j=0}^{n-1}(1+f_{j,1}).
 }
-the spot rates are recovered directly.
 }
 \examples{
 z_from_fn1(c(0.04, 0.05, 0.06, 0.07, 0.08))

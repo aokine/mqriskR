@@ -145,3 +145,240 @@ test_that("vt_var returns cumulative variable-rate discount factors", {
   expect_equal(v[2], 1 / (1.06 * 1.07), tolerance = 1e-12)
   expect_equal(v[3], 1 / (1.06 * 1.07 * 1.08), tolerance = 1e-12)
 })
+
+
+
+
+testthat::test_that("variable discount factors allow valid negative rates", {
+  rates <- c(-0.01, 0.02, 0.03)
+
+  expected <- cumprod(1 / (1 + rates))
+
+  testthat::expect_equal(
+    vt_var(rates),
+    expected,
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("variable-interest APVs satisfy standard identities", {
+  qx <- c(0.02, 0.03, 0.04, 0.05)
+  rates <- c(0.03, 0.04, 0.05, 0.06)
+
+  testthat::expect_equal(
+    Axn_var(qx, rates),
+    Axn1_var(qx, rates) + nEx_var(qx, rates),
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("spot-rate APVs satisfy standard identities", {
+  qx <- c(0.02, 0.03, 0.04, 0.05)
+  spot <- c(0.03, 0.04, 0.05, 0.06)
+
+  testthat::expect_equal(
+    Axn_spot(qx, spot),
+    Axn1_spot(qx, spot) + nEx_spot(qx, spot),
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("annuity-due includes the time-zero payment", {
+  qx <- rep(0.02, 5)
+  rates <- rep(0.05, 5)
+
+  immediate <- axn_var(qx, rates, type = "immediate")
+  due <- axn_var(qx, rates, type = "due")
+
+  testthat::expect_true(due > immediate)
+  testthat::expect_equal(
+    due,
+    sum(
+      c(1, head(vt_var(rates), -1)) *
+        c(1, cumprod(1 - qx))[seq_along(qx)]
+    ),
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("constant variable rates agree with direct discounting", {
+  qx <- c(0.02, 0.03, 0.04)
+  rate <- 0.05
+  rates <- rep(rate, length(qx))
+
+  survival_start <- c(1, cumprod(1 - qx))[seq_along(qx)]
+  expected <- sum(
+    (1 + rate)^(-seq_along(qx)) *
+      survival_start *
+      qx
+  )
+
+  testthat::expect_equal(
+    Axn1_var(qx, rates),
+    expected,
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("spot cash-flow valuation supports valid negative rates", {
+  out <- pv_spot_cashflows(
+    amounts = c(100, 100),
+    times = c(1, 2),
+    spot = c(-0.01, 0.02),
+    compounding = "annual"
+  )
+
+  expected <- 100 / 0.99 + 100 / 1.02^2
+
+  testthat::expect_equal(out, expected, tolerance = 1e-12)
+})
+
+
+testthat::test_that("annual spot bootstrapping reprices par bonds", {
+  maturity <- 1:4
+  coupon_yield <- c(0.02, 0.04, 0.06, 0.08)
+  par <- 1000
+
+  spot <- z_from_coupon_annual(
+    maturity = maturity,
+    coupon_yield = coupon_yield,
+    par = par
+  )
+
+  for (j in seq_along(maturity)) {
+    coupon <- par * coupon_yield[j]
+    cash_flows <- c(
+      rep(coupon, maturity[j] - 1L),
+      par + coupon
+    )
+
+    price <- sum(
+      cash_flows /
+        (1 + spot[seq_len(maturity[j])])^seq_len(maturity[j])
+    )
+
+    testthat::expect_equal(price, par, tolerance = 1e-8)
+  }
+})
+
+
+testthat::test_that("semiannual spot bootstrapping reprices par bonds", {
+  maturity <- c(0.5, 1.0, 1.5, 2.0)
+  coupon_yield <- c(0.0244, 0.0260, 0.0276, 0.0293)
+  par <- 1000
+
+  spot <- z_from_coupon_semi(
+    maturity = maturity,
+    coupon_yield = coupon_yield,
+    par = par
+  )
+
+  periods <- seq_along(maturity)
+
+  for (j in seq_along(maturity)) {
+    coupon <- par * coupon_yield[j] / 2
+    cash_flows <- c(
+      rep(coupon, periods[j] - 1L),
+      par + coupon
+    )
+
+    price <- sum(
+      cash_flows /
+        (1 + spot[seq_len(periods[j])] / 2)^seq_len(periods[j])
+    )
+
+    testthat::expect_equal(price, par, tolerance = 1e-8)
+  }
+})
+
+
+testthat::test_that("forward and spot conversions are internally consistent", {
+  forward <- c(0.04, 0.05, 0.06, 0.07, 0.08)
+  spot <- z_from_fn1(forward)
+
+  recovered <- c(
+    spot[1],
+    vapply(
+      1:(length(spot) - 1L),
+      function(n) fnk_from_z(spot, n = n, k = 1),
+      numeric(1)
+    )
+  )
+
+  testthat::expect_equal(
+    recovered,
+    forward,
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("forward rate matrix has expected structure", {
+  spot <- c(0.03, 0.04, 0.05, 0.06)
+
+  out <- forward_matrix_from_z(spot)
+
+  testthat::expect_true(is.matrix(out))
+  testthat::expect_equal(dim(out), c(3, 3))
+  testthat::expect_equal(out[1, 1], fnk_from_z(spot, 1, 1))
+  testthat::expect_true(is.na(out[3, 2]))
+})
+
+
+testthat::test_that("variable-interest functions reject invalid inputs", {
+  testthat::expect_error(
+    vt_var(numeric(0)),
+    "positive length"
+  )
+
+  testthat::expect_error(
+    vt_var(c(0.05, -1)),
+    "greater than -1"
+  )
+
+  testthat::expect_error(
+    Axn1_var(
+      qx = c(0.02, 0.03),
+      i = c(0.04, 0.05, 0.06)
+    ),
+    "same length"
+  )
+
+  testthat::expect_error(
+    nEx_var(
+      qx = c(0.02, 0.03),
+      i = c(0.04, 0.05),
+      benefit = c(1, 2)
+    ),
+    "benefit must be a numeric scalar"
+  )
+
+  testthat::expect_error(
+    forward_matrix_from_z(0.05),
+    "at least two"
+  )
+})
+
+
+testthat::test_that("bootstrapping requires consecutive maturities", {
+  testthat::expect_error(
+    z_from_coupon_annual(
+      maturity = c(1, 3),
+      coupon_yield = c(0.03, 0.04)
+    ),
+    "consecutive integer maturities"
+  )
+
+  testthat::expect_error(
+    z_from_coupon_semi(
+      maturity = c(0.5, 1.5),
+      coupon_yield = c(0.03, 0.04)
+    ),
+    "consecutive half-year maturities"
+  )
+})

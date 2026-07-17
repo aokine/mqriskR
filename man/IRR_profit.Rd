@@ -2,24 +2,23 @@
 % Please edit documentation in R/chapter17_profit_analysis.R
 \name{IRR_profit}
 \alias{IRR_profit}
-\title{Internal rate of return of a profit signature}
+\title{Internal rate of return}
 \usage{
 IRR_profit(Pi, interval = c(0, 1), tol = .Machine$double.eps^0.5)
 }
 \arguments{
-\item{Pi}{Profit signature vector.}
+\item{Pi}{Numeric profit-signature vector.}
 
-\item{interval}{Numeric vector of length 2 giving the search interval for
-\code{uniroot()}.}
+\item{interval}{Numeric vector of length two giving the root-search
+interval. Its lower endpoint must be greater than \code{-1}.}
 
-\item{tol}{Tolerance passed to \code{uniroot()}.}
+\item{tol}{Positive scalar tolerance passed to \code{stats::uniroot()}.}
 }
 \value{
-Numeric scalar.
+A numeric scalar.
 }
 \description{
-Computes the internal rate of return (IRR), defined as the rate \eqn{r} for
-which the net present value is zero.
+Computes a root of the profit-signature net present value.
 }
 \examples{
 Pi <- c(-15.00, 8.42, 8.39, 8.58)

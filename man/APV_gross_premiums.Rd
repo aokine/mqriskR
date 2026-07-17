@@ -2,28 +2,32 @@
 % Please edit documentation in R/chapter17_profit_analysis.R
 \name{APV_gross_premiums}
 \alias{APV_gross_premiums}
-\title{APV of gross premiums under a risk discount rate}
+\title{Actuarial present value of gross premiums}
 \usage{
 APV_gross_premiums(G, r, p_tau)
 }
 \arguments{
-\item{G}{Gross premium vector for policy years 1 through \eqn{n}.}
+\item{G}{Nonnegative gross premium vector.}
 
-\item{r}{Risk discount rate.}
+\item{r}{Annual effective risk discount rate. May be scalar or vector;
+values must be greater than \code{-1}.}
 
-\item{p_tau}{One-year in-force probabilities. This may have length
-\eqn{n-1} or \eqn{n}. If length \eqn{n}, the final entry is ignored.}
+\item{p_tau}{One-year in-force probabilities. For \code{n > 1}, this may
+have length \code{n - 1} or \code{n}; the final value is ignored when
+length \code{n}. For one premium, use \code{numeric(0)} or one value.}
 }
 \value{
-Numeric scalar.
+A numeric vector with one value for each rate in \code{r}.
 }
 \description{
-Computes the actuarial present value of gross premiums:
-\deqn{
-APV_{GP} = \sum_{t=0}^{n-1} \frac{G_{t+1} \cdot {}_tp_x^{(\tau)}}{(1+r)^t}.
-}
+Computes the actuarial present value of premiums weighted by contract
+persistency at the start of each policy year.
 }
 \examples{
-APV_gross_premiums(G = rep(95, 3),r = 0.10,p_tau = c(0.99858, 0.99847, 0.99834))
+APV_gross_premiums(
+  G = rep(95, 3),
+  r = 0.10,
+  p_tau = c(0.99858, 0.99847, 0.99834)
+)
 
 }

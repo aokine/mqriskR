@@ -1,534 +1,444 @@
 # =========================================================
-# Chapter 15 helpers for mqriskR
-# Models with Variable Interest Rates
+# Variable-interest models
 # =========================================================
 
 # -------------------------------------------------------------------------
 # Internal helpers
 # -------------------------------------------------------------------------
 
-.validate_prob_vector_ch15 <- function(x, name) {
-  if (!is.numeric(x) || any(!is.finite(x))) {
-    stop(sprintf("%s must be a finite numeric vector.", name), call. = FALSE)
+#' @noRd
+.variable_interest_check_numeric <- function(x, name, positive_length = TRUE) {
+  if (!is.numeric(x)) {
+    stop(name, " must be numeric.", call. = FALSE)
   }
+  if (positive_length && length(x) == 0L) {
+    stop(name, " must have positive length.", call. = FALSE)
+  }
+  if (any(!is.finite(x))) {
+    stop(name, " must contain finite values.", call. = FALSE)
+  }
+  as.numeric(x)
+}
+
+#' @noRd
+.variable_interest_check_probability <- function(x, name) {
+  x <- .variable_interest_check_numeric(x, name)
   if (any(x < 0 | x > 1)) {
-    stop(sprintf("%s must contain values in [0, 1].", name), call. = FALSE)
+    stop(name, " must contain values in [0, 1].", call. = FALSE)
   }
-  invisible(x)
+  x
 }
 
-.validate_nonneg_numeric_ch15 <- function(x, name) {
-  if (!is.numeric(x) || any(!is.finite(x))) {
-    stop(sprintf("%s must be a finite numeric vector.", name), call. = FALSE)
+#' @noRd
+.variable_interest_check_rate <- function(x, name) {
+  x <- .variable_interest_check_numeric(x, name)
+  if (any(x <= -1)) {
+    stop(name, " must contain values greater than -1.", call. = FALSE)
   }
+  x
+}
+
+#' @noRd
+.variable_interest_check_nonnegative <- function(x, name) {
+  x <- .variable_interest_check_numeric(x, name)
   if (any(x < 0)) {
-    stop(sprintf("%s must be nonnegative.", name), call. = FALSE)
+    stop(name, " must contain nonnegative values.", call. = FALSE)
   }
-  invisible(x)
+  x
 }
 
-.surv_start_from_qx_ch15 <- function(qx) {
-  n <- length(qx)
-  c(1, cumprod(1 - qx))[1:n]
+#' @noRd
+.variable_interest_check_scalar <- function(
+    x,
+    name,
+    lower = -Inf,
+    strict_lower = FALSE) {
+  x <- .variable_interest_check_numeric(x, name)
+
+  if (length(x) != 1L) {
+    stop(name, " must be a numeric scalar.", call. = FALSE)
+  }
+
+  invalid <- if (strict_lower) x <= lower else x < lower
+  if (invalid) {
+    comparator <- if (strict_lower) "greater than" else "at least"
+    stop(name, " must be ", comparator, " ", lower, ".", call. = FALSE)
+  }
+
+  x
 }
 
-.surv_end_from_qx_ch15 <- function(qx) {
+#' @noRd
+.variable_interest_check_integer <- function(
+    x,
+    name,
+    positive = FALSE) {
+  x <- .variable_interest_check_scalar(
+    x,
+    name,
+    lower = 0,
+    strict_lower = positive
+  )
+
+  if (abs(x - round(x)) > 1e-10) {
+    descriptor <- if (positive) "positive" else "nonnegative"
+    stop(name, " must be a ", descriptor, " integer.", call. = FALSE)
+  }
+
+  as.integer(round(x))
+}
+
+#' @noRd
+.variable_interest_check_same_length <- function(x, y, x_name, y_name) {
+  if (length(x) != length(y)) {
+    stop(x_name, " and ", y_name, " must have the same length.", call. = FALSE)
+  }
+  invisible(TRUE)
+}
+
+#' @noRd
+.variable_interest_survival_start <- function(qx) {
+  c(1, cumprod(1 - qx))[seq_along(qx)]
+}
+
+#' @noRd
+.variable_interest_survival_end <- function(qx) {
   cumprod(1 - qx)
+}
+
+#' @noRd
+.variable_interest_benefit_scalar <- function(benefit) {
+  benefit <- .variable_interest_check_nonnegative(benefit, "benefit")
+  if (length(benefit) != 1L) {
+    stop("benefit must be a numeric scalar.", call. = FALSE)
+  }
+  benefit
 }
 
 # -------------------------------------------------------------------------
 # Variable-interest discount factors
 # -------------------------------------------------------------------------
 
-#' Discount factors under a variable annual interest scenario
+#' Discount factors under variable annual interest rates
 #'
-#' Computes the sequence of discount factors
-#' \deqn{v_1,\; v_2,\; \dots,\; v_n}
-#' where
-#' \deqn{v_t = \prod_{k=1}^{t}(1+i_k)^{-1}.}
+#' Computes cumulative discount factors for a sequence of annual effective
+#' interest rates:
+#' \deqn{
+#' v_t = \prod_{k=1}^{t}(1+i_k)^{-1},
+#' \qquad t=1,\ldots,n.
+#' }
 #'
-#' This corresponds to the Chapter 15 notation \eqn{{}_j v^t} for a fixed
-#' scenario \eqn{j}.
+#' @param i Numeric vector of annual effective interest rates. Each value must
+#'   be greater than \code{-1}.
 #'
-#' @param i Numeric vector of annual effective interest rates
-#'   \eqn{i_1, i_2, \dots, i_n}.
-#'
-#' @return Numeric vector of discount factors of the same length as \code{i}.
+#' @return A numeric vector of cumulative discount factors with the same
+#'   length as \code{i}.
 #'
 #' @examples
 #' vt_var(c(0.06, 0.07, 0.08))
+#' vt_var(c(-0.01, 0.02, 0.03))
 #'
 #' @export
 vt_var <- function(i) {
-  .validate_nonneg_numeric_ch15(i, "i")
-  cumprod((1 + i)^(-1))
+  i <- .variable_interest_check_rate(i, "i")
+  cumprod(1 / (1 + i))
 }
 
 # -------------------------------------------------------------------------
-# APVs with variable annual interest scenarios
+# APVs under a sequence of annual effective interest rates
 # -------------------------------------------------------------------------
 
-#' Variable-interest actuarial present value functions
+#' Actuarial present values under variable annual interest rates
 #'
-#' Chapter 15 functions for actuarial present values under variable annual
-#' effective interest rates interpreted as a yearly scenario
-#' \eqn{i_1, i_2, \dots, i_n}.
+#' These functions value life-contingent benefits under a specified sequence
+#' of annual effective interest rates. The vectors \code{qx} and \code{i}
+#' describe one valuation scenario and must have the same positive length.
 #'
-#' @name chapter15_variable_interest_apv
-NULL
-
-#' Pure endowment APV under variable annual interest rates
+#' \code{nEx_var()} values a pure endowment.
 #'
-#' Computes the APV of an \eqn{n}-year pure endowment under a variable annual
-#' interest scenario:
-#' \deqn{
-#' {}_nE_x = v_n \cdot {}_np_x.
-#' }
+#' \code{Axn1_var()} values term insurance payable at the end of the year of
+#' death.
 #'
-#' If a benefit amount is supplied, the function returns that benefit times the
-#' APV factor.
+#' \code{Axn_var()} values endowment insurance.
 #'
-#' @param qx Numeric vector of one-year mortality rates
-#'   \eqn{q_x, q_{x+1}, \dots, q_{x+n-1}}.
-#' @param i Numeric vector of annual effective interest rates
-#'   \eqn{i_1, i_2, \dots, i_n}.
-#' @param benefit Benefit amount payable at the end of year \eqn{n}.
+#' \code{axn_var()} values a temporary annuity-immediate or annuity-due.
+#'
+#' @param qx Numeric vector of one-year mortality probabilities.
+#' @param i Numeric vector of annual effective interest rates. Each value must
+#'   be greater than \code{-1}.
+#' @param benefit Nonnegative scalar benefit or annuity payment amount.
+#' @param type Character string equal to \code{"immediate"} or \code{"due"}.
 #'
 #' @return A numeric scalar.
 #'
 #' @examples
-#' qx <- c(.03, .04, .05, .06, .07)
-#' nEx_var(qx = qx, i = c(.06, .07, .08, .09, .10), benefit = 1000)
+#' qx <- c(0.03, 0.04, 0.05, 0.06, 0.07)
+#' rates <- c(0.06, 0.07, 0.08, 0.09, 0.10)
 #'
-#' @rdname chapter15_variable_interest_apv
-#' @aliases nEx_var
+#' nEx_var(qx, rates, benefit = 1000)
+#' Axn1_var(qx, rates)
+#' Axn_var(qx, rates)
+#' axn_var(qx, rates, type = "due")
+#'
+#' @rdname variable_interest_apv
 #' @export
 nEx_var <- function(qx, i, benefit = 1) {
-  .validate_prob_vector_ch15(qx, "qx")
-  .validate_nonneg_numeric_ch15(i, "i")
-  .validate_nonneg_numeric_ch15(benefit, "benefit")
+  qx <- .variable_interest_check_probability(qx, "qx")
+  i <- .variable_interest_check_rate(i, "i")
+  benefit <- .variable_interest_benefit_scalar(benefit)
 
-  if (length(qx) != length(i)) {
-    stop("qx and i must have the same length.", call. = FALSE)
-  }
-  if (length(benefit) != 1L) {
-    stop("benefit must be a numeric scalar.", call. = FALSE)
-  }
+  .variable_interest_check_same_length(qx, i, "qx", "i")
 
   benefit * prod(1 - qx) * tail(vt_var(i), 1L)
 }
 
-#' Term insurance APV under variable annual interest rates
-#'
-#' Computes the APV of an \eqn{n}-year term insurance with benefit paid at the
-#' end of the year of death under a variable annual interest scenario:
-#' \deqn{
-#' A_{x:\overline{n}|}^1 = \sum_{t=1}^{n} v_t \cdot {}_{t-1}p_x \cdot q_{x+t-1}.
-#' }
-#'
-#' If a benefit amount is supplied, the function returns that benefit times the
-#' APV factor.
-#'
-#' @param qx Numeric vector of one-year mortality rates
-#'   \eqn{q_x, q_{x+1}, \dots, q_{x+n-1}}.
-#' @param i Numeric vector of annual effective interest rates
-#'   \eqn{i_1, i_2, \dots, i_n}.
-#' @param benefit Benefit amount payable at the end of the year of death.
-#'
-#' @return A numeric scalar.
-#'
-#' @examples
-#' qx <- c(.03, .04, .05, .06, .07)
-#' Axn1_var(qx = qx, i = c(.06, .07, .08, .09, .10))
-#'
-#' @rdname chapter15_variable_interest_apv
-#' @aliases Axn1_var
+#' @rdname variable_interest_apv
 #' @export
 Axn1_var <- function(qx, i, benefit = 1) {
-  .validate_prob_vector_ch15(qx, "qx")
-  .validate_nonneg_numeric_ch15(i, "i")
-  .validate_nonneg_numeric_ch15(benefit, "benefit")
+  qx <- .variable_interest_check_probability(qx, "qx")
+  i <- .variable_interest_check_rate(i, "i")
+  benefit <- .variable_interest_benefit_scalar(benefit)
 
-  if (length(qx) != length(i)) {
-    stop("qx and i must have the same length.", call. = FALSE)
-  }
-  if (length(benefit) != 1L) {
-    stop("benefit must be a numeric scalar.", call. = FALSE)
-  }
+  .variable_interest_check_same_length(qx, i, "qx", "i")
 
-  vt <- vt_var(i)
-  surv_start <- .surv_start_from_qx_ch15(qx)
+  discount <- vt_var(i)
+  survival_start <- .variable_interest_survival_start(qx)
 
-  benefit * sum(vt * surv_start * qx)
+  benefit * sum(discount * survival_start * qx)
 }
 
-#' Endowment insurance APV under variable annual interest rates
-#'
-#' Computes the APV of an \eqn{n}-year endowment insurance under a variable
-#' annual interest scenario:
-#' \deqn{
-#' A_{x:\overline{n}|} = A_{x:\overline{n}|}^1 + {}_nE_x.
-#' }
-#'
-#' If a benefit amount is supplied, the function returns that benefit times the
-#' APV factor.
-#'
-#' @param qx Numeric vector of one-year mortality rates
-#'   \eqn{q_x, q_{x+1}, \dots, q_{x+n-1}}.
-#' @param i Numeric vector of annual effective interest rates
-#'   \eqn{i_1, i_2, \dots, i_n}.
-#' @param benefit Benefit amount payable either at the end of the year of death
-#'   during the term or at the end of year \eqn{n} on survival.
-#'
-#' @return A numeric scalar.
-#'
-#' @examples
-#' qx <- c(.03, .04, .05, .06, .07)
-#' Axn_var(qx = qx, i = c(.06, .07, .08, .09, .10))
-#'
-#' @rdname chapter15_variable_interest_apv
-#' @aliases Axn_var
+#' @rdname variable_interest_apv
 #' @export
 Axn_var <- function(qx, i, benefit = 1) {
-  .validate_prob_vector_ch15(qx, "qx")
-  .validate_nonneg_numeric_ch15(i, "i")
-  .validate_nonneg_numeric_ch15(benefit, "benefit")
+  qx <- .variable_interest_check_probability(qx, "qx")
+  i <- .variable_interest_check_rate(i, "i")
+  benefit <- .variable_interest_benefit_scalar(benefit)
 
-  if (length(qx) != length(i)) {
-    stop("qx and i must have the same length.", call. = FALSE)
-  }
-  if (length(benefit) != 1L) {
-    stop("benefit must be a numeric scalar.", call. = FALSE)
-  }
+  .variable_interest_check_same_length(qx, i, "qx", "i")
 
   Axn1_var(qx = qx, i = i, benefit = benefit) +
     nEx_var(qx = qx, i = i, benefit = benefit)
 }
 
-#' Temporary annuity APV under variable annual interest rates
-#'
-#' Computes the APV of an \eqn{n}-year temporary life annuity under a variable
-#' annual interest scenario.
-#'
-#' For an immediate annuity,
-#' \deqn{
-#' a_{x:\overline{n}|} = \sum_{t=1}^{n} v_t \cdot {}_tp_x.
-#' }
-#'
-#' For an annuity-due,
-#' \deqn{
-#' \ddot{a}_{x:\overline{n}|} = \sum_{t=0}^{n-1} v_t \cdot {}_tp_x,
-#' }
-#' with \eqn{v_0 = 1}.
-#'
-#' @param qx Numeric vector of one-year mortality rates
-#'   \eqn{q_x, q_{x+1}, \dots, q_{x+n-1}}.
-#' @param i Numeric vector of annual effective interest rates
-#'   \eqn{i_1, i_2, \dots, i_n}.
-#' @param type Either \code{"immediate"} or \code{"due"}.
-#' @param benefit Amount of each annuity payment.
-#'
-#' @return A numeric scalar.
-#'
-#' @examples
-#' qx <- rep(.02, 5)
-#' axn_var(qx = qx, i = c(.06, .05, .04, .03, .03), type = "immediate")
-#' axn_var(qx = qx, i = c(.03, .04, .05, .06, .07), type = "due")
-#'
-#' @rdname chapter15_variable_interest_apv
-#' @aliases axn_var
+#' @rdname variable_interest_apv
 #' @export
 axn_var <- function(qx, i, type = c("immediate", "due"), benefit = 1) {
   type <- match.arg(type)
 
-  .validate_prob_vector_ch15(qx, "qx")
-  .validate_nonneg_numeric_ch15(i, "i")
-  .validate_nonneg_numeric_ch15(benefit, "benefit")
+  qx <- .variable_interest_check_probability(qx, "qx")
+  i <- .variable_interest_check_rate(i, "i")
+  benefit <- .variable_interest_benefit_scalar(benefit)
 
-  if (length(qx) != length(i)) {
-    stop("qx and i must have the same length.", call. = FALSE)
-  }
-  if (length(benefit) != 1L) {
-    stop("benefit must be a numeric scalar.", call. = FALSE)
-  }
+  .variable_interest_check_same_length(qx, i, "qx", "i")
 
-  vt <- vt_var(i)
+  discount <- vt_var(i)
 
   if (type == "immediate") {
-    surv_end <- .surv_end_from_qx_ch15(qx)
-    return(benefit * sum(vt * surv_end))
+    survival_end <- .variable_interest_survival_end(qx)
+    return(benefit * sum(discount * survival_end))
   }
 
-  surv_start <- .surv_start_from_qx_ch15(qx)
-  vt_due <- c(1, vt[-length(vt)])
-  benefit * sum(vt_due * surv_start)
+  survival_start <- .variable_interest_survival_start(qx)
+  discount_due <- c(1, head(discount, -1L))
+
+  benefit * sum(discount_due * survival_start)
 }
 
 # -------------------------------------------------------------------------
-# APVs with spot rates
+# APVs under spot rates
 # -------------------------------------------------------------------------
 
-#' Spot-rate actuarial present value functions
+#' Actuarial present values under spot rates
 #'
-#' Chapter 15 functions for actuarial present values when discounting uses
-#' spot rates by maturity. If \eqn{z_t} denotes the annual effective spot rate
-#' for maturity \eqn{t}, then the discount factor is \eqn{(1+z_t)^{-t}}.
+#' These functions value life-contingent benefits using annual effective spot
+#' rates by maturity. If \eqn{z_t} is the spot rate for maturity \eqn{t}, the
+#' corresponding discount factor is \eqn{(1+z_t)^{-t}}.
 #'
-#' @name chapter15_spot_interest_apv
-NULL
-
-#' Pure endowment APV using spot rates
+#' \code{nEx_spot()} values a pure endowment.
 #'
-#' Computes
-#' \deqn{
-#' {}_nE_x = (1+z_n)^{-n}\cdot {}_np_x.
-#' }
+#' \code{Axn1_spot()} values term insurance payable at the end of the year of
+#' death.
 #'
-#' @param qx Numeric vector of one-year mortality rates.
+#' \code{Axn_spot()} values endowment insurance.
+#'
+#' \code{axn_spot()} values a temporary annuity-immediate or annuity-due.
+#'
+#' @param qx Numeric vector of one-year mortality probabilities.
 #' @param z Numeric vector of annual effective spot rates for maturities
-#'   \eqn{1,\dots,n}.
-#' @param benefit Benefit amount payable at the end of year \eqn{n}.
+#'   \code{1, ..., n}. Each value must be greater than \code{-1}.
+#' @param benefit Nonnegative scalar benefit or annuity payment amount.
+#' @param type Character string equal to \code{"immediate"} or \code{"due"}.
 #'
 #' @return A numeric scalar.
 #'
 #' @examples
-#' qx <- c(.02, .03, .04, .05, .06)
-#' z  <- c(.03, .04, .05, .06, .07)
-#' nEx_spot(qx, z, benefit = 1000000)
+#' qx <- c(0.02, 0.03, 0.04, 0.05, 0.06)
+#' spot <- c(0.03, 0.04, 0.05, 0.06, 0.07)
 #'
-#' @rdname chapter15_spot_interest_apv
-#' @aliases nEx_spot
+#' nEx_spot(qx, spot, benefit = 1000)
+#' Axn1_spot(qx, spot)
+#' Axn_spot(qx, spot)
+#' axn_spot(qx, spot, type = "due")
+#'
+#' @rdname spot_interest_apv
 #' @export
 nEx_spot <- function(qx, z, benefit = 1) {
-  .validate_prob_vector_ch15(qx, "qx")
-  .validate_nonneg_numeric_ch15(z, "z")
-  .validate_nonneg_numeric_ch15(benefit, "benefit")
+  qx <- .variable_interest_check_probability(qx, "qx")
+  z <- .variable_interest_check_rate(z, "z")
+  benefit <- .variable_interest_benefit_scalar(benefit)
 
-  if (length(qx) != length(z)) {
-    stop("qx and z must have the same length.", call. = FALSE)
-  }
-  if (length(benefit) != 1L) {
-    stop("benefit must be a numeric scalar.", call. = FALSE)
-  }
+  .variable_interest_check_same_length(qx, z, "qx", "z")
 
   n <- length(z)
-  benefit * prod(1 - qx) / (1 + z[n])^n
+  benefit * prod(1 - qx) * (1 + z[n])^(-n)
 }
 
-#' Term insurance APV using spot rates
-#'
-#' Computes
-#' \deqn{
-#' A_{x:\overline{n}|}^1 = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_{t-1}p_x \cdot q_{x+t-1}.
-#' }
-#'
-#' @param qx Numeric vector of one-year mortality rates.
-#' @param z Numeric vector of annual effective spot rates for maturities
-#'   \eqn{1,\dots,n}.
-#' @param benefit Benefit amount payable at the end of the year of death.
-#'
-#' @return A numeric scalar.
-#'
-#' @examples
-#' qx <- c(.02, .03, .04, .05, .06)
-#' z  <- c(.03, .04, .05, .06, .07)
-#' Axn1_spot(qx, z)
-#'
-#' @rdname chapter15_spot_interest_apv
-#' @aliases Axn1_spot
+#' @rdname spot_interest_apv
 #' @export
 Axn1_spot <- function(qx, z, benefit = 1) {
-  .validate_prob_vector_ch15(qx, "qx")
-  .validate_nonneg_numeric_ch15(z, "z")
-  .validate_nonneg_numeric_ch15(benefit, "benefit")
+  qx <- .variable_interest_check_probability(qx, "qx")
+  z <- .variable_interest_check_rate(z, "z")
+  benefit <- .variable_interest_benefit_scalar(benefit)
 
-  if (length(qx) != length(z)) {
-    stop("qx and z must have the same length.", call. = FALSE)
-  }
-  if (length(benefit) != 1L) {
-    stop("benefit must be a numeric scalar.", call. = FALSE)
-  }
+  .variable_interest_check_same_length(qx, z, "qx", "z")
 
-  n <- length(z)
-  vt <- (1 + z)^(-seq_len(n))
-  surv_start <- .surv_start_from_qx_ch15(qx)
+  times <- seq_along(z)
+  discount <- (1 + z)^(-times)
+  survival_start <- .variable_interest_survival_start(qx)
 
-  benefit * sum(vt * surv_start * qx)
+  benefit * sum(discount * survival_start * qx)
 }
 
-#' Endowment insurance APV using spot rates
-#'
-#' Computes
-#' \deqn{
-#' A_{x:\overline{n}|} = A_{x:\overline{n}|}^1 + {}_nE_x
-#' }
-#' using spot-rate discount factors.
-#'
-#' @param qx Numeric vector of one-year mortality rates.
-#' @param z Numeric vector of annual effective spot rates for maturities
-#'   \eqn{1,\dots,n}.
-#' @param benefit Benefit amount.
-#'
-#' @return A numeric scalar.
-#'
-#' @examples
-#' qx <- c(.02, .03, .04, .05, .06)
-#' z  <- c(.03, .04, .05, .06, .07)
-#' Axn_spot(qx, z)
-#'
-#' @rdname chapter15_spot_interest_apv
-#' @aliases Axn_spot
+#' @rdname spot_interest_apv
 #' @export
 Axn_spot <- function(qx, z, benefit = 1) {
-  .validate_prob_vector_ch15(qx, "qx")
-  .validate_nonneg_numeric_ch15(z, "z")
-  .validate_nonneg_numeric_ch15(benefit, "benefit")
+  qx <- .variable_interest_check_probability(qx, "qx")
+  z <- .variable_interest_check_rate(z, "z")
+  benefit <- .variable_interest_benefit_scalar(benefit)
 
-  if (length(qx) != length(z)) {
-    stop("qx and z must have the same length.", call. = FALSE)
-  }
-  if (length(benefit) != 1L) {
-    stop("benefit must be a numeric scalar.", call. = FALSE)
-  }
+  .variable_interest_check_same_length(qx, z, "qx", "z")
 
   Axn1_spot(qx = qx, z = z, benefit = benefit) +
     nEx_spot(qx = qx, z = z, benefit = benefit)
 }
 
-#' Temporary annuity using spot rates
-#'
-#' For an immediate annuity,
-#' \deqn{
-#' a_{x:\overline{n}|} = \sum_{t=1}^{n}(1+z_t)^{-t}\cdot {}_tp_x.
-#' }
-#'
-#' For an annuity-due,
-#' \deqn{
-#' \ddot{a}_{x:\overline{n}|} = \sum_{t=0}^{n-1}(1+z_t)^{-t}\cdot {}_tp_x,
-#' }
-#' where the time-0 discount factor is 1.
-#'
-#' @param qx Numeric vector of one-year mortality rates.
-#' @param z Numeric vector of annual effective spot rates for maturities
-#'   \eqn{1,\dots,n}.
-#' @param type Either \code{"immediate"} or \code{"due"}.
-#' @param benefit Amount of each annuity payment.
-#'
-#' @return A numeric scalar.
-#'
-#' @examples
-#' qx <- c(.02, .03, .04, .05, .06)
-#' z  <- c(.03, .04, .05, .06, .07)
-#' axn_spot(qx, z, type = "due")
-#'
-#' @rdname chapter15_spot_interest_apv
-#' @aliases axn_spot
+#' @rdname spot_interest_apv
 #' @export
 axn_spot <- function(qx, z, type = c("immediate", "due"), benefit = 1) {
   type <- match.arg(type)
 
-  .validate_prob_vector_ch15(qx, "qx")
-  .validate_nonneg_numeric_ch15(z, "z")
-  .validate_nonneg_numeric_ch15(benefit, "benefit")
+  qx <- .variable_interest_check_probability(qx, "qx")
+  z <- .variable_interest_check_rate(z, "z")
+  benefit <- .variable_interest_benefit_scalar(benefit)
 
-  if (length(qx) != length(z)) {
-    stop("qx and z must have the same length.", call. = FALSE)
-  }
-  if (length(benefit) != 1L) {
-    stop("benefit must be a numeric scalar.", call. = FALSE)
-  }
+  .variable_interest_check_same_length(qx, z, "qx", "z")
 
   n <- length(z)
 
   if (type == "immediate") {
-    surv_end <- .surv_end_from_qx_ch15(qx)
-    vt <- (1 + z)^(-seq_len(n))
-    return(benefit * sum(vt * surv_end))
+    discount <- (1 + z)^(-seq_len(n))
+    survival_end <- .variable_interest_survival_end(qx)
+    return(benefit * sum(discount * survival_end))
   }
 
-  surv_start <- .surv_start_from_qx_ch15(qx)
-  vt_due <- c(1, (1 + z[-n])^(-seq_len(n - 1L)))
-  benefit * sum(vt_due * surv_start)
+  survival_start <- .variable_interest_survival_start(qx)
+  discount_due <- c(
+    1,
+    (1 + head(z, -1L))^(-seq_len(n - 1L))
+  )
+
+  benefit * sum(discount_due * survival_start)
 }
 
 # -------------------------------------------------------------------------
 # Spot-rate valuation and bootstrapping
 # -------------------------------------------------------------------------
 
-#' Present value of cash flows using spot rates
+#' Present value of deterministic cash flows using spot rates
 #'
-#' Discounts deterministic cash flows using spot rates matched to their
-#' maturities.
+#' Discounts each cash flow using the spot rate matched to its payment time.
+#' Time-zero cash flows are not discounted.
 #'
-#' For annual compounding, each positive-time cash flow at time \eqn{t} is
-#' discounted by \eqn{(1+z_t)^{-t}}.
-#'
-#' For semiannual nominal compounding, each positive-time cash flow at time
-#' \eqn{t} is discounted by \eqn{(1+z_t/2)^{-2t}}.
-#'
-#' Time-0 cash flows are left undiscounted.
-#'
-#' @param amounts Numeric vector of cash flow amounts.
+#' @param amounts Numeric vector of cash-flow amounts.
 #' @param times Numeric vector of payment times in years.
 #' @param spot Numeric vector of spot rates matched elementwise to
-#'   \code{times}. Use 0 for any time-0 entry.
-#' @param compounding Either \code{"annual"} or \code{"semiannual"}.
+#'   \code{times}. The value corresponding to a time-zero cash flow is ignored.
+#' @param compounding Character string equal to \code{"annual"} or
+#'   \code{"semiannual"}.
 #'
 #' @return A numeric scalar.
 #'
 #' @examples
 #' pv_spot_cashflows(
 #'   amounts = c(200000, 50000, 50000, 100000),
-#'   times   = c(0, 0.5, 1, 2),
-#'   spot    = c(0, 0.02440, 0.02601, 0.02936),
+#'   times = c(0, 0.5, 1, 2),
+#'   spot = c(0, 0.02440, 0.02601, 0.02936),
 #'   compounding = "semiannual"
 #' )
 #'
 #' @export
-pv_spot_cashflows <- function(amounts, times, spot,
-                              compounding = c("annual", "semiannual")) {
+pv_spot_cashflows <- function(
+    amounts,
+    times,
+    spot,
+    compounding = c("annual", "semiannual")) {
   compounding <- match.arg(compounding)
 
-  if (!is.numeric(amounts) || !is.numeric(times) || !is.numeric(spot)) {
-    stop("amounts, times, and spot must be numeric vectors.", call. = FALSE)
-  }
-  if (!(length(amounts) == length(times) && length(times) == length(spot))) {
-    stop("amounts, times, and spot must have the same length.", call. = FALSE)
-  }
-  if (any(!is.finite(amounts)) || any(!is.finite(times)) || any(!is.finite(spot))) {
-    stop("amounts, times, and spot must be finite.", call. = FALSE)
-  }
-  if (any(times < 0) || any(spot < 0)) {
-    stop("times and spot rates must be nonnegative.", call. = FALSE)
+  amounts <- .variable_interest_check_numeric(amounts, "amounts")
+  times <- .variable_interest_check_nonnegative(times, "times")
+  spot <- .variable_interest_check_numeric(spot, "spot")
+
+  if (!(length(amounts) == length(times) &&
+        length(times) == length(spot))) {
+    stop(
+      "amounts, times, and spot must have the same length.",
+      call. = FALSE
+    )
   }
 
-  df <- rep(1, length(times))
-  pos <- times > 0
+  positive_time <- times > 0
+  if (compounding == "annual" &&
+      any(1 + spot[positive_time] <= 0)) {
+    stop(
+      "Annual spot rates at positive times must be greater than -1.",
+      call. = FALSE
+    )
+  }
+  if (compounding == "semiannual" &&
+      any(1 + spot[positive_time] / 2 <= 0)) {
+    stop(
+      "Semiannual nominal spot rates at positive times must be greater than -2.",
+      call. = FALSE
+    )
+  }
+
+  discount <- rep(1, length(times))
 
   if (compounding == "annual") {
-    df[pos] <- (1 + spot[pos])^(-times[pos])
+    discount[positive_time] <-
+      (1 + spot[positive_time])^(-times[positive_time])
   } else {
-    df[pos] <- (1 + spot[pos] / 2)^(-2 * times[pos])
+    discount[positive_time] <-
+      (1 + spot[positive_time] / 2)^(-2 * times[positive_time])
   }
 
-  sum(amounts * df)
+  sum(amounts * discount)
 }
 
-#' Bootstrap semiannual nominal spot rates from coupon-bond yields
+#' Bootstrap semiannual nominal spot rates
 #'
-#' Bootstraps the semiannual nominal annual zero-coupon yields from par
-#' coupon-bearing bond yields of the same maturities.
+#' Bootstraps nominal annual spot rates convertible semiannually from par
+#' coupon yields at consecutive half-year maturities.
 #'
-#' Both coupon yields and spot yields are interpreted as nominal annual rates
-#' convertible semiannually.
+#' @param maturity Numeric vector of positive maturities in years, in strictly
+#'   increasing order. Maturities must be consecutive multiples of
+#'   \code{0.5}.
+#' @param coupon_yield Numeric vector of nominal annual par coupon yields
+#'   convertible semiannually. Values must be greater than \code{-2}.
+#' @param par Positive scalar par value.
 #'
-#' @param maturity Numeric vector of maturities in years, typically
-#'   \code{0.5, 1.0, 1.5, ...}, in increasing order.
-#' @param coupon_yield Numeric vector of nominal annual coupon yields
-#'   convertible semiannually.
-#' @param par Par value of each bond.
-#'
-#' @return Numeric vector of semiannual nominal annual spot rates.
+#' @return A numeric vector of nominal annual spot rates convertible
+#'   semiannually.
 #'
 #' @examples
 #' maturity <- c(0.5, 1.0, 1.5, 2.0)
@@ -537,63 +447,96 @@ pv_spot_cashflows <- function(amounts, times, spot,
 #'
 #' @export
 z_from_coupon_semi <- function(maturity, coupon_yield, par = 1000) {
-  if (!is.numeric(maturity) || !is.numeric(coupon_yield)) {
-    stop("maturity and coupon_yield must be numeric vectors.", call. = FALSE)
-  }
-  if (length(maturity) != length(coupon_yield)) {
-    stop("maturity and coupon_yield must have the same length.", call. = FALSE)
-  }
-  if (any(!is.finite(maturity)) || any(!is.finite(coupon_yield))) {
-    stop("maturity and coupon_yield must be finite.", call. = FALSE)
-  }
+  maturity <- .variable_interest_check_numeric(maturity, "maturity")
+  coupon_yield <- .variable_interest_check_numeric(
+    coupon_yield,
+    "coupon_yield"
+  )
+  par <- .variable_interest_check_scalar(
+    par,
+    "par",
+    lower = 0,
+    strict_lower = TRUE
+  )
+
+  .variable_interest_check_same_length(
+    maturity,
+    coupon_yield,
+    "maturity",
+    "coupon_yield"
+  )
+
   if (any(maturity <= 0) || is.unsorted(maturity, strictly = TRUE)) {
-    stop("maturity must be positive and strictly increasing.", call. = FALSE)
+    stop(
+      "maturity must be positive and strictly increasing.",
+      call. = FALSE
+    )
   }
-  if (any(coupon_yield < 0) || !is.numeric(par) || length(par) != 1L || par <= 0) {
-    stop("coupon_yield must be nonnegative and par must be a positive scalar.", call. = FALSE)
+  if (any(coupon_yield <= -2)) {
+    stop(
+      "coupon_yield must contain values greater than -2.",
+      call. = FALSE
+    )
   }
 
   periods <- round(2 * maturity)
   if (any(abs(2 * maturity - periods) > 1e-10)) {
-    stop("For semiannual bootstrapping, maturities must be multiples of 0.5 years.", call. = FALSE)
+    stop(
+      "maturity must contain multiples of 0.5 years.",
+      call. = FALSE
+    )
+  }
+  if (!identical(as.integer(periods), seq_len(length(periods)))) {
+    stop(
+      "maturity must contain consecutive half-year maturities beginning at 0.5.",
+      call. = FALSE
+    )
   }
 
-  z <- numeric(length(maturity))
+  spot <- numeric(length(maturity))
 
   for (j in seq_along(maturity)) {
-    cpn <- par * coupon_yield[j] / 2
-    m <- periods[j]
+    coupon <- par * coupon_yield[j] / 2
+    m <- as.integer(periods[j])
 
-    if (j == 1L) {
-      z[j] <- coupon_yield[j]
-    } else {
-      pv_prior <- 0
-      for (r in seq_len(m - 1L)) {
-        idx <- which(periods == r)
-        if (length(idx) != 1L) {
-          stop("Missing earlier maturity needed for bootstrapping.", call. = FALSE)
-        }
-        pv_prior <- pv_prior + cpn / (1 + z[idx] / 2)^r
-      }
-
-      df_m <- (par + cpn) / (par - pv_prior)
-      z[j] <- 2 * (df_m^(1 / m) - 1)
+    if (m == 1L) {
+      spot[j] <- coupon_yield[j]
+      next
     }
+
+    prior_periods <- seq_len(m - 1L)
+    pv_prior <- sum(
+      coupon / (1 + spot[prior_periods] / 2)^prior_periods
+    )
+    final_cash_flow <- par + coupon
+    remaining_price <- par - pv_prior
+
+    if (remaining_price <= 0) {
+      stop(
+        "The supplied coupon yields do not produce a positive final discount factor.",
+        call. = FALSE
+      )
+    }
+
+    accumulation <- final_cash_flow / remaining_price
+    spot[j] <- 2 * (accumulation^(1 / m) - 1)
   }
 
-  z
+  spot
 }
 
-#' Bootstrap annual spot rates from annual coupon-bond yields
+#' Bootstrap annual effective spot rates
 #'
-#' Bootstraps annual effective zero-coupon yields from par annual coupon-bearing
-#' bond yields of the same maturities.
+#' Bootstraps annual effective spot rates from par coupon yields at consecutive
+#' integer maturities.
 #'
-#' @param maturity Integer vector of maturities in years, in increasing order.
-#' @param coupon_yield Numeric vector of annual coupon yields.
-#' @param par Par value of each bond.
+#' @param maturity Numeric vector of positive integer maturities in strictly
+#'   increasing order. Maturities must be consecutive and begin at 1.
+#' @param coupon_yield Numeric vector of annual effective par coupon yields.
+#'   Values must be greater than \code{-1}.
+#' @param par Positive scalar par value.
 #'
-#' @return Numeric vector of annual effective spot rates.
+#' @return A numeric vector of annual effective spot rates.
 #'
 #' @examples
 #' maturity <- 1:4
@@ -602,70 +545,91 @@ z_from_coupon_semi <- function(maturity, coupon_yield, par = 1000) {
 #'
 #' @export
 z_from_coupon_annual <- function(maturity, coupon_yield, par = 1000) {
-  if (!is.numeric(maturity) || !is.numeric(coupon_yield)) {
-    stop("maturity and coupon_yield must be numeric vectors.", call. = FALSE)
-  }
-  if (length(maturity) != length(coupon_yield)) {
-    stop("maturity and coupon_yield must have the same length.", call. = FALSE)
-  }
-  if (any(!is.finite(maturity)) || any(!is.finite(coupon_yield))) {
-    stop("maturity and coupon_yield must be finite.", call. = FALSE)
-  }
+  maturity <- .variable_interest_check_numeric(maturity, "maturity")
+  coupon_yield <- .variable_interest_check_rate(
+    coupon_yield,
+    "coupon_yield"
+  )
+  par <- .variable_interest_check_scalar(
+    par,
+    "par",
+    lower = 0,
+    strict_lower = TRUE
+  )
+
+  .variable_interest_check_same_length(
+    maturity,
+    coupon_yield,
+    "maturity",
+    "coupon_yield"
+  )
+
   if (any(maturity <= 0) || is.unsorted(maturity, strictly = TRUE)) {
-    stop("maturity must be positive and strictly increasing.", call. = FALSE)
+    stop(
+      "maturity must be positive and strictly increasing.",
+      call. = FALSE
+    )
   }
   if (any(abs(maturity - round(maturity)) > 1e-10)) {
-    stop("For annual bootstrapping, maturities must be integers.", call. = FALSE)
-  }
-  if (any(coupon_yield < 0) || !is.numeric(par) || length(par) != 1L || par <= 0) {
-    stop("coupon_yield must be nonnegative and par must be a positive scalar.", call. = FALSE)
+    stop("maturity must contain integer years.", call. = FALSE)
   }
 
   maturity <- as.integer(round(maturity))
-  z <- numeric(length(maturity))
-
-  for (j in seq_along(maturity)) {
-    cpn <- par * coupon_yield[j]
-    m <- maturity[j]
-
-    if (j == 1L) {
-      z[j] <- coupon_yield[j]
-    } else {
-      pv_prior <- 0
-      for (r in seq_len(m - 1L)) {
-        idx <- which(maturity == r)
-        if (length(idx) != 1L) {
-          stop("Missing earlier maturity needed for bootstrapping.", call. = FALSE)
-        }
-        pv_prior <- pv_prior + cpn / (1 + z[idx])^r
-      }
-
-      df_m <- (par + cpn) / (par - pv_prior)
-      z[j] <- df_m^(1 / m) - 1
-    }
+  if (!identical(maturity, seq_len(length(maturity)))) {
+    stop(
+      "maturity must contain consecutive integer maturities beginning at 1.",
+      call. = FALSE
+    )
   }
 
-  z
+  spot <- numeric(length(maturity))
+
+  for (j in seq_along(maturity)) {
+    coupon <- par * coupon_yield[j]
+    m <- maturity[j]
+
+    if (m == 1L) {
+      spot[j] <- coupon_yield[j]
+      next
+    }
+
+    prior_periods <- seq_len(m - 1L)
+    pv_prior <- sum(coupon / (1 + spot[prior_periods])^prior_periods)
+    final_cash_flow <- par + coupon
+    remaining_price <- par - pv_prior
+
+    if (remaining_price <= 0) {
+      stop(
+        "The supplied coupon yields do not produce a positive final discount factor.",
+        call. = FALSE
+      )
+    }
+
+    accumulation <- final_cash_flow / remaining_price
+    spot[j] <- accumulation^(1 / m) - 1
+  }
+
+  spot
 }
 
 # -------------------------------------------------------------------------
 # Forward and spot rate conversions
 # -------------------------------------------------------------------------
 
-#' Forward rate \eqn{f_{n,k}} from spot rates
+#' Forward rate implied by spot rates
 #'
-#' Computes the \eqn{n}-year forward \eqn{k}-year annual effective rate implied
-#' by annual effective spot rates:
+#' Computes the annual effective forward rate for the interval from time
+#' \code{n} to time \code{n + k}:
 #' \deqn{
-#' (1+z_{n+k})^{n+k} = (1+z_n)^n (1+f_{n,k})^k.
+#' (1+z_{n+k})^{n+k}
+#' =
+#' (1+z_n)^n(1+f_{n,k})^k.
 #' }
 #'
-#' The input vector \code{z} should contain annual effective spot rates for
-#' maturities 1, 2, ..., length(z).
-#'
-#' @param z Numeric vector of annual effective spot rates.
-#' @param n Forward start in years.
-#' @param k Forward maturity in years.
+#' @param z Numeric vector of annual effective spot rates for maturities
+#'   \code{1, ..., length(z)}. Each value must be greater than \code{-1}.
+#' @param n Nonnegative integer forward-start time.
+#' @param k Positive integer forward period.
 #'
 #' @return A numeric scalar.
 #'
@@ -676,87 +640,85 @@ z_from_coupon_annual <- function(maturity, coupon_yield, par = 1000) {
 #'
 #' @export
 fnk_from_z <- function(z, n, k) {
-  .validate_nonneg_numeric_ch15(z, "z")
-
-  if (!is.numeric(n) || length(n) != 1L || !is.finite(n) || n < 0 || abs(n - round(n)) > 1e-10) {
-    stop("n must be a nonnegative integer.", call. = FALSE)
-  }
-  if (!is.numeric(k) || length(k) != 1L || !is.finite(k) || k <= 0 || abs(k - round(k)) > 1e-10) {
-    stop("k must be a positive integer.", call. = FALSE)
-  }
-
-  n <- as.integer(round(n))
-  k <- as.integer(round(k))
+  z <- .variable_interest_check_rate(z, "z")
+  n <- .variable_interest_check_integer(n, "n")
+  k <- .variable_interest_check_integer(k, "k", positive = TRUE)
 
   if (n + k > length(z)) {
-    stop("Need spot rates through maturity n + k.", call. = FALSE)
+    stop("Spot rates are required through maturity n + k.", call. = FALSE)
   }
 
-  zn <- if (n == 0L) 0 else z[n]
-  znk <- z[n + k]
+  z_n <- if (n == 0L) 0 else z[n]
+  z_nk <- z[n + k]
 
-  ((1 + znk)^(n + k) / (1 + zn)^n)^(1 / k) - 1
+  ((1 + z_nk)^(n + k) / (1 + z_n)^n)^(1 / k) - 1
 }
 
-#' Matrix of all determinable forward rates from spot rates
+#' Matrix of forward rates implied by spot rates
 #'
-#' Constructs an upper-left triangular matrix of annual effective forward rates
-#' \eqn{f_{n,k}} implied by annual effective spot rates \eqn{z_1,\dots,z_m}.
+#' Constructs a matrix of annual effective forward rates. Rows correspond to
+#' forward-start times \eqn{n=1,\ldots,m-1}; columns correspond to forward
+#' periods \eqn{k=1,\ldots,m-1}. Entries requiring maturities beyond
+#' \eqn{m} are returned as \code{NA}.
 #'
-#' Rows correspond to \eqn{n = 1,\dots,m-1} and columns correspond to
-#' \eqn{k = 1,\dots,m-1}. Entries that are not determinable are returned as
-#' \code{NA}.
-#'
-#' @param z Numeric vector of annual effective spot rates.
+#' @param z Numeric vector of at least two annual effective spot rates. Each
+#'   value must be greater than \code{-1}.
 #'
 #' @return A numeric matrix.
 #'
 #' @examples
-#' z <- c(0.03, 0.04, 0.05, 0.06, 0.07)
-#' forward_matrix_from_z(z)
+#' forward_matrix_from_z(c(0.03, 0.04, 0.05, 0.06, 0.07))
 #'
 #' @export
 forward_matrix_from_z <- function(z) {
-  .validate_nonneg_numeric_ch15(z, "z")
+  z <- .variable_interest_check_rate(z, "z")
+
+  if (length(z) < 2L) {
+    stop("z must contain at least two spot rates.", call. = FALSE)
+  }
 
   m <- length(z)
-  out <- matrix(NA_real_, nrow = m - 1L, ncol = m - 1L)
+  out <- matrix(
+    NA_real_,
+    nrow = m - 1L,
+    ncol = m - 1L,
+    dimnames = list(
+      paste0("n=", seq_len(m - 1L)),
+      paste0("k=", seq_len(m - 1L))
+    )
+  )
 
-  for (n in 1:(m - 1L)) {
-    for (k in 1:(m - n)) {
+  for (n in seq_len(m - 1L)) {
+    for (k in seq_len(m - n)) {
       out[n, k] <- fnk_from_z(z, n = n, k = k)
     }
   }
 
-  rownames(out) <- paste0("n=", 1:(m - 1L))
-  colnames(out) <- paste0("k=", 1:(m - 1L))
   out
 }
 
-#' Spot rates from forward one-year rates
+#' Spot rates from one-year forward rates
 #'
-#' Converts annual effective forward one-year rates
-#' \eqn{f_{0,1}, f_{1,1}, \dots, f_{n-1,1}}
-#' into annual effective spot rates
-#' \eqn{z_1, z_2, \dots, z_n}.
-#'
-#' Since
+#' Converts annual effective one-year forward rates
+#' \eqn{f_{0,1},f_{1,1},\ldots,f_{n-1,1}} into annual effective spot rates:
 #' \deqn{
-#' (1+z_n)^n = \prod_{j=0}^{n-1}(1+f_{j,1}),
+#' (1+z_n)^n
+#' =
+#' \prod_{j=0}^{n-1}(1+f_{j,1}).
 #' }
-#' the spot rates are recovered directly.
 #'
-#' @param fn1 Numeric vector of annual effective forward one-year rates.
+#' @param fn1 Numeric vector of annual effective one-year forward rates. Each
+#'   value must be greater than \code{-1}.
 #'
-#' @return Numeric vector of annual effective spot rates.
+#' @return A numeric vector of annual effective spot rates.
 #'
 #' @examples
 #' z_from_fn1(c(0.04, 0.05, 0.06, 0.07, 0.08))
 #'
 #' @export
 z_from_fn1 <- function(fn1) {
-  .validate_nonneg_numeric_ch15(fn1, "fn1")
+  fn1 <- .variable_interest_check_rate(fn1, "fn1")
 
-  gross <- cumprod(1 + fn1)
-  gross^(1 / seq_along(fn1)) - 1
+  accumulation <- cumprod(1 + fn1)
+  accumulation^(1 / seq_along(fn1)) - 1
 }

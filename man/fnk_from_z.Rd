@@ -2,30 +2,29 @@
 % Please edit documentation in R/chapter15_variable_interest.R
 \name{fnk_from_z}
 \alias{fnk_from_z}
-\title{Forward rate \eqn{f_{n,k}} from spot rates}
+\title{Forward rate implied by spot rates}
 \usage{
 fnk_from_z(z, n, k)
 }
 \arguments{
-\item{z}{Numeric vector of annual effective spot rates.}
+\item{z}{Numeric vector of annual effective spot rates for maturities
+\code{1, ..., length(z)}. Each value must be greater than \code{-1}.}
 
-\item{n}{Forward start in years.}
+\item{n}{Nonnegative integer forward-start time.}
 
-\item{k}{Forward maturity in years.}
+\item{k}{Positive integer forward period.}
 }
 \value{
 A numeric scalar.
 }
 \description{
-Computes the \eqn{n}-year forward \eqn{k}-year annual effective rate implied
-by annual effective spot rates:
+Computes the annual effective forward rate for the interval from time
+\code{n} to time \code{n + k}:
 \deqn{
-(1+z_{n+k})^{n+k} = (1+z_n)^n (1+f_{n,k})^k.
+(1+z_{n+k})^{n+k}
+=
+(1+z_n)^n(1+f_{n,k})^k.
 }
-}
-\details{
-The input vector \code{z} should contain annual effective spot rates for
-maturities 1, 2, ..., length(z).
 }
 \examples{
 z <- c(0.03, 0.04, 0.05, 0.06, 0.07)

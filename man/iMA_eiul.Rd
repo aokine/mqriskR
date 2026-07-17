@@ -7,18 +7,21 @@
 iMA_eiul(index)
 }
 \arguments{
-\item{index}{Numeric vector of length 13 containing the initial index value
-followed by the 12 monthly closing values.}
+\item{index}{Numeric vector of length 13 containing a strictly positive
+initial index value followed by twelve nonnegative monthly closing values.}
 }
 \value{
-Numeric scalar.
+A numeric scalar.
 }
 \description{
-Computes the monthly-average index growth rate from an initial index value
-and 12 monthly closing values, matching Equation (16.13).
+Computes the monthly-average growth rate from an initial index value and
+twelve monthly closing values.
 }
 \examples{
-idx <- c(1000, 1020, 1100, 1150, 1080, 1040, 960, 1030, 1000, 1070, 1150, 1200, 1150)
-iMA_eiul(idx)
+index <- c(
+  1000, 1020, 1100, 1150, 1080, 1040, 960,
+  1030, 1000, 1070, 1150, 1200, 1150
+)
+iMA_eiul(index)
 
 }

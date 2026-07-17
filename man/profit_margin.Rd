@@ -9,16 +9,14 @@ profit_margin(NPV, APV_GP)
 \arguments{
 \item{NPV}{Net present value of profits.}
 
-\item{APV_GP}{Actuarial present value of gross premiums.}
+\item{APV_GP}{Positive actuarial present value of gross premiums.}
 }
 \value{
-Numeric scalar.
+A numeric vector.
 }
 \description{
-Computes the Chapter 17 profit margin:
-\deqn{
-\text{Profit Margin} = \frac{NPV}{APV_{GP}}.
-}
+Computes net present value divided by the actuarial present value of gross
+premiums. Scalar arguments are recycled to the common length.
 }
 \examples{
 profit_margin(6.03, 259.52)

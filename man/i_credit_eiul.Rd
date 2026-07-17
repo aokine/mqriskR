@@ -2,7 +2,7 @@
 % Please edit documentation in R/chapter16_universal_life.R
 \name{i_credit_eiul}
 \alias{i_credit_eiul}
-\title{Credited rates from raw index growth rates}
+\title{Credited rates from index growth rates}
 \usage{
 i_credit_eiul(
   i_raw,
@@ -16,26 +16,28 @@ i_credit_eiul(
 \arguments{
 \item{i_raw}{Numeric vector of raw index growth rates.}
 
-\item{part}{Participation rate.}
+\item{part}{Nonnegative scalar participation rate.}
 
-\item{floor}{Minimum credited rate.}
+\item{floor}{Scalar minimum credited rate.}
 
-\item{cap}{Maximum credited rate.}
+\item{cap}{Scalar maximum credited rate. The default is \code{Inf}.}
 
-\item{margin}{Index margin. Defaults to 0.}
+\item{margin}{Nonnegative scalar index margin.}
 
-\item{margin_after_participation}{Logical; if \code{TRUE}, subtract the
-margin after applying the participation rate.}
+\item{margin_after_participation}{Logical scalar. If \code{TRUE}, the margin
+is subtracted after applying participation; otherwise it is subtracted
+before applying participation.}
 }
 \value{
-Numeric vector of credited rates.
+A numeric vector of credited rates.
 }
 \description{
-Applies participation, floor, cap, and optional margin to raw index growth
-rates for an indexed universal life contract.
+Applies a participation rate, floor, cap, and optional margin to raw index
+growth rates.
 }
 \examples{
 raw <- iP_eiul(c(1000, 1050, 1200, 1100))
 i_credit_eiul(raw, part = 1.10, floor = 0.01, cap = 0.10)
+i_credit_eiul(raw)
 
 }

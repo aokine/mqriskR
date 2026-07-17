@@ -2,20 +2,23 @@
 % Please edit documentation in R/chapter16_universal_life.R
 \name{Vprefloor_crvm_ul}
 \alias{Vprefloor_crvm_ul}
-\title{Pre-floor CRVM reserve for universal life}
+\title{Pre-floor CRVM reserve}
 \usage{
 Vprefloor_crvm_ul(r, pvfb_minus_pvfp)
 }
 \arguments{
-\item{r}{Ratio \eqn{r_t}.}
+\item{r}{Funding ratio. Values must lie in \code{[0, 1]}.}
 
-\item{pvfb_minus_pvfp}{Difference \eqn{(PVFB)_t - (PVFP)_t}.}
+\item{pvfb_minus_pvfp}{Numeric difference between the present value of
+future benefits and future premiums.}
 }
 \value{
-Numeric scalar.
+A numeric vector.
 }
 \description{
-Computes the pre-floor CRVM reserve from Equation (16.17).
+Computes the pre-floor reserve by multiplying the funding ratio by the
+difference between the present value of future benefits and future
+premiums.
 }
 \examples{
 Vprefloor_crvm_ul(r = 0.33506, pvfb_minus_pvfp = 70)

@@ -9,21 +9,31 @@ coi_ul_typeB(B, qx, iq)
 \arguments{
 \item{B}{Face amount.}
 
-\item{qx}{Mortality rate for the period.}
+\item{qx}{Mortality probability for the period.}
 
-\item{iq}{Interest rate used in the cost-of-insurance calculation.}
+\item{iq}{Interest rate used in the cost-of-insurance calculation. Values
+must be greater than \code{-1}.}
 }
 \value{
-Numeric vector.
+A numeric vector of cost-of-insurance charges.
 }
 \description{
-Computes the one-period cost of insurance for a Type B universal life policy
-using Equation (16.5a):
+Computes the one-period cost of insurance for a Type B universal life
+contract:
 \deqn{
-COI_t = \frac{B q_{x+t-1}}{1+i^q}.
+\mathrm{COI}_t = \frac{B_t q_{x+t-1}}{1+i_t^q}.
 }
+}
+\details{
+The arguments may be scalars or vectors. Scalar arguments are recycled to
+the common length.
 }
 \examples{
 coi_ul_typeB(B = 100000, qx = 0.00076, iq = 0.03)
+coi_ul_typeB(
+  B = 100000,
+  qx = c(0.00076, 0.00081),
+  iq = c(0.03, 0.035)
+)
 
 }

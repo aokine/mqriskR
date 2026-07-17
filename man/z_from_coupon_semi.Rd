@@ -2,29 +2,27 @@
 % Please edit documentation in R/chapter15_variable_interest.R
 \name{z_from_coupon_semi}
 \alias{z_from_coupon_semi}
-\title{Bootstrap semiannual nominal spot rates from coupon-bond yields}
+\title{Bootstrap semiannual nominal spot rates}
 \usage{
 z_from_coupon_semi(maturity, coupon_yield, par = 1000)
 }
 \arguments{
-\item{maturity}{Numeric vector of maturities in years, typically
-\code{0.5, 1.0, 1.5, ...}, in increasing order.}
+\item{maturity}{Numeric vector of positive maturities in years, in strictly
+increasing order. Maturities must be consecutive multiples of
+\code{0.5}.}
 
-\item{coupon_yield}{Numeric vector of nominal annual coupon yields
-convertible semiannually.}
+\item{coupon_yield}{Numeric vector of nominal annual par coupon yields
+convertible semiannually. Values must be greater than \code{-2}.}
 
-\item{par}{Par value of each bond.}
+\item{par}{Positive scalar par value.}
 }
 \value{
-Numeric vector of semiannual nominal annual spot rates.
+A numeric vector of nominal annual spot rates convertible
+  semiannually.
 }
 \description{
-Bootstraps the semiannual nominal annual zero-coupon yields from par
-coupon-bearing bond yields of the same maturities.
-}
-\details{
-Both coupon yields and spot yields are interpreted as nominal annual rates
-convertible semiannually.
+Bootstraps nominal annual spot rates convertible semiannually from par
+coupon yields at consecutive half-year maturities.
 }
 \examples{
 maturity <- c(0.5, 1.0, 1.5, 2.0)

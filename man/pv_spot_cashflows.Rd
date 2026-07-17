@@ -2,7 +2,7 @@
 % Please edit documentation in R/chapter15_variable_interest.R
 \name{pv_spot_cashflows}
 \alias{pv_spot_cashflows}
-\title{Present value of cash flows using spot rates}
+\title{Present value of deterministic cash flows using spot rates}
 \usage{
 pv_spot_cashflows(
   amounts,
@@ -12,36 +12,28 @@ pv_spot_cashflows(
 )
 }
 \arguments{
-\item{amounts}{Numeric vector of cash flow amounts.}
+\item{amounts}{Numeric vector of cash-flow amounts.}
 
 \item{times}{Numeric vector of payment times in years.}
 
 \item{spot}{Numeric vector of spot rates matched elementwise to
-\code{times}. Use 0 for any time-0 entry.}
+\code{times}. The value corresponding to a time-zero cash flow is ignored.}
 
-\item{compounding}{Either \code{"annual"} or \code{"semiannual"}.}
+\item{compounding}{Character string equal to \code{"annual"} or
+\code{"semiannual"}.}
 }
 \value{
 A numeric scalar.
 }
 \description{
-Discounts deterministic cash flows using spot rates matched to their
-maturities.
-}
-\details{
-For annual compounding, each positive-time cash flow at time \eqn{t} is
-discounted by \eqn{(1+z_t)^{-t}}.
-
-For semiannual nominal compounding, each positive-time cash flow at time
-\eqn{t} is discounted by \eqn{(1+z_t/2)^{-2t}}.
-
-Time-0 cash flows are left undiscounted.
+Discounts each cash flow using the spot rate matched to its payment time.
+Time-zero cash flows are not discounted.
 }
 \examples{
 pv_spot_cashflows(
   amounts = c(200000, 50000, 50000, 100000),
-  times   = c(0, 0.5, 1, 2),
-  spot    = c(0, 0.02440, 0.02601, 0.02936),
+  times = c(0, 0.5, 1, 2),
+  spot = c(0, 0.02440, 0.02601, 0.02936),
   compounding = "semiannual"
 )
 

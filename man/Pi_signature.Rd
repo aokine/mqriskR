@@ -2,26 +2,25 @@
 % Please edit documentation in R/chapter17_profit_analysis.R
 \name{Pi_signature}
 \alias{Pi_signature}
-\title{Profit signature from a profit vector}
+\title{Profit signature}
 \usage{
 Pi_signature(Pr, p_tau)
 }
 \arguments{
-\item{Pr}{Profit vector of length \eqn{n+1}.}
+\item{Pr}{Profit vector of length \code{n + 1}.}
 
-\item{p_tau}{One-year in-force probabilities. This may have length
-\eqn{n-1} or \eqn{n}. If length \eqn{n}, the final entry is ignored for
-the profit-signature calculation.}
+\item{p_tau}{One-year in-force probabilities. For \code{n > 1}, this may
+have length \code{n - 1} or \code{n}; the final value is ignored when
+length \code{n}. For a one-year contract, use \code{numeric(0)} or a
+single probability.}
 }
 \value{
-Numeric vector of length \eqn{n+1}.
+A named numeric vector with the same length as \code{Pr}.
 }
 \description{
-Converts a Chapter 17 profit vector
-\eqn{\mathbf{Pr}=(Pr_0,\dots,Pr_n)}
-into the corresponding profit signature
-\eqn{\mathbf{\Pi}=(\Pi_0,\dots,\Pi_n)}
-using Equation (17.3).
+Converts policy-year expected profits into a profit signature by weighting
+each future expected profit by the probability that the contract is in
+force at the start of that policy year.
 }
 \examples{
 Pr <- c(-15.00, 8.42, 8.40, 8.61)

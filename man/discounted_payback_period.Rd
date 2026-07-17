@@ -7,17 +7,18 @@
 discounted_payback_period(Pi, r)
 }
 \arguments{
-\item{Pi}{Profit signature vector.}
+\item{Pi}{Numeric profit-signature vector.}
 
-\item{r}{Risk discount rate.}
+\item{r}{Annual effective risk discount rate. May be scalar or vector;
+values must be greater than \code{-1}.}
 }
 \value{
-Integer scalar, or \code{NA_integer_} if the payback period is not
-  reached.
+An integer vector with one value for each discount rate. An element
+  is \code{NA_integer_} when payback is not reached.
 }
 \description{
-Returns the first duration \eqn{t} for which the partial net present value
-\eqn{NPV(t)} is nonnegative.
+Returns the first duration at which cumulative discounted profit is
+nonnegative.
 }
 \examples{
 Pi <- c(-15.00, 8.42, 8.39, 8.58)

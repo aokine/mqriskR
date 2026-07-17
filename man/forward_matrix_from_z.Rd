@@ -2,27 +2,24 @@
 % Please edit documentation in R/chapter15_variable_interest.R
 \name{forward_matrix_from_z}
 \alias{forward_matrix_from_z}
-\title{Matrix of all determinable forward rates from spot rates}
+\title{Matrix of forward rates implied by spot rates}
 \usage{
 forward_matrix_from_z(z)
 }
 \arguments{
-\item{z}{Numeric vector of annual effective spot rates.}
+\item{z}{Numeric vector of at least two annual effective spot rates. Each
+value must be greater than \code{-1}.}
 }
 \value{
 A numeric matrix.
 }
 \description{
-Constructs an upper-left triangular matrix of annual effective forward rates
-\eqn{f_{n,k}} implied by annual effective spot rates \eqn{z_1,\dots,z_m}.
-}
-\details{
-Rows correspond to \eqn{n = 1,\dots,m-1} and columns correspond to
-\eqn{k = 1,\dots,m-1}. Entries that are not determinable are returned as
-\code{NA}.
+Constructs a matrix of annual effective forward rates. Rows correspond to
+forward-start times \eqn{n=1,\ldots,m-1}; columns correspond to forward
+periods \eqn{k=1,\ldots,m-1}. Entries requiring maturities beyond
+\eqn{m} are returned as \code{NA}.
 }
 \examples{
-z <- c(0.03, 0.04, 0.05, 0.06, 0.07)
-forward_matrix_from_z(z)
+forward_matrix_from_z(c(0.03, 0.04, 0.05, 0.06, 0.07))
 
 }

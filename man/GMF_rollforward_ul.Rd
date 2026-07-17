@@ -11,18 +11,18 @@ GMF_rollforward_ul(GMF_prev, GMP, r, policy_charge, i)
 
 \item{GMP}{Guaranteed maturity premium.}
 
-\item{r}{Expense factor applied to GMP.}
+\item{r}{Percent-of-premium expense rate in \code{[0, 1]}.}
 
 \item{policy_charge}{Guaranteed policy charge.}
 
-\item{i}{Guaranteed interest rate.}
+\item{i}{Guaranteed annual effective interest rate greater than \code{-1}.}
 }
 \value{
-Numeric scalar.
+A numeric vector.
 }
 \description{
-Computes the one-period guaranteed maturity fund roll-forward used in
-Example 16.9.
+Computes a one-period guaranteed maturity fund roll-forward. Arguments may
+be scalars or vectors and follow common-length recycling.
 }
 \examples{
 GMF_rollforward_ul(140.40, 14.49, 0.04, 11.80, 0.03)

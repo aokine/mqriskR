@@ -7,15 +7,17 @@
 ag38_prefunding_ratio(excess_payment, nsp_required)
 }
 \arguments{
-\item{excess_payment}{Excess payment or shadow-fund amount.}
+\item{excess_payment}{Nonnegative excess payment or shadow-fund amount.}
 
-\item{nsp_required}{Net single premium required to fully fund the guarantee.}
+\item{nsp_required}{Positive net single premium required to fully fund the
+guarantee.}
 }
 \value{
-Numeric scalar.
+A numeric vector.
 }
 \description{
-Computes the prefunding ratio in Equation (16.18), capped at 1.
+Computes the excess-payment-to-required-net-single-premium ratio, capped at
+one.
 }
 \examples{
 ag38_prefunding_ratio(60000, 100000)

@@ -120,3 +120,407 @@ test_that("ag38_reserve_ul reproduces Example 16.11", {
 test_that("ag38_prefunding_ratio is capped at 1", {
   expect_equal(ag38_prefunding_ratio(120000, 100000), 1, tolerance = 1e-12)
 })
+
+
+testthat::test_that("Type B cost of insurance follows the direct formula", {
+  testthat::expect_equal(
+    coi_ul_typeB(
+      B = 100000,
+      qx = 0.00076,
+      iq = 0.03
+    ),
+    100000 * 0.00076 / 1.03,
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("Type B cost of insurance vectorizes consistently", {
+  out <- coi_ul_typeB(
+    B = 100000,
+    qx = c(0.00076, 0.00081),
+    iq = c(0.03, 0.04)
+  )
+
+  expected <- 100000 * c(0.00076, 0.00081) /
+    (1 + c(0.03, 0.04))
+
+  testthat::expect_equal(out, expected, tolerance = 1e-12)
+})
+
+
+testthat::test_that("Type B account value matches one-period formula", {
+  out <- AV_path_ul_typeB(
+    G = 5000,
+    r = 0.10,
+    e = 20,
+    qx = 0.001,
+    ic = 0.03,
+    B = 100000,
+    iq = 0.03,
+    AV0 = 1000
+  )
+
+  coi <- 100000 * 0.001 / 1.03
+
+  expected <- (
+    1000 +
+      5000 * (1 - 0.10) -
+      20 -
+      coi
+  ) * 1.03
+
+  testthat::expect_equal(out$AV[2], expected, tolerance = 1e-10)
+})
+
+
+testthat::test_that("Type A account value matches explicit formula", {
+  out <- AV_path_ul_typeA(
+    G = 5000,
+    r = 0.10,
+    e = 20,
+    qx = 0.001,
+    ic = 0.03,
+    B = 100000,
+    iq = 0.03,
+    AV0 = 1000
+  )
+
+  mortality_factor <- 0.001 * 1.03 / 1.03
+
+  expected <- (
+    (1000 + 5000 * 0.90 - 20) * 1.03 -
+      100000 * mortality_factor
+  ) / (1 - mortality_factor)
+
+  testthat::expect_equal(out$AV[2], expected, tolerance = 1e-10)
+})
+
+
+testthat::test_that("account-value paths recycle period inputs", {
+  qx <- c(0.001, 0.002, 0.003)
+
+  type_b <- AV_path_ul_typeB(
+    G = 5000,
+    r = 0.10,
+    e = 20,
+    qx = qx,
+    ic = 0.03,
+    B = c(100000, 95000, 90000)
+  )
+
+  type_a <- AV_path_ul_typeA(
+    G = 5000,
+    r = 0.10,
+    e = 20,
+    qx = qx,
+    ic = 0.03,
+    B = c(100000, 95000, 90000)
+  )
+
+  testthat::expect_equal(nrow(type_b), 4)
+  testthat::expect_equal(nrow(type_a), 4)
+  testthat::expect_true(all(is.finite(type_b$AV)))
+  testthat::expect_true(all(is.finite(type_a$AV)))
+})
+
+
+testthat::test_that("credited-rate helper works with the default infinite cap", {
+  raw <- c(-0.10, 0.05, 0.20)
+
+  out <- i_credit_eiul(raw)
+
+  testthat::expect_equal(
+    out,
+    c(0, 0.05, 0.20),
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("credited rates apply floor cap participation and margin", {
+  raw <- c(-0.10, 0.05, 0.20)
+
+  out <- i_credit_eiul(
+    raw,
+    part = 1.10,
+    floor = 0.01,
+    cap = 0.10,
+    margin = 0.005
+  )
+
+  expected <- pmin(
+    0.10,
+    pmax(0.01, 1.10 * raw - 0.005)
+  )
+
+  testthat::expect_equal(out, expected, tolerance = 1e-12)
+})
+
+
+testthat::test_that("point-to-point rates use consecutive index values", {
+  index <- c(1000, 1050, 1200, 1100)
+
+  testthat::expect_equal(
+    iP_eiul(index),
+    index[-1] / index[-length(index)] - 1,
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("monthly-average growth uses twelve closing values", {
+  index <- c(
+    1000, 1020, 1100, 1150, 1080, 1040, 960,
+    1030, 1000, 1070, 1150, 1200, 1150
+  )
+
+  testthat::expect_equal(
+    iMA_eiul(index),
+    mean(index[-1]) / index[1] - 1,
+    tolerance = 1e-12
+  )
+})
+
+
+testthat::test_that("persistency formulas are correct", {
+  qd <- c(0.01, 0.02)
+  qw <- c(0.03, 0.04)
+
+  year_end <- (1 - qd) * (1 - qw)
+  competing <- 1 - qd - qw
+
+  testthat::expect_equal(
+    pxtau_ul(qd, qw, year_end_withdrawal = TRUE),
+    year_end
+  )
+
+  testthat::expect_equal(
+    pxtau_ul(qd, qw, year_end_withdrawal = FALSE),
+    competing
+  )
+
+  testthat::expect_equal(
+    tpxtau_ul(qd, qw),
+    cumprod(year_end)
+  )
+})
+
+
+testthat::test_that("persistency probabilities recycle scalar inputs", {
+  out <- pxtau_ul(
+    qd = c(0.01, 0.02, 0.03),
+    qw = 0.05
+  )
+
+  testthat::expect_equal(
+    out,
+    (1 - c(0.01, 0.02, 0.03)) * 0.95
+  )
+})
+
+
+testthat::test_that("guaranteed maturity fund roll-forward vectorizes", {
+  out <- GMF_rollforward_ul(
+    GMF_prev = c(100, 120),
+    GMP = 15,
+    r = 0.04,
+    policy_charge = c(10, 11),
+    i = 0.03
+  )
+
+  expected <- (
+    c(100, 120) +
+      15 * (1 - 0.04) -
+      c(10, 11)
+  ) * 1.03
+
+  testthat::expect_equal(out, expected, tolerance = 1e-12)
+})
+
+
+testthat::test_that("funding ratio helpers cap results at one", {
+  testthat::expect_equal(
+    rt_ul(
+      AV = c(50, 120),
+      GMF = 100
+    ),
+    c(0.5, 1)
+  )
+
+  testthat::expect_equal(
+    ag38_prefunding_ratio(
+      excess_payment = c(50, 120),
+      nsp_required = 100
+    ),
+    c(0.5, 1)
+  )
+})
+
+
+testthat::test_that("pre-floor reserve permits negative APV differences", {
+  testthat::expect_equal(
+    Vprefloor_crvm_ul(
+      r = c(0.5, 0.75),
+      pvfb_minus_pvfp = c(100, -20)
+    ),
+    c(50, -15)
+  )
+})
+
+
+testthat::test_that("scalar AG 38 calculation preserves list output", {
+  out <- ag38_reserve_ul(
+    basic_reserve = 10000,
+    deficiency_reserve = 0,
+    excess_payment = 60000,
+    nsp_required = 100000,
+    valuation_nsp = 150000,
+    surrender_charge = 5000
+  )
+
+  testthat::expect_type(out, "list")
+
+  testthat::expect_named(
+    out,
+    c(
+      "prefunding_ratio",
+      "net_amount_additional",
+      "reduced_deficiency_reserve",
+      "step8_reserve",
+      "increased_basic_reserve",
+      "final_reserve"
+    )
+  )
+
+  testthat::expect_equal(out$prefunding_ratio, 0.6)
+  testthat::expect_equal(
+    out$final_reserve,
+    out$increased_basic_reserve
+  )
+})
+
+
+testthat::test_that("vectorized AG 38 calculation returns a data frame", {
+  out <- ag38_reserve_ul(
+    basic_reserve = c(10000, 12000),
+    deficiency_reserve = 0,
+    excess_payment = c(60000, 80000),
+    nsp_required = 100000,
+    valuation_nsp = c(150000, 160000),
+    surrender_charge = 5000
+  )
+
+  testthat::expect_s3_class(out, "data.frame")
+  testthat::expect_equal(nrow(out), 2)
+
+  testthat::expect_named(
+    out,
+    c(
+      "prefunding_ratio",
+      "net_amount_additional",
+      "reduced_deficiency_reserve",
+      "step8_reserve",
+      "increased_basic_reserve",
+      "final_reserve"
+    )
+  )
+})
+
+
+testthat::test_that("universal life functions reject invalid inputs", {
+  testthat::expect_error(
+    coi_ul_typeB(
+      B = 100000,
+      qx = 1.2,
+      iq = 0.03
+    ),
+    "values in \\[0, 1\\]"
+  )
+
+  testthat::expect_error(
+    coi_ul_typeB(
+      B = 100000,
+      qx = 0.01,
+      iq = -1
+    ),
+    "greater than -1"
+  )
+
+  testthat::expect_error(
+    AV_path_ul_typeB(
+      G = 5000,
+      r = 1.2,
+      e = 20,
+      qx = 0.001,
+      ic = 0.03,
+      B = 100000
+    ),
+    "values in \\[0, 1\\]"
+  )
+
+  testthat::expect_error(
+    iP_eiul(c(0, 100)),
+    "must be positive"
+  )
+
+  testthat::expect_error(
+    i_credit_eiul(
+      i_raw = 0.05,
+      floor = 0.10,
+      cap = 0.05
+    ),
+    "floor cannot exceed cap"
+  )
+
+  testthat::expect_error(
+    pxtau_ul(
+      qd = 0.70,
+      qw = 0.40,
+      year_end_withdrawal = FALSE
+    ),
+    "must not exceed 1"
+  )
+
+  testthat::expect_error(
+    rt_ul(
+      AV = 100,
+      GMF = 0
+    ),
+    "positive values"
+  )
+
+  testthat::expect_error(
+    ag38_prefunding_ratio(
+      excess_payment = 100,
+      nsp_required = 0
+    ),
+    "positive values"
+  )
+})
+
+
+testthat::test_that("universal life functions reject incompatible lengths", {
+  testthat::expect_error(
+    coi_ul_typeB(
+      B = c(100000, 110000),
+      qx = c(0.001, 0.002, 0.003),
+      iq = 0.03
+    ),
+    "length 1 or the common length"
+  )
+
+  testthat::expect_error(
+    AV_path_ul_typeA(
+      G = c(5000, 5000),
+      r = c(0.10, 0.10, 0.10),
+      e = 20,
+      qx = c(0.001, 0.002, 0.003),
+      ic = 0.03,
+      B = 100000
+    ),
+    "length 1 or the common length"
+  )
+})
+
+

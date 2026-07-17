@@ -7,17 +7,18 @@
 NPV_partial(Pi, r)
 }
 \arguments{
-\item{Pi}{Profit signature vector.}
+\item{Pi}{Numeric profit-signature vector.}
 
-\item{r}{Risk discount rate.}
+\item{r}{Annual effective risk discount rate. May be scalar or vector;
+values must be greater than \code{-1}.}
 }
 \value{
-Numeric vector.
+A named numeric vector for scalar \code{r}, or a numeric matrix for
+  vectorized \code{r}.
 }
 \description{
-Computes the sequence
-\eqn{NPV(0), NPV(1), \dots, NPV(n)}
-of partial net present values from a profit signature.
+Computes cumulative discounted profits through each duration. A scalar
+discount rate returns a named vector; vectorized rates return a matrix.
 }
 \examples{
 Pi <- c(-15.00, 8.42, 8.39, 8.58)

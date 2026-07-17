@@ -2,23 +2,25 @@
 % Please edit documentation in R/chapter15_variable_interest.R
 \name{z_from_coupon_annual}
 \alias{z_from_coupon_annual}
-\title{Bootstrap annual spot rates from annual coupon-bond yields}
+\title{Bootstrap annual effective spot rates}
 \usage{
 z_from_coupon_annual(maturity, coupon_yield, par = 1000)
 }
 \arguments{
-\item{maturity}{Integer vector of maturities in years, in increasing order.}
+\item{maturity}{Numeric vector of positive integer maturities in strictly
+increasing order. Maturities must be consecutive and begin at 1.}
 
-\item{coupon_yield}{Numeric vector of annual coupon yields.}
+\item{coupon_yield}{Numeric vector of annual effective par coupon yields.
+Values must be greater than \code{-1}.}
 
-\item{par}{Par value of each bond.}
+\item{par}{Positive scalar par value.}
 }
 \value{
-Numeric vector of annual effective spot rates.
+A numeric vector of annual effective spot rates.
 }
 \description{
-Bootstraps annual effective zero-coupon yields from par annual coupon-bearing
-bond yields of the same maturities.
+Bootstraps annual effective spot rates from par coupon yields at consecutive
+integer maturities.
 }
 \examples{
 maturity <- 1:4

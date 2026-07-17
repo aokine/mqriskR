@@ -2,42 +2,51 @@
 % Please edit documentation in R/chapter16_universal_life.R
 \name{AV_path_ul_typeA}
 \alias{AV_path_ul_typeA}
-\title{Account-value path for Type A universal life}
+\title{Type A universal life account-value path}
 \usage{
 AV_path_ul_typeA(G, r, e, qx, ic, B, iq = ic, AV0 = 0)
 }
 \arguments{
-\item{G}{Premium vector \eqn{G_t}.}
+\item{G}{Premium amount by period.}
 
-\item{r}{Percent-of-premium expense vector \eqn{r_t}.}
+\item{r}{Percent-of-premium expense rate by period. Values must lie in
+\code{[0, 1]}.}
 
-\item{e}{Fixed expense vector \eqn{e_t}.}
+\item{e}{Fixed expense by period.}
 
-\item{qx}{Mortality vector \eqn{q_{x+t-1}}.}
+\item{qx}{Mortality probability by period.}
 
-\item{ic}{Credited interest rate vector \eqn{i^c}.}
+\item{ic}{Credited annual effective interest rate by period. Values must be
+greater than \code{-1}.}
 
-\item{B}{Fixed death benefit face amount.}
+\item{B}{Face amount by period.}
 
-\item{iq}{Interest rate vector \eqn{i^q} used in cost of insurance.
-Defaults to \code{ic}.}
+\item{iq}{Interest rate used in the cost-of-insurance calculation. Defaults
+to \code{ic}; values must be greater than \code{-1}.}
 
-\item{AV0}{Initial account value. Defaults to 0.}
+\item{AV0}{Nonnegative scalar initial account value.}
 }
 \value{
-A data frame with columns \code{t}, \code{premium}, \code{AV}.
+A data frame containing the policy duration, premium, and account
+  value.
 }
 \description{
-Computes the year-by-year account value roll-forward for Type A universal
-life using the explicit form in Equation (16.8), or Equation (16.9) when
-\eqn{i^q = i^c}.
+Computes a year-by-year Type A universal life account-value path. The death
+benefit is fixed, so the net amount at risk depends on the ending account
+value and the roll-forward is solved explicitly each period.
 }
 \examples{
-qx <- c(.00076, .00081, .00085, .00090, .00095)
-r <- c(.75, .10, .10, .10, .10)
-e <- c(100, 20, 20, 20, 20)
-G <- rep(5000, 5)
+qx <- c(0.00076, 0.00081, 0.00085, 0.00090, 0.00095)
+r <- c(0.75, rep(0.10, 4))
+e <- c(100, rep(20, 4))
 
-AV_path_ul_typeA(G = G, r = r, e = e, qx = qx, ic = 0.03, B = 100000)
+AV_path_ul_typeA(
+  G = 5000,
+  r = r,
+  e = e,
+  qx = qx,
+  ic = 0.03,
+  B = 100000
+)
 
 }

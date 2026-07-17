@@ -2,46 +2,40 @@
 % Please edit documentation in R/chapter17_profit_analysis.R
 \name{V_zeroized}
 \alias{V_zeroized}
-\title{Zeroized reserves for a discrete death-only contract}
+\title{Zeroized reserves for a discrete death-benefit contract}
 \usage{
 V_zeroized(qx, i, G, benefit, r = 0, e = 0, V_terminal = 0, floor_zero = TRUE)
 }
 \arguments{
-\item{qx}{Mortality vector.}
+\item{qx}{Mortality probability by policy year.}
 
-\item{i}{Interest-rate vector.}
+\item{i}{Annual effective interest rate by policy year. Values must be
+greater than \code{-1}.}
 
-\item{G}{Gross premium vector.}
+\item{G}{Gross premium by policy year.}
 
-\item{benefit}{Death-benefit vector.}
+\item{benefit}{Death benefit by policy year.}
 
-\item{r}{Percent-of-premium expense vector.}
+\item{r}{Percent-of-premium expense rate by policy year. Values must lie in
+\code{[0, 1]}.}
 
-\item{e}{Fixed-expense vector.}
+\item{e}{Fixed expense by policy year.}
 
-\item{V_terminal}{Terminal reserve. Defaults to 0.}
+\item{V_terminal}{Nonnegative scalar terminal reserve.}
 
-\item{floor_zero}{Logical; if \code{TRUE}, negative reserves are reset to 0.}
+\item{floor_zero}{Logical scalar. If \code{TRUE}, negative reserves are
+replaced by zero.}
 }
 \value{
-Numeric vector of zeroized reserves of length \eqn{n+1}.
+A named numeric vector of length \code{length(qx) + 1}.
 }
 \description{
-Computes the zeroized reserve sequence by backward recursion, setting
-negative reserves equal to zero.
-}
-\details{
-For a death-only contract with no settlement expense and no second
-decrement, the recursion sets
-\deqn{
-Pr_{t+1} = ({}_tV^Z + G_{t+1}(1-r_{t+1}) - e_{t+1})(1+i_{t+1})
-- [Bq_{x+t} + {}_{t+1}V^Z p_{x+t}]
-}
-equal to zero, solving backward for \eqn{{}_tV^Z}.
+Computes reserves backward by setting expected profit in each policy year
+equal to zero. Negative reserves may optionally be floored at zero.
 }
 \examples{
 V_zeroized(
-  qx = c(.015, .017, .019, .021, .024),
+  qx = c(0.015, 0.017, 0.019, 0.021, 0.024),
   i = 0.06,
   G = 19279,
   benefit = 1000000,

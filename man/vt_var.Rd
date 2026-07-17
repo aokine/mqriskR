@@ -2,28 +2,28 @@
 % Please edit documentation in R/chapter15_variable_interest.R
 \name{vt_var}
 \alias{vt_var}
-\title{Discount factors under a variable annual interest scenario}
+\title{Discount factors under variable annual interest rates}
 \usage{
 vt_var(i)
 }
 \arguments{
-\item{i}{Numeric vector of annual effective interest rates
-\eqn{i_1, i_2, \dots, i_n}.}
+\item{i}{Numeric vector of annual effective interest rates. Each value must
+be greater than \code{-1}.}
 }
 \value{
-Numeric vector of discount factors of the same length as \code{i}.
+A numeric vector of cumulative discount factors with the same
+  length as \code{i}.
 }
 \description{
-Computes the sequence of discount factors
-\deqn{v_1,\; v_2,\; \dots,\; v_n}
-where
-\deqn{v_t = \prod_{k=1}^{t}(1+i_k)^{-1}.}
+Computes cumulative discount factors for a sequence of annual effective
+interest rates:
+\deqn{
+v_t = \prod_{k=1}^{t}(1+i_k)^{-1},
+\qquad t=1,\ldots,n.
 }
-\details{
-This corresponds to the Chapter 15 notation \eqn{{}_j v^t} for a fixed
-scenario \eqn{j}.
 }
 \examples{
 vt_var(c(0.06, 0.07, 0.08))
+vt_var(c(-0.01, 0.02, 0.03))
 
 }

@@ -14,25 +14,30 @@ ag38_reserve_ul(
 )
 }
 \arguments{
-\item{basic_reserve}{Basic reserve.}
+\item{basic_reserve}{Nonnegative basic reserve.}
 
-\item{deficiency_reserve}{Deficiency reserve.}
+\item{deficiency_reserve}{Nonnegative deficiency reserve.}
 
-\item{excess_payment}{Excess payment or shadow-fund amount.}
+\item{excess_payment}{Nonnegative excess payment or shadow-fund amount.}
 
-\item{nsp_required}{Net single premium required to fully fund the guarantee.}
+\item{nsp_required}{Positive net single premium required to fully fund the
+guarantee.}
 
-\item{valuation_nsp}{Valuation net single premium.}
+\item{valuation_nsp}{Nonnegative valuation net single premium.}
 
-\item{surrender_charge}{Applicable surrender charge.}
+\item{surrender_charge}{Nonnegative surrender charge.}
 }
 \value{
-A named list.
+For scalar inputs, a named list. For vectorized inputs, a data frame
+  containing the same calculated quantities.
 }
 \description{
-Computes the main quantities in the Chapter 16 AG 38 reserve calculation,
-including the prefunding ratio, reduced deficiency reserve, Step (8)
-reserve, and final increased basic reserve.
+Computes the prefunding ratio, net additional amount, reduced deficiency
+reserve, intermediate reserve, and increased basic reserve.
+}
+\details{
+Scalar inputs preserve the original named-list output. Vectorized inputs
+return a data frame with one row per calculation.
 }
 \examples{
 ag38_reserve_ul(

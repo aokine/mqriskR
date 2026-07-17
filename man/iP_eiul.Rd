@@ -7,14 +7,13 @@
 iP_eiul(index)
 }
 \arguments{
-\item{index}{Numeric vector of index closing values.}
+\item{index}{Numeric vector of strictly positive index values.}
 }
 \value{
-Numeric vector of growth rates.
+A numeric vector with length one less than \code{index}.
 }
 \description{
-Computes annual point-to-point index growth rates from successive index
-values, matching Equation (16.12).
+Computes consecutive point-to-point growth rates from index values.
 }
 \examples{
 iP_eiul(c(1000, 1050, 1200, 1100))

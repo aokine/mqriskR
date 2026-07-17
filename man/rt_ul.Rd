@@ -2,20 +2,21 @@
 % Please edit documentation in R/chapter16_universal_life.R
 \name{rt_ul}
 \alias{rt_ul}
-\title{Ratio \eqn{r_t = AV_t / GMF_t} capped at 1}
+\title{Account-value to guaranteed-fund ratio}
 \usage{
 rt_ul(AV, GMF)
 }
 \arguments{
-\item{AV}{Account value.}
+\item{AV}{Nonnegative account value.}
 
-\item{GMF}{Guaranteed maturity fund.}
+\item{GMF}{Positive guaranteed maturity fund.}
 }
 \value{
-Numeric scalar.
+A numeric vector.
 }
 \description{
-Computes the ratio in Equation (16.16).
+Computes the ratio of account value to guaranteed maturity fund, capped at
+one.
 }
 \examples{
 rt_ul(AV = 4918.20, GMF = 14678.57)

@@ -7,21 +7,21 @@
 NPV_profit(Pi, r)
 }
 \arguments{
-\item{Pi}{Profit signature vector.}
+\item{Pi}{Numeric profit-signature vector.}
 
-\item{r}{Risk discount rate.}
+\item{r}{Annual effective risk discount rate. May be scalar or vector;
+values must be greater than \code{-1}.}
 }
 \value{
-Numeric scalar.
+A numeric vector with one value for each rate in \code{r}.
 }
 \description{
-Computes the Chapter 17 net present value:
-\deqn{
-NPV = \sum_{t=0}^{n}\frac{\Pi_t}{(1+r)^t}.
-}
+Discounts a profit signature at one or more annual effective risk discount
+rates.
 }
 \examples{
 Pi <- c(-15.00, 8.42, 8.39, 8.58)
 NPV_profit(Pi, r = 0.10)
+NPV_profit(Pi, r = c(0.08, 0.10, 0.12))
 
 }

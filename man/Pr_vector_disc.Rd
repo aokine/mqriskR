@@ -21,52 +21,55 @@ Pr_vector_disc(
 )
 }
 \arguments{
-\item{V}{Vector of gross premium reserves \eqn{{}_tV^G} of length
-\eqn{n+1}, including the issue-time reserve and the terminal reserve.}
+\item{V}{Numeric vector of gross premium reserves with length
+\code{n + 1}, including the issue-time and terminal reserves.}
 
-\item{G}{Gross premium vector for policy years 1 through \eqn{n}.}
+\item{G}{Gross premium by policy year.}
 
-\item{i}{Interest-rate vector for policy years 1 through \eqn{n}.}
+\item{i}{Annual effective interest rate by policy year. Values must be
+greater than \code{-1}.}
 
-\item{r}{Percent-of-premium expense vector.}
+\item{r}{Percent-of-premium expense rate by policy year. Values must lie in
+\code{[0, 1]}.}
 
-\item{e}{Fixed expense vector.}
+\item{e}{Fixed expense by policy year.}
 
-\item{q1}{First decrement probabilities, typically death.}
+\item{q1}{Probability of the first decrement by policy year.}
 
-\item{q2}{Second decrement probabilities, typically surrender or lapse.
-Defaults to 0.}
+\item{q2}{Probability of the second decrement by policy year.}
 
-\item{b1}{Benefit vector for decrement 1.}
+\item{b1}{Benefit payable on the first decrement.}
 
-\item{b2}{Benefit vector for decrement 2. Defaults to 0.}
+\item{b2}{Benefit payable on the second decrement.}
 
-\item{s1}{Settlement-expense vector for decrement 1. Defaults to 0.}
+\item{s1}{Settlement expense associated with the first decrement.}
 
-\item{s2}{Settlement-expense vector for decrement 2. Defaults to 0.}
+\item{s2}{Settlement expense associated with the second decrement.}
 
-\item{p_tau}{Optional vector of in-force probabilities
-\eqn{p_{x+t}^{(\tau)}}. If omitted, it is computed as
-\eqn{1-q^{(1)}-q^{(2)}}.}
+\item{p_tau}{Optional in-force probability by policy year. If omitted, it is
+calculated as \code{1 - q1 - q2}.}
 
-\item{pre_contract_expense}{Positive pre-contract expense amount. The
-returned first element is \eqn{Pr_0 = -\text{pre\_contract\_expense}}.}
+\item{pre_contract_expense}{Nonnegative scalar pre-contract expense.}
 }
 \value{
-Numeric vector of length \eqn{n+1}.
+A named numeric vector of length \code{n + 1}.
 }
 \description{
-Computes the Chapter 17 profit vector
-\deqn{
-\mathbf{Pr} = (Pr_0, Pr_1, \dots, Pr_n)
-}
-where \eqn{Pr_0} is the negative pre-contract expense and the yearly
-expected profit values are calculated from the general discrete expression
-in Equation (17.1).
+Computes expected profit by policy year for a discrete contract with up to
+two decrements. The first element is the negative pre-contract expense.
 }
 \details{
-This implementation allows for two decrements, typically death and
-withdrawal/surrender.
+For policy year \eqn{k}, the expected profit is
+\deqn{
+[V_{k-1} + G_k(1-r_k)-e_k](1+i_k)
+-
+[(b_k^{(1)}+s_k^{(1)})q_k^{(1)}
++(b_k^{(2)}+s_k^{(2)})q_k^{(2)}
++V_kp_k^{(\tau)}].
+}
+
+Scalar yearly inputs are recycled to the number of policy years determined
+by \code{length(V) - 1}.
 }
 \examples{
 V <- c(0, 5.66, 6.17, 0)
