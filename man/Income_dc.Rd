@@ -7,16 +7,18 @@
 Income_dc(AVz, adue_z)
 }
 \arguments{
-\item{AVz}{Accumulated value at retirement.}
+\item{AVz}{Nonnegative accumulated value at retirement.}
 
-\item{adue_z}{Whole life annuity-due factor at retirement age.}
+\item{adue_z}{Positive whole-life annuity-due factor at retirement.}
 }
 \value{
-Annual retirement income.
+A numeric vector.
 }
 \description{
-Converts a defined contribution accumulation to annual annuity-due income.
+Converts an accumulated account value into annual annuity-due income.
+Scalar arguments are recycled to a common length.
 }
 \examples{
 Income_dc(AVz = 824211.35, adue_z = 12)
+
 }

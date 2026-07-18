@@ -2,24 +2,29 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{AB_fas}
 \alias{AB_fas}
-\title{Accrued benefit for a final average salary plan}
+\title{Accrued benefit under a final-average-salary plan}
 \usage{
 AB_fas(salary_history, p, fas_years = 3)
 }
 \arguments{
-\item{salary_history}{Numeric vector of annual salaries to date.}
+\item{salary_history}{Positive numeric vector of annual salaries.}
 
-\item{p}{Accrual percentage, e.g. \code{2} for 2 percent.}
+\item{p}{Nonnegative scalar accrual percentage.}
 
-\item{fas_years}{Number of years in the final average salary average.}
+\item{fas_years}{Positive integer number of years in the salary average.}
 }
 \value{
-Accrued benefit.
+A numeric scalar.
 }
 \description{
-Computes the accrued benefit at the current date using service and salary
-history only.
+Computes the accrued benefit using salary and service history through the
+valuation date.
 }
 \examples{
-AB_fas(salary_history = c(150000, 156000), p = 1, fas_years = 2)
+AB_fas(
+  salary_history = c(150000, 156000),
+  p = 1,
+  fas_years = 2
+)
+
 }

@@ -2,21 +2,26 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{AB_cae}
 \alias{AB_cae}
-\title{Accrued benefit for a career average earnings plan}
+\title{Accrued benefit under a career-average-earnings plan}
 \usage{
 AB_cae(salary_history, p)
 }
 \arguments{
-\item{salary_history}{Numeric vector of annual salaries to date.}
+\item{salary_history}{Positive numeric vector of annual salaries.}
 
-\item{p}{Accrual percentage.}
+\item{p}{Nonnegative scalar accrual percentage.}
 }
 \value{
-Accrued benefit.
+A numeric scalar.
 }
 \description{
-Computes the accrued benefit using actual salary history only.
+Computes the accrued benefit using salary history through the valuation
+date.
 }
 \examples{
-AB_cae(salary_history = c(100000, 104000, 108160), p = 1)
+AB_cae(
+  salary_history = c(100000, 104000, 108160),
+  p = 1
+)
+
 }

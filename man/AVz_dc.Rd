@@ -7,27 +7,35 @@
 AVz_dc(x, z, Sx, c, i, g = NULL, s = NULL)
 }
 \arguments{
-\item{x}{Entry age.}
+\item{x}{Scalar entry age.}
 
-\item{z}{Retirement age.}
+\item{z}{Scalar retirement age.}
 
-\item{Sx}{Salary at age \code{x}.}
+\item{Sx}{Positive scalar salary at age \code{x}.}
 
-\item{c}{Contribution rate as a proportion of salary.}
+\item{c}{Scalar contribution rate in \code{[0, 1]}.}
 
-\item{i}{Annual effective interest rate.}
+\item{i}{Scalar annual effective investment return greater than \code{-1}.}
 
-\item{g}{Optional constant annual salary growth rate.}
+\item{g}{Optional scalar annual salary growth rate greater than \code{-1}.}
 
-\item{s}{Optional salary scale vector of length \code{z - x}.}
+\item{s}{Optional positive salary-scale vector of length \code{z - x}.}
 }
 \value{
-The accumulated value of contributions at age \code{z}.
+A numeric scalar.
 }
 \description{
-Computes the accumulated value at retirement age \eqn{z} for the defined
-contribution model in Equation (18.1).
+Computes the accumulated value at retirement from contributions paid at
+the beginning of each year and accumulated to retirement.
 }
 \examples{
-AVz_dc(x = 30, z = 65, Sx = 50000, c = 0.10, i = 0.05, g = 0.04)
+AVz_dc(
+  x = 30,
+  z = 65,
+  Sx = 50000,
+  c = 0.10,
+  i = 0.05,
+  g = 0.04
+)
+
 }

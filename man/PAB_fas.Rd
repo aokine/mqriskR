@@ -2,34 +2,43 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{PAB_fas}
 \alias{PAB_fas}
-\title{Projected annual benefit under a final average salary DB plan}
+\title{Projected annual benefit under a final-average-salary plan}
 \usage{
 PAB_fas(x, z, CASx, p, fas_years = 3, past_service = 0, g = NULL, s = NULL)
 }
 \arguments{
-\item{x}{Current or entry age.}
+\item{x}{Scalar current or entry age.}
 
-\item{z}{Retirement age.}
+\item{z}{Scalar retirement age.}
 
-\item{CASx}{Current annual salary at age \code{x}.}
+\item{CASx}{Positive scalar current annual salary.}
 
-\item{p}{Accrual percentage, e.g. \code{2} for 2 percent.}
+\item{p}{Nonnegative scalar accrual percentage, such as \code{2} for
+2 percent.}
 
-\item{fas_years}{Number of years in the final average salary period.}
+\item{fas_years}{Positive integer number of years in the final salary
+average.}
 
-\item{past_service}{Past years of service already completed at age \code{x}.}
+\item{past_service}{Nonnegative scalar years of service already completed.}
 
-\item{g}{Optional constant annual salary growth rate.}
+\item{g}{Optional scalar annual salary growth rate greater than \code{-1}.}
 
-\item{s}{Optional salary scale vector of length \code{z - x}.}
+\item{s}{Optional positive salary-scale vector of length \code{z - x}.}
 }
 \value{
-Projected annual benefit.
+A numeric scalar.
 }
 \description{
-Computes the projected annual benefit for a final average salary plan
-using Equation (18.6).
+Projects the annual benefit using a final-average-salary formula.
 }
 \examples{
-PAB_fas(x = 35, z = 65, CASx = 60000, p = 2, fas_years = 3, g = 0.04)
+PAB_fas(
+  x = 35,
+  z = 65,
+  CASx = 60000,
+  p = 2,
+  fas_years = 3,
+  g = 0.04
+)
+
 }

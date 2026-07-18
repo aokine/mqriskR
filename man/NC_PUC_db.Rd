@@ -2,26 +2,28 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{NC_PUC_db}
 \alias{NC_PUC_db}
-\title{Projected Unit Credit normal cost for a DB plan}
+\title{Projected Unit Credit normal cost}
 \usage{
 NC_PUC_db(projected_benefit, total_service, v_to_ret, p_surv, adue_ret)
 }
 \arguments{
-\item{projected_benefit}{Projected benefit at retirement.}
+\item{projected_benefit}{Nonnegative projected annual benefit at retirement.}
 
-\item{total_service}{Total service at retirement.}
+\item{total_service}{Positive total service at retirement.}
 
-\item{v_to_ret}{Discount factor to retirement.}
+\item{v_to_ret}{Nonnegative discount factor from the valuation date to
+retirement.}
 
-\item{p_surv}{Active-service survival probability to retirement.}
+\item{p_surv}{Survival or active-service probability to retirement in
+\code{[0, 1]}.}
 
-\item{adue_ret}{Retirement annuity factor.}
+\item{adue_ret}{Positive retirement annuity-due factor.}
 }
 \value{
-PUC normal cost.
+A numeric vector.
 }
 \description{
-Computes the PUC normal cost as the APV of the portion of the projected
+Computes the actuarial present value of the portion of the projected
 benefit attributed to the current year of service.
 }
 \examples{
@@ -32,4 +34,5 @@ NC_PUC_db(
   p_surv = 0.9,
   adue_ret = 12
 )
+
 }

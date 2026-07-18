@@ -2,7 +2,7 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{AAL_PUC_db}
 \alias{AAL_PUC_db}
-\title{Projected Unit Credit accrued liability for a DB plan}
+\title{Projected Unit Credit accrued liability}
 \usage{
 AAL_PUC_db(
   projected_benefit,
@@ -14,26 +14,35 @@ AAL_PUC_db(
 )
 }
 \arguments{
-\item{projected_benefit}{Projected benefit at retirement.}
+\item{projected_benefit}{Nonnegative projected annual benefit at retirement.}
 
-\item{past_service}{Past service completed.}
+\item{past_service}{Nonnegative service completed through the valuation date.}
 
-\item{total_service}{Total service at retirement.}
+\item{total_service}{Positive total service at retirement.}
 
-\item{v_to_ret}{Discount factor to retirement.}
+\item{v_to_ret}{Nonnegative discount factor from the valuation date to
+retirement.}
 
-\item{p_surv}{Active-service survival probability to retirement.}
+\item{p_surv}{Survival or active-service probability to retirement in
+\code{[0, 1]}.}
 
-\item{adue_ret}{Retirement annuity factor.}
+\item{adue_ret}{Positive retirement annuity-due factor.}
 }
 \value{
-PUC accrued liability.
+A numeric vector.
 }
 \description{
-Computes the PUC accrued liability as the APV of the portion of the
-projected benefit attributed to past service.
+Computes the actuarial present value of the portion of the projected
+benefit attributed to past service.
 }
 \examples{
-AAL_PUC_db(projected_benefit = 30000, past_service = 10, total_service = 30,
-v_to_ret = 0.5, p_surv = 0.9, adue_ret = 12)
+AAL_PUC_db(
+  projected_benefit = 30000,
+  past_service = 10,
+  total_service = 30,
+  v_to_ret = 0.5,
+  p_surv = 0.9,
+  adue_ret = 12
+)
+
 }

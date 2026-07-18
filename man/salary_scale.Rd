@@ -7,20 +7,21 @@
 salary_scale(k, g, base_age = min(k), s_base = 1)
 }
 \arguments{
-\item{k}{Numeric vector of ages.}
+\item{k}{Numeric vector of ages or durations.}
 
-\item{g}{Annual salary growth rate.}
+\item{g}{Annual salary growth rate greater than \code{-1}.}
 
-\item{base_age}{Age at which the scale is normalized.}
+\item{base_age}{Scalar age or duration at which the scale is normalized.}
 
-\item{s_base}{Salary scale value at \code{base_age}.}
+\item{s_base}{Positive scalar salary-scale value at \code{base_age}.}
 }
 \value{
-Numeric vector of salary scale factors.
+A numeric vector with the same length as \code{k}.
 }
 \description{
-Constructs salary scale factors \eqn{s_k} under a constant annual growth rate.
+Constructs salary-scale values under a constant annual growth rate.
 }
 \examples{
 salary_scale(k = 30:34, g = 0.04, base_age = 30)
+
 }

@@ -7,16 +7,21 @@
 replacement_ratio_db(benefit, salary)
 }
 \arguments{
-\item{benefit}{Annual retirement benefit.}
+\item{benefit}{Nonnegative annual retirement benefit.}
 
-\item{salary}{Salary measure used in the denominator.}
+\item{salary}{Positive salary measure used in the denominator.}
 }
 \value{
-Replacement ratio.
+A numeric vector.
 }
 \description{
-Computes a DB replacement ratio as benefit divided by a chosen salary measure.
+Computes annual benefit divided by a selected salary measure. Scalar
+arguments are recycled to a common length.
 }
 \examples{
-replacement_ratio_db(benefit = 108008.66, salary = 187119.09)
+replacement_ratio_db(
+  benefit = 108008.66,
+  salary = 187119.09
+)
+
 }

@@ -7,31 +7,38 @@
 replacement_ratio_dc(x, z, Sx, c, i, adue_z, g = NULL, s = NULL)
 }
 \arguments{
-\item{x}{Entry age.}
+\item{x}{Scalar entry age.}
 
-\item{z}{Retirement age.}
+\item{z}{Scalar retirement age.}
 
-\item{Sx}{Salary at age \code{x}.}
+\item{Sx}{Positive scalar salary at age \code{x}.}
 
-\item{c}{Contribution rate.}
+\item{c}{Scalar contribution rate in \code{[0, 1]}.}
 
-\item{i}{Annual effective interest rate.}
+\item{i}{Scalar annual effective investment return greater than \code{-1}.}
 
-\item{adue_z}{Whole life annuity-due factor at age \code{z}.}
+\item{adue_z}{Positive scalar whole-life annuity-due factor at retirement.}
 
-\item{g}{Optional constant annual salary growth rate.}
+\item{g}{Optional scalar annual salary growth rate greater than \code{-1}.}
 
-\item{s}{Optional salary scale vector of length \code{z - x}.}
+\item{s}{Optional positive salary-scale vector of length \code{z - x}.}
 }
 \value{
-Replacement ratio.
+A numeric scalar.
 }
 \description{
-Computes the replacement ratio defined in Equation (18.4).
+Computes annual retirement income divided by salary in the final
+pre-retirement year.
 }
 \examples{
 replacement_ratio_dc(
-  x = 30, z = 65, Sx = 50000, c = 0.10, i = 0.05,
-  adue_z = 12, g = 0.04
+  x = 30,
+  z = 65,
+  Sx = 50000,
+  c = 0.10,
+  i = 0.05,
+  adue_z = 12,
+  g = 0.04
 )
+
 }

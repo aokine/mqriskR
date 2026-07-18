@@ -2,25 +2,34 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{NC_TUC_db}
 \alias{NC_TUC_db}
-\title{Traditional Unit Credit normal cost for a DB plan}
+\title{Traditional Unit Credit normal cost}
 \usage{
 NC_TUC_db(accrual_benefit, v_to_ret, p_surv, adue_ret)
 }
 \arguments{
-\item{accrual_benefit}{Benefit accrued in the current year.}
+\item{accrual_benefit}{Nonnegative benefit accrued during the current year.}
 
-\item{v_to_ret}{Discount factor to retirement.}
+\item{v_to_ret}{Nonnegative discount factor from the valuation date to
+retirement.}
 
-\item{p_surv}{Active-service survival probability to retirement.}
+\item{p_surv}{Survival or active-service probability to retirement in
+\code{[0, 1]}.}
 
-\item{adue_ret}{Retirement annuity factor.}
+\item{adue_ret}{Positive retirement annuity-due factor.}
 }
 \value{
-TUC normal cost.
+A numeric vector.
 }
 \description{
-Computes the TUC normal cost as the APV of the current year's accrual.
+Computes the actuarial present value of the benefit accrued during the
+current year.
 }
 \examples{
-NC_TUC_db(accrual_benefit = 1560, v_to_ret = 0.5, p_surv = 0.9, adue_ret = 12)
+NC_TUC_db(
+  accrual_benefit = 1560,
+  v_to_ret = 0.5,
+  p_surv = 0.9,
+  adue_ret = 12
+)
+
 }

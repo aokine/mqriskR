@@ -2,21 +2,23 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{NC_EAN_db}
 \alias{NC_EAN_db}
-\title{Entry Age Normal normal cost for a DB plan}
+\title{Entry Age Normal normal cost}
 \usage{
 NC_EAN_db(APV_total, adue_active)
 }
 \arguments{
-\item{APV_total}{Total actuarial present value of benefits.}
+\item{APV_total}{Nonnegative total actuarial present value of benefits.}
 
-\item{adue_active}{Active-service annuity-due factor.}
+\item{adue_active}{Positive active-service annuity-due factor.}
 }
 \value{
-Entry Age Normal normal cost.
+A numeric vector.
 }
 \description{
-Computes Equation (18.13).
+Computes Entry Age Normal normal cost as total benefit APV divided by an
+active-service annuity-due factor.
 }
 \examples{
 NC_EAN_db(APV_total = 25000, adue_active = 15)
+
 }

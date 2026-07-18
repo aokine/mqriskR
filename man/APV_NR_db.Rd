@@ -2,25 +2,34 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{APV_NR_db}
 \alias{APV_NR_db}
-\title{APV of normal retirement benefit for a DB plan}
+\title{Actuarial present value of a normal retirement benefit}
 \usage{
 APV_NR_db(PABz, v_to_ret, p_surv, adue_ret)
 }
 \arguments{
-\item{PABz}{Projected annual benefit at retirement.}
+\item{PABz}{Nonnegative projected annual benefit at retirement.}
 
-\item{v_to_ret}{Discount factor from current age to retirement.}
+\item{v_to_ret}{Nonnegative discount factor from the valuation date to
+retirement.}
 
-\item{p_surv}{Active-service survival probability to retirement.}
+\item{p_surv}{Survival or active-service probability to retirement in
+\code{[0, 1]}.}
 
-\item{adue_ret}{Retirement annuity factor.}
+\item{adue_ret}{Positive retirement annuity-due factor.}
 }
 \value{
-Actuarial present value of the normal retirement benefit.
+A numeric vector.
 }
 \description{
-Computes Equation (18.10).
+Computes the actuarial present value of a projected annual retirement
+benefit. Scalar arguments are recycled to a common length.
 }
 \examples{
-APV_NR_db(PABz = 108008.66, v_to_ret = 1 / 1.06^30, p_surv = 0.8, adue_ret = 12)
+APV_NR_db(
+  PABz = 108008.66,
+  v_to_ret = 1 / 1.06^30,
+  p_surv = 0.8,
+  adue_ret = 12
+)
+
 }

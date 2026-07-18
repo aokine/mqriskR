@@ -2,25 +2,34 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{AAL_TUC_db}
 \alias{AAL_TUC_db}
-\title{Traditional Unit Credit accrued liability for a DB plan}
+\title{Traditional Unit Credit accrued liability}
 \usage{
 AAL_TUC_db(accrued_benefit, v_to_ret, p_surv, adue_ret)
 }
 \arguments{
-\item{accrued_benefit}{Accrued benefit at the valuation date.}
+\item{accrued_benefit}{Nonnegative accrued benefit.}
 
-\item{v_to_ret}{Discount factor to retirement.}
+\item{v_to_ret}{Nonnegative discount factor from the valuation date to
+retirement.}
 
-\item{p_surv}{Active-service survival probability to retirement.}
+\item{p_surv}{Survival or active-service probability to retirement in
+\code{[0, 1]}.}
 
-\item{adue_ret}{Retirement annuity factor.}
+\item{adue_ret}{Positive retirement annuity-due factor.}
 }
 \value{
-TUC accrued liability.
+A numeric vector.
 }
 \description{
-Computes the TUC accrued liability as the APV of the accrued benefit.
+Computes the actuarial present value of the benefit accrued through the
+valuation date.
 }
 \examples{
-AAL_TUC_db(accrued_benefit = 12000, v_to_ret = 0.5, p_surv = 0.9, adue_ret = 12)
+AAL_TUC_db(
+  accrued_benefit = 12000,
+  v_to_ret = 0.5,
+  p_surv = 0.9,
+  adue_ret = 12
+)
+
 }

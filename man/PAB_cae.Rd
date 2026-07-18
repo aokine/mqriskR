@@ -2,31 +2,38 @@
 % Please edit documentation in R/chapter18_pensions.R
 \name{PAB_cae}
 \alias{PAB_cae}
-\title{Projected annual benefit under a career average earnings DB plan}
+\title{Projected annual benefit under a career-average-earnings plan}
 \usage{
 PAB_cae(x, z, CASx, p, past_salary_total = 0, g = NULL, s = NULL)
 }
 \arguments{
-\item{x}{Current or entry age.}
+\item{x}{Scalar current or entry age.}
 
-\item{z}{Retirement age.}
+\item{z}{Scalar retirement age.}
 
-\item{CASx}{Current annual salary at age \code{x}.}
+\item{CASx}{Positive scalar current annual salary.}
 
-\item{p}{Accrual percentage, e.g. \code{1} for 1 percent.}
+\item{p}{Nonnegative scalar accrual percentage.}
 
-\item{past_salary_total}{Optional total of actual past salaries.}
+\item{past_salary_total}{Nonnegative total of actual prior salaries.}
 
-\item{g}{Optional constant annual salary growth rate.}
+\item{g}{Optional scalar annual salary growth rate greater than \code{-1}.}
 
-\item{s}{Optional salary scale vector of length \code{z - x}.}
+\item{s}{Optional positive salary-scale vector of length \code{z - x}.}
 }
 \value{
-Projected annual benefit.
+A numeric scalar.
 }
 \description{
-Computes the projected annual benefit for a CAE plan using Equation (18.9).
+Projects the annual benefit using a career-average-earnings formula.
 }
 \examples{
-PAB_cae(x = 30, z = 65, CASx = 100000, p = 1, g = 0.04)
+PAB_cae(
+  x = 30,
+  z = 65,
+  CASx = 100000,
+  p = 1,
+  g = 0.04
+)
+
 }
