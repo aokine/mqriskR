@@ -250,26 +250,51 @@ axn_var <- function(qx, i, type = c("immediate", "due"), benefit = 1) {
 
 #' Actuarial present values under spot rates
 #'
-#' These functions value life-contingent benefits using annual effective spot
-#' rates by maturity. If \eqn{z_t} is the spot rate for maturity \eqn{t}, the
-#' corresponding discount factor is \eqn{(1+z_t)^{-t}}.
+#' Computes life-contingent actuarial present values using annual effective
+#' spot rates by maturity.
 #'
-#' \code{nEx_spot()} values a pure endowment.
+#' If \eqn{z_t} denotes the annual effective spot rate for maturity
+#' \eqn{t}, the corresponding discount factor is
+#' \deqn{(1+z_t)^{-t}.}
 #'
-#' \code{Axn1_spot()} values term insurance payable at the end of the year of
-#' death.
+#' \code{nEx_spot()} computes a pure endowment.
 #'
-#' \code{Axn_spot()} values endowment insurance.
+#' \code{Axn1_spot()} computes term insurance payable at the end of the year
+#' of death.
 #'
-#' \code{axn_spot()} values a temporary annuity-immediate or annuity-due.
+#' \code{Axn_spot()} computes endowment insurance.
+#'
+#' \code{axn_spot()} computes a temporary annuity-immediate or
+#' annuity-due.
 #'
 #' @param qx Numeric vector of one-year mortality probabilities.
 #' @param z Numeric vector of annual effective spot rates for maturities
-#'   \code{1, ..., n}. Each value must be greater than \code{-1}.
+#'   \code{1, \dots, n}. Each value must be greater than \code{-1}.
 #' @param benefit Nonnegative scalar benefit or annuity payment amount.
-#' @param type Character string equal to \code{"immediate"} or \code{"due"}.
+#' @param type Character string equal to \code{"immediate"} or
+#'   \code{"due"}.
 #'
 #' @return A numeric scalar.
+#'
+#' @details
+#' Each payment is discounted using the spot rate corresponding to its
+#' maturity rather than a single level interest rate.
+#'
+#' The pure endowment is
+#' \deqn{
+#' {}_nE
+#' =
+#' {}_np_x(1+z_n)^{-n}.
+#' }
+#'
+#' Term insurance is obtained by discounting each death benefit using the
+#' spot rate corresponding to its payment year.
+#'
+#' Endowment insurance equals the sum of the corresponding term insurance
+#' and pure endowment.
+#'
+#' Temporary annuities discount each payment using the spot rate for its
+#' payment time.
 #'
 #' @examples
 #' qx <- c(0.02, 0.03, 0.04, 0.05, 0.06)
@@ -280,7 +305,8 @@ axn_var <- function(qx, i, type = c("immediate", "due"), benefit = 1) {
 #' Axn_spot(qx, spot)
 #' axn_spot(qx, spot, type = "due")
 #'
-#' @rdname spot_interest_apv
+#' @name spot_interest_apvs
+#' @rdname spot_interest_apvs
 #' @export
 nEx_spot <- function(qx, z, benefit = 1) {
   qx <- .variable_interest_check_probability(qx, "qx")
@@ -293,7 +319,7 @@ nEx_spot <- function(qx, z, benefit = 1) {
   benefit * prod(1 - qx) * (1 + z[n])^(-n)
 }
 
-#' @rdname spot_interest_apv
+#' @rdname spot_interest_apvs
 #' @export
 Axn1_spot <- function(qx, z, benefit = 1) {
   qx <- .variable_interest_check_probability(qx, "qx")
@@ -309,7 +335,7 @@ Axn1_spot <- function(qx, z, benefit = 1) {
   benefit * sum(discount * survival_start * qx)
 }
 
-#' @rdname spot_interest_apv
+#' @rdname spot_interest_apvs
 #' @export
 Axn_spot <- function(qx, z, benefit = 1) {
   qx <- .variable_interest_check_probability(qx, "qx")
@@ -322,7 +348,7 @@ Axn_spot <- function(qx, z, benefit = 1) {
     nEx_spot(qx = qx, z = z, benefit = benefit)
 }
 
-#' @rdname spot_interest_apv
+#' @rdname spot_interest_apvs
 #' @export
 axn_spot <- function(qx, z, type = c("immediate", "due"), benefit = 1) {
   type <- match.arg(type)
