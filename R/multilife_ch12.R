@@ -394,13 +394,19 @@ tqxybar <- function(x, y, t, tbl = NULL, model = NULL, ...) {
 }
 
 # -------------------------------------------------------------------------
-# Pure endowments
+# Multi-life pure endowments
 # -------------------------------------------------------------------------
 
 #' Multi-life pure endowments
 #'
 #' Computes pure endowment actuarial present values for joint-life and
-#' last-survivor statuses.
+#' last-survivor statuses for two independent lives.
+#'
+#' \code{nExy()} computes an \eqn{n}-year joint-life pure endowment, payable
+#' at time \eqn{n} if both lives survive.
+#'
+#' \code{nExybar()} computes an \eqn{n}-year last-survivor pure endowment,
+#' payable at time \eqn{n} if at least one life survives.
 #'
 #' @param x Age of the first life. May be scalar or vector.
 #' @param y Age of the second life. May be scalar or vector.
@@ -412,11 +418,55 @@ tqxybar <- function(x, y, t, tbl = NULL, model = NULL, ...) {
 #'
 #' @return A numeric vector of actuarial present values.
 #'
-#' @examples
-#' nExy(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
-#' nExybar(40, 50, n = 10, i = 0.05, model = "uniform", omega = 100)
+#' @details
+#' The joint-life pure endowment is
+#' \deqn{
+#' {}_nE_{xy}
+#' =
+#' v^n\,{}_np_{xy}.
+#' }
 #'
-#' @rdname multilife_pure_endowment
+#' The last-survivor pure endowment is
+#' \deqn{
+#' {}_nE_{\overline{xy}}
+#' =
+#' v^n\,{}_np_{\overline{xy}}.
+#' }
+#'
+#' Under independence,
+#' \deqn{
+#' {}_np_{xy}
+#' =
+#' {}_np_x\,{}_np_y
+#' }
+#' and
+#' \deqn{
+#' {}_np_{\overline{xy}}
+#' =
+#' {}_np_x + {}_np_y - {}_np_x\,{}_np_y.
+#' }
+#'
+#' @examples
+#' nExy(
+#'   x = 40,
+#'   y = 50,
+#'   n = 10,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' nExybar(
+#'   x = 40,
+#'   y = 50,
+#'   n = 10,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' @name multilife_pure_endowments
+#' @rdname multilife_pure_endowments
 #' @export
 nExy <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
   .multilife_check_basis(tbl, model)
@@ -439,17 +489,19 @@ nExy <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
   n <- values[[3]]
   i <- values[[4]]
 
-  discount(i, n) * tpxy(
-    x = x,
-    y = y,
-    t = n,
-    tbl = tbl,
-    model = model,
-    ...
-  )
+  discount(i, n) *
+    tpxy(
+      x = x,
+      y = y,
+      t = n,
+      tbl = tbl,
+      model = model,
+      ...
+    )
 }
 
-#' @rdname multilife_pure_endowment
+
+#' @rdname multilife_pure_endowments
 #' @export
 nExybar <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
   .multilife_check_basis(tbl, model)
@@ -472,14 +524,15 @@ nExybar <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
   n <- values[[3]]
   i <- values[[4]]
 
-  discount(i, n) * tpxybar(
-    x = x,
-    y = y,
-    t = n,
-    tbl = tbl,
-    model = model,
-    ...
-  )
+  discount(i, n) *
+    tpxybar(
+      x = x,
+      y = y,
+      t = n,
+      tbl = tbl,
+      model = model,
+      ...
+    )
 }
 
 # -------------------------------------------------------------------------
