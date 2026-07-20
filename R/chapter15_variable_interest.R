@@ -144,32 +144,59 @@ vt_var <- function(i) {
   cumprod(1 / (1 + i))
 }
 
+
 # -------------------------------------------------------------------------
 # APVs under a sequence of annual effective interest rates
 # -------------------------------------------------------------------------
 
 #' Actuarial present values under variable annual interest rates
 #'
-#' These functions value life-contingent benefits under a specified sequence
-#' of annual effective interest rates. The vectors \code{qx} and \code{i}
-#' describe one valuation scenario and must have the same positive length.
+#' Computes life-contingent actuarial present values using a specified
+#' sequence of annual effective interest rates.
 #'
-#' \code{nEx_var()} values a pure endowment.
+#' The vectors \code{qx} and \code{i} represent one valuation scenario and
+#' must have the same positive length.
 #'
-#' \code{Axn1_var()} values term insurance payable at the end of the year of
-#' death.
+#' \code{nEx_var()} computes a pure endowment.
 #'
-#' \code{Axn_var()} values endowment insurance.
+#' \code{Axn1_var()} computes term insurance payable at the end of the year
+#' of death.
 #'
-#' \code{axn_var()} values a temporary annuity-immediate or annuity-due.
+#' \code{Axn_var()} computes endowment insurance.
+#'
+#' \code{axn_var()} computes a temporary annuity-immediate or
+#' annuity-due.
 #'
 #' @param qx Numeric vector of one-year mortality probabilities.
-#' @param i Numeric vector of annual effective interest rates. Each value must
-#'   be greater than \code{-1}.
+#' @param i Numeric vector of annual effective interest rates. Each value
+#'   must be greater than \code{-1}.
 #' @param benefit Nonnegative scalar benefit or annuity payment amount.
-#' @param type Character string equal to \code{"immediate"} or \code{"due"}.
+#' @param type Character string equal to \code{"immediate"} or
+#'   \code{"due"}.
 #'
 #' @return A numeric scalar.
+#'
+#' @details
+#' Each year's payment is discounted using the cumulative product of the
+#' annual effective interest rates supplied in \code{i}.
+#'
+#' The pure endowment is
+#' \deqn{
+#' {}_nE
+#' =
+#' {}_np_x\,v_n,
+#' }
+#' where \eqn{v_n} is the cumulative discount factor implied by the sequence
+#' of annual effective interest rates.
+#'
+#' Term insurance is obtained by discounting each possible death benefit
+#' using the cumulative discount factor applicable to its payment year.
+#'
+#' Endowment insurance equals the sum of the corresponding term insurance
+#' and pure endowment.
+#'
+#' Temporary annuities discount each payment using the cumulative discount
+#' factors derived from the interest-rate sequence.
 #'
 #' @examples
 #' qx <- c(0.03, 0.04, 0.05, 0.06, 0.07)
@@ -180,7 +207,8 @@ vt_var <- function(i) {
 #' Axn_var(qx, rates)
 #' axn_var(qx, rates, type = "due")
 #'
-#' @rdname variable_interest_apv
+#' @name variable_interest_apvs
+#' @rdname variable_interest_apvs
 #' @export
 nEx_var <- function(qx, i, benefit = 1) {
   qx <- .variable_interest_check_probability(qx, "qx")
@@ -192,7 +220,7 @@ nEx_var <- function(qx, i, benefit = 1) {
   benefit * prod(1 - qx) * tail(vt_var(i), 1L)
 }
 
-#' @rdname variable_interest_apv
+#' @rdname variable_interest_apvs
 #' @export
 Axn1_var <- function(qx, i, benefit = 1) {
   qx <- .variable_interest_check_probability(qx, "qx")
@@ -207,7 +235,7 @@ Axn1_var <- function(qx, i, benefit = 1) {
   benefit * sum(discount * survival_start * qx)
 }
 
-#' @rdname variable_interest_apv
+#' @rdname variable_interest_apvs
 #' @export
 Axn_var <- function(qx, i, benefit = 1) {
   qx <- .variable_interest_check_probability(qx, "qx")
@@ -220,7 +248,7 @@ Axn_var <- function(qx, i, benefit = 1) {
     nEx_var(qx = qx, i = i, benefit = benefit)
 }
 
-#' @rdname variable_interest_apv
+#' @rdname variable_interest_apvs
 #' @export
 axn_var <- function(qx, i, type = c("immediate", "due"), benefit = 1) {
   type <- match.arg(type)
