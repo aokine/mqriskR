@@ -42,5 +42,5 @@ abarx_woolhouse3(x, i, model, ...)
 Numeric vector.
 }
 \description{
-Woolhouse 3-term approximations for Chapter 8 annuity functions.
+Woolhouse 3-term approximations for fractional-payment annuity functions.
 }

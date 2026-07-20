@@ -4,7 +4,7 @@
 \alias{annuity_approximations}
 \title{Annuity approximations}
 \description{
-Chapter 8 approximation formulas for m-thly and continuous life annuities.
+Approximation formulas for m-thly and continuous life annuities.
 }
 \details{
 This file implements:

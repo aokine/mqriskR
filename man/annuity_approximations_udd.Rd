@@ -54,7 +54,7 @@ nabarx_udd(x, n, i, model, ...)
 Numeric vector.
 }
 \description{
-UDD-based approximations for Chapter 8 annuity functions.
+UDD-based approximations for annual, fractional-payment, and continuous annuity functions.
 
 Computes
 \deqn{\ddot{a}_x^{(m)} \approx \alpha(m)\ddot{a}_x - \beta(m).}
@@ -91,8 +91,8 @@ Computes
 
 Uses the identity
 \deqn{\bar{a}_{x:\overline{n}|} \approx \frac{1-\bar{A}_{x:\overline{n}|}}{\delta}}
-together with the package's existing Chapter 7 UDD insurance approximation
-for \eqn{\bar{A}_{x:\overline{n}|}}.
+together with the package's existing UDD approximation
+for continuous endowment insurance
 
 Computes
 \deqn{{}_{n\mid}\bar{a}_x \approx {}_nE_x \, \bar{a}_{x+n}.}

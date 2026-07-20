@@ -1,6 +1,6 @@
 #' Annuity approximations
 #'
-#' Chapter 8 approximation formulas for m-thly and continuous life annuities.
+#' Approximation formulas for m-thly and continuous life annuities.
 #'
 #' This file implements:
 #' \itemize{
@@ -114,7 +114,7 @@ NULL
 
 #' UDD annuity approximations
 #'
-#' UDD-based approximations for Chapter 8 annuity functions.
+#' UDD-based approximations for annual, fractional-payment, and continuous annuity functions.
 #'
 #' These functions implement the standard Uniform Distribution of Deaths
 #' approximations linking annual, m-thly, and continuous annuity values.
@@ -307,8 +307,8 @@ abarx_udd <- function(x, i, model, ...) {
 #'
 #' Uses the identity
 #' \deqn{\bar{a}_{x:\overline{n}|} \approx \frac{1-\bar{A}_{x:\overline{n}|}}{\delta}}
-#' together with the package's existing Chapter 7 UDD insurance approximation
-#' for \eqn{\bar{A}_{x:\overline{n}|}}.
+#' together with the package's existing UDD approximation
+#' for continuous endowment insurance
 #'
 #' Note that this function relies on the already-existing \code{Abarxn_udd()}
 #' implementation in the package, so extra survival-model arguments are not used.
@@ -343,7 +343,7 @@ nabarx_udd <- function(x, n, i, model, ...) {
 
 #' Woolhouse 2-term annuity approximations
 #'
-#' Woolhouse 2-term approximations for Chapter 8 annuity functions.
+#' Woolhouse 2-term approximations for fractional-payment annuity functions.
 #'
 #' @name annuity_approximations_woolhouse2
 #' @aliases ax_m_woolhouse2 adotx_m_woolhouse2
@@ -467,7 +467,7 @@ abarx_woolhouse2 <- function(x, i, model, ...) {
 
 #' Woolhouse 3-term annuity approximations
 #'
-#' Woolhouse 3-term approximations for Chapter 8 annuity functions.
+#' Woolhouse 3-term approximations for fractional-payment annuity functions.
 #'
 #' @name annuity_approximations_woolhouse3
 #' @aliases ax_m_woolhouse3 adotx_m_woolhouse3

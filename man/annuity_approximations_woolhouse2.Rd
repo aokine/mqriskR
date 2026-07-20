@@ -48,5 +48,5 @@ abarx_woolhouse2(x, i, model, ...)
 Numeric vector.
 }
 \description{
-Woolhouse 2-term approximations for Chapter 8 annuity functions.
+Woolhouse 2-term approximations for fractional-payment annuity functions.
 }
