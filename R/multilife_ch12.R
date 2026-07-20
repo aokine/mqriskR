@@ -260,19 +260,33 @@
 #' Computes joint-life and last-survivor survival and failure probabilities
 #' for two independent lives.
 #'
-#' \code{tpxy()} computes
-#' \eqn{{}_t p_{xy} = {}_t p_x\,{}_t p_y}.
+#' \code{tpxy()} computes the joint-life survival probability
+#' \deqn{
+#' {}_tp_{xy}
+#' =
+#' {}_tp_x\,{}_tp_y.
+#' }
 #'
-#' \code{tqxy()} computes
-#' \eqn{{}_t q_{xy} = 1 - {}_t p_{xy}}.
+#' \code{tqxy()} computes the joint-life failure probability
+#' \deqn{
+#' {}_tq_{xy}
+#' =
+#' 1-{}_tp_{xy}.
+#' }
 #'
-#' \code{tpxybar()} computes
-#' \eqn{{}_t p_{\overline{xy}}
-#' = {}_t p_x + {}_t p_y - {}_t p_{xy}}.
+#' \code{tpxybar()} computes the last-survivor survival probability
+#' \deqn{
+#' {}_tp_{\overline{xy}}
+#' =
+#' {}_tp_x + {}_tp_y - {}_tp_x\,{}_tp_y.
+#' }
 #'
-#' \code{tqxybar()} computes
-#' \eqn{{}_t q_{\overline{xy}}
-#' = 1 - {}_t p_{\overline{xy}}}.
+#' \code{tqxybar()} computes the last-survivor failure probability
+#' \deqn{
+#' {}_tq_{\overline{xy}}
+#' =
+#' 1-{}_tp_{\overline{xy}}.
+#' }
 #'
 #' @param x Age of the first life. May be scalar or vector.
 #' @param y Age of the second life. May be scalar or vector.
@@ -283,13 +297,44 @@
 #'
 #' @return A numeric vector of probabilities.
 #'
-#' @examples
-#' tpxy(40, 50, t = 10, model = "uniform", omega = 100)
-#' tqxy(40, 50, t = 10, model = "uniform", omega = 100)
-#' tpxybar(40, 50, t = 10, model = "uniform", omega = 100)
-#' tqxybar(40, 50, t = 10, model = "uniform", omega = 100)
+#' @details
+#' All calculations assume the future lifetimes are independent.
 #'
-#' @rdname multilife_survival
+#' Joint-life probabilities require both lives to satisfy the survival
+#' condition, whereas last-survivor probabilities require at least one life
+#' to survive.
+#'
+#' @examples
+#' tpxy(
+#'   40, 50,
+#'   t = 10,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' tqxy(
+#'   40, 50,
+#'   t = 10,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' tpxybar(
+#'   40, 50,
+#'   t = 10,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' tqxybar(
+#'   40, 50,
+#'   t = 10,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' @name multilife_survival_probabilities
+#' @rdname multilife_survival_probabilities
 #' @export
 tpxy <- function(x, y, t, tbl = NULL, model = NULL, ...) {
   .multilife_check_basis(tbl, model)
@@ -315,18 +360,19 @@ tpxy <- function(x, y, t, tbl = NULL, model = NULL, ...) {
     tbl = tbl,
     model = model,
     ...
-  ) * .multilife_single_survival(
-    x = y,
-    t = t,
-    tbl = tbl,
-    model = model,
-    ...
-  )
+  ) *
+    .multilife_single_survival(
+      x = y,
+      t = t,
+      tbl = tbl,
+      model = model,
+      ...
+    )
 
   pmin(pmax(out, 0), 1)
 }
 
-#' @rdname multilife_survival
+#' @rdname multilife_survival_probabilities
 #' @export
 tqxy <- function(x, y, t, tbl = NULL, model = NULL, ...) {
   1 - tpxy(
@@ -339,7 +385,7 @@ tqxy <- function(x, y, t, tbl = NULL, model = NULL, ...) {
   )
 }
 
-#' @rdname multilife_survival
+#' @rdname multilife_survival_probabilities
 #' @export
 tpxybar <- function(x, y, t, tbl = NULL, model = NULL, ...) {
   .multilife_check_basis(tbl, model)
@@ -380,7 +426,7 @@ tpxybar <- function(x, y, t, tbl = NULL, model = NULL, ...) {
   pmin(pmax(out, 0), 1)
 }
 
-#' @rdname multilife_survival
+#' @rdname multilife_survival_probabilities
 #' @export
 tqxybar <- function(x, y, t, tbl = NULL, model = NULL, ...) {
   1 - tpxybar(
