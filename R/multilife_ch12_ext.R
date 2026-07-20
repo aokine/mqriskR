@@ -232,44 +232,72 @@
 #' Computes probabilities associated with the order of death of two
 #' independent lives over a specified term.
 #'
-#' \code{tqxy1()} gives the probability that the first life dies before the
-#' second life within \code{n} years.
+#' \code{tqxy1()} computes the probability that the first life dies before
+#' the second life within \eqn{n} years.
 #'
-#' \code{tqyx1()} gives the probability that the second life dies before the
-#' first life within \code{n} years.
+#' \code{tqyx1()} computes the probability that the second life dies before
+#' the first life within \eqn{n} years.
 #'
-#' \code{tqxy2()} gives the probability that the first life dies after the
-#' second life but within \code{n} years.
+#' \code{tqxy2()} computes the probability that the first life dies after
+#' the second life but within \eqn{n} years.
 #'
-#' \code{tqyx2()} gives the probability that the second life dies after the
-#' first life but within \code{n} years.
+#' \code{tqyx2()} computes the probability that the second life dies after
+#' the first life but within \eqn{n} years.
 #'
-#' These functions require a parametric survival model because an annual life
-#' table does not uniquely determine the within-year order of death without
-#' an additional interpolation assumption.
+#' These functions require a parametric survival model because an annual
+#' life table does not uniquely determine the within-year order of death
+#' without an additional interpolation assumption.
 #'
 #' @param x Age of the first life. May be scalar or vector.
 #' @param y Age of the second life. May be scalar or vector.
 #' @param n Term in years. May be scalar or vector.
-#' @param tbl Optional life table object. Retained for backward compatibility;
-#'   these continuous calculations require \code{model}.
+#' @param tbl Optional life table object retained for backward compatibility.
+#'   Continuous calculations currently require \code{model}.
 #' @param model Parametric survival model.
 #' @param ... Additional parameters passed to the survival and hazard
 #'   functions.
 #'
 #' @return A numeric vector of contingent probabilities.
 #'
+#' @details
+#' All calculations assume the two future lifetimes are independent.
+#'
+#' The probabilities are obtained by integrating the joint survival
+#' function together with the appropriate force of mortality.
+#'
+#' The four functions partition the probability that one of the two lives
+#' dies within the specified term according to the order of death.
+#'
 #' @examples
 #' tqxy1(
-#'   40, 50, n = 10,
-#'   model = "uniform", omega = 100
+#'   40, 50,
+#'   n = 10,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
 #' tqyx1(
-#'   40, 50, n = 10,
-#'   model = "uniform", omega = 100
+#'   40, 50,
+#'   n = 10,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
+#' tqxy2(
+#'   40, 50,
+#'   n = 10,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' tqyx2(
+#'   40, 50,
+#'   n = 10,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' @name multilife_contingent_probabilities
 #' @rdname multilife_contingent_probabilities
 #' @export
 tqxy1 <- function(x, y, n, tbl = NULL, model = NULL, ...) {
@@ -294,37 +322,41 @@ tqxy1 <- function(x, y, n, tbl = NULL, model = NULL, ...) {
   y <- values[[2]]
   n <- values[[3]]
 
-  vapply(seq_along(x), function(j) {
-    upper <- .multilife_ext_upper(
-      x = x[j],
-      y = y[j],
-      n = n[j],
-      model = model,
-      ...
-    )
+  vapply(
+    seq_along(x),
+    function(j) {
+      upper <- .multilife_ext_upper(
+        x = x[j],
+        y = y[j],
+        n = n[j],
+        model = model,
+        ...
+      )
 
-    .multilife_ext_integrate(
-      function(t) {
-        value <- .multilife_ext_joint_survival(
-          t = t,
-          x = x[j],
-          y = y[j],
-          model = model,
-          ...
-        ) * .multilife_ext_hazard(
-          age = x[j] + t,
-          model = model,
-          ...
-        )
+      .multilife_ext_integrate(
+        function(t) {
+          value <- .multilife_ext_joint_survival(
+            t = t,
+            x = x[j],
+            y = y[j],
+            model = model,
+            ...
+          ) *
+            .multilife_ext_hazard(
+              age = x[j] + t,
+              model = model,
+              ...
+            )
 
-        value[!is.finite(value)] <- 0
-        value
-      },
-      upper = upper
-    )
-  }, numeric(1))
+          value[!is.finite(value)] <- 0
+          value
+        },
+        upper = upper
+      )
+    },
+    numeric(1)
+  )
 }
-
 
 #' @rdname multilife_contingent_probabilities
 #' @export
@@ -350,37 +382,41 @@ tqyx1 <- function(x, y, n, tbl = NULL, model = NULL, ...) {
   y <- values[[2]]
   n <- values[[3]]
 
-  vapply(seq_along(x), function(j) {
-    upper <- .multilife_ext_upper(
-      x = x[j],
-      y = y[j],
-      n = n[j],
-      model = model,
-      ...
-    )
+  vapply(
+    seq_along(x),
+    function(j) {
+      upper <- .multilife_ext_upper(
+        x = x[j],
+        y = y[j],
+        n = n[j],
+        model = model,
+        ...
+      )
 
-    .multilife_ext_integrate(
-      function(t) {
-        value <- .multilife_ext_joint_survival(
-          t = t,
-          x = x[j],
-          y = y[j],
-          model = model,
-          ...
-        ) * .multilife_ext_hazard(
-          age = y[j] + t,
-          model = model,
-          ...
-        )
+      .multilife_ext_integrate(
+        function(t) {
+          value <- .multilife_ext_joint_survival(
+            t = t,
+            x = x[j],
+            y = y[j],
+            model = model,
+            ...
+          ) *
+            .multilife_ext_hazard(
+              age = y[j] + t,
+              model = model,
+              ...
+            )
 
-        value[!is.finite(value)] <- 0
-        value
-      },
-      upper = upper
-    )
-  }, numeric(1))
+          value[!is.finite(value)] <- 0
+          value
+        },
+        upper = upper
+      )
+    },
+    numeric(1)
+  )
 }
-
 
 #' @rdname multilife_contingent_probabilities
 #' @export
@@ -423,7 +459,6 @@ tqxy2 <- function(x, y, n, tbl = NULL, model = NULL, ...) {
 
   pmax(out, 0)
 }
-
 
 #' @rdname multilife_contingent_probabilities
 #' @export
