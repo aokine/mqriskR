@@ -662,17 +662,10 @@ tsVxn1 <- function(x, n, t, s, i,
 #' Computes prospective gross premium and expense reserves for fully
 #' discrete whole life insurance after issue.
 #'
-#' \code{tVGx()} computes the gross premium reserve:
+#' \code{tVGx()} computes the prospective gross premium reserve.
 #'
-#' \deqn{
-#' {}_tV_x^G =
-#' (b+s)A_{x+t}
-#' -
-#' \left[(1-r)G-e\right]\ddot{a}_{x+t}.
-#' }
-#'
-#' \code{tVEx()} computes the corresponding expense reserve as the gross
-#' premium reserve minus the net benefit reserve.
+#' \code{tVEx()} computes the corresponding expense reserve, defined as the
+#' difference between the gross premium reserve and the net benefit reserve.
 #'
 #' @param x Issue age. May be scalar or vector.
 #' @param t Nonnegative integer duration. May be scalar or vector.
@@ -689,15 +682,58 @@ tsVxn1 <- function(x, n, t, s, i,
 #'
 #' @return A numeric vector of reserve values.
 #'
+#' @details
+#' The gross premium reserve is calculated as
+#'
+#' \deqn{
+#' {}_tV_x^G
+#' =
+#' (b+s)A_{x+t}
+#' -
+#' \left[(1-r)G-e\right]\ddot{a}_{x+t},
+#' }
+#'
+#' where
+#' \itemize{
+#'   \item \eqn{b} is the insurance benefit,
+#'   \item \eqn{s} is the settlement expense,
+#'   \item \eqn{G} is the gross annual premium,
+#'   \item \eqn{r} is the renewal percent-of-premium expense, and
+#'   \item \eqn{e} is the renewal per-policy expense.
+#' }
+#'
+#' The expense reserve is obtained as the gross premium reserve minus the
+#' corresponding net benefit reserve.
+#'
 #' @examples
 #' tVGx(
-#'   x = 40, t = 10, i = 0.05, G = 0.03,
-#'   benefit = 1, renewal_premium_pct = 0.10,
+#'   x = 40,
+#'   t = 10,
+#'   i = 0.05,
+#'   G = 0.03,
+#'   benefit = 1,
+#'   renewal_premium_pct = 0.10,
 #'   renewal_policy_exp = 0.002,
 #'   settlement_exp = 0.02,
-#'   model = "uniform", omega = 100
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
+#' tVEx(
+#'   x = 40,
+#'   t = 10,
+#'   i = 0.05,
+#'   G = 0.03,
+#'   benefit = 1,
+#'   renewal_premium_pct = 0.10,
+#'   renewal_policy_exp = 0.002,
+#'   settlement_exp = 0.02,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' @name gross_premium_expense_reserves
+#' @rdname gross_premium_expense_reserves
 #' @export
 tVGx <- function(x, t, i, G,
                  benefit = 1,
@@ -782,7 +818,7 @@ tVGx <- function(x, t, i, G,
   }, numeric(1))
 }
 
-#' @rdname tVGx
+#' @rdname gross_premium_expense_reserves
 #' @export
 tVEx <- function(x, t, i, G,
                  benefit = 1,
