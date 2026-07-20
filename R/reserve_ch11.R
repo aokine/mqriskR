@@ -468,21 +468,20 @@ meanVx <- function(x, t, i, tbl = NULL, model = NULL, ...) {
 #' Fractional-duration term and endowment reserves
 #'
 #' Computes fractional-duration reserves for term and endowment insurance
-#' using linear interpolation:
+#' using linear interpolation between the reserve immediately after the
+#' premium at duration \eqn{t} and the reserve at duration \eqn{t+1}.
 #'
-#' \deqn{
-#' {}_{t+s}V =
-#' ({}_tV + P)(1-s) + {}_{t+1}V s.
-#' }
+#' \code{tsVxn()} computes the fractional-duration reserve for endowment
+#' insurance.
 #'
-#' \code{tsVxn()} applies the formula to endowment insurance.
-#'
-#' \code{tsVxn1()} applies the formula to term insurance.
+#' \code{tsVxn1()} computes the fractional-duration reserve for term
+#' insurance.
 #'
 #' @param x Issue age. May be scalar or vector.
 #' @param n Positive integer term. May be scalar or vector.
-#' @param t Nonnegative integer duration satisfying \eqn{t<n}.
-#' @param s Fractional duration in \eqn{[0,1]}.
+#' @param t Nonnegative integer duration satisfying \eqn{t < n}. May be
+#'   scalar or vector.
+#' @param s Fractional duration in \eqn{[0,1]}. May be scalar or vector.
 #' @param i Effective annual interest rate. May be scalar or vector.
 #' @param tbl Optional life table object.
 #' @param model Optional parametric survival model.
@@ -490,17 +489,43 @@ meanVx <- function(x, t, i, tbl = NULL, model = NULL, ...) {
 #'
 #' @return A numeric vector of reserve values.
 #'
+#' @details
+#' The fractional reserve is computed using
+#'
+#' \deqn{
+#' {}_{t+s}V
+#' =
+#' ({}_tV + P)(1-s)
+#' +
+#' {}_{t+1}V s.
+#' }
+#'
+#' The premium \eqn{P} is the net annual premium for the corresponding
+#' insurance contract (term or endowment).
+#'
 #' @examples
 #' tsVxn(
-#'   40, n = 20, t = 10, s = 0.5, i = 0.05,
-#'   model = "uniform", omega = 100
+#'   40,
+#'   n = 20,
+#'   t = 10,
+#'   s = 0.5,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
 #' tsVxn1(
-#'   40, n = 20, t = 10, s = 0.5, i = 0.05,
-#'   model = "uniform", omega = 100
+#'   40,
+#'   n = 20,
+#'   t = 10,
+#'   s = 0.5,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
+#' @name fractional_duration_term_endowment_reserves
+#' @rdname fractional_duration_term_endowment_reserves
 #' @export
 tsVxn <- function(x, n, t, s, i,
                   tbl = NULL, model = NULL, ...) {
@@ -564,7 +589,7 @@ tsVxn <- function(x, n, t, s, i,
   }, numeric(1))
 }
 
-#' @rdname tsVxn
+#' @rdname fractional_duration_term_endowment_reserves
 #' @export
 tsVxn1 <- function(x, n, t, s, i,
                    tbl = NULL, model = NULL, ...) {
