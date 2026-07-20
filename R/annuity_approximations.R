@@ -307,11 +307,11 @@ abarx_udd <- function(x, i, model, ...) {
 #'
 #' Uses the identity
 #' \deqn{\bar{a}_{x:\overline{n}|} \approx \frac{1-\bar{A}_{x:\overline{n}|}}{\delta}}
-#' together with the package's existing UDD approximation
-#' for continuous endowment insurance
+#' together with the package's existing Abarxn_udd() approximation.
 #'
-#' Note that this function relies on the already-existing \code{Abarxn_udd()}
-#' implementation in the package, so extra survival-model arguments are not used.
+#' The abarxn_udd() calculation uses the existing Abarxn_udd() insurance
+#' approximation. Consequently, additional survival-model arguments are not used
+#' in that calculation.
 #'
 #' @rdname annuity_approximations_udd
 #' @export
