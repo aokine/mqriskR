@@ -492,25 +492,43 @@ tqyx2 <- function(x, y, n, tbl = NULL, model = NULL, ...) {
 #' @param x Age of the first life. May be scalar or vector.
 #' @param y Age of the second life. May be scalar or vector.
 #' @param i Effective annual interest rate. May be scalar or vector.
-#' @param tbl Optional life table object. Retained for backward compatibility;
-#'   these continuous calculations require \code{model}.
+#' @param tbl Optional life table object retained for backward compatibility.
+#'   Continuous calculations currently require \code{model}.
 #' @param model Parametric survival model.
 #' @param ... Additional parameters passed to the survival functions.
 #'
 #' @return A numeric vector of actuarial present values.
 #'
+#' @details
+#' Under independence, \code{abarxy()} represents the continuous joint-life
+#' annuity, payable while both lives survive.
+#'
+#' The last-survivor annuity satisfies
+#' \deqn{\bar{a}_{\overline{xy}} =
+#' \bar{a}_x + \bar{a}_y - \bar{a}_{xy}.}
+#'
+#' The reversionary annuities are obtained as the difference between the
+#' corresponding single-life annuity and the joint-life annuity.
+#'
 #' @examples
 #' abarxy(
-#'   40, 50, i = 0.05,
-#'   model = "uniform", omega = 100
+#'   x = 40,
+#'   y = 50,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
 #' abarxybar(
-#'   40, 50, i = 0.05,
-#'   model = "uniform", omega = 100
+#'   x = 40,
+#'   y = 50,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
-#' @rdname multilife_continuous_annuities
+#' @name continuous_multilife_annuities
+#' @rdname continuous_multilife_annuities
 #' @export
 abarxy <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(
@@ -536,35 +554,39 @@ abarxy <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 
   delta <- log1p(i)
 
-  vapply(seq_along(x), function(j) {
-    upper <- .multilife_ext_upper(
-      x = x[j],
-      y = y[j],
-      model = model,
-      ...
-    )
+  vapply(
+    seq_along(x),
+    function(j) {
+      upper <- .multilife_ext_upper(
+        x = x[j],
+        y = y[j],
+        model = model,
+        ...
+      )
 
-    .multilife_ext_integrate(
-      function(t) {
-        value <- exp(-delta[j] * t) *
-          .multilife_ext_joint_survival(
-            t = t,
-            x = x[j],
-            y = y[j],
-            model = model,
-            ...
-          )
+      .multilife_ext_integrate(
+        function(t) {
+          value <- exp(-delta[j] * t) *
+            .multilife_ext_joint_survival(
+              t = t,
+              x = x[j],
+              y = y[j],
+              model = model,
+              ...
+            )
 
-        value[!is.finite(value)] <- 0
-        value
-      },
-      upper = upper
-    )
-  }, numeric(1))
+          value[!is.finite(value)] <- 0
+          value
+        },
+        upper = upper
+      )
+    },
+    numeric(1)
+  )
 }
 
 
-#' @rdname multilife_continuous_annuities
+#' @rdname continuous_multilife_annuities
 #' @export
 abarxybar <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(
@@ -610,7 +632,7 @@ abarxybar <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 }
 
 
-#' @rdname multilife_continuous_annuities
+#' @rdname continuous_multilife_annuities
 #' @export
 abarx_y <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(
@@ -650,7 +672,7 @@ abarx_y <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 }
 
 
-#' @rdname multilife_continuous_annuities
+#' @rdname continuous_multilife_annuities
 #' @export
 abary_x <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(
@@ -688,7 +710,6 @@ abary_x <- function(x, y, i, tbl = NULL, model = NULL, ...) {
       ...
     )
 }
-
 
 # -------------------------------------------------------------------------
 # Continuous multi-life insurance
