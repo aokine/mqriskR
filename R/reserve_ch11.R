@@ -328,22 +328,22 @@ tVFx <- function(x, t, i, tbl = NULL, model = NULL, ...) {
   )
 }
 
+
 # -------------------------------------------------------------------------
 # Fractional-duration whole life reserves
 # -------------------------------------------------------------------------
 
 #' Fractional-duration whole life reserves
 #'
-#' Computes a fractional-duration whole life reserve using linear
+#' Computes fractional-duration whole life reserves using linear
 #' interpolation between the reserve immediately after the premium at
-#' duration \code{t} and the reserve at duration \code{t + 1}:
+#' duration \eqn{t} and the reserve at duration \eqn{t+1}.
 #'
-#' \deqn{
-#' {}_{t+s}V_x =
-#' ({}_tV_x + P_x)(1-s) + {}_{t+1}V_x s.
-#' }
+#' \code{tsVx()} computes the reserve at fractional duration
+#' \eqn{t+s}, where \eqn{0 \le s \le 1}.
 #'
-#' \code{meanVx()} evaluates the same formula at \eqn{s=1/2}.
+#' \code{meanVx()} computes the reserve at the midpoint of the policy
+#' year (\eqn{s=0.5}).
 #'
 #' @param x Issue age. May be scalar or vector.
 #' @param t Nonnegative integer duration. May be scalar or vector.
@@ -355,17 +355,40 @@ tVFx <- function(x, t, i, tbl = NULL, model = NULL, ...) {
 #'
 #' @return A numeric vector of reserve values.
 #'
+#' @details
+#' The fractional reserve is computed using
+#'
+#' \deqn{
+#' {}_{t+s}V_x
+#' =
+#' ({}_tV_x + P_x)(1-s)
+#' +
+#' {}_{t+1}V_x s.
+#' }
+#'
+#' The function \code{meanVx()} is a convenience wrapper corresponding to
+#' \eqn{s=0.5}.
+#'
 #' @examples
 #' tsVx(
-#'   40, t = 10, s = 0.5, i = 0.05,
-#'   model = "uniform", omega = 100
+#'   40,
+#'   t = 10,
+#'   s = 0.5,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
 #' meanVx(
-#'   40, t = 10, i = 0.05,
-#'   model = "uniform", omega = 100
+#'   40,
+#'   t = 10,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
+#' @name fractional_duration_reserves
+#' @rdname fractional_duration_reserves
 #' @export
 tsVx <- function(x, t, s, i, tbl = NULL, model = NULL, ...) {
   .reserve11_check_basis(tbl, model)
@@ -388,39 +411,43 @@ tsVx <- function(x, t, s, i, tbl = NULL, model = NULL, ...) {
   s <- values[[3]]
   i <- values[[4]]
 
-  vapply(seq_along(x), function(j) {
-    reserve_t <- tVx(
-      x = x[j],
-      t = t[j],
-      i = i[j],
-      tbl = tbl,
-      model = model,
-      ...
-    )
+  vapply(
+    seq_along(x),
+    function(j) {
+      reserve_t <- tVx(
+        x = x[j],
+        t = t[j],
+        i = i[j],
+        tbl = tbl,
+        model = model,
+        ...
+      )
 
-    reserve_t1 <- tVx(
-      x = x[j],
-      t = t[j] + 1L,
-      i = i[j],
-      tbl = tbl,
-      model = model,
-      ...
-    )
+      reserve_t1 <- tVx(
+        x = x[j],
+        t = t[j] + 1L,
+        i = i[j],
+        tbl = tbl,
+        model = model,
+        ...
+      )
 
-    premium <- Px(
-      x = x[j],
-      i = i[j],
-      tbl = tbl,
-      model = model,
-      ...
-    )
+      premium <- Px(
+        x = x[j],
+        i = i[j],
+        tbl = tbl,
+        model = model,
+        ...
+      )
 
-    (reserve_t + premium) * (1 - s[j]) +
-      reserve_t1 * s[j]
-  }, numeric(1))
+      (reserve_t + premium) * (1 - s[j]) +
+        reserve_t1 * s[j]
+    },
+    numeric(1)
+  )
 }
 
-#' @rdname tsVx
+#' @rdname fractional_duration_reserves
 #' @export
 meanVx <- function(x, t, i, tbl = NULL, model = NULL, ...) {
   tsVx(
