@@ -691,10 +691,10 @@ abary_x <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 
 
 # -------------------------------------------------------------------------
-# Continuous multi-life insurances
+# Continuous multi-life insurance
 # -------------------------------------------------------------------------
 
-#' Continuous multi-life insurances
+#' Continuous multi-life insurance
 #'
 #' Computes continuous joint-life, last-survivor, and contingent whole-life
 #' insurance values for two independent lives.
@@ -704,10 +704,10 @@ abary_x <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 #' \code{Abarxybar()} computes last-survivor insurance payable at the second
 #' death.
 #'
-#' \code{Abarxy1()} and \code{Abaryx1()} compute contingent insurances payable
+#' \code{Abarxy1()} and \code{Abaryx1()} compute contingent insurance payable
 #' when the specified life dies first.
 #'
-#' \code{Abarxy2()} and \code{Abaryx2()} compute contingent insurances payable
+#' \code{Abarxy2()} and \code{Abaryx2()} compute contingent insurance payable
 #' when the specified life dies second.
 #'
 #' These functions require a parametric survival model.
@@ -715,26 +715,41 @@ abary_x <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 #' @param x Age of the first life. May be scalar or vector.
 #' @param y Age of the second life. May be scalar or vector.
 #' @param i Effective annual interest rate. May be scalar or vector.
-#' @param tbl Optional life table object. Retained for backward compatibility;
-#'   these continuous calculations require \code{model}.
+#' @param tbl Optional life table object retained for backward compatibility.
+#'   Continuous calculations currently require \code{model}.
 #' @param model Parametric survival model.
 #' @param ... Additional parameters passed to the survival and hazard
 #'   functions.
 #'
 #' @return A numeric vector of actuarial present values.
 #'
+#' @details
+#' Under independence, \code{Abarxy()} represents insurance payable at the
+#' first death and \code{Abarxybar()} represents insurance payable at the
+#' second death.
+#'
+#' The contingent functions distinguish both the life whose death triggers
+#' payment and whether that death occurs first or second.
+#'
 #' @examples
 #' Abarxy(
-#'   40, 50, i = 0.05,
-#'   model = "uniform", omega = 100
+#'   x = 40,
+#'   y = 50,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
 #' Abarxy1(
-#'   40, 50, i = 0.05,
-#'   model = "uniform", omega = 100
+#'   x = 40,
+#'   y = 50,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
 #' )
 #'
-#' @rdname multilife_continuous_insurances
+#' @name continuous_multilife_insurance
+#' @rdname continuous_multilife_insurance
 #' @export
 Abarxy <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(
@@ -768,7 +783,7 @@ Abarxy <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 }
 
 
-#' @rdname multilife_continuous_insurances
+#' @rdname continuous_multilife_insurance
 #' @export
 Abarxybar <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(
@@ -814,7 +829,7 @@ Abarxybar <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 }
 
 
-#' @rdname multilife_continuous_insurances
+#' @rdname continuous_multilife_insurance
 #' @export
 Abarxy1 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(
@@ -840,40 +855,44 @@ Abarxy1 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 
   delta <- log1p(i)
 
-  vapply(seq_along(x), function(j) {
-    upper <- .multilife_ext_upper(
-      x = x[j],
-      y = y[j],
-      model = model,
-      ...
-    )
+  vapply(
+    seq_along(x),
+    function(j) {
+      upper <- .multilife_ext_upper(
+        x = x[j],
+        y = y[j],
+        model = model,
+        ...
+      )
 
-    .multilife_ext_integrate(
-      function(t) {
-        value <- exp(-delta[j] * t) *
-          .multilife_ext_joint_survival(
-            t = t,
-            x = x[j],
-            y = y[j],
-            model = model,
-            ...
-          ) *
-          .multilife_ext_hazard(
-            age = x[j] + t,
-            model = model,
-            ...
-          )
+      .multilife_ext_integrate(
+        function(t) {
+          value <- exp(-delta[j] * t) *
+            .multilife_ext_joint_survival(
+              t = t,
+              x = x[j],
+              y = y[j],
+              model = model,
+              ...
+            ) *
+            .multilife_ext_hazard(
+              age = x[j] + t,
+              model = model,
+              ...
+            )
 
-        value[!is.finite(value)] <- 0
-        value
-      },
-      upper = upper
-    )
-  }, numeric(1))
+          value[!is.finite(value)] <- 0
+          value
+        },
+        upper = upper
+      )
+    },
+    numeric(1)
+  )
 }
 
 
-#' @rdname multilife_continuous_insurances
+#' @rdname continuous_multilife_insurance
 #' @export
 Abaryx1 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(
@@ -899,40 +918,44 @@ Abaryx1 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 
   delta <- log1p(i)
 
-  vapply(seq_along(x), function(j) {
-    upper <- .multilife_ext_upper(
-      x = x[j],
-      y = y[j],
-      model = model,
-      ...
-    )
+  vapply(
+    seq_along(x),
+    function(j) {
+      upper <- .multilife_ext_upper(
+        x = x[j],
+        y = y[j],
+        model = model,
+        ...
+      )
 
-    .multilife_ext_integrate(
-      function(t) {
-        value <- exp(-delta[j] * t) *
-          .multilife_ext_joint_survival(
-            t = t,
-            x = x[j],
-            y = y[j],
-            model = model,
-            ...
-          ) *
-          .multilife_ext_hazard(
-            age = y[j] + t,
-            model = model,
-            ...
-          )
+      .multilife_ext_integrate(
+        function(t) {
+          value <- exp(-delta[j] * t) *
+            .multilife_ext_joint_survival(
+              t = t,
+              x = x[j],
+              y = y[j],
+              model = model,
+              ...
+            ) *
+            .multilife_ext_hazard(
+              age = y[j] + t,
+              model = model,
+              ...
+            )
 
-        value[!is.finite(value)] <- 0
-        value
-      },
-      upper = upper
-    )
-  }, numeric(1))
+          value[!is.finite(value)] <- 0
+          value
+        },
+        upper = upper
+      )
+    },
+    numeric(1)
+  )
 }
 
 
-#' @rdname multilife_continuous_insurances
+#' @rdname continuous_multilife_insurance
 #' @export
 Abarxy2 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(
@@ -974,7 +997,7 @@ Abarxy2 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
 }
 
 
-#' @rdname multilife_continuous_insurances
+#' @rdname continuous_multilife_insurance
 #' @export
 Abaryx2 <- function(x, y, i, tbl = NULL, model = NULL, ...) {
   .multilife_ext_check_basis(

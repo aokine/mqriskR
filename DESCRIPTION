@@ -1,7 +1,7 @@
 Package: mqriskR
 Type: Package
 Title: Actuarial Risk Modeling and Life Contingencies
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person(
       "Nii", "Okine",
