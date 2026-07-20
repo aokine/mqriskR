@@ -488,7 +488,18 @@ nExybar <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
 
 #' Joint-life annuities
 #'
-#' Computes temporary and whole life joint-life annuities under independence.
+#' Computes temporary and whole-life joint-life annuities-due and
+#' annuities-immediate for two independent lives.
+#'
+#' \code{adotxyn()} computes an \eqn{n}-year temporary joint-life
+#' annuity-due.
+#'
+#' \code{axyn()} computes an \eqn{n}-year temporary joint-life
+#' annuity-immediate.
+#'
+#' \code{adotxy()} computes a whole-life joint-life annuity-due.
+#'
+#' \code{axy()} computes a whole-life joint-life annuity-immediate.
 #'
 #' @param x Age of the first life. May be scalar or vector.
 #' @param y Age of the second life. May be scalar or vector.
@@ -497,21 +508,69 @@ nExybar <- function(x, y, n, i, tbl = NULL, model = NULL, ...) {
 #' @param tbl Optional life table object.
 #' @param model Optional parametric survival model.
 #' @param ... Additional parameters passed to the survival model.
-#' @param k_max Maximum summation horizon for non-terminating models.
-#' @param tol Positive convergence tolerance.
+#' @param k_max Maximum summation horizon used for non-terminating parametric
+#'   survival models.
+#' @param tol Positive convergence tolerance for whole-life summations.
 #'
 #' @return A numeric vector of annuity actuarial present values.
 #'
-#' @examples
-#' adotxyn(40, 50, n = 10, i = 0.05,
-#'         model = "uniform", omega = 100)
-#' axyn(40, 50, n = 10, i = 0.05,
-#'      model = "uniform", omega = 100)
-#' adotxy(40, 50, i = 0.05,
-#'        model = "uniform", omega = 100)
-#' axy(40, 50, i = 0.05,
-#'     model = "uniform", omega = 100)
+#' @details
+#' All calculations assume independence between the two future lifetimes.
 #'
+#' The temporary annuity-due is
+#' \deqn{
+#' \ddot{a}_{xy:\overline{n}|}
+#' =
+#' \sum_{k=0}^{n-1} v^k\,{}_kp_{xy}.
+#' }
+#'
+#' The temporary annuity-immediate is
+#' \deqn{
+#' a_{xy:\overline{n}|}
+#' =
+#' \sum_{k=1}^{n} v^k\,{}_kp_{xy}.
+#' }
+#'
+#' For life-table calculations, the whole-life sums terminate at the last
+#' duration supported jointly by the two lives. For parametric models, the
+#' sums are evaluated until convergence or until \code{k_max} is reached.
+#'
+#' @examples
+#' adotxyn(
+#'   x = 40,
+#'   y = 50,
+#'   n = 10,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' axyn(
+#'   x = 40,
+#'   y = 50,
+#'   n = 10,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' adotxy(
+#'   x = 40,
+#'   y = 50,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' axy(
+#'   x = 40,
+#'   y = 50,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' @name joint_life_annuities
 #' @rdname joint_life_annuities
 #' @export
 adotxyn <- function(x, y, n, i,
@@ -536,26 +595,31 @@ adotxyn <- function(x, y, n, i,
   n <- values[[3]]
   i <- values[[4]]
 
-  vapply(seq_along(x), function(j) {
-    if (n[j] == 0L) {
-      return(0)
-    }
+  vapply(
+    seq_along(x),
+    function(j) {
+      if (n[j] == 0L) {
+        return(0)
+      }
 
-    times <- 0:(n[j] - 1L)
+      times <- 0:(n[j] - 1L)
 
-    sum(
-      discount(i[j], times) *
-        tpxy(
-          x = x[j],
-          y = y[j],
-          t = times,
-          tbl = tbl,
-          model = model,
-          ...
-        )
-    )
-  }, numeric(1))
+      sum(
+        discount(i[j], times) *
+          tpxy(
+            x = x[j],
+            y = y[j],
+            t = times,
+            tbl = tbl,
+            model = model,
+            ...
+          )
+      )
+    },
+    numeric(1)
+  )
 }
+
 
 #' @rdname joint_life_annuities
 #' @export
@@ -569,16 +633,18 @@ axyn <- function(x, y, n, i,
     tbl = tbl,
     model = model,
     ...
-  ) - 1 + nExy(
-    x = x,
-    y = y,
-    n = n,
-    i = i,
-    tbl = tbl,
-    model = model,
-    ...
-  )
+  ) - 1 +
+    nExy(
+      x = x,
+      y = y,
+      n = n,
+      i = i,
+      tbl = tbl,
+      model = model,
+      ...
+    )
 }
+
 
 #' @rdname joint_life_annuities
 #' @export
@@ -606,52 +672,59 @@ adotxy <- function(x, y, i,
   y <- values[[2]]
   i <- values[[3]]
 
-  vapply(seq_along(x), function(j) {
-    if (!is.null(tbl)) {
-      upper <- .multilife_joint_table_horizon(
-        tbl = tbl,
-        x = x[j],
-        y = y[j]
-      )
+  vapply(
+    seq_along(x),
+    function(j) {
+      if (!is.null(tbl)) {
+        upper <- .multilife_joint_table_horizon(
+          tbl = tbl,
+          x = x[j],
+          y = y[j]
+        )
 
-      if (upper < 0L) {
-        return(0)
+        if (upper < 0L) {
+          return(0)
+        }
+
+        return(
+          .multilife_sum_series(
+            fun = function(k) {
+              discount(i[j], k) *
+                tpxy(
+                  x = x[j],
+                  y = y[j],
+                  t = k,
+                  tbl = tbl
+                )
+            },
+            start = 0L,
+            end = upper,
+            tol = tol
+          )
+        )
       }
 
-      return(.multilife_sum_series(
+      .multilife_sum_series(
         fun = function(k) {
           discount(i[j], k) *
             tpxy(
               x = x[j],
               y = y[j],
               t = k,
-              tbl = tbl
+              model = model,
+              ...
             )
         },
         start = 0L,
-        end = upper,
-        tol = tol
-      ))
-    }
-
-    .multilife_sum_series(
-      fun = function(k) {
-        discount(i[j], k) *
-          tpxy(
-            x = x[j],
-            y = y[j],
-            t = k,
-            model = model,
-            ...
-          )
-      },
-      start = 0L,
-      end = k_max - 1L,
-      tol = tol,
-      warn_if_unconverged = TRUE
-    )
-  }, numeric(1))
+        end = k_max - 1L,
+        tol = tol,
+        warn_if_unconverged = TRUE
+      )
+    },
+    numeric(1)
+  )
 }
+
 
 #' @rdname joint_life_annuities
 #' @export
@@ -679,51 +752,57 @@ axy <- function(x, y, i,
   y <- values[[2]]
   i <- values[[3]]
 
-  vapply(seq_along(x), function(j) {
-    if (!is.null(tbl)) {
-      upper <- .multilife_joint_table_horizon(
-        tbl = tbl,
-        x = x[j],
-        y = y[j]
-      )
+  vapply(
+    seq_along(x),
+    function(j) {
+      if (!is.null(tbl)) {
+        upper <- .multilife_joint_table_horizon(
+          tbl = tbl,
+          x = x[j],
+          y = y[j]
+        )
 
-      if (upper < 1L) {
-        return(0)
+        if (upper < 1L) {
+          return(0)
+        }
+
+        return(
+          .multilife_sum_series(
+            fun = function(k) {
+              discount(i[j], k) *
+                tpxy(
+                  x = x[j],
+                  y = y[j],
+                  t = k,
+                  tbl = tbl
+                )
+            },
+            start = 1L,
+            end = upper,
+            tol = tol
+          )
+        )
       }
 
-      return(.multilife_sum_series(
+      .multilife_sum_series(
         fun = function(k) {
           discount(i[j], k) *
             tpxy(
               x = x[j],
               y = y[j],
               t = k,
-              tbl = tbl
+              model = model,
+              ...
             )
         },
         start = 1L,
-        end = upper,
-        tol = tol
-      ))
-    }
-
-    .multilife_sum_series(
-      fun = function(k) {
-        discount(i[j], k) *
-          tpxy(
-            x = x[j],
-            y = y[j],
-            t = k,
-            model = model,
-            ...
-          )
-      },
-      start = 1L,
-      end = k_max,
-      tol = tol,
-      warn_if_unconverged = TRUE
-    )
-  }, numeric(1))
+        end = k_max,
+        tol = tol,
+        warn_if_unconverged = TRUE
+      )
+    },
+    numeric(1)
+  )
 }
 
 # -------------------------------------------------------------------------
