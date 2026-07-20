@@ -172,13 +172,13 @@
 }
 
 # -------------------------------------------------------------------------
-# Full preliminary term modified reserves
+# Full preliminary term modified premiums and reserves
 # -------------------------------------------------------------------------
 
 #' Full preliminary term modified premiums and reserves
 #'
 #' Computes modified premiums and reserves under the full preliminary term
-#' method for whole life insurance.
+#' method for whole-life insurance.
 #'
 #' \code{alphaF()} computes the first-year modified premium
 #' \eqn{\alpha^F = vq_x}.
@@ -187,8 +187,8 @@
 #' \eqn{\beta^F = P_{x+1}}.
 #'
 #' \code{tVFx()} computes the full preliminary term reserve. The reserve is
-#' zero at durations 0 and 1; for \eqn{t > 1}, it equals the net level premium
-#' reserve at duration \eqn{t-1} for a policy issued at age \eqn{x+1}.
+#' zero at durations 0 and 1. For \eqn{t > 1}, it equals the net level premium
+#' reserve at duration \eqn{t - 1} for a policy issued at age \eqn{x + 1}.
 #'
 #' @param x Issue age. May be scalar or vector.
 #' @param i Effective annual interest rate. May be scalar or vector.
@@ -197,13 +197,43 @@
 #' @param ... Additional parameters passed to the actuarial functions.
 #' @param t Nonnegative integer duration. May be scalar or vector.
 #'
-#' @return A numeric vector.
+#' @return A numeric vector of modified premiums or reserves.
+#'
+#' @details
+#' Under the full preliminary term method, the first policy year is treated
+#' as one-year term insurance. The first-year modified premium is therefore
+#' the actuarial present value of one-year term insurance at age \eqn{x}.
+#'
+#' Renewal premiums are based on a whole-life policy issued one year later,
+#' at age \eqn{x + 1}. Accordingly, reserves after the first policy year are
+#' obtained from the corresponding net level premium reserve for that
+#' deferred issue age.
 #'
 #' @examples
-#' alphaF(40, i = 0.05, model = "uniform", omega = 100)
-#' betaF(40, i = 0.05, model = "uniform", omega = 100)
-#' tVFx(40, t = 5, i = 0.05, model = "uniform", omega = 100)
+#' alphaF(
+#'   x = 40,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
+#' )
 #'
+#' betaF(
+#'   x = 40,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' tVFx(
+#'   x = 40,
+#'   t = 5,
+#'   i = 0.05,
+#'   model = "uniform",
+#'   omega = 100
+#' )
+#'
+#' @name full_preliminary_term
+#' @rdname full_preliminary_term
 #' @export
 alphaF <- function(x, i, tbl = NULL, model = NULL, ...) {
   .reserve11_check_basis(tbl, model)
@@ -230,7 +260,8 @@ alphaF <- function(x, i, tbl = NULL, model = NULL, ...) {
   )
 }
 
-#' @rdname alphaF
+
+#' @rdname full_preliminary_term
 #' @export
 betaF <- function(x, i, tbl = NULL, model = NULL, ...) {
   .reserve11_check_basis(tbl, model)
@@ -256,7 +287,8 @@ betaF <- function(x, i, tbl = NULL, model = NULL, ...) {
   )
 }
 
-#' @rdname alphaF
+
+#' @rdname full_preliminary_term
 #' @export
 tVFx <- function(x, t, i, tbl = NULL, model = NULL, ...) {
   .reserve11_check_basis(tbl, model)
@@ -276,20 +308,24 @@ tVFx <- function(x, t, i, tbl = NULL, model = NULL, ...) {
   t <- values[[2]]
   i <- values[[3]]
 
-  vapply(seq_along(x), function(j) {
-    if (t[j] <= 1L) {
-      return(0)
-    }
+  vapply(
+    seq_along(x),
+    function(j) {
+      if (t[j] <= 1L) {
+        return(0)
+      }
 
-    tVx(
-      x = x[j] + 1,
-      t = t[j] - 1L,
-      i = i[j],
-      tbl = tbl,
-      model = model,
-      ...
-    )
-  }, numeric(1))
+      tVx(
+        x = x[j] + 1,
+        t = t[j] - 1L,
+        i = i[j],
+        tbl = tbl,
+        model = model,
+        ...
+      )
+    },
+    numeric(1)
+  )
 }
 
 # -------------------------------------------------------------------------
