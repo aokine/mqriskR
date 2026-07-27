@@ -4,9 +4,12 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/mqriskR)](https://CRAN.R-project.org/package=mqriskR)
 <!-- badges: end -->
 
-**mqriskR** is an R package for actuarial mathematics and life contingency modeling. It provides functions for calculating actuarial present values, premiums, reserves, survival probabilities, life annuities, pension benefits, multiple-decrement models, and mortality improvement using both life tables and parametric survival models.
+**mqriskR** provides a comprehensive collection of functions for actuarial mathematics and life contingency modeling. It supports actuarial present values, premiums, reserves, pensions, multiple-life models, multiple-decrement models, mortality improvement, and both life table and parametric survival model calculations using standard actuarial notation.
+
 
 The package is designed to support actuarial education, professional exam preparation, research, and reproducible actuarial analysis.
+
+
 
 ## Installation
 
