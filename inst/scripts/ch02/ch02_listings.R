@@ -104,4 +104,4 @@ EY <- 0.5 * EX
 VarY <- (1/12) * EX2 + (1/4) * VarX
 
 c(EY = EY, VarY = VarY)
-\end{lstlisting}
+
