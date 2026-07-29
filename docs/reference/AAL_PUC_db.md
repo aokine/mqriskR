@@ -1,7 +1,7 @@
-# Projected Unit Credit accrued liability for a DB plan
+# Projected Unit Credit accrued liability
 
-Computes the PUC accrued liability as the APV of the portion of the
-projected benefit attributed to past service.
+Computes the actuarial present value of the portion of the projected
+benefit attributed to past service.
 
 ## Usage
 
@@ -20,36 +20,42 @@ AAL_PUC_db(
 
 - projected_benefit:
 
-  Projected benefit at retirement.
+  Nonnegative projected annual benefit at retirement.
 
 - past_service:
 
-  Past service completed.
+  Nonnegative service completed through the valuation date.
 
 - total_service:
 
-  Total service at retirement.
+  Positive total service at retirement.
 
 - v_to_ret:
 
-  Discount factor to retirement.
+  Nonnegative discount factor from the valuation date to retirement.
 
 - p_surv:
 
-  Active-service survival probability to retirement.
+  Survival or active-service probability to retirement in `[0, 1]`.
 
 - adue_ret:
 
-  Retirement annuity factor.
+  Positive retirement annuity-due factor.
 
 ## Value
 
-PUC accrued liability.
+A numeric vector.
 
 ## Examples
 
 ``` r
-AAL_PUC_db(projected_benefit = 30000, past_service = 10, total_service = 30,
-v_to_ret = 0.5, p_surv = 0.9, adue_ret = 12)
+AAL_PUC_db(
+  projected_benefit = 30000,
+  past_service = 10,
+  total_service = 30,
+  v_to_ret = 0.5,
+  p_surv = 0.9,
+  adue_ret = 12
+)
 #> [1] 54000
 ```

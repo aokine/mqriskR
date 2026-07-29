@@ -1,7 +1,7 @@
 # Convert survival probabilities to life-table values
 
-Converts Chapter 5 survival function values \\S_0(x)\\ into Chapter 6
-life-table values \\l_x = l_0 S_0(x)\\ using a chosen radix.
+Converts survival function values \\S_0(x)\\ into life-table survivor
+values \\l_x = l_0 S_0(x)\\ using a chosen radix.
 
 ## Usage
 

@@ -1,7 +1,6 @@
 # Point-to-point index growth rates
 
-Computes annual point-to-point index growth rates from successive index
-values, matching Equation (16.12).
+Computes consecutive point-to-point growth rates from index values.
 
 ## Usage
 
@@ -13,11 +12,11 @@ iP_eiul(index)
 
 - index:
 
-  Numeric vector of index closing values.
+  Numeric vector of strictly positive index values.
 
 ## Value
 
-Numeric vector of growth rates.
+A numeric vector with length one less than `index`.
 
 ## Examples
 

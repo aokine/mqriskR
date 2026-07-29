@@ -1,22 +1,25 @@
 # mqriskR
 
-`mqriskR` provides functions for actuarial risk modeling, including
-survival models, life annuities, multiple-decrement models, and
-mortality improvement projections, using standard actuarial notation.
+**mqriskR** provides a comprehensive collection of functions for
+actuarial mathematics and life contingency modeling. It supports
+actuarial present values, premiums, reserves, pensions, multiple-life
+models, multiple-decrement models, mortality improvement, and both life
+table and parametric survival model calculations using standard
+actuarial notation.
 
-The package is designed to support teaching, exam preparation, and
-reproducible actuarial analysis.
+The package is designed to support actuarial education, professional
+exam preparation, research, and reproducible actuarial analysis.
 
 ## Installation
 
-You can install the stable version from CRAN:
+Install the stable release from CRAN:
 
 ``` r
 
 install.packages("mqriskR")
 ```
 
-You can install the development version from GitHub:
+Or install the development version from GitHub:
 
 ``` r
 
@@ -26,48 +29,80 @@ remotes::install_github("aokine/mqriskR")
 
 ## Example
 
-This example computes a whole life annuity under a uniform distribution
-of deaths.
+Compute the actuarial present value of a whole life annuity under a
+uniform distribution of deaths.
 
 ``` r
 
 library(mqriskR)
 
-ax(40, i = 0.05, model = "uniform", omega = 100)
+ax(
+  x = 40,
+  i = 0.05,
+  model = "uniform",
+  omega = 100
+)
 ```
 
-## Features
+## Main Features
 
-- Life insurance and annuity functions (discrete, continuous, and
-  m-thly)
-- Survival models and mortality laws
+- Life insurance present values
+- Life annuities (discrete, continuous, and m-thly)
+- Premium calculations
+- Policy reserve calculations
+- Pension mathematics
+- Survival probabilities
+- Multiple-life models
 - Multiple-decrement models
 - Mortality improvement projections
-- Functions aligned with standard actuarial notation
+- Spot interest rate models
+- Variable interest models
+- Support for both life tables and parametric survival models
+- Functions using standard actuarial notation
 
-## Purpose
+## Version 0.1.1
 
-This package is intended for:
+Version 0.1.1 focuses on improving the quality, consistency, and
+usability of the package.
 
-- Actuarial students preparing for professional exams
-- Instructors teaching life contingencies
-- Practitioners needing transparent and reproducible calculations
+Highlights include:
+
+- Improved support for life table objects
+- Expanded vectorized input support
+- Improved handling of finite life tables
+- More consistent behavior across related functions
+- Cleaner, descriptive documentation
+- Improved examples and package manual
+- Enhanced input validation and error handling
+
+No breaking changes were introduced. Existing code written for earlier
+versions of **mqriskR** continues to work.
+
+## Intended Audience
+
+The package is intended for:
+
+- Actuarial students preparing for professional examinations
+- University instructors teaching actuarial mathematics
+- Researchers developing actuarial methods
+- Practicing actuaries requiring transparent and reproducible
+  calculations
 
 ## Documentation
 
-Full function documentation is available on the pkgdown site:
+Complete documentation for all exported functions is available on the
+pkgdown website:
 
 <https://aokine.github.io/mqriskR/>
 
 ## References
 
-The methods implemented in this package are aligned with standard
-actuarial texts, including:
+The methods implemented in **mqriskR** are based on standard actuarial
+references, including:
 
-- Camilli, S. J., Duncan, I., and London, R. L. (2014,
-  <ISBN:9781625423474>) “Models for Quantifying Risk”, 6th Edition,
-  ACTEX Publications.
+- Camilli, S. J., Duncan, I., and London, R. L. (2014). *Models for
+  Quantifying Risk* (6th ed.). ACTEX Publications.
 
-- Dickson, D. C. M., Hardy, M. R., and Waters, H. R. (2020,
-  <ISBN:9781108478083>) “Actuarial Mathematics for Life Contingent
-  Risks”.
+- Dickson, D. C. M., Hardy, M. R., and Waters, H. R. (2020). *Actuarial
+  Mathematics for Life Contingent Risks* (2nd ed.). Cambridge University
+  Press.

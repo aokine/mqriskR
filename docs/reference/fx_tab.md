@@ -1,7 +1,7 @@
 # Fractional conditional density from a life table
 
 Computes the conditional density \\f_x(t \mid T_0 \> x) = {}\_t p_x
-\mu\_{x+t}\\ for \\0 \< t \< 1\\.
+\mu\_{x+t}\\.
 
 ## Usage
 

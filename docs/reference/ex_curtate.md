@@ -1,7 +1,6 @@
-# Curtate expectation of life at age x
+# Curtate expectation of life
 
-Computes \\e_x = E\[K_x\] = \sum\_{k=1}^\infty {}\_k p_x\\ with
-truncation.
+Computes \\e_x = E\[K_x\] = \sum\_{k=1}^{\infty} {}\_k p_x\\.
 
 ## Usage
 
@@ -13,26 +12,16 @@ ex_curtate(x, model, ..., k_max = 5000, tol = 1e-12)
 
 - x:
 
-  Numeric vector of ages (\\x \ge 0\\).
+  Numeric vector of ages.
 
 - model:
 
-  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`,
+  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`, or
   `"weibull"`.
 
 - ...:
 
-  Model parameters:
-
-  - uniform: `omega`
-
-  - exponential: `lambda`
-
-  - gompertz: `B`, `c`
-
-  - makeham: `A`, `B`, `c`
-
-  - weibull: `shape`, `scale`
+  Model parameters.
 
 - k_max:
 
@@ -40,7 +29,8 @@ ex_curtate(x, model, ..., k_max = 5000, tol = 1e-12)
 
 - tol:
 
-  Stop early if the summand is \< tol for several steps.
+  Stop early if the summand is smaller than this tolerance for several
+  consecutive steps.
 
 ## Value
 

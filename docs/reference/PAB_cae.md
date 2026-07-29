@@ -1,7 +1,6 @@
-# Projected annual benefit under a career average earnings DB plan
+# Projected annual benefit under a career-average-earnings plan
 
-Computes the projected annual benefit for a CAE plan using Equation
-(18.9).
+Projects the annual benefit using a career-average-earnings formula.
 
 ## Usage
 
@@ -13,39 +12,45 @@ PAB_cae(x, z, CASx, p, past_salary_total = 0, g = NULL, s = NULL)
 
 - x:
 
-  Current or entry age.
+  Scalar current or entry age.
 
 - z:
 
-  Retirement age.
+  Scalar retirement age.
 
 - CASx:
 
-  Current annual salary at age `x`.
+  Positive scalar current annual salary.
 
 - p:
 
-  Accrual percentage, e.g. `1` for 1 percent.
+  Nonnegative scalar accrual percentage.
 
 - past_salary_total:
 
-  Optional total of actual past salaries.
+  Nonnegative total of actual prior salaries.
 
 - g:
 
-  Optional constant annual salary growth rate.
+  Optional scalar annual salary growth rate greater than `-1`.
 
 - s:
 
-  Optional salary scale vector of length `z - x`.
+  Optional positive salary-scale vector of length `z - x`.
 
 ## Value
 
-Projected annual benefit.
+A numeric scalar.
 
 ## Examples
 
 ``` r
-PAB_cae(x = 30, z = 65, CASx = 100000, p = 1, g = 0.04)
+PAB_cae(
+  x = 30,
+  z = 65,
+  CASx = 100000,
+  p = 1,
+  g = 0.04
+)
 #> [1] 73652.22
 ```

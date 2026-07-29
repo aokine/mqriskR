@@ -12,7 +12,7 @@ nqx_select(tbl, x_sel, t, n)
 
 - tbl:
 
-  A select_life_table object.
+  A `select_life_table` object.
 
 - x_sel:
 

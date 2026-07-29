@@ -1,12 +1,11 @@
 # Pure endowment net level premium reserve
 
-Computes the Chapter 10 prospective reserve for an n-year pure
-endowment.
+Computes the prospective reserve for an n-year pure endowment.
 
 ## Usage
 
 ``` r
-tVnEx(x, n, t, i, model, ...)
+tVnEx(x, n, t, i, model = NULL, ..., tbl = NULL)
 ```
 
 ## Arguments
@@ -29,15 +28,19 @@ tVnEx(x, n, t, i, model, ...)
 
 - model:
 
-  Survival model.
+  Optional parametric survival model name.
 
 - ...:
 
   Additional model parameters.
 
+- tbl:
+
+  Optional life table object.
+
 ## Value
 
-Numeric vector.
+A numeric vector of values.
 
 ## Examples
 

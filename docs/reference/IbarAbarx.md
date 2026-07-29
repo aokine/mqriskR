@@ -1,7 +1,7 @@
 # Fully continuous increasing whole life insurance
 
-Computes \$\$(\bar{I}\bar{A})\_x = \int_0^\infty t\\ v^t\\ {}\_tp_x\\
-\mu\_{x+t}\\ dt.\$\$
+Computes \$\$(\bar{I}\bar{A})\_x = \int_0^\infty t v^t {}\_tp_x
+\mu\_{x+t}\\dt.\$\$
 
 ## Usage
 

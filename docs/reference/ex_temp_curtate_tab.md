@@ -1,7 +1,7 @@
 # Temporary curtate expectation of life from a life table
 
 Computes \\e\_{x:\overline{n}\|} = \sum\_{k=1}^{n} {}\_k p_x\\ for
-integer n in the discrete tabular setting.
+integer \\n\\ in the discrete tabular setting.
 
 ## Usage
 
@@ -13,7 +13,7 @@ ex_temp_curtate_tab(tbl, x, n)
 
 - tbl:
 
-  A life_table object.
+  A `life_table` object.
 
 - x:
 

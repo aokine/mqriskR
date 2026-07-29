@@ -1,7 +1,7 @@
 # Target contribution rate for a defined contribution plan
 
-Solves Equation (18.5) for the contribution rate required to achieve a
-target replacement ratio.
+Calculates the contribution rate required to achieve a target
+replacement ratio.
 
 ## Usage
 
@@ -13,46 +13,52 @@ contribution_rate_target(x, z, Sx, RR_target, i, adue_z, g = NULL, s = NULL)
 
 - x:
 
-  Entry age.
+  Scalar entry age.
 
 - z:
 
-  Retirement age.
+  Scalar retirement age.
 
 - Sx:
 
-  Salary at age `x`.
+  Positive scalar salary at age `x`.
 
 - RR_target:
 
-  Target replacement ratio.
+  Scalar target replacement ratio in `[0, 1]`.
 
 - i:
 
-  Annual effective interest rate.
+  Scalar annual effective investment return greater than `-1`.
 
 - adue_z:
 
-  Whole life annuity-due factor at age `z`.
+  Positive scalar whole-life annuity-due factor at retirement.
 
 - g:
 
-  Optional constant annual salary growth rate.
+  Optional scalar annual salary growth rate greater than `-1`.
 
 - s:
 
-  Optional salary scale vector of length `z - x`.
+  Optional positive salary-scale vector of length `z - x`.
 
 ## Value
 
-Required contribution rate.
+A numeric scalar. The result may exceed one when the target cannot be
+achieved with a contribution rate no greater than 100 percent.
 
 ## Examples
 
 ``` r
 contribution_rate_target(
-  x = 30, z = 65, Sx = 60000, RR_target = 0.50,
-  i = 0.06, adue_z = 11, g = 0.04
+  x = 30,
+  z = 65,
+  Sx = 60000,
+  RR_target = 0.50,
+  i = 0.06,
+  adue_z = 11,
+  g = 0.04
 )
 #> [1] 0.1052808
 ```

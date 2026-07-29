@@ -21,4 +21,4 @@ px_to_lx(px, radix = 1e+05)
 
 ## Value
 
-Numeric vector of \\l_x\\ values of length `length(px)+1`.
+Numeric vector of \\l_x\\ values of length `length(px) + 1`.

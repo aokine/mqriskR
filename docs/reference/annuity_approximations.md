@@ -1,7 +1,6 @@
-# Annuity approximations (Chapter 8)
+# Annuity approximations
 
-Chapter 8 approximation formulas for m-thly and continuous life
-annuities.
+Approximation formulas for m-thly and continuous life annuities.
 
 ## Details
 

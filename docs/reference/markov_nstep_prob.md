@@ -1,8 +1,6 @@
-# n-step transition probability for a discrete-time Markov chain
+# Multi-step transition probability
 
-Computes the \\(i,j)\\ entry of \\P^n\\, useful for Chapter 14 examples
-involving discrete-time multi-state models such as CCRC and risk-class
-models.
+Computes an entry of the matrix power \\P^n\\.
 
 ## Usage
 
@@ -14,7 +12,7 @@ markov_nstep_prob(P, n, i, j)
 
 - P:
 
-  Transition probability matrix.
+  Square transition-probability matrix.
 
 - n:
 
@@ -22,11 +20,11 @@ markov_nstep_prob(P, n, i, j)
 
 - i:
 
-  Starting state index.
+  Starting-state index.
 
 - j:
 
-  Ending state index.
+  Ending-state index.
 
 ## Value
 
@@ -35,16 +33,7 @@ A numeric scalar.
 ## Examples
 
 ``` r
-P <- matrix(
-  c(0.94, 0.03, 0.02, 0.01,
-    0.50, 0.30, 0.18, 0.02,
-    0.00, 0.00, 0.93, 0.07,
-    0.00, 0.00, 0.00, 1.00),
-  nrow = 4, byrow = TRUE
-)
-
-markov_nstep_prob(P, n = 3, i = 1, j = 1)
-#> [1] 0.863284
-markov_nstep_prob(P, n = 3, i = 1, j = 3)
-#> [1] 0.064472
+P <- matrix(c(0.9, 0.1, 0, 1), nrow = 2, byrow = TRUE)
+markov_nstep_prob(P, n = 3, i = 1, j = 2)
+#> [1] 0.271
 ```

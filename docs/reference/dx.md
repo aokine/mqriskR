@@ -12,7 +12,7 @@ dx(tbl, x)
 
 - tbl:
 
-  A life_table object.
+  A `life_table` object.
 
 - x:
 
@@ -20,4 +20,4 @@ dx(tbl, x)
 
 ## Value
 
-Numeric vector of d_x values.
+Numeric vector of \\d_x\\ values.

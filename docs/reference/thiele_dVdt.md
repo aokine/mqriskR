@@ -1,6 +1,6 @@
 # Reserve derivative from Thiele's equation
 
-Computes \\dV/dt = P + \delta V - \mu(B - V)\\.
+Computes \$\$ \frac{dV}{dt} = P + \delta V - \mu(B - V). \$\$
 
 ## Usage
 
@@ -12,7 +12,7 @@ thiele_dVdt(V, P, delta, mu, benefit = 1)
 
 - V:
 
-  Reserve at time t.
+  Reserve at time \`t\`.
 
 - P:
 
@@ -24,19 +24,25 @@ thiele_dVdt(V, P, delta, mu, benefit = 1)
 
 - mu:
 
-  Force of mortality.
+  Nonnegative force of mortality.
 
 - benefit:
 
-  Benefit amount. Defaults to 1.
+  Benefit amount.
 
 ## Value
 
-Numeric vector.
+Numeric vector of reserve derivatives.
 
 ## Examples
 
 ``` r
-thiele_dVdt(V = 900, P = 25, delta = 0.05, mu = 0.002, benefit = 1000)
+thiele_dVdt(
+  V = 900,
+  P = 25,
+  delta = 0.05,
+  mu = 0.002,
+  benefit = 1000
+)
 #> [1] 69.8
 ```

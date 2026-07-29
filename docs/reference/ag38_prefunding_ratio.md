@@ -1,6 +1,7 @@
 # AG 38 prefunding ratio
 
-Computes the prefunding ratio in Equation (16.18), capped at 1.
+Computes the excess-payment-to-required-net-single-premium ratio, capped
+at one.
 
 ## Usage
 
@@ -12,15 +13,15 @@ ag38_prefunding_ratio(excess_payment, nsp_required)
 
 - excess_payment:
 
-  Excess payment or shadow-fund amount.
+  Nonnegative excess payment or shadow-fund amount.
 
 - nsp_required:
 
-  Net single premium required to fully fund the guarantee.
+  Positive net single premium required to fully fund the guarantee.
 
 ## Value
 
-Numeric scalar.
+A numeric vector.
 
 ## Examples
 

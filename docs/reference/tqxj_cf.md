@@ -1,6 +1,7 @@
-# Cause-specific probability \\{}\_t q_x^{(j)}\\ under constant forces
+# Cause-specific decrement probability under constant forces
 
-Cause-specific probability \\{}\_t q_x^{(j)}\\ under constant forces
+Computes \$\$ {}\_tq_x^{(j)} = \frac{\mu_j}{\sum_k\mu_k} \left\[
+1-\exp\left(-t\sum_k\mu_k\right) \right\]. \$\$
 
 ## Usage
 
@@ -12,19 +13,19 @@ tqxj_cf(mu, j, t)
 
 - mu:
 
-  Numeric vector of cause-specific forces.
+  Numeric vector of nonnegative cause-specific forces.
 
 - j:
 
-  Cause index.
+  Positive integer cause index.
 
 - t:
 
-  Time.
+  Nonnegative time. May be scalar or vector.
 
 ## Value
 
-Numeric scalar/vector.
+A numeric vector.
 
 ## Examples
 

@@ -1,6 +1,6 @@
-# Distribution functions for age-at-failure T0
+# Distribution functions for age-at-failure
 
-Convenience functions for the CDF and density of \\T_0\\.
+Distribution functions for age-at-failure
 
 ## Usage
 
@@ -14,34 +14,17 @@ f0(t, model, ...)
 
 - t:
 
-  Numeric vector of times (\\t \ge 0\\).
+  Numeric vector of times.
 
 - model:
 
-  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`,
+  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`, or
   `"weibull"`.
 
 - ...:
 
-  Model parameters:
-
-  - uniform: `omega`
-
-  - exponential: `lambda`
-
-  - gompertz: `B`, `c`
-
-  - makeham: `A`, `B`, `c`
-
-  - weibull: `shape`, `scale`
+  Model parameters.
 
 ## Value
 
-Numeric vector. For `F0`: CDF values in \\\[0,1\]\\. For `f0`: density
-values (\\\ge 0\\).
-
-## Details
-
-- `F0(t)` computes \\F_0(t)=Pr(T_0 \le t)=1-S_0(t)\\
-
-- `f0(t)` computes \\f_0(t)=\frac{d}{dt}F_0(t)\\
+Numeric vector.

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Actuarial Risk Modeling and Life Contingencies • mqriskR</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Actuarial Risk Modeling and Life Contingencies">
 <meta name="description" content='Provides functions for actuarial risk modeling, including survival models, life annuities, multiple-decrement models, and mortality improvement projections. The package is designed to align with standard actuarial notation and supports teaching, exam preparation, and reproducible actuarial analysis. The methods are based on standard actuarial references including Camilli, Duncan and London (2014, ISBN:9781625423474) "Models for Quantifying Risk" and Dickson, Hardy and Waters (2020, ISBN:9781108478083) "Actuarial Mathematics for Life Contingent Risks".'>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">mqriskR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,62 +51,92 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><code>mqriskR</code> provides functions for actuarial risk modeling, including survival models, life annuities, multiple-decrement models, and mortality improvement projections, using standard actuarial notation.</p>
-<p>The package is designed to support teaching, exam preparation, and reproducible actuarial analysis.</p>
+<p><strong>mqriskR</strong> provides a comprehensive collection of functions for actuarial mathematics and life contingency modeling. It supports actuarial present values, premiums, reserves, pensions, multiple-life models, multiple-decrement models, mortality improvement, and both life table and parametric survival model calculations using standard actuarial notation.</p>
+<p>The package is designed to support actuarial education, professional exam preparation, research, and reproducible actuarial analysis.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the stable version from CRAN:</p>
+<p>Install the stable release from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mqriskR"</span><span class="op">)</span></span></code></pre></div>
-<p>You can install the development version from GitHub:</p>
+<p>Or install the development version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"aokine/mqriskR"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"aokine/mqriskR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This example computes a whole life annuity under a uniform distribution of deaths.</p>
+<p>Compute the actuarial present value of a whole life annuity under a uniform distribution of deaths.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mqriskR</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/annuity_annual.html">ax</a></span><span class="op">(</span><span class="fl">40</span>, i <span class="op">=</span> <span class="fl">0.05</span>, model <span class="op">=</span> <span class="st">"uniform"</span>, omega <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/annuity_annual.html">ax</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>  i <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  model <span class="op">=</span> <span class="st">"uniform"</span>,</span>
+<span>  omega <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+<h2 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a>
 </h2>
 <ul>
-<li>Life insurance and annuity functions (discrete, continuous, and m-thly)</li>
-<li>Survival models and mortality laws</li>
+<li>Life insurance present values</li>
+<li>Life annuities (discrete, continuous, and m-thly)</li>
+<li>Premium calculations</li>
+<li>Policy reserve calculations</li>
+<li>Pension mathematics</li>
+<li>Survival probabilities</li>
+<li>Multiple-life models</li>
 <li>Multiple-decrement models</li>
 <li>Mortality improvement projections</li>
-<li>Functions aligned with standard actuarial notation</li>
+<li>Spot interest rate models</li>
+<li>Variable interest models</li>
+<li>Support for both life tables and parametric survival models</li>
+<li>Functions using standard actuarial notation</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="purpose">Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a>
+<h2 id="version-011">Version 0.1.1<a class="anchor" aria-label="anchor" href="#version-011"></a>
 </h2>
-<p>This package is intended for:</p>
+<p>Version 0.1.1 focuses on improving the quality, consistency, and usability of the package.</p>
+<p>Highlights include:</p>
 <ul>
-<li>Actuarial students preparing for professional exams</li>
-<li>Instructors teaching life contingencies</li>
-<li>Practitioners needing transparent and reproducible calculations</li>
+<li>Improved support for life table objects</li>
+<li>Expanded vectorized input support</li>
+<li>Improved handling of finite life tables</li>
+<li>More consistent behavior across related functions</li>
+<li>Cleaner, descriptive documentation</li>
+<li>Improved examples and package manual</li>
+<li>Enhanced input validation and error handling</li>
+</ul>
+<p>No breaking changes were introduced. Existing code written for earlier versions of <strong>mqriskR</strong> continues to work.</p>
+</div>
+<div class="section level2">
+<h2 id="intended-audience">Intended Audience<a class="anchor" aria-label="anchor" href="#intended-audience"></a>
+</h2>
+<p>The package is intended for:</p>
+<ul>
+<li>Actuarial students preparing for professional examinations</li>
+<li>University instructors teaching actuarial mathematics</li>
+<li>Researchers developing actuarial methods</li>
+<li>Practicing actuaries requiring transparent and reproducible calculations</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<p>Full function documentation is available on the pkgdown site:</p>
+<p>Complete documentation for all exported functions is available on the pkgdown website:</p>
 <p><a href="https://aokine.github.io/mqriskR/" class="uri">https://aokine.github.io/mqriskR/</a></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>The methods implemented in this package are aligned with standard actuarial texts, including:</p>
+<p>The methods implemented in <strong>mqriskR</strong> are based on standard actuarial references, including:</p>
 <ul>
-<li><p>Camilli, S. J., Duncan, I., and London, R. L. (2014, <a href="ISBN:9781625423474" class="uri">ISBN:9781625423474</a>) “Models for Quantifying Risk”, 6th Edition, ACTEX Publications.</p></li>
-<li><p>Dickson, D. C. M., Hardy, M. R., and Waters, H. R. (2020, <a href="ISBN:9781108478083" class="uri">ISBN:9781108478083</a>) “Actuarial Mathematics for Life Contingent Risks”.</p></li>
+<li><p>Camilli, S. J., Duncan, I., and London, R. L. (2014). <em>Models for Quantifying Risk</em> (6th ed.). ACTEX Publications.</p></li>
+<li><p>Dickson, D. C. M., Hardy, M. R., and Waters, H. R. (2020). <em>Actuarial Mathematics for Life Contingent Risks</em> (2nd ed.). Cambridge University Press.</p></li>
 </ul>
 </div>
 </div>
@@ -157,7 +187,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

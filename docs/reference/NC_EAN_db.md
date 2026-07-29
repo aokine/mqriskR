@@ -1,6 +1,7 @@
-# Entry Age Normal normal cost for a DB plan
+# Entry Age Normal normal cost
 
-Computes Equation (18.13).
+Computes Entry Age Normal normal cost as total benefit APV divided by an
+active-service annuity-due factor.
 
 ## Usage
 
@@ -12,15 +13,15 @@ NC_EAN_db(APV_total, adue_active)
 
 - APV_total:
 
-  Total actuarial present value of benefits.
+  Nonnegative total actuarial present value of benefits.
 
 - adue_active:
 
-  Active-service annuity-due factor.
+  Positive active-service annuity-due factor.
 
 ## Value
 
-Entry Age Normal normal cost.
+A numeric vector.
 
 ## Examples
 

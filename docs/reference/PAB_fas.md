@@ -1,7 +1,6 @@
-# Projected annual benefit under a final average salary DB plan
+# Projected annual benefit under a final-average-salary plan
 
-Computes the projected annual benefit for a final average salary plan
-using Equation (18.6).
+Projects the annual benefit using a final-average-salary formula.
 
 ## Usage
 
@@ -13,43 +12,50 @@ PAB_fas(x, z, CASx, p, fas_years = 3, past_service = 0, g = NULL, s = NULL)
 
 - x:
 
-  Current or entry age.
+  Scalar current or entry age.
 
 - z:
 
-  Retirement age.
+  Scalar retirement age.
 
 - CASx:
 
-  Current annual salary at age `x`.
+  Positive scalar current annual salary.
 
 - p:
 
-  Accrual percentage, e.g. `2` for 2 percent.
+  Nonnegative scalar accrual percentage, such as `2` for 2 percent.
 
 - fas_years:
 
-  Number of years in the final average salary period.
+  Positive integer number of years in the final salary average.
 
 - past_service:
 
-  Past years of service already completed at age `x`.
+  Nonnegative scalar years of service already completed.
 
 - g:
 
-  Optional constant annual salary growth rate.
+  Optional scalar annual salary growth rate greater than `-1`.
 
 - s:
 
-  Optional salary scale vector of length `z - x`.
+  Optional positive salary-scale vector of length `z - x`.
 
 ## Value
 
-Projected annual benefit.
+A numeric scalar.
 
 ## Examples
 
 ``` r
-PAB_fas(x = 35, z = 65, CASx = 60000, p = 2, fas_years = 3, g = 0.04)
+PAB_fas(
+  x = 35,
+  z = 65,
+  CASx = 60000,
+  p = 2,
+  fas_years = 3,
+  g = 0.04
+)
 #> [1] 108008.7
 ```

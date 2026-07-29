@@ -1,7 +1,7 @@
 # Total gain for a discrete insurance contract
 
-Computes the Chapter 10 total gain: amount on hand at year-end minus
-amount required.
+Computes the total gain: amount on hand at year-end minus amount
+required.
 
 ## Usage
 
@@ -37,7 +37,7 @@ GT_disc(Vt, Vt1, P, i_actual, q_actual, B = 1)
 
 ## Value
 
-Numeric vector.
+A numeric vector of values.
 
 ## Examples
 

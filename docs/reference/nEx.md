@@ -1,6 +1,6 @@
 # Pure endowment APV
 
-Computes \\{}\_nE_x = v^n \\ {}\_n p_x\\.
+Computes \\{}\_nE_x = v^n {}\_n p_x\\.
 
 ## Usage
 

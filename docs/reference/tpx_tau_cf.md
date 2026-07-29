@@ -1,6 +1,6 @@
-# Total survival probability \\{}\_t p_x^{(\tau)}\\ under constant forces
+# Total survival under constant cause-specific forces
 
-Total survival probability \\{}\_t p_x^{(\tau)}\\ under constant forces
+Computes \$\$ {}\_tp_x^{(\tau)} = \exp\left(-t\sum_j\mu_j\right). \$\$
 
 ## Usage
 
@@ -12,19 +12,21 @@ tpx_tau_cf(mu, t)
 
 - mu:
 
-  Numeric vector of cause-specific forces.
+  Numeric vector of nonnegative cause-specific forces.
 
 - t:
 
-  Time.
+  Nonnegative time. May be scalar or vector.
 
 ## Value
 
-Numeric scalar/vector.
+A numeric vector.
 
 ## Examples
 
 ``` r
 tpx_tau_cf(c(0.10, 0.20), 5)
 #> [1] 0.2231302
+tpx_tau_cf(c(0.10, 0.20), c(1, 5, 10))
+#> [1] 0.74081822 0.22313016 0.04978707
 ```

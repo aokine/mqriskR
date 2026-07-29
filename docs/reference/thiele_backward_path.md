@@ -1,7 +1,8 @@
-# Backward Euler reserve path from maturity
+# Backward reserve path from a terminal value
 
-Starting from a terminal reserve value at time T, computes reserves
-backward on a grid using the backward Euler-style Thiele step.
+Starting from a terminal reserve at the final time, computes reserves
+backward over a strictly increasing time grid using
+\`thiele_backward_step()\`.
 
 ## Usage
 
@@ -13,36 +14,45 @@ thiele_backward_path(times, V_terminal, P, delta, mu, benefit = 1)
 
 - times:
 
-  Vector of times in increasing order.
+  Finite numeric vector of strictly increasing times.
 
 - V_terminal:
 
-  Reserve at the final time.
+  Finite scalar reserve at the final time.
 
 - P:
 
-  Premium rate, scalar or vector of length length(times)-1.
+  Premium rate, scalar or vector with one value per time step.
 
 - delta:
 
-  Force of interest, scalar or vector of length length(times)-1.
+  Force of interest, scalar or vector with one value per step.
 
 - mu:
 
-  Force of mortality, scalar or vector of length length(times)-1.
+  Nonnegative force of mortality, scalar or vector with one value per
+  step.
 
 - benefit:
 
-  Benefit amount, scalar or vector of length length(times)-1.
+  Benefit amount, scalar or vector with one value per step.
 
 ## Value
 
-Numeric vector of reserve values on the grid.
+Numeric vector of reserve values corresponding to \`times\`.
 
 ## Examples
 
 ``` r
 times <- seq(19, 20, by = 0.25)
-thiele_backward_path(times, V_terminal = 1000, P = 26.96, delta = 0.058, mu = 0.002, benefit = 1000)
+
+thiele_backward_path(
+  times,
+  V_terminal = 1000,
+  P = 26.96,
+  delta = 0.058,
+  mu = 0.002,
+  benefit = 1000
+)
 #> [1]  918.1329  938.1449  958.4570  979.0739 1000.0000
 ```

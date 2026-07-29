@@ -1,6 +1,7 @@
-# Total probability of decrement \\q_x^{(\tau)}\\
+# Total one-year decrement probability
 
-Total probability of decrement \\q_x^{(\tau)}\\
+Computes the total one-year multiple-decrement probability
+\$\$q_x^{(\tau)}=\sum_j q_x^{(j)}.\$\$
 
 ## Usage
 
@@ -16,7 +17,7 @@ qxtau(qxj)
 
 ## Value
 
-Numeric scalar.
+A numeric scalar.
 
 ## Examples
 

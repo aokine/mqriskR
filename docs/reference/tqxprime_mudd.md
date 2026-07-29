@@ -1,6 +1,7 @@
-# Independent probabilities \\{}\_t q_x^{\prime(j)}\\ under MUDD
+# Fractional-year associated single-decrement probabilities under MUDD
 
-Independent probabilities \\{}\_t q_x^{\prime(j)}\\ under MUDD
+Computes the associated single-decrement probabilities through time `t`
+under the multiple-decrement uniform distribution assumption.
 
 ## Usage
 
@@ -12,19 +13,19 @@ tqxprime_mudd(qxj, t)
 
 - qxj:
 
-  Numeric vector of dependent probabilities \\q_x^{(j)}\\.
+  Numeric vector of dependent cause-specific decrement probabilities.
 
 - t:
 
-  Time in \[0,1\].
+  A single time in \\\[0,1\]\\.
 
 ## Value
 
-Numeric vector.
+A numeric vector of associated single-decrement probabilities.
 
 ## Examples
 
 ``` r
-tqxprime_mudd(c(.20, .10), t = 0.5)
+tqxprime_mudd(c(0.20, 0.10), t = 0.5)
 #> [1] 0.10268289 0.05273176
 ```

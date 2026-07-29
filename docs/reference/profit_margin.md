@@ -1,7 +1,7 @@
 # Profit margin
 
-Computes the Chapter 17 profit margin: \$\$ \text{Profit Margin} =
-\frac{NPV}{APV\_{GP}}. \$\$
+Computes net present value divided by the actuarial present value of
+gross premiums. Scalar arguments are recycled to the common length.
 
 ## Usage
 
@@ -17,11 +17,11 @@ profit_margin(NPV, APV_GP)
 
 - APV_GP:
 
-  Actuarial present value of gross premiums.
+  Positive actuarial present value of gross premiums.
 
 ## Value
 
-Numeric scalar.
+A numeric vector.
 
 ## Examples
 

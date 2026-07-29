@@ -1,7 +1,7 @@
-# Bootstrap semiannual nominal spot rates from coupon-bond yields
+# Bootstrap semiannual nominal spot rates
 
-Bootstraps the semiannual nominal annual zero-coupon yields from par
-coupon-bearing bond yields of the same maturities.
+Bootstraps nominal annual spot rates convertible semiannually from par
+coupon yields at consecutive half-year maturities.
 
 ## Usage
 
@@ -13,26 +13,21 @@ z_from_coupon_semi(maturity, coupon_yield, par = 1000)
 
 - maturity:
 
-  Numeric vector of maturities in years, typically `0.5, 1.0, 1.5, ...`,
-  in increasing order.
+  Numeric vector of positive maturities in years, in strictly increasing
+  order. Maturities must be consecutive multiples of `0.5`.
 
 - coupon_yield:
 
-  Numeric vector of nominal annual coupon yields convertible
-  semiannually.
+  Numeric vector of nominal annual par coupon yields convertible
+  semiannually. Values must be greater than `-2`.
 
 - par:
 
-  Par value of each bond.
+  Positive scalar par value.
 
 ## Value
 
-Numeric vector of semiannual nominal annual spot rates.
-
-## Details
-
-Both coupon yields and spot yields are interpreted as nominal annual
-rates convertible semiannually.
+A numeric vector of nominal annual spot rates convertible semiannually.
 
 ## Examples
 

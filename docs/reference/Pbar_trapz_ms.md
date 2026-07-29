@@ -1,7 +1,6 @@
-# Continuous premium approximation \\\overline{P}\\ by trapezoidal rule
+# Continuous premium approximation in a disability model
 
-Approximates the annual continuous premium in the disability model
-allowing for recovery, as in Example 14.18.
+Approximates a continuous premium rate by trapezoidal integration.
 
 ## Usage
 
@@ -13,15 +12,15 @@ Pbar_trapz_ms(t, tp00, tp01, delta, mu02, mu12, B02 = 1, B12 = 1, R = 0)
 
 - t:
 
-  Numeric vector of time points.
+  Strictly increasing nonnegative time points.
 
 - tp00:
 
-  Numeric vector of values \\{}\_{t}p\_{x}^{00}\\.
+  Healthy-state probabilities.
 
 - tp01:
 
-  Numeric vector of values \\{}\_{t}p\_{x}^{01}\\.
+  Disabled-state probabilities.
 
 - delta:
 
@@ -29,34 +28,27 @@ Pbar_trapz_ms(t, tp00, tp01, delta, mu02, mu12, B02 = 1, B12 = 1, R = 0)
 
 - mu02:
 
-  Function of time returning \\\mu\_{x+t}^{02}\\.
+  Healthy-to-deceased intensity function.
 
 - mu12:
 
-  Function of time returning \\\mu\_{x+t}^{12}\\.
+  Disabled-to-deceased intensity function.
 
 - B02:
 
-  Benefit payable on death while healthy.
+  Benefit on death while healthy.
 
 - B12:
 
-  Benefit payable on death while disabled.
+  Benefit on death while disabled.
 
 - R:
 
-  Continuous income rate while disabled.
+  Continuous disability income rate.
 
 ## Value
 
 A numeric scalar.
-
-## Details
-
-The numerator is \$\$ \int v^t
-\left\[{}\_{t}p\_{x}^{00}\mu\_{x+t}^{02}B^{02} +
-{}\_{t}p\_{x}^{01}\mu\_{x+t}^{12}B^{12} + {}\_{t}p\_{x}^{01}R \right\]
-dt \$\$ and the denominator is \$\$ \int v^t {}\_{t}p\_{x}^{00} dt \$\$
 
 ## Examples
 
@@ -66,15 +58,19 @@ mu02 <- function(t) 0.20
 mu10 <- function(t) 0.50
 mu12 <- function(t) 0.125 * t + 0.20
 
-ex1410 <- tp00_tp01_euler(
-  h = 0.10, n = 2.0,
-  mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
+probs <- tp00_tp01_euler(
+  h = 0.10,
+  n = 2,
+  mu01 = mu01,
+  mu02 = mu02,
+  mu10 = mu10,
+  mu12 = mu12
 )
 
 Pbar_trapz_ms(
-  t = ex1410$t,
-  tp00 = ex1410$tp00,
-  tp01 = ex1410$tp01,
+  t = probs$t,
+  tp00 = probs$tp00,
+  tp01 = probs$tp01,
   delta = 0.04,
   mu02 = mu02,
   mu12 = mu12,

@@ -1,6 +1,6 @@
-# Hazard / force for age-at-failure T0
+# Hazard or force of mortality for age-at-failure
 
-Computes \\\lambda_0(t)=f_0(t)/S_0(t)\\.
+Computes \\\lambda_0(t)\\.
 
 ## Usage
 
@@ -12,27 +12,17 @@ hazard0(t, model, ...)
 
 - t:
 
-  Numeric vector of times (\\t \ge 0\\).
+  Numeric vector of times.
 
 - model:
 
-  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`,
+  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`, or
   `"weibull"`.
 
 - ...:
 
-  Model parameters:
-
-  - uniform: `omega`
-
-  - exponential: `lambda`
-
-  - gompertz: `B`, `c`
-
-  - makeham: `A`, `B`, `c`
-
-  - weibull: `shape`, `scale`
+  Model parameters.
 
 ## Value
 
-Numeric vector of hazard/force values.
+Numeric vector.

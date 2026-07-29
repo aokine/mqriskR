@@ -1,6 +1,6 @@
 # Continuous term insurance APV
 
-Computes \\\bar{A}\_{x:\overline{n}\|}^{1} = \int_0^n v^t \\ {}\_t p_x
+Computes \\\bar{A}\_{x:\overline{n}\|}^{1} = \int_0^n v^t {}\_t p_x
 \mu\_{x+t}\\dt\\.
 
 ## Usage

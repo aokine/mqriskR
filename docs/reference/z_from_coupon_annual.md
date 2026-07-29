@@ -1,7 +1,7 @@
-# Bootstrap annual spot rates from annual coupon-bond yields
+# Bootstrap annual effective spot rates
 
-Bootstraps annual effective zero-coupon yields from par annual
-coupon-bearing bond yields of the same maturities.
+Bootstraps annual effective spot rates from par coupon yields at
+consecutive integer maturities.
 
 ## Usage
 
@@ -13,19 +13,21 @@ z_from_coupon_annual(maturity, coupon_yield, par = 1000)
 
 - maturity:
 
-  Integer vector of maturities in years, in increasing order.
+  Numeric vector of positive integer maturities in strictly increasing
+  order. Maturities must be consecutive and begin at 1.
 
 - coupon_yield:
 
-  Numeric vector of annual coupon yields.
+  Numeric vector of annual effective par coupon yields. Values must be
+  greater than `-1`.
 
 - par:
 
-  Par value of each bond.
+  Positive scalar par value.
 
 ## Value
 
-Numeric vector of annual effective spot rates.
+A numeric vector of annual effective spot rates.
 
 ## Examples
 

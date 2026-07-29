@@ -1,7 +1,6 @@
-# Complete expectation of life at age x
+# Complete expectation of life
 
-Computes \\\overset{\circ}{e}\_x=\int_0^\infty {}\_t p_x \\ dt\\. Uses
-closed form for uniform and exponential; numeric integration otherwise.
+Computes \\\overset{\circ}{e}\_x=\int_0^\infty {}\_t p_x\\dt\\.
 
 ## Usage
 
@@ -13,30 +12,20 @@ ex_complete(x, model, ..., tol = 1e-10)
 
 - x:
 
-  Numeric vector of ages (\\x \ge 0\\).
+  Numeric vector of ages.
 
 - model:
 
-  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`,
+  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`, or
   `"weibull"`.
 
 - ...:
 
-  Model parameters:
-
-  - uniform: `omega`
-
-  - exponential: `lambda`
-
-  - gompertz: `B`, `c`
-
-  - makeham: `A`, `B`, `c`
-
-  - weibull: `shape`, `scale`
+  Model parameters.
 
 - tol:
 
-  Tolerance used to choose a finite integration bound (numeric).
+  Tolerance used to choose a finite integration bound.
 
 ## Value
 

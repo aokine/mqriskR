@@ -1,7 +1,8 @@
-# Discount factors under a variable annual interest scenario
+# Discount factors under variable annual interest rates
 
-Computes the sequence of discount factors \$\$v_1,\\ v_2,\\ \dots,\\
-v_n\$\$ where \$\$v_t = \prod\_{k=1}^{t}(1+i_k)^{-1}.\$\$
+Computes cumulative discount factors for a sequence of annual effective
+interest rates: \$\$ v_t = \prod\_{k=1}^{t}(1+i_k)^{-1}, \qquad
+t=1,\ldots,n. \$\$
 
 ## Usage
 
@@ -13,21 +14,19 @@ vt_var(i)
 
 - i:
 
-  Numeric vector of annual effective interest rates \\i_1, i_2, \dots,
-  i_n\\.
+  Numeric vector of annual effective interest rates. Each value must be
+  greater than `-1`.
 
 ## Value
 
-Numeric vector of discount factors of the same length as `i`.
-
-## Details
-
-This corresponds to the Chapter 15 notation \\{}\_j v^t\\ for a fixed
-scenario \\j\\.
+A numeric vector of cumulative discount factors with the same length as
+`i`.
 
 ## Examples
 
 ``` r
 vt_var(c(0.06, 0.07, 0.08))
 #> [1] 0.9433962 0.8816787 0.8163692
+vt_var(c(-0.01, 0.02, 0.03))
+#> [1] 1.0101010 0.9902951 0.9614516
 ```

@@ -1,7 +1,7 @@
 # Piecewise-continuous decreasing n-year term insurance
 
 Computes \$\$(D\bar{A})\_{x:\overline{n}\|}^{1} = \int_0^n \lfloor n+1-t
-\rfloor\\ v^t\\ {}\_tp_x\\ \mu\_{x+t}\\ dt.\$\$
+\rfloor v^t {}\_tp_x \mu\_{x+t}\\dt.\$\$
 
 ## Usage
 

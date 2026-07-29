@@ -12,7 +12,7 @@ qx_tab(tbl, x)
 
 - tbl:
 
-  A life_table object.
+  A `life_table` object.
 
 - x:
 
@@ -20,4 +20,4 @@ qx_tab(tbl, x)
 
 ## Value
 
-Numeric vector of q_x values.
+Numeric vector of \\q_x\\ values.

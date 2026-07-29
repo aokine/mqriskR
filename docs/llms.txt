@@ -1,22 +1,25 @@
 # mqriskR
 
-`mqriskR` provides functions for actuarial risk modeling, including
-survival models, life annuities, multiple-decrement models, and
-mortality improvement projections, using standard actuarial notation.
+**mqriskR** provides a comprehensive collection of functions for
+actuarial mathematics and life contingency modeling. It supports
+actuarial present values, premiums, reserves, pensions, multiple-life
+models, multiple-decrement models, mortality improvement, and both life
+table and parametric survival model calculations using standard
+actuarial notation.
 
-The package is designed to support teaching, exam preparation, and
-reproducible actuarial analysis.
+The package is designed to support actuarial education, professional
+exam preparation, research, and reproducible actuarial analysis.
 
 ## Installation
 
-You can install the stable version from CRAN:
+Install the stable release from CRAN:
 
 ``` r
 
 install.packages("mqriskR")
 ```
 
-You can install the development version from GitHub:
+Or install the development version from GitHub:
 
 ``` r
 
@@ -26,51 +29,83 @@ remotes::install_github("aokine/mqriskR")
 
 ## Example
 
-This example computes a whole life annuity under a uniform distribution
-of deaths.
+Compute the actuarial present value of a whole life annuity under a
+uniform distribution of deaths.
 
 ``` r
 
 library(mqriskR)
 
-ax(40, i = 0.05, model = "uniform", omega = 100)
+ax(
+  x = 40,
+  i = 0.05,
+  model = "uniform",
+  omega = 100
+)
 ```
 
-## Features
+## Main Features
 
-- Life insurance and annuity functions (discrete, continuous, and
-  m-thly)
-- Survival models and mortality laws
+- Life insurance present values
+- Life annuities (discrete, continuous, and m-thly)
+- Premium calculations
+- Policy reserve calculations
+- Pension mathematics
+- Survival probabilities
+- Multiple-life models
 - Multiple-decrement models
 - Mortality improvement projections
-- Functions aligned with standard actuarial notation
+- Spot interest rate models
+- Variable interest models
+- Support for both life tables and parametric survival models
+- Functions using standard actuarial notation
 
-## Purpose
+## Version 0.1.1
 
-This package is intended for:
+Version 0.1.1 focuses on improving the quality, consistency, and
+usability of the package.
 
-- Actuarial students preparing for professional exams
-- Instructors teaching life contingencies
-- Practitioners needing transparent and reproducible calculations
+Highlights include:
+
+- Improved support for life table objects
+- Expanded vectorized input support
+- Improved handling of finite life tables
+- More consistent behavior across related functions
+- Cleaner, descriptive documentation
+- Improved examples and package manual
+- Enhanced input validation and error handling
+
+No breaking changes were introduced. Existing code written for earlier
+versions of **mqriskR** continues to work.
+
+## Intended Audience
+
+The package is intended for:
+
+- Actuarial students preparing for professional examinations
+- University instructors teaching actuarial mathematics
+- Researchers developing actuarial methods
+- Practicing actuaries requiring transparent and reproducible
+  calculations
 
 ## Documentation
 
-Full function documentation is available on the pkgdown site:
+Complete documentation for all exported functions is available on the
+pkgdown website:
 
 <https://aokine.github.io/mqriskR/>
 
 ## References
 
-The methods implemented in this package are aligned with standard
-actuarial texts, including:
+The methods implemented in **mqriskR** are based on standard actuarial
+references, including:
 
-- Camilli, S. J., Duncan, I., and London, R. L. (2014,
-  <ISBN:9781625423474>) “Models for Quantifying Risk”, 6th Edition,
-  ACTEX Publications.
+- Camilli, S. J., Duncan, I., and London, R. L. (2014). *Models for
+  Quantifying Risk* (6th ed.). ACTEX Publications.
 
-- Dickson, D. C. M., Hardy, M. R., and Waters, H. R. (2020,
-  <ISBN:9781108478083>) “Actuarial Mathematics for Life Contingent
-  Risks”.
+- Dickson, D. C. M., Hardy, M. R., and Waters, H. R. (2020). *Actuarial
+  Mathematics for Life Contingent Risks* (2nd ed.). Cambridge University
+  Press.
 
 # Package index
 
@@ -90,24 +125,24 @@ actuarial texts, including:
 ## Survival Models
 
 - [`S0()`](https://aokine.github.io/mqriskR/reference/S0.md) : Survival
-  function for age-at-failure T0
+  function for age-at-failure
 - [`F0()`](https://aokine.github.io/mqriskR/reference/dist0.md)
   [`f0()`](https://aokine.github.io/mqriskR/reference/dist0.md) :
-  Distribution functions for age-at-failure T0
+  Distribution functions for age-at-failure
 - [`hazard0()`](https://aokine.github.io/mqriskR/reference/hazard0.md) :
-  Hazard / force for age-at-failure T0
+  Hazard or force of mortality for age-at-failure
 - [`cumhaz0()`](https://aokine.github.io/mqriskR/reference/cumhaz0.md) :
-  Cumulative hazard for age-at-failure T0
+  Cumulative hazard for age-at-failure
 - [`tpx()`](https://aokine.github.io/mqriskR/reference/tpx.md) :
-  Conditional survival probability for Tx
+  Conditional survival probability
 - [`tqx()`](https://aokine.github.io/mqriskR/reference/tqx.md) :
-  Conditional failure probability for Tx
+  Conditional failure probability
 - [`fx()`](https://aokine.github.io/mqriskR/reference/fx.md) :
-  Conditional density for Tx
+  Conditional density
 - [`ex_complete()`](https://aokine.github.io/mqriskR/reference/ex_complete.md)
-  : Complete expectation of life at age x
+  : Complete expectation of life
 - [`ex_curtate()`](https://aokine.github.io/mqriskR/reference/ex_curtate.md)
-  : Curtate expectation of life at age x
+  : Curtate expectation of life
 
 ## Life Tables
 
@@ -303,23 +338,16 @@ actuarial texts, including:
   [`sxn()`](https://aokine.github.io/mqriskR/reference/annuity_annual.md)
   [`sdotxn()`](https://aokine.github.io/mqriskR/reference/annuity_annual.md)
   [`sbarxn()`](https://aokine.github.io/mqriskR/reference/annuity_annual.md)
-  : Annual annuity functions (Chapter 8)
-- [`ax_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly_whole_immediate.md)
-  : Whole life m-thly annuity-immediate
-- [`adotx_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly_whole_due.md)
-  : Whole life m-thly annuity-due
-- [`axn_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly_temp_immediate.md)
-  : Temporary m-thly annuity-immediate
-- [`adotxn_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly_temp_due.md)
-  : Temporary m-thly annuity-due
-- [`nax_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly_deferred_immediate.md)
-  : Deferred whole life m-thly annuity-immediate
-- [`nadotx_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly_deferred_due.md)
-  : Deferred whole life m-thly annuity-due
-- [`sxn_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly_accum_immediate.md)
-  : Temporary m-thly annuity-immediate actuarial accumulated value
-- [`sdotxn_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly_accum_due.md)
-  : Temporary m-thly annuity-due actuarial accumulated value
+  : Annual annuity functions
+- [`ax_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly.md)
+  [`adotx_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly.md)
+  [`axn_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly.md)
+  [`adotxn_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly.md)
+  [`nax_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly.md)
+  [`nadotx_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly.md)
+  [`sxn_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly.md)
+  [`sdotxn_m()`](https://aokine.github.io/mqriskR/reference/annuity_mthly.md)
+  : m-thly contingent annuity functions
 - [`annuity_identity_ax()`](https://aokine.github.io/mqriskR/reference/annuity_relationships.md)
   [`annuity_identity_adotx()`](https://aokine.github.io/mqriskR/reference/annuity_relationships.md)
   [`annuity_identity_abarx()`](https://aokine.github.io/mqriskR/reference/annuity_relationships.md)
@@ -329,7 +357,7 @@ actuarial texts, including:
   [`annuity_identity_nax()`](https://aokine.github.io/mqriskR/reference/annuity_relationships.md)
   [`annuity_identity_nadotx()`](https://aokine.github.io/mqriskR/reference/annuity_relationships.md)
   [`annuity_identity_nabarx()`](https://aokine.github.io/mqriskR/reference/annuity_relationships.md)
-  : Annuity-insurance relationships (Chapter 8)
+  : Annuity-insurance relationships
 - [`Iax()`](https://aokine.github.io/mqriskR/reference/annuity_varying_payments.md)
   [`Iaxn()`](https://aokine.github.io/mqriskR/reference/annuity_varying_payments.md)
   [`Daxn()`](https://aokine.github.io/mqriskR/reference/annuity_varying_payments.md)
@@ -339,19 +367,14 @@ actuarial texts, including:
   [`Iabarx()`](https://aokine.github.io/mqriskR/reference/annuity_varying_payments.md)
   [`Iabarxn()`](https://aokine.github.io/mqriskR/reference/annuity_varying_payments.md)
   [`Dabarxn()`](https://aokine.github.io/mqriskR/reference/annuity_varying_payments.md)
-  : Varying-payment annuity functions (Chapter 8)
-- [`qx_proj()`](https://aokine.github.io/mqriskR/reference/qx_proj.md) :
-  Project one-year death probability under mortality improvement
-- [`px_proj()`](https://aokine.github.io/mqriskR/reference/px_proj.md) :
-  Project one-year survival probability under mortality improvement
-- [`tpx_improved()`](https://aokine.github.io/mqriskR/reference/tpx_improved.md)
-  : Multi-year survival probability under mortality improvement
-- [`axn_improved()`](https://aokine.github.io/mqriskR/reference/axn_improved.md)
-  : Temporary annuity-immediate under mortality improvement
-- [`naxn_improved()`](https://aokine.github.io/mqriskR/reference/naxn_improved.md)
-  : Deferred temporary annuity-immediate under mortality improvement
-- [`ax_improved()`](https://aokine.github.io/mqriskR/reference/ax_improved.md)
-  : Whole life annuity-immediate under mortality improvement
+  : Varying-payment annuity functions
+- [`qx_proj()`](https://aokine.github.io/mqriskR/reference/mortality_improvement_projection.md)
+  [`px_proj()`](https://aokine.github.io/mqriskR/reference/mortality_improvement_projection.md)
+  [`tpx_improved()`](https://aokine.github.io/mqriskR/reference/mortality_improvement_projection.md)
+  [`axn_improved()`](https://aokine.github.io/mqriskR/reference/mortality_improvement_projection.md)
+  [`naxn_improved()`](https://aokine.github.io/mqriskR/reference/mortality_improvement_projection.md)
+  [`ax_improved()`](https://aokine.github.io/mqriskR/reference/mortality_improvement_projection.md)
+  : Mortality improvement projection functions
 - [`adotx_m_udd()`](https://aokine.github.io/mqriskR/reference/annuity_approximations_udd.md)
   [`adotxn_m_udd()`](https://aokine.github.io/mqriskR/reference/annuity_approximations_udd.md)
   [`nadotx_m_udd()`](https://aokine.github.io/mqriskR/reference/annuity_approximations_udd.md)
@@ -385,36 +408,36 @@ actuarial texts, including:
 
 ## Funding Plans for Contingent Contracts
 
-- [`Px()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`Pxn1()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`PnEx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`Pxn()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`tPx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`tPxn1()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`tPnEx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`tPxn()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`PnAx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`tPnAx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`Pbarx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`Pbarxn1()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`Pbarxn()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`PbarAbarx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`PbarAbarxn1()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`PbarAbarxn()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`Px_m()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`Pxn1_m()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`Pxn_m()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`PnAx_m()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`EL0x()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`varL0x()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`EL0xn1()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`varL0xn1()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`EL0xn()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`varL0xn()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`EL0barAbarx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`varL0barAbarx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md)
-  [`Gx()`](https://aokine.github.io/mqriskR/reference/premium_ch9.md) :
-  Chapter 9 premium, loss, and expense functions
+- [`Px()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`Pxn1()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`PnEx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`Pxn()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`tPx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`tPxn1()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`tPnEx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`tPxn()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`PnAx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`tPnAx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`Pbarx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`Pbarxn1()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`Pbarxn()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`PbarAbarx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`PbarAbarxn1()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`PbarAbarxn()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`Px_m()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`Pxn1_m()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`Pxn_m()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`PnAx_m()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`EL0x()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`varL0x()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`EL0xn1()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`varL0xn1()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`EL0xn()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`varL0xn()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`EL0barAbarx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`varL0barAbarx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  [`Gx()`](https://aokine.github.io/mqriskR/reference/premium_functions.md)
+  : Premium, loss, and expense functions
 
 ## Contingent Contract Reserves
 
@@ -448,254 +471,212 @@ actuarial texts, including:
 - [`GT_cont()`](https://aokine.github.io/mqriskR/reference/GT_cont.md) :
   Total gain for a continuous-style one-step recursion
 - [`GM_cont()`](https://aokine.github.io/mqriskR/reference/GM_cont.md) :
-  Mortality gain helper for continuous-style recursion
+  Mortality gain for a continuous-style recursion
 - [`GI_cont()`](https://aokine.github.io/mqriskR/reference/GI_cont.md) :
-  Interest gain helper for continuous-style recursion
+  Interest gain for a continuous-style recursion
 - [`tVx_ret()`](https://aokine.github.io/mqriskR/reference/tVx_ret.md) :
-  Whole life net level premium reserve by retrospective method
+  Retrospective whole life reserve
 - [`tVxn_ret()`](https://aokine.github.io/mqriskR/reference/tVxn_ret.md)
-  : Endowment insurance reserve by retrospective method
+  : Retrospective endowment insurance reserve
 - [`tVxn1_ret()`](https://aokine.github.io/mqriskR/reference/tVxn1_ret.md)
-  : Term insurance reserve by retrospective method
-- [`tVnAx()`](https://aokine.github.io/mqriskR/reference/reserve_deferred_insurance_ch10.md)
-  [`htVnAx()`](https://aokine.github.io/mqriskR/reference/reserve_deferred_insurance_ch10.md)
-  : Deferred insurance reserve functions
+  : Retrospective term insurance reserve
+- [`tVnAx()`](https://aokine.github.io/mqriskR/reference/deferred_insurance_reserves.md)
+  [`htVnAx()`](https://aokine.github.io/mqriskR/reference/deferred_insurance_reserves.md)
+  : Deferred insurance reserves
 - [`PnAdotx()`](https://aokine.github.io/mqriskR/reference/PnAdotx.md) :
-  Deferred annuity-due premium
+  Net premium for a deferred annuity-due
 - [`tVnAdotx()`](https://aokine.github.io/mqriskR/reference/tVnAdotx.md)
-  : Deferred annuity-due reserve
-- [`Pnax()`](https://aokine.github.io/mqriskR/reference/Pnax.md) :
-  Deferred annuity-immediate premium
+  : Reserve for a deferred annuity-due
+- [`Pnax()`](https://aokine.github.io/mqriskR/reference/Pnax.md) : Net
+  premium for a deferred annuity-immediate
 - [`tVnax()`](https://aokine.github.io/mqriskR/reference/tVnax.md) :
-  Deferred annuity-immediate reserve
+  Reserve for a deferred annuity-immediate
 - [`thiele_backward_step()`](https://aokine.github.io/mqriskR/reference/thiele_backward_step.md)
-  : One backward Euler-style Thiele step
+  : One backward numerical step for Thiele's equation
 - [`thiele_dVdt()`](https://aokine.github.io/mqriskR/reference/thiele_dVdt.md)
   : Reserve derivative from Thiele's equation
 - [`thiele_backward_path()`](https://aokine.github.io/mqriskR/reference/thiele_backward_path.md)
-  : Backward Euler reserve path from maturity
+  : Backward reserve path from a terminal value
 
 ## Reserves as Financial Liabilities
 
-- [`alphaF()`](https://aokine.github.io/mqriskR/reference/alphaF.md) :
-  Full preliminary term first-year modified premium
-- [`betaF()`](https://aokine.github.io/mqriskR/reference/betaF.md) :
-  Full preliminary term renewal modified premium
-- [`tVFx()`](https://aokine.github.io/mqriskR/reference/tVFx.md) : Full
-  preliminary term reserve for whole life insurance
-- [`tsVx()`](https://aokine.github.io/mqriskR/reference/tsVx.md) :
-  Fractional-duration whole life reserve
-- [`meanVx()`](https://aokine.github.io/mqriskR/reference/meanVx.md) :
-  Mean reserve for whole life insurance
-- [`tsVxn()`](https://aokine.github.io/mqriskR/reference/tsVxn.md) :
-  Fractional-duration endowment reserve
-- [`tsVxn1()`](https://aokine.github.io/mqriskR/reference/tsVxn1.md) :
-  Fractional-duration term reserve
-- [`tVGx()`](https://aokine.github.io/mqriskR/reference/tVGx.md) : Whole
-  life gross premium reserve
-- [`tVEx()`](https://aokine.github.io/mqriskR/reference/tVEx.md) : Whole
-  life expense reserve
+- [`alphaF()`](https://aokine.github.io/mqriskR/reference/full_preliminary_term.md)
+  [`betaF()`](https://aokine.github.io/mqriskR/reference/full_preliminary_term.md)
+  [`tVFx()`](https://aokine.github.io/mqriskR/reference/full_preliminary_term.md)
+  : Full preliminary term modified premiums and reserves
+- [`tsVx()`](https://aokine.github.io/mqriskR/reference/fractional_duration_reserves.md)
+  [`meanVx()`](https://aokine.github.io/mqriskR/reference/fractional_duration_reserves.md)
+  : Fractional-duration whole life reserves
+- [`tsVxn()`](https://aokine.github.io/mqriskR/reference/fractional_duration_term_endowment_reserves.md)
+  [`tsVxn1()`](https://aokine.github.io/mqriskR/reference/fractional_duration_term_endowment_reserves.md)
+  : Fractional-duration term and endowment reserves
+- [`tVGx()`](https://aokine.github.io/mqriskR/reference/gross_premium_expense_reserves.md)
+  [`tVEx()`](https://aokine.github.io/mqriskR/reference/gross_premium_expense_reserves.md)
+  : Whole life gross premium and expense reserves
 - [`GTg_disc()`](https://aokine.github.io/mqriskR/reference/GTg_disc.md)
   : Total gross gain for a discrete insurance contract
 - [`decompGg_disc()`](https://aokine.github.io/mqriskR/reference/decompGg_disc.md)
-  : Ordered gross gain decomposition
+  : Ordered decomposition of gross gain
 
 ## Multi-Life Models
 
-- [`tpxy()`](https://aokine.github.io/mqriskR/reference/tpxy.md) :
-  Joint-life survival probability
-- [`tqxy()`](https://aokine.github.io/mqriskR/reference/tqxy.md) :
-  Joint-life failure probability
-- [`tpxybar()`](https://aokine.github.io/mqriskR/reference/tpxybar.md) :
-  Last-survivor survival probability
-- [`tqxybar()`](https://aokine.github.io/mqriskR/reference/tqxybar.md) :
-  Last-survivor failure probability
-- [`tqxy1()`](https://aokine.github.io/mqriskR/reference/tqxy1.md) :
-  Probability that (x) fails before (y) within n years
-- [`tqyx1()`](https://aokine.github.io/mqriskR/reference/tqyx1.md) :
-  Probability that (y) fails before (x) within n years
-- [`tqxy2()`](https://aokine.github.io/mqriskR/reference/tqxy2.md) :
-  Probability that (x) fails after (y) within n years
-- [`tqyx2()`](https://aokine.github.io/mqriskR/reference/tqyx2.md) :
-  Probability that (y) fails after (x) within n years
-- [`nExy()`](https://aokine.github.io/mqriskR/reference/nExy.md) :
-  Joint-life pure endowment
-- [`nExybar()`](https://aokine.github.io/mqriskR/reference/nExybar.md) :
-  Last-survivor pure endowment
-- [`adotxyn()`](https://aokine.github.io/mqriskR/reference/adotxyn.md) :
-  Joint-life temporary annuity-due
-- [`axyn()`](https://aokine.github.io/mqriskR/reference/axyn_ch12.md) :
-  Joint-life temporary annuity-immediate
-- [`adotxy()`](https://aokine.github.io/mqriskR/reference/adotxy.md) :
-  Joint-life whole life annuity-due
-- [`axy()`](https://aokine.github.io/mqriskR/reference/axy_ch12.md) :
-  Joint-life whole life annuity-immediate
-- [`Axyn1()`](https://aokine.github.io/mqriskR/reference/Axyn1.md) :
-  Joint-life term insurance
-- [`Axyn()`](https://aokine.github.io/mqriskR/reference/Axyn.md) :
-  Joint-life endowment insurance
-- [`Axy()`](https://aokine.github.io/mqriskR/reference/Axy.md) :
-  Joint-life whole life insurance
-- [`adotxybarn()`](https://aokine.github.io/mqriskR/reference/adotxybarn.md)
-  : Last-survivor temporary annuity-due
-- [`axybarn()`](https://aokine.github.io/mqriskR/reference/axybarn_ch12.md)
-  : Last-survivor temporary annuity-immediate
-- [`adotxybar()`](https://aokine.github.io/mqriskR/reference/adotxybar.md)
-  : Last-survivor whole life annuity-due
-- [`axybar()`](https://aokine.github.io/mqriskR/reference/axybar_ch12.md)
-  : Last-survivor whole life annuity-immediate
-- [`Axybarn1()`](https://aokine.github.io/mqriskR/reference/Axybarn1.md)
-  : Last-survivor term insurance
-- [`Axybarn()`](https://aokine.github.io/mqriskR/reference/Axybarn.md) :
-  Last-survivor endowment insurance
-- [`Axybar()`](https://aokine.github.io/mqriskR/reference/Axybar.md) :
-  Last-survivor whole life insurance
-- [`ax_y()`](https://aokine.github.io/mqriskR/reference/ax_y.md) :
-  Reversionary annuity to (y) after death of (x)
-- [`ay_x()`](https://aokine.github.io/mqriskR/reference/ay_x.md) :
-  Reversionary annuity to (x) after death of (y)
-- [`abarx_y()`](https://aokine.github.io/mqriskR/reference/abarx_y.md) :
-  Continuous reversionary annuity to (y) after death of (x)
-- [`abary_x()`](https://aokine.github.io/mqriskR/reference/abary_x.md) :
-  Continuous reversionary annuity to (x) after death of (y)
-- [`abarxy()`](https://aokine.github.io/mqriskR/reference/abarxy_ch12.md)
-  : Continuous joint-life whole life annuity
-- [`abarxybar()`](https://aokine.github.io/mqriskR/reference/abarxybar_ch12.md)
-  : Continuous last-survivor whole life annuity
-- [`Abarxy()`](https://aokine.github.io/mqriskR/reference/Abarxy.md) :
-  Continuous joint-life whole life insurance
-- [`Abarxybar()`](https://aokine.github.io/mqriskR/reference/Abarxybar.md)
-  : Continuous last-survivor whole life insurance
-- [`Abarxy1()`](https://aokine.github.io/mqriskR/reference/Abarxy1.md) :
-  Continuous contingent insurance: benefit on death of (x) if before (y)
-- [`Abaryx1()`](https://aokine.github.io/mqriskR/reference/Abaryx1.md) :
-  Continuous contingent insurance: benefit on death of (y) if before (x)
-- [`Abarxy2()`](https://aokine.github.io/mqriskR/reference/Abarxy2.md) :
-  Continuous contingent insurance: benefit on death of (x) if after (y)
-- [`Abaryx2()`](https://aokine.github.io/mqriskR/reference/Abaryx2.md) :
-  Continuous contingent insurance: benefit on death of (y) if after (x)
+- [`tpxy()`](https://aokine.github.io/mqriskR/reference/multilife_survival_probabilities.md)
+  [`tqxy()`](https://aokine.github.io/mqriskR/reference/multilife_survival_probabilities.md)
+  [`tpxybar()`](https://aokine.github.io/mqriskR/reference/multilife_survival_probabilities.md)
+  [`tqxybar()`](https://aokine.github.io/mqriskR/reference/multilife_survival_probabilities.md)
+  : Multi-life survival and failure probabilities
+- [`tqxy1()`](https://aokine.github.io/mqriskR/reference/multilife_contingent_probabilities.md)
+  [`tqyx1()`](https://aokine.github.io/mqriskR/reference/multilife_contingent_probabilities.md)
+  [`tqxy2()`](https://aokine.github.io/mqriskR/reference/multilife_contingent_probabilities.md)
+  [`tqyx2()`](https://aokine.github.io/mqriskR/reference/multilife_contingent_probabilities.md)
+  : Contingent multi-life probabilities
+- [`nExy()`](https://aokine.github.io/mqriskR/reference/multilife_pure_endowments.md)
+  [`nExybar()`](https://aokine.github.io/mqriskR/reference/multilife_pure_endowments.md)
+  : Multi-life pure endowments
+- [`adotxyn()`](https://aokine.github.io/mqriskR/reference/joint_life_annuities.md)
+  [`axyn()`](https://aokine.github.io/mqriskR/reference/joint_life_annuities.md)
+  [`adotxy()`](https://aokine.github.io/mqriskR/reference/joint_life_annuities.md)
+  [`axy()`](https://aokine.github.io/mqriskR/reference/joint_life_annuities.md)
+  : Joint-life annuities
+- [`Axyn1()`](https://aokine.github.io/mqriskR/reference/joint_life_insurance.md)
+  [`Axyn()`](https://aokine.github.io/mqriskR/reference/joint_life_insurance.md)
+  [`Axy()`](https://aokine.github.io/mqriskR/reference/joint_life_insurance.md)
+  : Joint-life insurance functions
+- [`adotxybarn()`](https://aokine.github.io/mqriskR/reference/last_survivor_annuities.md)
+  [`axybarn()`](https://aokine.github.io/mqriskR/reference/last_survivor_annuities.md)
+  [`adotxybar()`](https://aokine.github.io/mqriskR/reference/last_survivor_annuities.md)
+  [`axybar()`](https://aokine.github.io/mqriskR/reference/last_survivor_annuities.md)
+  : Last-survivor annuity functions
+- [`Axybarn1()`](https://aokine.github.io/mqriskR/reference/last_survivor_insurance.md)
+  [`Axybarn()`](https://aokine.github.io/mqriskR/reference/last_survivor_insurance.md)
+  [`Axybar()`](https://aokine.github.io/mqriskR/reference/last_survivor_insurance.md)
+  : Last-survivor insurance functions
+- [`ax_y()`](https://aokine.github.io/mqriskR/reference/reversionary_annuities.md)
+  [`ay_x()`](https://aokine.github.io/mqriskR/reference/reversionary_annuities.md)
+  : Reversionary annuity functions
+- [`abarxy()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_annuities.md)
+  [`abarxybar()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_annuities.md)
+  [`abarx_y()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_annuities.md)
+  [`abary_x()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_annuities.md)
+  : Continuous multi-life annuities
+- [`Abarxy()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_insurance.md)
+  [`Abarxybar()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_insurance.md)
+  [`Abarxy1()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_insurance.md)
+  [`Abaryx1()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_insurance.md)
+  [`Abarxy2()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_insurance.md)
+  [`Abaryx2()`](https://aokine.github.io/mqriskR/reference/continuous_multilife_insurance.md)
+  : Continuous multi-life insurance
 
 ## Multiple-Decrement Models
 
 - [`qxtau()`](https://aokine.github.io/mqriskR/reference/qxtau.md) :
-  Total probability of decrement \\q_x^{(\tau)}\\
+  Total one-year decrement probability
 - [`pxtau()`](https://aokine.github.io/mqriskR/reference/pxtau.md) :
-  Survival probability \\p_x^{(\tau)}\\
+  Total one-year survival probability
 - [`dxj()`](https://aokine.github.io/mqriskR/reference/dxj.md) :
-  Cause-specific decrements \\d_x^{(j)}\\
+  Cause-specific numbers of decrements
 - [`dxtau()`](https://aokine.github.io/mqriskR/reference/dxtau.md) :
-  Total decrements \\d_x^{(\tau)}\\
+  Total number of decrements
 - [`md_table()`](https://aokine.github.io/mqriskR/reference/md_table.md)
-  : Build a multiple-decrement table
+  : Construct a multiple-decrement table
 - [`npxtau_md()`](https://aokine.github.io/mqriskR/reference/npxtau_md.md)
-  : \\{}\_n p_x^{(\tau)}\\ from a multiple-decrement table
+  : Multiple-decrement survival probability from a table
 - [`nqxj_md()`](https://aokine.github.io/mqriskR/reference/nqxj_md.md) :
-  \\{}\_n q_x^{(j)}\\ from a multiple-decrement table
+  Cause-specific multiple-decrement probability from a table
 - [`nqxtau_md()`](https://aokine.github.io/mqriskR/reference/nqxtau_md.md)
-  : \\{}\_n q_x^{(\tau)}\\ from a multiple-decrement table
+  : Total multiple-decrement probability from a table
 - [`tpxprimej_cf()`](https://aokine.github.io/mqriskR/reference/tpxprimej_cf.md)
-  : Single-decrement survival probability \\{}\_t p_x^{\prime(j)}\\
-  under constant force
+  : Single-decrement survival under a constant force
 - [`tqxprimej_cf()`](https://aokine.github.io/mqriskR/reference/tqxprimej_cf.md)
-  : Single-decrement failure probability \\{}\_t q_x^{\prime(j)}\\ under
-  constant force
+  : Single-decrement failure under a constant force
 - [`tpx_tau_cf()`](https://aokine.github.io/mqriskR/reference/tpx_tau_cf.md)
-  : Total survival probability \\{}\_t p_x^{(\tau)}\\ under constant
-  forces
+  : Total survival under constant cause-specific forces
 - [`tqxj_cf()`](https://aokine.github.io/mqriskR/reference/tqxj_cf.md) :
-  Cause-specific probability \\{}\_t q_x^{(j)}\\ under constant forces
+  Cause-specific decrement probability under constant forces
 - [`qx_dep_cf()`](https://aokine.github.io/mqriskR/reference/qx_dep_cf.md)
-  : Dependent probabilities \\q_x^{(j)}\\ from independent probabilities
-  \\q_x^{\prime(j)}\\ under constant force
+  : Multiple-decrement probabilities under constant forces
 - [`qxprime_mudd()`](https://aokine.github.io/mqriskR/reference/qxprime_mudd.md)
-  : Independent probabilities \\q_x^{\prime(j)}\\ from dependent
-  probabilities \\q_x^{(j)}\\ under MUDD
+  : Associated single-decrement probabilities under MUDD
 - [`tqxprime_mudd()`](https://aokine.github.io/mqriskR/reference/tqxprime_mudd.md)
-  : Independent probabilities \\{}\_t q_x^{\prime(j)}\\ under MUDD
+  : Fractional-year associated single-decrement probabilities under MUDD
 - [`qx_dep_sudd()`](https://aokine.github.io/mqriskR/reference/qx_dep_sudd.md)
-  : Dependent probabilities \\q_x^{(j)}\\ from independent probabilities
-  \\q_x^{\prime(j)}\\ under SUDD
+  : Multiple-decrement probabilities under SUDD
 - [`qxprime_sudd()`](https://aokine.github.io/mqriskR/reference/qxprime_sudd.md)
-  : Independent probabilities \\q_x^{\prime(j)}\\ from dependent
-  probabilities \\q_x^{(j)}\\ under SUDD
+  : Associated single-decrement probabilities under SUDD
 
 ## Multiple-Decrement Applications
 
 - [`Axj_md()`](https://aokine.github.io/mqriskR/reference/Axj_md.md) :
-  Discrete multiple-decrement insurance APV \\A\_{x}^{(j)}\\
+  Discrete multiple-decrement insurance present value
 - [`Abarxj_md()`](https://aokine.github.io/mqriskR/reference/Abarxj_md.md)
-  : Continuous multiple-decrement insurance APV
-  \\\overline{A}\_{x}^{(j)}\\
+  : Continuous multiple-decrement insurance present value
 - [`AS_path()`](https://aokine.github.io/mqriskR/reference/AS_path.md) :
-  Projected asset share path \\{}\_{k}AS\\
+  Projected asset-share path for two decrement causes
 - [`AS_path_md()`](https://aokine.github.io/mqriskR/reference/AS_path_md.md)
-  : General projected asset share path (multiple decrements)
+  : General projected asset-share path
 - [`tp00_tp01_euler()`](https://aokine.github.io/mqriskR/reference/tp00_tp01_euler.md)
-  : Euler approximation for \\{}\_{t}p\_{x}^{00}\\ and
-  \\{}\_{t}p\_{x}^{01}\\
+  : Euler approximation of disability-state probabilities
 - [`Pbar_trapz_ms()`](https://aokine.github.io/mqriskR/reference/Pbar_trapz_ms.md)
-  : Continuous premium approximation \\\overline{P}\\ by trapezoidal
-  rule
+  : Continuous premium approximation in a disability model
 - [`thiele_dVdt_01()`](https://aokine.github.io/mqriskR/reference/thiele_dVdt_01.md)
-  : Reserve derivatives for the disability model with recovery
+  : Reserve derivatives for a disability model with recovery
 - [`thiele_path_01()`](https://aokine.github.io/mqriskR/reference/thiele_path_01.md)
-  : Backward reserve path for the disability model with recovery
+  : Backward reserve path for a disability model with recovery
 - [`markov_nstep_prob()`](https://aokine.github.io/mqriskR/reference/markov_nstep_prob.md)
-  : n-step transition probability for a discrete-time Markov chain
+  : Multi-step transition probability
 - [`gain_loss_md()`](https://aokine.github.io/mqriskR/reference/gain_loss_md.md)
-  : Gain or loss in a multiple-decrement model
+  : Gain or loss in a two-cause multiple-decrement model
 
 ## Variable Interest Models
 
-- [`nEx_var()`](https://aokine.github.io/mqriskR/reference/chapter15_variable_interest_apv.md)
-  [`Axn1_var()`](https://aokine.github.io/mqriskR/reference/chapter15_variable_interest_apv.md)
-  [`Axn_var()`](https://aokine.github.io/mqriskR/reference/chapter15_variable_interest_apv.md)
-  [`axn_var()`](https://aokine.github.io/mqriskR/reference/chapter15_variable_interest_apv.md)
-  : Variable-interest actuarial present value functions
-- [`nEx_spot()`](https://aokine.github.io/mqriskR/reference/chapter15_spot_interest_apv.md)
-  [`Axn1_spot()`](https://aokine.github.io/mqriskR/reference/chapter15_spot_interest_apv.md)
-  [`Axn_spot()`](https://aokine.github.io/mqriskR/reference/chapter15_spot_interest_apv.md)
-  [`axn_spot()`](https://aokine.github.io/mqriskR/reference/chapter15_spot_interest_apv.md)
-  : Spot-rate actuarial present value functions
+- [`nEx_var()`](https://aokine.github.io/mqriskR/reference/variable_interest_apvs.md)
+  [`Axn1_var()`](https://aokine.github.io/mqriskR/reference/variable_interest_apvs.md)
+  [`Axn_var()`](https://aokine.github.io/mqriskR/reference/variable_interest_apvs.md)
+  [`axn_var()`](https://aokine.github.io/mqriskR/reference/variable_interest_apvs.md)
+  : Actuarial present values under variable annual interest rates
+- [`nEx_spot()`](https://aokine.github.io/mqriskR/reference/spot_interest_apvs.md)
+  [`Axn1_spot()`](https://aokine.github.io/mqriskR/reference/spot_interest_apvs.md)
+  [`Axn_spot()`](https://aokine.github.io/mqriskR/reference/spot_interest_apvs.md)
+  [`axn_spot()`](https://aokine.github.io/mqriskR/reference/spot_interest_apvs.md)
+  : Actuarial present values under spot rates
 - [`vt_var()`](https://aokine.github.io/mqriskR/reference/vt_var.md) :
-  Discount factors under a variable annual interest scenario
+  Discount factors under variable annual interest rates
 - [`pv_spot_cashflows()`](https://aokine.github.io/mqriskR/reference/pv_spot_cashflows.md)
-  : Present value of cash flows using spot rates
+  : Present value of deterministic cash flows using spot rates
 - [`z_from_coupon_semi()`](https://aokine.github.io/mqriskR/reference/z_from_coupon_semi.md)
-  : Bootstrap semiannual nominal spot rates from coupon-bond yields
+  : Bootstrap semiannual nominal spot rates
 - [`z_from_coupon_annual()`](https://aokine.github.io/mqriskR/reference/z_from_coupon_annual.md)
-  : Bootstrap annual spot rates from annual coupon-bond yields
+  : Bootstrap annual effective spot rates
 - [`fnk_from_z()`](https://aokine.github.io/mqriskR/reference/fnk_from_z.md)
-  : Forward rate \\f\_{n,k}\\ from spot rates
+  : Forward rate implied by spot rates
 - [`forward_matrix_from_z()`](https://aokine.github.io/mqriskR/reference/forward_matrix_from_z.md)
-  : Matrix of all determinable forward rates from spot rates
+  : Matrix of forward rates implied by spot rates
 - [`z_from_fn1()`](https://aokine.github.io/mqriskR/reference/z_from_fn1.md)
-  : Spot rates from forward one-year rates
+  : Spot rates from one-year forward rates
 
 ## Universal Life Insurance
 
 - [`coi_ul_typeB()`](https://aokine.github.io/mqriskR/reference/coi_ul_typeB.md)
   : Cost of insurance for Type B universal life
 - [`AV_path_ul_typeB()`](https://aokine.github.io/mqriskR/reference/AV_path_ul_typeB.md)
-  : Account-value path for Type B universal life
+  : Type B universal life account-value path
 - [`AV_path_ul_typeA()`](https://aokine.github.io/mqriskR/reference/AV_path_ul_typeA.md)
-  : Account-value path for Type A universal life
+  : Type A universal life account-value path
 - [`iP_eiul()`](https://aokine.github.io/mqriskR/reference/iP_eiul.md) :
   Point-to-point index growth rates
 - [`iMA_eiul()`](https://aokine.github.io/mqriskR/reference/iMA_eiul.md)
   : Monthly-average index growth rate
 - [`i_credit_eiul()`](https://aokine.github.io/mqriskR/reference/i_credit_eiul.md)
-  : Credited rates from raw index growth rates
-- [`pxtau_ul()`](https://aokine.github.io/mqriskR/reference/pxtau_ul.md)
-  : One-year persistency rates for universal life
-- [`tpxtau_ul()`](https://aokine.github.io/mqriskR/reference/tpxtau_ul.md)
-  : Cumulative persistency to the end of each policy year
+  : Credited rates from index growth rates
+- [`pxtau_ul()`](https://aokine.github.io/mqriskR/reference/ul_persistency.md)
+  [`tpxtau_ul()`](https://aokine.github.io/mqriskR/reference/ul_persistency.md)
+  : Universal life persistency probabilities
 - [`GMF_rollforward_ul()`](https://aokine.github.io/mqriskR/reference/GMF_rollforward_ul.md)
   : Guaranteed maturity fund roll-forward
 - [`rt_ul()`](https://aokine.github.io/mqriskR/reference/rt_ul.md) :
-  Ratio \\r_t = AV_t / GMF_t\\ capped at 1
+  Account-value to guaranteed-fund ratio
 - [`Vprefloor_crvm_ul()`](https://aokine.github.io/mqriskR/reference/Vprefloor_crvm_ul.md)
-  : Pre-floor CRVM reserve for universal life
+  : Pre-floor CRVM reserve
 - [`ag38_prefunding_ratio()`](https://aokine.github.io/mqriskR/reference/ag38_prefunding_ratio.md)
   : AG 38 prefunding ratio
 - [`ag38_reserve_ul()`](https://aokine.github.io/mqriskR/reference/ag38_reserve_ul.md)
@@ -706,7 +687,7 @@ actuarial texts, including:
 - [`Pr_vector_disc()`](https://aokine.github.io/mqriskR/reference/Pr_vector_disc.md)
   : Profit vector for a discrete profit-analysis model
 - [`Pi_signature()`](https://aokine.github.io/mqriskR/reference/Pi_signature.md)
-  : Profit signature from a profit vector
+  : Profit signature
 - [`NPV_profit()`](https://aokine.github.io/mqriskR/reference/NPV_profit.md)
   : Net present value of a profit signature
 - [`NPV_partial()`](https://aokine.github.io/mqriskR/reference/NPV_partial.md)
@@ -714,13 +695,13 @@ actuarial texts, including:
 - [`discounted_payback_period()`](https://aokine.github.io/mqriskR/reference/discounted_payback_period.md)
   : Discounted payback period
 - [`IRR_profit()`](https://aokine.github.io/mqriskR/reference/IRR_profit.md)
-  : Internal rate of return of a profit signature
+  : Internal rate of return
 - [`APV_gross_premiums()`](https://aokine.github.io/mqriskR/reference/APV_gross_premiums.md)
-  : APV of gross premiums under a risk discount rate
+  : Actuarial present value of gross premiums
 - [`profit_margin()`](https://aokine.github.io/mqriskR/reference/profit_margin.md)
   : Profit margin
 - [`V_zeroized()`](https://aokine.github.io/mqriskR/reference/V_zeroized.md)
-  : Zeroized reserves for a discrete death-only contract
+  : Zeroized reserves for a discrete death-benefit contract
 
 ## Pension Benefits
 
@@ -735,27 +716,27 @@ actuarial texts, including:
 - [`contribution_rate_target()`](https://aokine.github.io/mqriskR/reference/contribution_rate_target.md)
   : Target contribution rate for a defined contribution plan
 - [`PAB_fas()`](https://aokine.github.io/mqriskR/reference/PAB_fas.md) :
-  Projected annual benefit under a final average salary DB plan
+  Projected annual benefit under a final-average-salary plan
 - [`PAB_cae()`](https://aokine.github.io/mqriskR/reference/PAB_cae.md) :
-  Projected annual benefit under a career average earnings DB plan
+  Projected annual benefit under a career-average-earnings plan
 - [`replacement_ratio_db()`](https://aokine.github.io/mqriskR/reference/replacement_ratio_db.md)
   : Replacement ratio for a defined benefit plan
 - [`AB_fas()`](https://aokine.github.io/mqriskR/reference/AB_fas.md) :
-  Accrued benefit for a final average salary plan
+  Accrued benefit under a final-average-salary plan
 - [`AB_cae()`](https://aokine.github.io/mqriskR/reference/AB_cae.md) :
-  Accrued benefit for a career average earnings plan
+  Accrued benefit under a career-average-earnings plan
 - [`APV_NR_db()`](https://aokine.github.io/mqriskR/reference/APV_NR_db.md)
-  : APV of normal retirement benefit for a DB plan
+  : Actuarial present value of a normal retirement benefit
 - [`NC_EAN_db()`](https://aokine.github.io/mqriskR/reference/NC_EAN_db.md)
-  : Entry Age Normal normal cost for a DB plan
+  : Entry Age Normal normal cost
 - [`NC_TUC_db()`](https://aokine.github.io/mqriskR/reference/NC_TUC_db.md)
-  : Traditional Unit Credit normal cost for a DB plan
+  : Traditional Unit Credit normal cost
 - [`AAL_TUC_db()`](https://aokine.github.io/mqriskR/reference/AAL_TUC_db.md)
-  : Traditional Unit Credit accrued liability for a DB plan
+  : Traditional Unit Credit accrued liability
 - [`NC_PUC_db()`](https://aokine.github.io/mqriskR/reference/NC_PUC_db.md)
-  : Projected Unit Credit normal cost for a DB plan
+  : Projected Unit Credit normal cost
 - [`AAL_PUC_db()`](https://aokine.github.io/mqriskR/reference/AAL_PUC_db.md)
-  : Projected Unit Credit accrued liability for a DB plan
+  : Projected Unit Credit accrued liability
 
 # Articles
 

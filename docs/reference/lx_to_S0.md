@@ -1,7 +1,7 @@
 # Convert life-table values to survival probabilities
 
-Converts Chapter 6 life-table values \\l_x\\ into Chapter 5 survival
-probabilities \\S_0(x) = l_x / l_0\\.
+Converts life-table survivor values \\l_x\\ into survival probabilities
+\\S_0(x) = l_x / l_0\\.
 
 ## Usage
 

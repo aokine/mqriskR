@@ -36,7 +36,7 @@ GM_disc(Vt, Vt1, P, i_assumed, q_actual, B = 1)
 
 ## Value
 
-Numeric vector.
+A numeric vector of values.
 
 ## Examples
 

@@ -12,7 +12,7 @@ nqx(tbl, x, n)
 
 - tbl:
 
-  A life_table object.
+  A `life_table` object.
 
 - x:
 
@@ -24,4 +24,4 @@ nqx(tbl, x, n)
 
 ## Value
 
-Numeric vector of \_n q_x values.
+Numeric vector of \\{}\_n q_x\\ values.

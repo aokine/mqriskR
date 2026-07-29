@@ -1,7 +1,7 @@
-# Zeroized reserves for a discrete death-only contract
+# Zeroized reserves for a discrete death-benefit contract
 
-Computes the zeroized reserve sequence by backward recursion, setting
-negative reserves equal to zero.
+Computes reserves backward by setting expected profit in each policy
+year equal to zero. Negative reserves may optionally be floored at zero.
 
 ## Usage
 
@@ -13,53 +13,47 @@ V_zeroized(qx, i, G, benefit, r = 0, e = 0, V_terminal = 0, floor_zero = TRUE)
 
 - qx:
 
-  Mortality vector.
+  Mortality probability by policy year.
 
 - i:
 
-  Interest-rate vector.
+  Annual effective interest rate by policy year. Values must be greater
+  than `-1`.
 
 - G:
 
-  Gross premium vector.
+  Gross premium by policy year.
 
 - benefit:
 
-  Death-benefit vector.
+  Death benefit by policy year.
 
 - r:
 
-  Percent-of-premium expense vector.
+  Percent-of-premium expense rate by policy year. Values must lie in
+  `[0, 1]`.
 
 - e:
 
-  Fixed-expense vector.
+  Fixed expense by policy year.
 
 - V_terminal:
 
-  Terminal reserve. Defaults to 0.
+  Nonnegative scalar terminal reserve.
 
 - floor_zero:
 
-  Logical; if `TRUE`, negative reserves are reset to 0.
+  Logical scalar. If `TRUE`, negative reserves are replaced by zero.
 
 ## Value
 
-Numeric vector of zeroized reserves of length \\n+1\\.
-
-## Details
-
-For a death-only contract with no settlement expense and no second
-decrement, the recursion sets \$\$ Pr\_{t+1} = ({}\_tV^Z +
-G\_{t+1}(1-r\_{t+1}) - e\_{t+1})(1+i\_{t+1}) - \[Bq\_{x+t} +
-{}\_{t+1}V^Z p\_{x+t}\] \$\$ equal to zero, solving backward for
-\\{}\_tV^Z\\.
+A named numeric vector of length `length(qx) + 1`.
 
 ## Examples
 
 ``` r
 V_zeroized(
-  qx = c(.015, .017, .019, .021, .024),
+  qx = c(0.015, 0.017, 0.019, 0.021, 0.024),
   i = 0.06,
   G = 19279,
   benefit = 1000000,

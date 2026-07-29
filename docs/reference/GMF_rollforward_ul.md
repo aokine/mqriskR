@@ -1,7 +1,7 @@
 # Guaranteed maturity fund roll-forward
 
-Computes the one-period guaranteed maturity fund roll-forward used in
-Example 16.9.
+Computes a one-period guaranteed maturity fund roll-forward. Arguments
+may be scalars or vectors and follow common-length recycling.
 
 ## Usage
 
@@ -21,7 +21,7 @@ GMF_rollforward_ul(GMF_prev, GMP, r, policy_charge, i)
 
 - r:
 
-  Expense factor applied to GMP.
+  Percent-of-premium expense rate in `[0, 1]`.
 
 - policy_charge:
 
@@ -29,11 +29,11 @@ GMF_rollforward_ul(GMF_prev, GMP, r, policy_charge, i)
 
 - i:
 
-  Guaranteed interest rate.
+  Guaranteed annual effective interest rate greater than `-1`.
 
 ## Value
 
-Numeric scalar.
+A numeric vector.
 
 ## Examples
 

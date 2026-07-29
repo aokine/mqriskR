@@ -1,6 +1,6 @@
 # Curtate death probability from a life table
 
-Computes \\{}\_{k\|} q_x = {}\_k p_x - {}\_{k+1} p_x\\
+Computes \\{}\_{k\|} q_x = {}\_k p_x - {}\_{k+1} p_x\\.
 
 ## Usage
 

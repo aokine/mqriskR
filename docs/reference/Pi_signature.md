@@ -1,8 +1,8 @@
-# Profit signature from a profit vector
+# Profit signature
 
-Converts a Chapter 17 profit vector \\\mathbf{Pr}=(Pr_0,\dots,Pr_n)\\
-into the corresponding profit signature
-\\\mathbf{\Pi}=(\Pi_0,\dots,\Pi_n)\\ using Equation (17.3).
+Converts policy-year expected profits into a profit signature by
+weighting each future expected profit by the probability that the
+contract is in force at the start of that policy year.
 
 ## Usage
 
@@ -14,17 +14,17 @@ Pi_signature(Pr, p_tau)
 
 - Pr:
 
-  Profit vector of length \\n+1\\.
+  Profit vector of length `n + 1`.
 
 - p_tau:
 
-  One-year in-force probabilities. This may have length \\n-1\\ or
-  \\n\\. If length \\n\\, the final entry is ignored for the
-  profit-signature calculation.
+  One-year in-force probabilities. For `n > 1`, this may have length
+  `n - 1` or `n`; the final value is ignored when length `n`. For a
+  one-year contract, use `numeric(0)` or a single probability.
 
 ## Value
 
-Numeric vector of length \\n+1\\.
+A named numeric vector with the same length as `Pr`.
 
 ## Examples
 

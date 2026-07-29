@@ -1,6 +1,6 @@
-# Insurance utilities (Chapter 7)
+# Insurance utilities
 
-Helper functions for Chapter 7 insurance models.
+Helper functions for insurance models.
 
 ## Details
 

@@ -1,7 +1,7 @@
-# Accrued benefit for a final average salary plan
+# Accrued benefit under a final-average-salary plan
 
-Computes the accrued benefit at the current date using service and
-salary history only.
+Computes the accrued benefit using salary and service history through
+the valuation date.
 
 ## Usage
 
@@ -13,23 +13,27 @@ AB_fas(salary_history, p, fas_years = 3)
 
 - salary_history:
 
-  Numeric vector of annual salaries to date.
+  Positive numeric vector of annual salaries.
 
 - p:
 
-  Accrual percentage, e.g. `2` for 2 percent.
+  Nonnegative scalar accrual percentage.
 
 - fas_years:
 
-  Number of years in the final average salary average.
+  Positive integer number of years in the salary average.
 
 ## Value
 
-Accrued benefit.
+A numeric scalar.
 
 ## Examples
 
 ``` r
-AB_fas(salary_history = c(150000, 156000), p = 1, fas_years = 2)
+AB_fas(
+  salary_history = c(150000, 156000),
+  p = 1,
+  fas_years = 2
+)
 #> [1] 3060
 ```

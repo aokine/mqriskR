@@ -1,7 +1,6 @@
-# Single-decrement survival probability \\{}\_t p_x^{\prime(j)}\\ under constant force
+# Single-decrement survival under a constant force
 
-Single-decrement survival probability \\{}\_t p_x^{\prime(j)}\\ under
-constant force
+Computes \$\${}\_tp_x^{\prime(j)}=\exp(-\mu_jt).\$\$
 
 ## Usage
 
@@ -13,19 +12,21 @@ tpxprimej_cf(mu, t)
 
 - mu:
 
-  Force of decrement for cause j.
+  Nonnegative constant force of decrement. May be scalar or vector.
 
 - t:
 
-  Time.
+  Nonnegative time. May be scalar or vector.
 
 ## Value
 
-Numeric scalar/vector.
+A numeric vector.
 
 ## Examples
 
 ``` r
 tpxprimej_cf(0.10, 5)
 #> [1] 0.6065307
+tpxprimej_cf(0.10, c(1, 5, 10))
+#> [1] 0.9048374 0.6065307 0.3678794
 ```

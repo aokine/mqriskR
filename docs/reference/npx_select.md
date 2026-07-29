@@ -1,6 +1,7 @@
 # Select-life survival probability
 
-Computes \\{}\_n p\_{\[x\]+t} = l\_{\[x\]+t+n} / l\_{\[x\]+t}\\
+Computes \\{}\_n p\_{\[x\]+t} = l\_{\[x\]+t+n} / l\_{\[x\]+t}\\ in the
+discrete select-table setting.
 
 ## Usage
 
@@ -12,7 +13,7 @@ npx_select(tbl, x_sel, t, n)
 
 - tbl:
 
-  A select_life_table object.
+  A `select_life_table` object.
 
 - x_sel:
 
@@ -29,7 +30,3 @@ npx_select(tbl, x_sel, t, n)
 ## Value
 
 Numeric vector of survival probabilities.
-
-## Details
-
-in the discrete select-table setting.

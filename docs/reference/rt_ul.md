@@ -1,6 +1,7 @@
-# Ratio \\r_t = AV_t / GMF_t\\ capped at 1
+# Account-value to guaranteed-fund ratio
 
-Computes the ratio in Equation (16.16).
+Computes the ratio of account value to guaranteed maturity fund, capped
+at one.
 
 ## Usage
 
@@ -12,15 +13,15 @@ rt_ul(AV, GMF)
 
 - AV:
 
-  Account value.
+  Nonnegative account value.
 
 - GMF:
 
-  Guaranteed maturity fund.
+  Positive guaranteed maturity fund.
 
 ## Value
 
-Numeric scalar.
+A numeric vector.
 
 ## Examples
 

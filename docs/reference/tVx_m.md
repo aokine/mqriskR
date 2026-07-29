@@ -1,12 +1,12 @@
 # Whole life reserve with m-thly premiums
 
-Computes the Chapter 10 reserve for a whole life insurance funded by
-true m-thly premiums.
+Computes the reserve for a whole life insurance funded by true m-thly
+premiums.
 
 ## Usage
 
 ``` r
-tVx_m(x, t, m, i, model, ...)
+tVx_m(x, t, m, i, model = NULL, ..., tbl = NULL)
 ```
 
 ## Arguments
@@ -29,15 +29,19 @@ tVx_m(x, t, m, i, model, ...)
 
 - model:
 
-  Survival model.
+  Optional parametric survival model name.
 
 - ...:
 
   Additional model parameters.
 
+- tbl:
+
+  Optional life table object.
+
 ## Value
 
-Numeric vector.
+A numeric vector of values.
 
 ## Examples
 

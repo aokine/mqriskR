@@ -1,6 +1,8 @@
-# Pre-floor CRVM reserve for universal life
+# Pre-floor CRVM reserve
 
-Computes the pre-floor CRVM reserve from Equation (16.17).
+Computes the pre-floor reserve by multiplying the funding ratio by the
+difference between the present value of future benefits and future
+premiums.
 
 ## Usage
 
@@ -12,15 +14,16 @@ Vprefloor_crvm_ul(r, pvfb_minus_pvfp)
 
 - r:
 
-  Ratio \\r_t\\.
+  Funding ratio. Values must lie in `[0, 1]`.
 
 - pvfb_minus_pvfp:
 
-  Difference \\(PVFB)\_t - (PVFP)\_t\\.
+  Numeric difference between the present value of future benefits and
+  future premiums.
 
 ## Value
 
-Numeric scalar.
+A numeric vector.
 
 ## Examples
 

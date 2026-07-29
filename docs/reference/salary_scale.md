@@ -1,7 +1,6 @@
 # Salary scale under constant annual growth
 
-Constructs salary scale factors \\s_k\\ under a constant annual growth
-rate.
+Constructs salary-scale values under a constant annual growth rate.
 
 ## Usage
 
@@ -13,23 +12,23 @@ salary_scale(k, g, base_age = min(k), s_base = 1)
 
 - k:
 
-  Numeric vector of ages.
+  Numeric vector of ages or durations.
 
 - g:
 
-  Annual salary growth rate.
+  Annual salary growth rate greater than `-1`.
 
 - base_age:
 
-  Age at which the scale is normalized.
+  Scalar age or duration at which the scale is normalized.
 
 - s_base:
 
-  Salary scale value at `base_age`.
+  Positive scalar salary-scale value at `base_age`.
 
 ## Value
 
-Numeric vector of salary scale factors.
+A numeric vector with the same length as `k`.
 
 ## Examples
 

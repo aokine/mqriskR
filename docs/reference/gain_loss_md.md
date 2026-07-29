@@ -1,6 +1,8 @@
-# Gain or loss in a multiple-decrement model
+# Gain or loss in a two-cause multiple-decrement model
 
-Computes the gain or loss expression from Section 14.6.
+Computes one-year gain or loss under simultaneous within-year decrement
+probabilities or an ordered case in which Cause 2 occurs at year-end.
+Numeric arguments may be scalar or compatible vectors.
 
 ## Usage
 
@@ -28,23 +30,23 @@ gain_loss_md(
 
 - Vt:
 
-  Gross premium reserve at time \\t\\.
+  Gross reserve at the beginning of the year.
 
 - G:
 
-  Gross premium for the year.
+  Gross premium.
 
 - r:
 
-  Percent-of-premium expense factor.
+  Percent-of-premium expense rate.
 
 - e:
 
-  Fixed expense at the beginning of the year.
+  Fixed beginning-of-year expense.
 
 - i:
 
-  Earned interest rate.
+  Earned effective annual interest rate.
 
 - b1:
 
@@ -56,11 +58,11 @@ gain_loss_md(
 
 - s1:
 
-  Claim settlement expense for Cause 1.
+  Cause 1 settlement expense.
 
 - s2:
 
-  Claim settlement expense for Cause 2.
+  Cause 2 settlement expense.
 
 - q1:
 
@@ -72,40 +74,30 @@ gain_loss_md(
 
 - Vt1:
 
-  Gross premium reserve at time \\t+1\\.
+  Gross reserve at the end of the year.
 
 - year_end_cause2:
 
-  Logical; if `TRUE`, use the year-end Cause 2 form.
+  Whether Cause 2 occurs only at year-end.
 
 - q1prime:
 
-  Single-decrement Cause 1 probability for the year-end Cause 2 case.
+  Single-decrement Cause 1 probability for the ordered case.
 
 - q2prime:
 
-  Single-decrement Cause 2 probability for the year-end Cause 2 case.
+  Single-decrement Cause 2 probability for the ordered case.
 
 ## Value
 
-A numeric scalar.
-
-## Details
-
-With within-year decrement probabilities, the function evaluates \$\$
-\[{}\_{t}V^G + G(1-r) - e\](1+i) - \left\[(b^{(1)}+s^{(1)})q^{(1)} +
-(b^{(2)}+s^{(2)})q^{(2)} + p^{(\tau)} {}\_{t+1}V^G \right\] \$\$
-
-If `year_end_cause2 = TRUE`, the Cause 2 decrement is treated as
-occurring only at year end, matching Equation (14.30).
+A numeric vector of gains or losses.
 
 ## Examples
 
 ``` r
 gain_loss_md(
-  Vt = 115.00, G = 16, r = 0, e = 3, i = 0.06,
-  b1 = 1000, b2 = 110, s1 = 0, s2 = 0,
-  q1 = 0.01, q2 = 0.10, Vt1 = 128.83
+  Vt = 115, G = 16, r = 0, e = 3, i = 0.06,
+  b1 = 1000, b2 = 110, q1 = 0.01, q2 = 0.10, Vt1 = 128.83
 )
 #> [1] 0.0213
 ```

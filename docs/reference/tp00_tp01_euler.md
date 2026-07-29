@@ -1,7 +1,8 @@
-# Euler approximation for \\{}\_{t}p\_{x}^{00}\\ and \\{}\_{t}p\_{x}^{01}\\
+# Euler approximation of disability-state probabilities
 
-Computes the Euler approximations in the disability model allowing for
-recovery, as in Equations (14.20) and (14.21).
+Approximates probabilities of being healthy, disabled, or deceased in a
+three-state model that allows recovery from disability. The final time
+is always included, with a shorter final step when needed.
 
 ## Usage
 
@@ -13,49 +14,39 @@ tp00_tp01_euler(h, n, mu01, mu02, mu10, mu12, p00_0 = 1, p01_0 = 0)
 
 - h:
 
-  Step size.
+  Positive step size.
 
 - n:
 
-  Final time.
+  Nonnegative final time.
 
 - mu01:
 
-  Function of time returning \\\mu\_{x+t}^{01}\\.
+  Healthy-to-disabled intensity function.
 
 - mu02:
 
-  Function of time returning \\\mu\_{x+t}^{02}\\.
+  Healthy-to-deceased intensity function.
 
 - mu10:
 
-  Function of time returning \\\mu\_{x+t}^{10}\\.
+  Disabled-to-healthy intensity function.
 
 - mu12:
 
-  Function of time returning \\\mu\_{x+t}^{12}\\.
+  Disabled-to-deceased intensity function.
 
 - p00_0:
 
-  Initial value of \\{}\_{0}p\_{x}^{00}\\.
+  Initial healthy-state probability.
 
 - p01_0:
 
-  Initial value of \\{}\_{0}p\_{x}^{01}\\.
+  Initial disabled-state probability.
 
 ## Value
 
 A data frame with columns `t`, `tp00`, `tp01`, and `tp02`.
-
-## Details
-
-The model uses three states:
-
-- State 0: healthy
-
-- State 1: disabled
-
-- State 2: deceased
 
 ## Examples
 
@@ -64,11 +55,7 @@ mu01 <- function(t) 0.10 * t + 0.20
 mu02 <- function(t) 0.20
 mu10 <- function(t) 0.50
 mu12 <- function(t) 0.125 * t + 0.20
-
-tp00_tp01_euler(
-  h = 0.10, n = 2.0,
-  mu01 = mu01, mu02 = mu02, mu10 = mu10, mu12 = mu12
-)
+tp00_tp01_euler(0.10, 2, mu01, mu02, mu10, mu12)
 #>      t      tp00       tp01       tp02
 #> 1  0.0 1.0000000 0.00000000 0.00000000
 #> 2  0.1 0.9600000 0.02000000 0.02000000

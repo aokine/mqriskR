@@ -1,6 +1,6 @@
-# Total decrements \\d_x^{(\tau)}\\
+# Total number of decrements
 
-Total decrements \\d_x^{(\tau)}\\
+Computes \$\$d_x^{(\tau)}=\sum_j d_x^{(j)}.\$\$
 
 ## Usage
 
@@ -12,7 +12,7 @@ dxtau(lxtau, qxj)
 
 - lxtau:
 
-  Number alive at age x in the multiple-decrement table.
+  Number alive at age or duration \\x\\ in the multiple-decrement table.
 
 - qxj:
 
@@ -20,7 +20,7 @@ dxtau(lxtau, qxj)
 
 ## Value
 
-Numeric scalar.
+A numeric scalar.
 
 ## Examples
 

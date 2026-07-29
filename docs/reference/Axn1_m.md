@@ -1,7 +1,7 @@
 # m-thly term insurance APV
 
-Computes \\A\_{x:\overline{n}\|}^{1(m)} = \sum\_{j=0}^{mn-1}
-v^{(j+1)/m}\Pr(j/m \< T_x \le (j+1)/m)\\.
+Computes \\A\_{x:\overline{n}\|}^{1(m)} = \sum\_{j=0}^{mn-1} v^{(j+1)/m}
+\Pr(j/m \< T_x \le (j+1)/m)\\.
 
 ## Usage
 

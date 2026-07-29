@@ -1,6 +1,8 @@
-# Dependent probabilities \\q_x^{(j)}\\ from independent probabilities \\q_x^{\prime(j)}\\ under SUDD
+# Multiple-decrement probabilities under SUDD
 
-Two-decrement case only.
+Converts two associated single-decrement probabilities to dependent
+multiple-decrement probabilities under the single-decrement uniform
+distribution assumption.
 
 ## Usage
 
@@ -12,15 +14,18 @@ qx_dep_sudd(q1prime, q2prime)
 
 - q1prime:
 
-  Independent probability for decrement 1.
+  Associated single-decrement probability for cause 1. May be scalar or
+  vector.
 
 - q2prime:
 
-  Independent probability for decrement 2.
+  Associated single-decrement probability for cause 2. May be scalar or
+  vector.
 
 ## Value
 
-Numeric vector `c(q1, q2)`.
+For scalar input, a named numeric vector containing `q1` and `q2`. For
+vectorized input, a numeric matrix with columns `q1` and `q2`.
 
 ## Examples
 

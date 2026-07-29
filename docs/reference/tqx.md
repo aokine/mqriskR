@@ -1,4 +1,4 @@
-# Conditional failure probability for Tx
+# Conditional failure probability
 
 Computes \\{}\_t q_x = 1 - {}\_t p_x\\.
 
@@ -12,31 +12,21 @@ tqx(t, x, model, ...)
 
 - t:
 
-  Numeric vector of durations (\\t \ge 0\\).
+  Numeric vector of durations.
 
 - x:
 
-  Numeric vector of ages (\\x \ge 0\\).
+  Numeric vector of ages.
 
 - model:
 
-  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`,
+  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`, or
   `"weibull"`.
 
 - ...:
 
-  Model parameters:
-
-  - uniform: `omega`
-
-  - exponential: `lambda`
-
-  - gompertz: `B`, `c`
-
-  - makeham: `A`, `B`, `c`
-
-  - weibull: `shape`, `scale`
+  Model parameters.
 
 ## Value
 
-Numeric vector in \\\[0,1\]\\.
+Numeric vector of failure probabilities.

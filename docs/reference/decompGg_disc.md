@@ -1,34 +1,11 @@
-# Ordered gross gain decomposition
+# Ordered decomposition of gross gain
 
-Decomposes total gross gain into interest, mortality, and expense
-components in a user-specified order.
-
-Decomposes total gross gain into interest, mortality, and expense
-components in a user-specified order. The first two components are
-computed sequentially, and the last component is taken as the balancing
-item so that the components sum exactly to total gain.
+Decomposes gross gain into interest, mortality, and expense components
+in a user-specified order.
 
 ## Usage
 
 ``` r
-decompGg_disc(
-  VtG,
-  Vt1G,
-  G,
-  i_assumed,
-  q_assumed,
-  r_assumed = 0,
-  e_assumed = 0,
-  s_assumed = 0,
-  i_actual,
-  q_actual,
-  r_actual = 0,
-  e_actual = 0,
-  s_actual = 0,
-  b = 1,
-  order = c("interest", "mortality", "expense")
-)
-
 decompGg_disc(
   VtG,
   Vt1G,
@@ -52,11 +29,11 @@ decompGg_disc(
 
 - VtG:
 
-  Gross reserve at duration t.
+  Gross reserve at duration `t`.
 
 - Vt1G:
 
-  Gross reserve at duration t+1.
+  Gross reserve at duration `t + 1`.
 
 - G:
 
@@ -68,7 +45,7 @@ decompGg_disc(
 
 - q_assumed:
 
-  Assumed mortality rate.
+  Assumed mortality probability.
 
 - r_assumed:
 
@@ -88,7 +65,7 @@ decompGg_disc(
 
 - q_actual:
 
-  Actual mortality rate.
+  Actual mortality probability.
 
 - r_actual:
 
@@ -104,40 +81,43 @@ decompGg_disc(
 
 - b:
 
-  Benefit amount. Default 1.
+  Benefit amount.
 
 - order:
 
-  Character vector giving the order of decomposition.
+  Character vector containing `"interest"`, `"mortality"`, and
+  `"expense"` exactly once.
 
 ## Value
 
-Named numeric vector.
+For scalar input, a named numeric vector. For vectorized input, a
+numeric matrix with columns `total_gain`, `interest`, `mortality`,
+`expense`, and `check`.
 
-Named numeric vector.
+## Details
+
+For scalar input, the function returns a named numeric vector. For
+vectorized input, it returns a numeric matrix with one row per
+calculation.
 
 ## Examples
 
 ``` r
 decompGg_disc(
-  VtG = 3950.73, Vt1G = 4607.07, G = 685,
-  i_assumed = 0.06, q_assumed = 0.00592,
-  r_assumed = 0.05, e_assumed = 0, s_assumed = 300,
-  i_actual = 0.065, q_actual = 0.005,
-  r_actual = 0.06, e_actual = 0, s_actual = 100,
-  b = 50000,
-  order = c("interest", "mortality", "expense")
-)
-#> total_gain   interest  mortality    expense      check 
-#>   58.74630   23.00405   42.03750   -6.29525   58.74630 
-decompGg_disc(
-  VtG = 3950.73, Vt1G = 4607.07, G = 685,
-  i_assumed = 0.06, q_assumed = 0.00592,
-  r_assumed = 0.05, e_assumed = 0, s_assumed = 300,
-  i_actual = 0.065, q_actual = 0.005,
-  r_actual = 0.06, e_actual = 0, s_actual = 100,
-  b = 50000,
-  order = c("interest", "mortality", "expense")
+  VtG = 3950.73,
+  Vt1G = 4607.07,
+  G = 685,
+  i_assumed = 0.06,
+  q_assumed = 0.00592,
+  r_assumed = 0.05,
+  e_assumed = 0,
+  s_assumed = 300,
+  i_actual = 0.065,
+  q_actual = 0.005,
+  r_actual = 0.06,
+  e_actual = 0,
+  s_actual = 100,
+  b = 50000
 )
 #> total_gain   interest  mortality    expense      check 
 #>   58.74630   23.00405   42.03750   -6.29525   58.74630 

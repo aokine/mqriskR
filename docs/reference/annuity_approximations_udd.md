@@ -1,6 +1,7 @@
 # UDD annuity approximations
 
-UDD-based approximations for Chapter 8 annuity functions.
+UDD-based approximations for annual, fractional-payment, and continuous
+annuity functions.
 
 Computes \$\$\ddot{a}\_x^{(m)} \approx \alpha(m)\ddot{a}\_x -
 \beta(m).\$\$
@@ -32,8 +33,7 @@ Computes \$\$\bar{a}\_x \approx \frac{id}{\delta^2}\ddot{a}\_x -
 
 Uses the identity \$\$\bar{a}\_{x:\overline{n}\|} \approx
 \frac{1-\bar{A}\_{x:\overline{n}\|}}{\delta}\$\$ together with the
-package's existing Chapter 7 UDD insurance approximation for
-\\\bar{A}\_{x:\overline{n}\|}\\.
+package's existing Abarxn_udd() approximation.
 
 Computes \$\${}\_{n\mid}\bar{a}\_x \approx {}\_nE_x \\
 \bar{a}\_{x+n}.\$\$
@@ -123,7 +123,6 @@ The exported functions documented on this page are:
 
 - `nabarx_udd()`
 
-Note that this function relies on the already-existing
-[`Abarxn_udd()`](https://aokine.github.io/mqriskR/reference/Abarxn_udd.md)
-implementation in the package, so extra survival-model arguments are not
-used.
+The abarxn_udd() calculation uses the existing Abarxn_udd() insurance
+approximation. Consequently, additional survival-model arguments are not
+used in that calculation.

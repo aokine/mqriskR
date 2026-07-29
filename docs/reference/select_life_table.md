@@ -29,4 +29,4 @@ select_life_table(x_sel, duration, attained_age, lx)
 
 ## Value
 
-A data.frame with class `"select_life_table"`.
+A data frame with class `"select_life_table"`.

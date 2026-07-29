@@ -1,7 +1,6 @@
-# Internal rate of return of a profit signature
+# Internal rate of return
 
-Computes the internal rate of return (IRR), defined as the rate \\r\\
-for which the net present value is zero.
+Computes a root of the profit-signature net present value.
 
 ## Usage
 
@@ -13,21 +12,21 @@ IRR_profit(Pi, interval = c(0, 1), tol = .Machine$double.eps^0.5)
 
 - Pi:
 
-  Profit signature vector.
+  Numeric profit-signature vector.
 
 - interval:
 
-  Numeric vector of length 2 giving the search interval for
-  [`uniroot()`](https://rdrr.io/r/stats/uniroot.html).
+  Numeric vector of length two giving the root-search interval. Its
+  lower endpoint must be greater than `-1`.
 
 - tol:
 
-  Tolerance passed to
-  [`uniroot()`](https://rdrr.io/r/stats/uniroot.html).
+  Positive scalar tolerance passed to
+  [`stats::uniroot()`](https://rdrr.io/r/stats/uniroot.html).
 
 ## Value
 
-Numeric scalar.
+A numeric scalar.
 
 ## Examples
 

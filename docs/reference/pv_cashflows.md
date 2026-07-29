@@ -12,11 +12,11 @@ pv_cashflows(cf, t, i)
 
 - cf:
 
-  Cash flow amounts (positive = inflow, negative = outflow).
+  Cash flow amounts.
 
 - t:
 
-  Times of cash flows (same length as cf).
+  Times of cash flows.
 
 - i:
 

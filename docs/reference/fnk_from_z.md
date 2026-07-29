@@ -1,8 +1,8 @@
-# Forward rate \\f\_{n,k}\\ from spot rates
+# Forward rate implied by spot rates
 
-Computes the \\n\\-year forward \\k\\-year annual effective rate implied
-by annual effective spot rates: \$\$ (1+z\_{n+k})^{n+k} = (1+z_n)^n
-(1+f\_{n,k})^k. \$\$
+Computes the annual effective forward rate for the interval from time
+`n` to time `n + k`: \$\$ (1+z\_{n+k})^{n+k} = (1+z_n)^n(1+f\_{n,k})^k.
+\$\$
 
 ## Usage
 
@@ -14,24 +14,20 @@ fnk_from_z(z, n, k)
 
 - z:
 
-  Numeric vector of annual effective spot rates.
+  Numeric vector of annual effective spot rates for maturities
+  `1, ..., length(z)`. Each value must be greater than `-1`.
 
 - n:
 
-  Forward start in years.
+  Nonnegative integer forward-start time.
 
 - k:
 
-  Forward maturity in years.
+  Positive integer forward period.
 
 ## Value
 
 A numeric scalar.
-
-## Details
-
-The input vector `z` should contain annual effective spot rates for
-maturities 1, 2, ..., length(z).
 
 ## Examples
 

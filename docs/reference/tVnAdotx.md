@@ -1,47 +1,57 @@
-# Deferred annuity-due reserve
+# Reserve for a deferred annuity-due
 
-Computes the Chapter 10 reserve \\{}\_tV({}\_{n\|}\ddot{a}\_x)\\ for \\t
-\< n\\.
+Computes the reserve during the deferral period, where \\0 \le t \< n\\.
 
 ## Usage
 
 ``` r
-tVnAdotx(x, n, t, i, model, ...)
+tVnAdotx(x, n, t, i, model = NULL, ..., tbl = NULL)
 ```
 
 ## Arguments
 
 - x:
 
-  Issue age.
+  Issue age. May be scalar or vector.
 
 - n:
 
-  Deferral period.
+  Positive integer deferral period. May be scalar or vector.
 
 - t:
 
-  Duration.
+  Nonnegative integer duration. May be scalar or vector.
 
 - i:
 
-  Effective annual interest rate.
+  Effective annual interest rate. May be scalar or vector.
 
 - model:
 
-  Survival model.
+  Optional parametric survival model.
 
 - ...:
 
-  Additional model parameters.
+  Additional parameters passed to the actuarial functions.
+
+- tbl:
+
+  Optional life table object. Supply by name.
 
 ## Value
 
-Numeric vector.
+Numeric vector of reserve values.
 
 ## Examples
 
 ``` r
-tVnAdotx(40, n = 20, t = 10, i = 0.05, model = "uniform", omega = 100)
+tVnAdotx(
+  40,
+  n = 20,
+  t = 10,
+  i = 0.05,
+  model = "uniform",
+  omega = 100
+)
 #> [1] 3.915575
 ```

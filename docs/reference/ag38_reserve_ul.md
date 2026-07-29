@@ -1,8 +1,7 @@
 # AG 38 reserve calculation
 
-Computes the main quantities in the Chapter 16 AG 38 reserve
-calculation, including the prefunding ratio, reduced deficiency reserve,
-Step (8) reserve, and final increased basic reserve.
+Computes the prefunding ratio, net additional amount, reduced deficiency
+reserve, intermediate reserve, and increased basic reserve.
 
 ## Usage
 
@@ -21,31 +20,37 @@ ag38_reserve_ul(
 
 - basic_reserve:
 
-  Basic reserve.
+  Nonnegative basic reserve.
 
 - deficiency_reserve:
 
-  Deficiency reserve.
+  Nonnegative deficiency reserve.
 
 - excess_payment:
 
-  Excess payment or shadow-fund amount.
+  Nonnegative excess payment or shadow-fund amount.
 
 - nsp_required:
 
-  Net single premium required to fully fund the guarantee.
+  Positive net single premium required to fully fund the guarantee.
 
 - valuation_nsp:
 
-  Valuation net single premium.
+  Nonnegative valuation net single premium.
 
 - surrender_charge:
 
-  Applicable surrender charge.
+  Nonnegative surrender charge.
 
 ## Value
 
-A named list.
+For scalar inputs, a named list. For vectorized inputs, a data frame
+containing the same calculated quantities.
+
+## Details
+
+Scalar inputs preserve the original named-list output. Vectorized inputs
+return a data frame with one row per calculation.
 
 ## Examples
 

@@ -12,7 +12,7 @@ lx(tbl, x)
 
 - tbl:
 
-  A life_table object.
+  A `life_table` object.
 
 - x:
 
@@ -20,4 +20,4 @@ lx(tbl, x)
 
 ## Value
 
-Numeric vector of l_x values.
+Numeric vector of \\l_x\\ values.

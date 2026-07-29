@@ -1,8 +1,7 @@
 # Fractional survival probability from a life table
 
 Computes \\{}\_t p_x\\ for \\0 \le t \le 1\\ from a discrete life table
-under one of the standard Chapter 6 assumptions: UDD, constant force, or
-Balducci.
+under UDD, constant force, or Balducci.
 
 ## Usage
 

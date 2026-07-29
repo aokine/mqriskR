@@ -1,6 +1,7 @@
 # Total gain for a continuous-style one-step recursion
 
-Total gain for a continuous-style one-step recursion
+Computes the amount accumulated during a step, less the expected reserve
+required at the end of the step.
 
 ## Usage
 
@@ -12,11 +13,11 @@ GT_cont(Vt, Vt1, P, delta_actual, p_actual, benefit = 0, h = 1)
 
 - Vt:
 
-  Reserve at time t.
+  Reserve at time \`t\`.
 
 - Vt1:
 
-  Reserve at time t+h.
+  Reserve at time \`t + h\`.
 
 - P:
 
@@ -32,19 +33,32 @@ GT_cont(Vt, Vt1, P, delta_actual, p_actual, benefit = 0, h = 1)
 
 - benefit:
 
-  Benefit paid at start of step. Default 0.
+  Benefit paid at the start of the step.
 
 - h:
 
-  Step length. Default 1.
+  Positive step length.
 
 ## Value
 
-Numeric vector.
+Numeric vector of gain values.
+
+## Details
+
+Reserves, premium rates, benefits, and forces of interest may be
+negative when such values are meaningful for the application. The step
+length must be positive, and the survival probability must lie in
+\\\[0,1\]\\.
 
 ## Examples
 
 ``` r
-GT_cont(Vt = 10, Vt1 = 11, P = 1, delta_actual = 0.05, p_actual = 0.99)
+GT_cont(
+  Vt = 10,
+  Vt1 = 11,
+  P = 1,
+  delta_actual = 0.05,
+  p_actual = 0.99
+)
 #> [1] 0.6739821
 ```

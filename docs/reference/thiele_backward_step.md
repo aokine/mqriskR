@@ -1,7 +1,7 @@
-# One backward Euler-style Thiele step
+# One backward numerical step for Thiele's equation
 
-Approximates the reserve at time \\t\\ from a known reserve at time
-\\t+h\\.
+Approximates the reserve at time \`t\` from a known reserve at time
+\`t + h\`.
 
 ## Usage
 
@@ -13,7 +13,7 @@ thiele_backward_step(V_next, P, delta, mu, benefit = 1, h = 1)
 
 - V_next:
 
-  Reserve at time t+h.
+  Reserve at time \`t + h\`.
 
 - P:
 
@@ -25,23 +25,35 @@ thiele_backward_step(V_next, P, delta, mu, benefit = 1, h = 1)
 
 - mu:
 
-  Force of mortality at time t.
+  Nonnegative force of mortality at time \`t\`.
 
 - benefit:
 
-  Benefit amount. Defaults to 1.
+  Benefit amount.
 
 - h:
 
-  Step size.
+  Positive step size.
 
 ## Value
 
-Numeric vector.
+Numeric vector of reserve approximations.
+
+## Details
+
+The implemented step is \$\$ V_t = \frac{ V\_{t+h} - hP + h\mu B }{ 1 +
+h(\delta + \mu) }. \$\$
 
 ## Examples
 
 ``` r
-thiele_backward_step(V_next = 1000, P = 26.96, delta = 0.058, mu = 0.002, benefit = 1000, h = 1)
+thiele_backward_step(
+  V_next = 1000,
+  P = 26.96,
+  delta = 0.058,
+  mu = 0.002,
+  benefit = 1000,
+  h = 1
+)
 #> [1] 919.8491
 ```

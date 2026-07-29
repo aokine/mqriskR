@@ -1,7 +1,7 @@
-# Continuous multiple-decrement insurance APV \\\overline{A}\_{x}^{(j)}\\
+# Continuous multiple-decrement insurance present value
 
-Computes the actuarial present value of a benefit payable at the moment
-of decrement by Cause \\j\\, matching Equation (14.4) in Chapter 14.
+Approximates the actuarial present value of a benefit payable at the
+moment of decrement using the trapezoidal rule.
 
 ## Usage
 
@@ -13,40 +13,34 @@ Abarxj_md(t, ptau, muj, delta, benefit = 1)
 
 - t:
 
-  Numeric vector of time points.
+  Strictly increasing nonnegative time points.
 
 - ptau:
 
-  Numeric vector of values \\{}\_{t}p\_{x}^{(\tau)}\\.
+  In-force probabilities at the supplied time points.
 
 - muj:
 
-  Numeric vector of values \\\mu\_{x+t}^{(j)}\\.
+  Cause-specific decrement intensities at the supplied time points.
 
 - delta:
 
-  Force of interest.
+  Force of interest. May be scalar or vector.
 
 - benefit:
 
-  Benefit amount payable on decrement by Cause \\j\\.
+  Benefit payable on decrement. May be scalar or vector.
 
 ## Value
 
-A numeric scalar.
-
-## Details
-
-The integral is evaluated numerically by the trapezoidal rule: \$\$
-\overline{A}\_{x}^{(j)} = \int_0^T v^t {}\_{t}p\_{x}^{(\tau)}
-\mu\_{x+t}^{(j)} dt \$\$
+A numeric vector of actuarial present values.
 
 ## Examples
 
 ``` r
-t <- seq(0, 20, by = 0.01)
+t <- seq(0, 20, by = 0.1)
 ptau <- exp(-0.012 * t)
-mu_ac <- rep(0.002, length(t))
-Abarxj_md(t, ptau, mu_ac, delta = 0.05, benefit = 2000)
-#> [1] 45.84618
+muj <- rep(0.002, length(t))
+Abarxj_md(t, ptau, muj, delta = 0.05, benefit = 2000)
+#> [1] 45.84633
 ```

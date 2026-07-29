@@ -1,12 +1,12 @@
 # Variance of present value of loss at duration t for whole life insurance
 
-Computes the Chapter 10 conditional variance \\\mathrm{Var}({}\_tL_x
-\mid K_x \ge t)\\ for a fully discrete whole life insurance.
+Computes the conditional variance \\\mathrm{Var}({}\_tL_x \mid K_x \ge
+t)\\ for a fully discrete whole life insurance.
 
 ## Usage
 
 ``` r
-varLtx(x, t, i, P, model, ...)
+varLtx(x, t, i, P, model = NULL, ..., tbl = NULL)
 ```
 
 ## Arguments
@@ -29,15 +29,19 @@ varLtx(x, t, i, P, model, ...)
 
 - model:
 
-  Survival model.
+  Optional parametric survival model name.
 
 - ...:
 
   Additional model parameters.
 
+- tbl:
+
+  Optional life table object.
+
 ## Value
 
-Numeric vector.
+A numeric vector of values.
 
 ## Examples
 

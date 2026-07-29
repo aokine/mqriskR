@@ -1,7 +1,7 @@
 # Solve the yield rate by the equation of value
 
-Finds the interest rate i such that the present value of the cash flows
-is 0.
+Finds the interest rate \`i\` such that the present value of the cash
+flows is 0.
 
 ## Usage
 
@@ -25,11 +25,11 @@ solve_yield(cf, t, interval = c(-0.99, 1), tol = 1e-10)
 
 - tol:
 
-  Tolerance passed to uniroot.
+  Tolerance passed to \`uniroot()\`.
 
 ## Value
 
-Yield rate i.
+Yield rate \`i\`.
 
 ## Examples
 

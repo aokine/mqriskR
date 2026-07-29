@@ -1,6 +1,6 @@
-# Cause-specific decrements \\d_x^{(j)}\\
+# Cause-specific numbers of decrements
 
-Cause-specific decrements \\d_x^{(j)}\\
+Computes \$\$d_x^{(j)}=l_x^{(\tau)}q_x^{(j)}.\$\$
 
 ## Usage
 
@@ -12,7 +12,7 @@ dxj(lxtau, qxj)
 
 - lxtau:
 
-  Number alive at age x in the multiple-decrement table.
+  Number alive at age or duration \\x\\ in the multiple-decrement table.
 
 - qxj:
 
@@ -20,7 +20,7 @@ dxj(lxtau, qxj)
 
 ## Value
 
-Numeric vector.
+A numeric vector containing the number of decrements from each cause.
 
 ## Examples
 

@@ -12,7 +12,7 @@ lx_select(tbl, x_sel, t)
 
 - tbl:
 
-  A select_life_table object.
+  A `select_life_table` object.
 
 - x_sel:
 

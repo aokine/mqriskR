@@ -1,7 +1,7 @@
-# Dependent probabilities \\q_x^{(j)}\\ from independent probabilities \\q_x^{\prime(j)}\\ under constant force
+# Multiple-decrement probabilities under constant forces
 
-Dependent probabilities \\q_x^{(j)}\\ from independent probabilities
-\\q_x^{\prime(j)}\\ under constant force
+Converts associated single-decrement probabilities to dependent
+cause-specific decrement probabilities under constant forces.
 
 ## Usage
 
@@ -13,11 +13,12 @@ qx_dep_cf(qxprime)
 
 - qxprime:
 
-  Numeric vector of independent probabilities.
+  Numeric vector of associated single-decrement probabilities. Each
+  value must be less than one.
 
 ## Value
 
-Numeric vector of dependent probabilities.
+A numeric vector of dependent cause-specific decrement probabilities.
 
 ## Examples
 

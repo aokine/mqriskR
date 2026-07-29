@@ -1,7 +1,7 @@
 # Fully continuous decreasing n-year term insurance
 
-Computes \$\$(\bar{D}\bar{A})\_{x:\overline{n}\|}^{1} = \int_0^n (n-t)\\
-v^t\\ {}\_tp_x\\ \mu\_{x+t}\\ dt.\$\$
+Computes \$\$(\bar{D}\bar{A})\_{x:\overline{n}\|}^{1} = \int_0^n (n-t)
+v^t {}\_tp_x \mu\_{x+t}\\dt.\$\$
 
 ## Usage
 

@@ -1,7 +1,7 @@
-# Credited rates from raw index growth rates
+# Credited rates from index growth rates
 
-Applies participation, floor, cap, and optional margin to raw index
-growth rates for an indexed universal life contract.
+Applies a participation rate, floor, cap, and optional margin to raw
+index growth rates.
 
 ## Usage
 
@@ -24,28 +24,29 @@ i_credit_eiul(
 
 - part:
 
-  Participation rate.
+  Nonnegative scalar participation rate.
 
 - floor:
 
-  Minimum credited rate.
+  Scalar minimum credited rate.
 
 - cap:
 
-  Maximum credited rate.
+  Scalar maximum credited rate. The default is `Inf`.
 
 - margin:
 
-  Index margin. Defaults to 0.
+  Nonnegative scalar index margin.
 
 - margin_after_participation:
 
-  Logical; if `TRUE`, subtract the margin after applying the
-  participation rate.
+  Logical scalar. If `TRUE`, the margin is subtracted after applying
+  participation; otherwise it is subtracted before applying
+  participation.
 
 ## Value
 
-Numeric vector of credited rates.
+A numeric vector of credited rates.
 
 ## Examples
 
@@ -53,4 +54,6 @@ Numeric vector of credited rates.
 raw <- iP_eiul(c(1000, 1050, 1200, 1100))
 i_credit_eiul(raw, part = 1.10, floor = 0.01, cap = 0.10)
 #> [1] 0.055 0.100 0.010
+i_credit_eiul(raw)
+#> [1] 0.0500000 0.1428571 0.0000000
 ```

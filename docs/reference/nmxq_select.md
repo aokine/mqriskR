@@ -13,7 +13,7 @@ nmxq_select(tbl, x_sel, t, n, m)
 
 - tbl:
 
-  A select_life_table object.
+  A `select_life_table` object.
 
 - x_sel:
 

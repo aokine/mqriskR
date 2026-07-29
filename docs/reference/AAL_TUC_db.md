@@ -1,6 +1,7 @@
-# Traditional Unit Credit accrued liability for a DB plan
+# Traditional Unit Credit accrued liability
 
-Computes the TUC accrued liability as the APV of the accrued benefit.
+Computes the actuarial present value of the benefit accrued through the
+valuation date.
 
 ## Usage
 
@@ -12,27 +13,32 @@ AAL_TUC_db(accrued_benefit, v_to_ret, p_surv, adue_ret)
 
 - accrued_benefit:
 
-  Accrued benefit at the valuation date.
+  Nonnegative accrued benefit.
 
 - v_to_ret:
 
-  Discount factor to retirement.
+  Nonnegative discount factor from the valuation date to retirement.
 
 - p_surv:
 
-  Active-service survival probability to retirement.
+  Survival or active-service probability to retirement in `[0, 1]`.
 
 - adue_ret:
 
-  Retirement annuity factor.
+  Positive retirement annuity-due factor.
 
 ## Value
 
-TUC accrued liability.
+A numeric vector.
 
 ## Examples
 
 ``` r
-AAL_TUC_db(accrued_benefit = 12000, v_to_ret = 0.5, p_surv = 0.9, adue_ret = 12)
+AAL_TUC_db(
+  accrued_benefit = 12000,
+  v_to_ret = 0.5,
+  p_surv = 0.9,
+  adue_ret = 12
+)
 #> [1] 64800
 ```

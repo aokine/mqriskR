@@ -1,6 +1,6 @@
-# Cumulative hazard for age-at-failure T0
+# Cumulative hazard for age-at-failure
 
-Computes \\\Lambda_0(t)=\int_0^t \lambda_0(y)\\dy\\.
+Computes \\\Lambda_0(t)\\.
 
 ## Usage
 
@@ -12,27 +12,17 @@ cumhaz0(t, model, ...)
 
 - t:
 
-  Numeric vector of times (\\t \ge 0\\).
+  Numeric vector of times.
 
 - model:
 
-  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`,
+  One of `"uniform"`, `"exponential"`, `"gompertz"`, `"makeham"`, or
   `"weibull"`.
 
 - ...:
 
-  Model parameters:
-
-  - uniform: `omega`
-
-  - exponential: `lambda`
-
-  - gompertz: `B`, `c`
-
-  - makeham: `A`, `B`, `c`
-
-  - weibull: `shape`, `scale`
+  Model parameters.
 
 ## Value
 
-Numeric vector of cumulative hazard values.
+Numeric vector.

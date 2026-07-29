@@ -1,7 +1,6 @@
-# Single-decrement failure probability \\{}\_t q_x^{\prime(j)}\\ under constant force
+# Single-decrement failure under a constant force
 
-Single-decrement failure probability \\{}\_t q_x^{\prime(j)}\\ under
-constant force
+Computes \$\${}\_tq_x^{\prime(j)} =1-\exp(-\mu_jt).\$\$
 
 ## Usage
 
@@ -13,15 +12,15 @@ tqxprimej_cf(mu, t)
 
 - mu:
 
-  Force of decrement for cause j.
+  Nonnegative constant force of decrement. May be scalar or vector.
 
 - t:
 
-  Time.
+  Nonnegative time. May be scalar or vector.
 
 ## Value
 
-Numeric scalar/vector.
+A numeric vector.
 
 ## Examples
 

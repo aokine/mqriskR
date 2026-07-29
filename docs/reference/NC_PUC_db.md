@@ -1,6 +1,6 @@
-# Projected Unit Credit normal cost for a DB plan
+# Projected Unit Credit normal cost
 
-Computes the PUC normal cost as the APV of the portion of the projected
+Computes the actuarial present value of the portion of the projected
 benefit attributed to the current year of service.
 
 ## Usage
@@ -13,27 +13,27 @@ NC_PUC_db(projected_benefit, total_service, v_to_ret, p_surv, adue_ret)
 
 - projected_benefit:
 
-  Projected benefit at retirement.
+  Nonnegative projected annual benefit at retirement.
 
 - total_service:
 
-  Total service at retirement.
+  Positive total service at retirement.
 
 - v_to_ret:
 
-  Discount factor to retirement.
+  Nonnegative discount factor from the valuation date to retirement.
 
 - p_surv:
 
-  Active-service survival probability to retirement.
+  Survival or active-service probability to retirement in `[0, 1]`.
 
 - adue_ret:
 
-  Retirement annuity factor.
+  Positive retirement annuity-due factor.
 
 ## Value
 
-PUC normal cost.
+A numeric vector.
 
 ## Examples
 

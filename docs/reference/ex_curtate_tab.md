@@ -1,6 +1,6 @@
 # Curtate expectation of life from a life table
 
-Computes the curtate expectation of life \\e_x = \sum\_{k=1}^\infty
+Computes the curtate expectation of life \\e_x = \sum\_{k=1}^{\infty}
 {}\_k p_x\\ in the discrete tabular setting.
 
 ## Usage
@@ -13,7 +13,7 @@ ex_curtate_tab(tbl, x)
 
 - tbl:
 
-  A life_table object.
+  A `life_table` object.
 
 - x:
 

@@ -1,6 +1,6 @@
-# Survival probability \\p_x^{(\tau)}\\
+# Total one-year survival probability
 
-Survival probability \\p_x^{(\tau)}\\
+Computes \$\$p_x^{(\tau)}=1-q_x^{(\tau)}.\$\$
 
 ## Usage
 
@@ -16,7 +16,7 @@ pxtau(qxj)
 
 ## Value
 
-Numeric scalar.
+A numeric scalar.
 
 ## Examples
 

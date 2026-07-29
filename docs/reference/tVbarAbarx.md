@@ -1,12 +1,12 @@
 # Fully continuous whole life reserve
 
-Computes the Chapter 10 reserve for a whole life insurance with
-continuous premiums and immediate payment of claims.
+Computes the reserve for a whole life insurance with continuous premiums
+and immediate payment of claims.
 
 ## Usage
 
 ``` r
-tVbarAbarx(x, t, i, model, ...)
+tVbarAbarx(x, t, i, model = NULL, ..., tbl = NULL)
 ```
 
 ## Arguments
@@ -25,15 +25,19 @@ tVbarAbarx(x, t, i, model, ...)
 
 - model:
 
-  Survival model.
+  Optional parametric survival model name.
 
 - ...:
 
   Additional model parameters.
 
+- tbl:
+
+  Optional life table object.
+
 ## Value
 
-Numeric vector.
+A numeric vector of values.
 
 ## Details
 

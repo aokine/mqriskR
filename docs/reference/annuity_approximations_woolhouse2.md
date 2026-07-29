@@ -1,6 +1,7 @@
 # Woolhouse 2-term annuity approximations
 
-Woolhouse 2-term approximations for Chapter 8 annuity functions.
+Woolhouse 2-term approximations for fractional-payment annuity
+functions.
 
 ## Usage
 

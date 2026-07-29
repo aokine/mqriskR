@@ -1,6 +1,7 @@
 # Replacement ratio for a defined contribution plan
 
-Computes the replacement ratio defined in Equation (18.4).
+Computes annual retirement income divided by salary in the final
+pre-retirement year.
 
 ## Usage
 
@@ -12,46 +13,51 @@ replacement_ratio_dc(x, z, Sx, c, i, adue_z, g = NULL, s = NULL)
 
 - x:
 
-  Entry age.
+  Scalar entry age.
 
 - z:
 
-  Retirement age.
+  Scalar retirement age.
 
 - Sx:
 
-  Salary at age `x`.
+  Positive scalar salary at age `x`.
 
 - c:
 
-  Contribution rate.
+  Scalar contribution rate in `[0, 1]`.
 
 - i:
 
-  Annual effective interest rate.
+  Scalar annual effective investment return greater than `-1`.
 
 - adue_z:
 
-  Whole life annuity-due factor at age `z`.
+  Positive scalar whole-life annuity-due factor at retirement.
 
 - g:
 
-  Optional constant annual salary growth rate.
+  Optional scalar annual salary growth rate greater than `-1`.
 
 - s:
 
-  Optional salary scale vector of length `z - x`.
+  Optional positive salary-scale vector of length `z - x`.
 
 ## Value
 
-Replacement ratio.
+A numeric scalar.
 
 ## Examples
 
 ``` r
 replacement_ratio_dc(
-  x = 30, z = 65, Sx = 50000, c = 0.10, i = 0.05,
-  adue_z = 12, g = 0.04
+  x = 30,
+  z = 65,
+  Sx = 50000,
+  c = 0.10,
+  i = 0.05,
+  adue_z = 12,
+  g = 0.04
 )
 #> [1] 0.3620377
 ```

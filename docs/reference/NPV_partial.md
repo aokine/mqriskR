@@ -1,7 +1,7 @@
 # Partial net present values
 
-Computes the sequence \\NPV(0), NPV(1), \dots, NPV(n)\\ of partial net
-present values from a profit signature.
+Computes cumulative discounted profits through each duration. A scalar
+discount rate returns a named vector; vectorized rates return a matrix.
 
 ## Usage
 
@@ -13,15 +13,17 @@ NPV_partial(Pi, r)
 
 - Pi:
 
-  Profit signature vector.
+  Numeric profit-signature vector.
 
 - r:
 
-  Risk discount rate.
+  Annual effective risk discount rate. May be scalar or vector; values
+  must be greater than `-1`.
 
 ## Value
 
-Numeric vector.
+A named numeric vector for scalar `r`, or a numeric matrix for
+vectorized `r`.
 
 ## Examples
 

@@ -1,6 +1,8 @@
-# General projected asset share path (multiple decrements)
+# General projected asset-share path
 
-General projected asset share path (multiple decrements)
+Computes projected asset shares for a multiple-decrement contract. Rows
+of `b_mat` and `q_mat` represent policy years and columns represent
+decrement causes.
 
 ## Usage
 
@@ -16,38 +18,36 @@ AS_path_md(AS0, G, r, e, b_mat, q_mat, p_tau, i, b_surv = NULL)
 
 - G:
 
-  Premium.
+  Premium amount by policy year.
 
 - r:
 
-  Expense percentages.
+  Percent-of-premium expense rate by policy year.
 
 - e:
 
-  Fixed expenses.
+  Fixed expense by policy year.
 
 - b_mat:
 
-  Matrix of benefits (rows = years, cols = causes).
+  Matrix of decrement benefits.
 
 - q_mat:
 
-  Matrix of decrement probabilities (same shape as b_mat).
+  Matrix of decrement probabilities.
 
 - p_tau:
 
-  In-force probabilities.
+  In-force probability by policy year.
 
 - i:
 
-  Interest rate.
+  Effective annual interest rate by policy year.
 
 - b_surv:
 
-  Optional survival benefits.
+  Survival benefit by policy year.
 
 ## Value
 
-A data frame with columns `k` and `AS`. Column `k` gives the policy year
-from 0 to `n`, and column `AS` gives the corresponding projected asset
-share at each year.
+A data frame with policy year `k` and asset share `AS`.

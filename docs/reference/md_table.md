@@ -1,6 +1,7 @@
-# Build a multiple-decrement table
+# Construct a multiple-decrement table
 
-Build a multiple-decrement table
+Constructs a discrete multiple-decrement table from cause-specific
+one-year decrement probabilities.
 
 ## Usage
 
@@ -12,31 +13,35 @@ md_table(x, qxj, radix = 1e+05)
 
 - x:
 
-  Integer vector of ages or durations.
+  Integer vector of consecutive ages or durations.
 
 - qxj:
 
-  Matrix/data.frame of cause-specific decrement probabilities. Rows
-  correspond to ages in x, columns correspond to causes.
+  Numeric matrix or data frame of cause-specific decrement
+  probabilities. Rows correspond to values in `x`, and columns
+  correspond to causes.
 
 - radix:
 
-  Starting \\l_x^{(\tau)}\\.
+  Initial value of \\l_x^{(\tau)}\\.
 
 ## Value
 
-Data frame containing \\q^{(j)}\\, \\q^{(\tau)}\\, \\p^{(\tau)}\\,
-\\l^{(\tau)}\\, \\d^{(j)}\\, and \\d^{(\tau)}\\.
+An object of classes `"md_table"` and `"data.frame"` containing age or
+duration, cause-specific decrement probabilities, total decrement and
+survival probabilities, numbers alive, and cause-specific and total
+decrements.
 
 ## Examples
 
 ``` r
-x <- 45:50
+ages <- 45:50
 qmat <- cbind(
-  q1 = c(.011, .012, .013, .014, .015, .016),
-  q2 = c(.100, .100, .100, .100, .100, .100)
+  withdrawal = c(0.011, 0.012, 0.013, 0.014, 0.015, 0.016),
+  retirement = rep(0.100, 6)
 )
-md_table(x, qmat, radix = 1000)
+
+md_table(ages, qmat, radix = 1000)
 #>    x    q1  q2  qtau  ptau      ltau        d1        d2      dtau
 #> 1 45 0.011 0.1 0.111 0.889 1000.0000 11.000000 100.00000 111.00000
 #> 2 46 0.012 0.1 0.112 0.888  889.0000 10.668000  88.90000  99.56800

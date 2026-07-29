@@ -13,7 +13,7 @@ ex_complete_tab(tbl, x, assumption = c("udd", "cf", "balducci"))
 
 - tbl:
 
-  A life_table object.
+  A `life_table` object.
 
 - x:
 

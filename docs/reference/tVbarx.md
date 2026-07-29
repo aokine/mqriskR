@@ -1,12 +1,12 @@
 # Whole life reserve with continuous premiums
 
-Computes the Chapter 10 reserve for a discrete whole life insurance
-funded by continuous premiums.
+Computes the reserve for a discrete whole life insurance funded by
+continuous premiums.
 
 ## Usage
 
 ``` r
-tVbarx(x, t, i, model, ...)
+tVbarx(x, t, i, model = NULL, ..., tbl = NULL)
 ```
 
 ## Arguments
@@ -25,15 +25,19 @@ tVbarx(x, t, i, model, ...)
 
 - model:
 
-  Survival model.
+  Optional parametric survival model name.
 
 - ...:
 
   Additional model parameters.
 
+- tbl:
+
+  Optional life table object.
+
 ## Value
 
-Numeric vector.
+A numeric vector of values.
 
 ## Examples
 

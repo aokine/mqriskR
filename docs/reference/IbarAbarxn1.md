@@ -1,7 +1,7 @@
 # Fully continuous increasing n-year term insurance
 
-Computes \$\$(\bar{I}\bar{A})\_{x:\overline{n}\|}^{1} = \int_0^n t\\
-v^t\\ {}\_tp_x\\ \mu\_{x+t}\\ dt.\$\$
+Computes \$\$(\bar{I}\bar{A})\_{x:\overline{n}\|}^{1} = \int_0^n t v^t
+{}\_tp_x \mu\_{x+t}\\dt.\$\$
 
 ## Usage
 

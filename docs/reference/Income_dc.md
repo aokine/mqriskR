@@ -1,7 +1,7 @@
 # Retirement income from a defined contribution accumulation
 
-Converts a defined contribution accumulation to annual annuity-due
-income.
+Converts an accumulated account value into annual annuity-due income.
+Scalar arguments are recycled to a common length.
 
 ## Usage
 
@@ -13,15 +13,15 @@ Income_dc(AVz, adue_z)
 
 - AVz:
 
-  Accumulated value at retirement.
+  Nonnegative accumulated value at retirement.
 
 - adue_z:
 
-  Whole life annuity-due factor at retirement age.
+  Positive whole-life annuity-due factor at retirement.
 
 ## Value
 
-Annual retirement income.
+A numeric vector.
 
 ## Examples
 

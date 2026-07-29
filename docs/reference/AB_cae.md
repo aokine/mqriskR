@@ -1,6 +1,7 @@
-# Accrued benefit for a career average earnings plan
+# Accrued benefit under a career-average-earnings plan
 
-Computes the accrued benefit using actual salary history only.
+Computes the accrued benefit using salary history through the valuation
+date.
 
 ## Usage
 
@@ -12,19 +13,22 @@ AB_cae(salary_history, p)
 
 - salary_history:
 
-  Numeric vector of annual salaries to date.
+  Positive numeric vector of annual salaries.
 
 - p:
 
-  Accrual percentage.
+  Nonnegative scalar accrual percentage.
 
 ## Value
 
-Accrued benefit.
+A numeric scalar.
 
 ## Examples
 
 ``` r
-AB_cae(salary_history = c(100000, 104000, 108160), p = 1)
+AB_cae(
+  salary_history = c(100000, 104000, 108160),
+  p = 1
+)
 #> [1] 3121.6
 ```

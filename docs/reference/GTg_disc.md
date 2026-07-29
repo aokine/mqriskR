@@ -1,26 +1,11 @@
 # Total gross gain for a discrete insurance contract
 
-Computes the Chapter 11 total gain under gross premiums and gross
-reserves.
-
-Computes the Chapter 11 total gain under gross premiums and gross
-reserves.
+Computes total gain during one policy year under gross premiums, gross
+reserves, actual mortality, actual interest, and actual expenses.
 
 ## Usage
 
 ``` r
-GTg_disc(
-  VtG,
-  Vt1G,
-  G,
-  i_actual,
-  q_actual,
-  r_actual = 0,
-  e_actual = 0,
-  s_actual = 0,
-  b = 1
-)
-
 GTg_disc(
   VtG,
   Vt1G,
@@ -38,11 +23,11 @@ GTg_disc(
 
 - VtG:
 
-  Gross reserve at duration t.
+  Gross reserve at duration `t`.
 
 - Vt1G:
 
-  Gross reserve at duration t+1.
+  Gross reserve at duration `t + 1`.
 
 - G:
 
@@ -54,7 +39,7 @@ GTg_disc(
 
 - q_actual:
 
-  Actual mortality rate.
+  Actual mortality probability.
 
 - r_actual:
 
@@ -70,27 +55,25 @@ GTg_disc(
 
 - b:
 
-  Benefit amount. Default 1.
+  Benefit amount.
 
 ## Value
 
-Numeric vector.
-
-Numeric vector.
+A numeric vector of total gains.
 
 ## Examples
 
 ``` r
 GTg_disc(
-  VtG = 0.10, Vt1G = 0.12, G = 0.02,
-  i_actual = 0.05, q_actual = 0.01,
-  r_actual = 0.03, e_actual = 0, s_actual = 0.01, b = 1
-)
-#> [1] -0.00353
-GTg_disc(
-  VtG = 0.10, Vt1G = 0.12, G = 0.02,
-  i_actual = 0.05, q_actual = 0.01,
-  r_actual = 0.03, e_actual = 0, s_actual = 0.01, b = 1
+  VtG = 0.10,
+  Vt1G = 0.12,
+  G = 0.02,
+  i_actual = 0.05,
+  q_actual = 0.01,
+  r_actual = 0.03,
+  e_actual = 0,
+  s_actual = 0.01,
+  b = 1
 )
 #> [1] -0.00353
 ```

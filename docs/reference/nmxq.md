@@ -2,7 +2,7 @@
 
 Computes the probability that a life aged x survives n years and then
 dies within the following m years: \\{}\_{n\|m} q_x = {}\_n p_x \cdot
-{}\_m q\_{x+n}\\
+{}\_m q\_{x+n}\\.
 
 ## Usage
 

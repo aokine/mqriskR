@@ -1,8 +1,8 @@
-# Spot rates from forward one-year rates
+# Spot rates from one-year forward rates
 
-Converts annual effective forward one-year rates \\f\_{0,1}, f\_{1,1},
-\dots, f\_{n-1,1}\\ into annual effective spot rates \\z_1, z_2, \dots,
-z_n\\.
+Converts annual effective one-year forward rates
+\\f\_{0,1},f\_{1,1},\ldots,f\_{n-1,1}\\ into annual effective spot
+rates: \$\$ (1+z_n)^n = \prod\_{j=0}^{n-1}(1+f\_{j,1}). \$\$
 
 ## Usage
 
@@ -14,16 +14,12 @@ z_from_fn1(fn1)
 
 - fn1:
 
-  Numeric vector of annual effective forward one-year rates.
+  Numeric vector of annual effective one-year forward rates. Each value
+  must be greater than `-1`.
 
 ## Value
 
-Numeric vector of annual effective spot rates.
-
-## Details
-
-Since \$\$ (1+z_n)^n = \prod\_{j=0}^{n-1}(1+f\_{j,1}), \$\$ the spot
-rates are recovered directly.
+A numeric vector of annual effective spot rates.
 
 ## Examples
 

@@ -14,7 +14,7 @@ ex_temp_complete_tab(tbl, x, n, assumption = c("udd", "cf", "balducci"))
 
 - tbl:
 
-  A life_table object.
+  A `life_table` object.
 
 - x:
 
@@ -22,7 +22,7 @@ ex_temp_complete_tab(tbl, x, n, assumption = c("udd", "cf", "balducci"))
 
 - n:
 
-  Numeric vector of nonnegative numbers.
+  Numeric vector of nonnegative durations.
 
 - assumption:
 

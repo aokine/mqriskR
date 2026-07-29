@@ -1,6 +1,7 @@
-# Interest gain helper for continuous-style recursion
+# Interest gain for a continuous-style recursion
 
-Interest gain helper for continuous-style recursion
+Evaluates the one-step gain using the actual force of interest and the
+assumed survival probability.
 
 ## Usage
 
@@ -12,11 +13,11 @@ GI_cont(Vt, Vt1, P, delta_actual, p_assumed, benefit = 0, h = 1)
 
 - Vt:
 
-  Reserve at time t.
+  Reserve at time \`t\`.
 
 - Vt1:
 
-  Reserve at time t+h.
+  Reserve at time \`t + h\`.
 
 - P:
 
@@ -32,19 +33,25 @@ GI_cont(Vt, Vt1, P, delta_actual, p_assumed, benefit = 0, h = 1)
 
 - benefit:
 
-  Benefit paid at start of step. Default 0.
+  Benefit paid at the start of the step.
 
 - h:
 
-  Step length. Default 1.
+  Positive step length.
 
 ## Value
 
-Numeric vector.
+Numeric vector of interest gain values.
 
 ## Examples
 
 ``` r
-GI_cont(Vt = 10, Vt1 = 11, P = 1, delta_actual = 0.05, p_assumed = 0.99)
+GI_cont(
+  Vt = 10,
+  Vt1 = 11,
+  P = 1,
+  delta_actual = 0.05,
+  p_assumed = 0.99
+)
 #> [1] 0.6739821
 ```

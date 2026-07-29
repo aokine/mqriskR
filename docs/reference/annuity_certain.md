@@ -13,33 +13,37 @@ annuity_certain(n, i, due = FALSE, m = 1, cont = FALSE)
 
 - n:
 
-  Number of payments or periods.
+  Number of payments or periods. May be scalar or vector.
 
 - i:
 
-  Effective interest rate per period.
+  Effective interest rate per period. May be scalar or vector.
 
 - due:
 
-  If TRUE, annuity-due; otherwise annuity-immediate.
+  If \`TRUE\`, annuity-due; otherwise annuity-immediate.
 
 - m:
 
-  Payment frequency per period (m = 1 means annual).
+  Payment frequency per period. \`m = 1\` means annual.
 
 - cont:
 
-  If TRUE, continuous payment model.
+  If \`TRUE\`, use the continuous payment model.
 
 ## Value
 
-Present value.
+Numeric vector of present values.
 
 ## Examples
 
 ``` r
 annuity_certain(n = 10, i = 0.05)
 #> [1] 7.721735
+annuity_certain(n = c(5, 10), i = 0.05)
+#> [1] 4.329477 7.721735
+annuity_certain(n = 10, i = c(0.03, 0.05))
+#> [1] 8.530203 7.721735
 annuity_certain(n = 10, i = 0.05, due = TRUE)
 #> [1] 8.107822
 annuity_certain(n = 10, i = 0.05, cont = TRUE)

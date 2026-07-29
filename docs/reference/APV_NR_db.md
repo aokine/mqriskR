@@ -1,6 +1,7 @@
-# APV of normal retirement benefit for a DB plan
+# Actuarial present value of a normal retirement benefit
 
-Computes Equation (18.10).
+Computes the actuarial present value of a projected annual retirement
+benefit. Scalar arguments are recycled to a common length.
 
 ## Usage
 
@@ -12,27 +13,32 @@ APV_NR_db(PABz, v_to_ret, p_surv, adue_ret)
 
 - PABz:
 
-  Projected annual benefit at retirement.
+  Nonnegative projected annual benefit at retirement.
 
 - v_to_ret:
 
-  Discount factor from current age to retirement.
+  Nonnegative discount factor from the valuation date to retirement.
 
 - p_surv:
 
-  Active-service survival probability to retirement.
+  Survival or active-service probability to retirement in `[0, 1]`.
 
 - adue_ret:
 
-  Retirement annuity factor.
+  Positive retirement annuity-due factor.
 
 ## Value
 
-Actuarial present value of the normal retirement benefit.
+A numeric vector.
 
 ## Examples
 
 ``` r
-APV_NR_db(PABz = 108008.66, v_to_ret = 1 / 1.06^30, p_surv = 0.8, adue_ret = 12)
+APV_NR_db(
+  PABz = 108008.66,
+  v_to_ret = 1 / 1.06^30,
+  p_surv = 0.8,
+  adue_ret = 12
+)
 #> [1] 180531.9
 ```

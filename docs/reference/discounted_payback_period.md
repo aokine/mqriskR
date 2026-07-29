@@ -1,7 +1,7 @@
 # Discounted payback period
 
-Returns the first duration \\t\\ for which the partial net present value
-\\NPV(t)\\ is nonnegative.
+Returns the first duration at which cumulative discounted profit is
+nonnegative.
 
 ## Usage
 
@@ -13,15 +13,17 @@ discounted_payback_period(Pi, r)
 
 - Pi:
 
-  Profit signature vector.
+  Numeric profit-signature vector.
 
 - r:
 
-  Risk discount rate.
+  Annual effective risk discount rate. May be scalar or vector; values
+  must be greater than `-1`.
 
 ## Value
 
-Integer scalar, or `NA_integer_` if the payback period is not reached.
+An integer vector with one value for each discount rate. An element is
+`NA_integer_` when payback is not reached.
 
 ## Examples
 
