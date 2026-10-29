@@ -209,33 +209,36 @@ A30 <- 0.07570
 A50 <- 0.19908
 A51 <- 0.20820
 
+# NLP reserves
 V20_basic <- B_basic * (A50 - A30) / (1 - A30)
 V21_basic <- B_basic * (A51 - A30) / (1 - A30)
 
 V20_pua <- PA20 * A50
 V21_pua <- PA20 * A51
 
-# This reproduces the printed solution
-Pr21_book <- (V20_basic + V20_pua + G - expense) * (1 + i) -
-  q50 * B_basic -
+# Profit in the 21st policy year
+Pr21 <- (V20_basic + V20_pua + G - expense) * (1 + i) -
+  q50 * (B_basic + PA20) -
   p50 * (V21_basic + V21_pua)
 
-Div21_book <- 0.85 * Pr21_book
-X21_book <- Div21_book / A51
-p_compound_book <- X21_book / (B_basic + PA20)
+# Dividend and paid-up additions
+Div21 <- 0.85 * Pr21
+X21 <- Div21 / A51
 
+# Compound reversionary bonus rate
+p_compound <- X21 / (B_basic + PA20)
 
+# Results
 round(c(
   V20_basic = V20_basic,
   V21_basic = V21_basic,
   V20_pua = V20_pua,
   V21_pua = V21_pua,
-  profit_21 = Pr21_book,
-  dividend_21 = Div21_book,
-  paid_up_addition_21 = X21_book,
-  compound_bonus_rate = p_compound_book
+  profit_21 = Pr21,
+  dividend_21 = Div21,
+  paid_up_addition_21 = X21,
+  compound_bonus_rate = p_compound
 ), 5)
-
 
 
 
