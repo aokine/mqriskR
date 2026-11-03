@@ -334,7 +334,7 @@ plot(
 
 
 
-# Exercise 13-13
+# Exercise 13-12
 
 library(mqriskR)
 
@@ -362,7 +362,7 @@ matplot(
   type = "b", pch = 1, col=1:4,
   xlab = "Year",
   ylab = "Probability",
-  main = "Exercise 13-13: Independent vs dependent probabilities"
+  main = "Exercise 13-12: Independent vs dependent probabilities"
 )
 legend(
   "topright",
@@ -372,7 +372,7 @@ legend(
 
 
 
-# Exercise 13-17
+# Exercise 13-16
 
 radix <- 1000
 q1_prime <- 0.100
