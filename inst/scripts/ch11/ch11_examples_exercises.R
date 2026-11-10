@@ -455,67 +455,62 @@ abline(v = q0, lty = 2)
 
 
 
+
 # R Check for Exercise 11-10
-# Solve for b_11 from the recursion:
-# (V_10 + P)(1+i) = b_11 q_30' + p_30' V_11
-#
-# To avoid inconsistency, compute P, V10, and V11 from the same model basis.
+# Verify b_11 using the reserve recursion.
 
-library(mqriskR)
-
-i <- 0.05
-
-# Question data
+# Given information
+V11 <- 0.08154
 q30 <- 0.008427
-q30_prime <- q30 + 0.01
-p30_prime <- 1 - q30_prime
+extra_q <- 0.01
 
-# Since premiums and reserves are stated to match those of issue age 20,
-# compute all model-based quantities from the same age-20 basis.
-P <- Px(x = 20, i = i, model = "uniform", omega = 100)
-V10 <- tVx(x = 20, t = 10, i = i, model = "uniform", omega = 100)
-V11 <- tVx(x = 20, t = 11, i = i, model = "uniform", omega = 100)
+# Standard whole life policy issued at age 20
+p30 <- 1 - q30
 
-# Implied benefit in year 11
-b11 <- ((V10 + P) * (1 + i) - p30_prime * V11) / q30_prime
+# From the standard policy's reserve recursion:
+# (V10 + P)(1+i) = q30 + p30 * V11
+accumulated_fund <- q30 + p30 * V11
+
+# Modified whole life policy issued at age 40
+q50 <- q30 + extra_q
+p50 <- 1 - q50
+
+# Solve for the benefit in year 11
+b11 <- (accumulated_fund - p50 * V11) / q50
 
 round(c(
-  P = P,
-  V10 = V10,
-  V11 = V11,
-  q30 = q30,
-  q30_prime = q30_prime,
+  accumulated_fund = accumulated_fund,
+  q50 = q50,
   b11 = b11
-), 6)
+), 7)
 
-# Check the recursion numerically
-lhs <- (V10 + P) * (1 + i)
-rhs <- b11 * q30_prime + p30_prime * V11
+# Sensitivity analysis
+# Vary the excess mortality adjustment
 
-round(c(
-  lhs = lhs,
-  rhs = rhs,
-  difference = lhs - rhs
-), 10)
-
-# Sensitivity to excess mortality adjustment
 excess_grid <- seq(0, 0.03, by = 0.0005)
+
 b_grid <- sapply(excess_grid, function(extra_q) {
+
   q_prime <- q30 + extra_q
   p_prime <- 1 - q_prime
-  ((V10 + P) * (1 + i) - p_prime * V11) / q_prime
+
+  (accumulated_fund - p_prime * V11) / q_prime
+
 })
 
+# Plot the implied benefit
 plot(
-  excess_grid, b_grid, type = "l", lwd = 2,
+  excess_grid, b_grid,
+  type = "l",
+  lwd = 2,
   xlab = "Excess mortality adjustment",
   ylab = expression(b[11]),
   main = "Exercise 11-10: Implied Benefit vs Excess Mortality"
 )
+
+# Highlight the given adjustment and benefit
 abline(v = 0.01, lty = 2)
 abline(h = b11, lty = 2)
-
-
 
 
 # R Check for Exercise 11-19
@@ -601,52 +596,89 @@ abline(h = 0)
 
 
 # R Check for Exercise 11-20
-# Payout-phase deferred annuity with expense on survival benefit
+# Payout-phase deferred annuity with survival-contingent expenses
 
-library(mqriskR)
-
+# Given information
 x <- 70
+
 i_assumed <- 0.06
 i_actual <- 0.055
+
 q_assumed <- 0.02041
 q_actual <- 0.025
+
 p_assumed <- 1 - q_assumed
 p_actual <- 1 - q_actual
 
 benefit <- 10000
 expense_rate <- 0.05
-net_survival_outgo <- benefit * (1 + expense_rate)   # annuity + expense if alive
 
-# Reserve at age 70 and 71 from annual life annuity-immediate values
-# payout phase: reserve is APV of future survival-contingent payments
-V70 <- net_survival_outgo * ax(x = x, i = i_assumed, model = "uniform", omega = 100)
-V71 <- net_survival_outgo * ax(x = x + 1, i = i_assumed, model = "uniform", omega = 100)
+# Annual payment including expenses
+annual_outgo <- benefit * (1 + expense_rate)
 
-# Ordered gains: mortality first, then interest
-GM <- (V70 - net_survival_outgo) * (1 + i_assumed) - p_actual * V71
-GI_total <- (V70 - net_survival_outgo) * (1 + i_actual) - p_actual * V71
-GI <- GI_total - GM
+# Annuity-immediate values from Appendix A
+a70 <- 8.89563
+a71 <- 8.62586
 
+# Reserves at ages 70 and 71
+V70 <- annual_outgo * a70
+V71 <- annual_outgo * a71
+
+# Gain from mortality:
+# Actual mortality and anticipated interest
+GM <- V70 * (1 + i_assumed) -
+  p_actual * (annual_outgo + V71)
+
+# Total gain:
+# Actual mortality and actual interest
+GT <- V70 * (1 + i_actual) -
+  p_actual * (annual_outgo + V71)
+
+# Gain from interest
+GI <- GT - GM
+
+# Display results
 round(c(
   V70 = V70,
   V71 = V71,
   mortality_gain = GM,
   interest_gain = GI,
-  total_gain = GM + GI
-), 6)
+  total_gain = GT
+), 2)
+
+# Check profit under anticipated experience
+G_assumed <- V70 * (1 + i_assumed) -
+  p_assumed * (annual_outgo + V71)
+
+round(G_assumed, 4)
+
+# Under anticipated experience, the expected gain is zero.
+# The small numerical discrepancy reflects rounded table values.
 
 # Sensitivity to actual mortality
 q_grid <- seq(0.01, 0.04, by = 0.0005)
+
 GM_grid <- sapply(q_grid, function(qa) {
   pa <- 1 - qa
-  (V70 - net_survival_outgo) * (1 + i_assumed) - pa * V71
+
+  V70 * (1 + i_assumed) -
+    pa * (annual_outgo + V71)
 })
 
 plot(
-  q_grid, GM_grid, type = "l", lwd = 2,
+  q_grid, GM_grid,
+  type = "l",
+  lwd = 2,
   xlab = "Actual mortality rate",
-  ylab = "Mortality gain",
+  ylab = "Mortality gain ($)",
   main = "Exercise 11-20: Mortality Gain in Payout Phase"
 )
+
+# Highlight the actual mortality rate
 abline(v = q_actual, lty = 2)
 
+# Highlight the mortality gain at q_actual = 0.025
+abline(h = GM, lty = 2)
+
+# Add a point at the actual mortality rate
+points(q_actual, GM, pch = 19)
